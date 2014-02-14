@@ -6,7 +6,7 @@
 
 #include "loop.h"
 
-#define REAL 0 //1:real data; 0:MC
+#define REAL 1 //1:real data; 0:MC
 
 class bNtuple
 {
@@ -92,6 +92,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 
          b->gen=0;
 
+         // Gen info: check each daughter
          int bGenIdxK=-1;
          int bGenIdxMu1=-1;
          int bGenIdxMu2=-1;
@@ -177,7 +178,7 @@ void loop(){
    if(REAL)
      {
       cout<<"--- REAL DATA ---"<<endl;
-      infname = "/net/hidsk0001/d00/scratch/yjlee/bmeson/merged_pPbData_20131114.root";
+      infname = "sample/test.root";
       outfname = "nt_data.root";
      }
    else
@@ -280,6 +281,7 @@ void loop(){
       }
    }
 
+  nt0->SetAlias("LD","4.239e-03*abs(trk1Dxy)/trk1D0Err +chi2ndf*1.168e-03+trk1Chi2ndf*4.045e-04+trk1PixelHit*1.595e-04+trk1StripHit*3.943e-05");
   outf->Write();
   outf->Close();
 }
