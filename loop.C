@@ -35,11 +35,12 @@ public:
   float trk2PixelHit;
   float trk2StripHit;
   float trk2Chi2ndf;
-
+  float gen;  
 
   void buildBranch(TTree* nt){
     nt->Branch("mass",&mass);
     nt->Branch("pt",&pt);
+    nt->Branch("gen",&gen);
     nt->Branch("px",&px);
     nt->Branch("py",&py);
     nt->Branch("d0",&d0);
@@ -88,7 +89,58 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
          b->trk1StripHit = TrackInfo_striphit[BInfo_rftk1_index[j]];
          b->trk1Pt = TrackInfo_pt[BInfo_rftk1_index[j]];
          b->trk1Chi2ndf = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
+
+         b->gen=0;
+
+         int bGenIdxK=-1;
+         int bGenIdxMu1=-1;
+         int bGenIdxMu2=-1;
+
+         // check Kaon
+         if (TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
+         {
+            //cout << TrackInfo_geninfo_index[BInfo_rftk1_index[j]] <<" "<< (GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])<<endl;
+            int level =0;
+            if (fabs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==321) level = 1;
+            if (GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1) {
+               if (fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==521)
+               level = 2;
+               bGenIdxK=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+            }
+            b->gen=level;
+         }
+
+         if (MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>-1)
+         {  
+      //      cout <<fabs(GenInfo_pdgId[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]])<<endl;
+            int level =0;
+            if (fabs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]])==13) level = 1;
+            if (GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]>-1) {
+               if (GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1) {
+                  if (fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]])==521)
+                  level = 2;
+                  bGenIdxMu1=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
+               }
+            }
+            b->gen+=level*100;
+         }
+
+         if (MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>-1)
+         {  
+            int level =0;
+            if (fabs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]])==13) level = 1;
+            if (GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]>-1) {
+               if (GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1) {
+                  if (fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]])==521)
+                  level = 2;
+                  bGenIdxMu2=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]];
+               }
+            }
+            b->gen+=level*10;
+         }
 	 
+         if (bGenIdxMu1!=-1&&bGenIdxMu1==bGenIdxMu2&&bGenIdxK==bGenIdxMu2) b->gen+=2000;
+
 	 if(BInfo_type[j]==1 || BInfo_type[j]==2)
 	   {
 	     b->trk2Dxy = 0;
@@ -131,7 +183,7 @@ void loop(){
    else
      {
       cout<<"--- MC ---"<<endl;
-      infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full_20140212/Bfinder_all_MC_Kp.root";
+      infname = "Bfinder_all_MC_Kp.root";
       outfname = "nt_mc.root";
      }
 
@@ -148,55 +200,34 @@ void loop(){
 
    int ifchannel[7];
    ifchannel[0] = 1; //jpsi+Kp
-   ifchannel[1] = 0; //jpsi+pi
-   ifchannel[2] = 0; //jpsi+Ks(pi+,pi-)
-   ifchannel[3] = 0; //jpsi+K*(K+,pi-)
-   ifchannel[4] = 0; //jpsi+K*(K-,pi+)
-   ifchannel[5] = 0; //jpsi+phi
-   ifchannel[6] = 0; //jpsi+pi pi <= psi', X(3872), Bs->J/psi f0
-   
-   if(ifchannel[0]==1)
-     {
-       bNtuple* b0 = new bNtuple;
+   ifchannel[1] = 1; //jpsi+pi
+   ifchannel[2] = 1; //jpsi+Ks(pi+,pi-)
+   ifchannel[3] = 1; //jpsi+K*(K+,pi-)
+   ifchannel[4] = 1; //jpsi+K*(K-,pi+)
+   ifchannel[5] = 1; //jpsi+phi
+   ifchannel[6] = 1; //jpsi+pi pi <= psi', X(3872), Bs->J/psi f0
+   bNtuple* b0 = new bNtuple;
+   bNtuple* b1 = new bNtuple;
+   bNtuple* b2 = new bNtuple;
+   bNtuple* b3 = new bNtuple;
+   bNtuple* b4 = new bNtuple;
+   bNtuple* b5 = new bNtuple;
+   bNtuple* b6 = new bNtuple;
+      
        TTree* nt0 = new TTree("ntKp","");
        b0->buildBranch(nt0);
-     }
-   if(ifchannel[1]==1)
-     {
-       bNtuple* b1 = new bNtuple;
        TTree* nt1 = new TTree("ntpi","");
        b1->buildBranch(nt1);
-     }
-   if(ifchannel[2]==1)
-     {
-       bNtuple* b2 = new bNtuple;
        TTree* nt2 = new TTree("ntKs","");
        b2->buildBranch(nt2);
-     }
-   if(ifchannel[3]==1)
-     {
-       bNtuple* b3 = new bNtuple;
        TTree* nt3 = new TTree("ntKstar1","");
        b3->buildBranch(nt3);
-     }
-   if(ifchannel[4]==1)
-     {
-       bNtuple* b4 = new bNtuple;
        TTree* nt4 = new TTree("ntKstar2","");
        b4->buildBranch(nt4);
-     }
-   if(ifchannel[5]==1)
-     {
-       bNtuple* b5 = new bNtuple;
        TTree* nt5 = new TTree("ntphi","");
        b5->buildBranch(nt5);
-     }
-   if(ifchannel[6]==1)
-     {
-       bNtuple* b6 = new bNtuple;
        TTree* nt6 = new TTree("ntmix","");
        b6->buildBranch(nt6);
-     }
 
    Long64_t nentries = root->GetEntries();
    Long64_t nbytes = 0;

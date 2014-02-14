@@ -61,6 +61,7 @@
    Double_t        MuonInfo_iso_hcal[MAX_MUON];
    Double_t        MuonInfo_n_matches[MAX_MUON];
    Int_t           MuonInfo_isGoodCand[MAX_MUON];
+   Int_t           MuonInfo_geninfo_index[MAX_MUON];
    Int_t           TrackInfo_size;
    Int_t           TrackInfo_index[MAX_TRACK];
    Int_t           TrackInfo_handle_index[MAX_TRACK];
@@ -79,6 +80,7 @@
    Double_t        TrackInfo_dzPV[MAX_TRACK];
    Double_t        TrackInfo_dxyPV[MAX_TRACK];
    Int_t           TrackInfo_isGoodCand[MAX_TRACK];
+   Int_t           TrackInfo_geninfo_index[MAX_TRACK];
    Int_t           BInfo_uj_size;
    Int_t           BInfo_uj_index[MAX_XB];
    Double_t        BInfo_uj_mass[MAX_XB];
@@ -230,6 +232,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("MuonInfo.iso_hcal",MuonInfo_iso_hcal);
    root->SetBranchAddress("MuonInfo.n_matches",MuonInfo_n_matches);
    root->SetBranchAddress("MuonInfo.isGoodCand",MuonInfo_isGoodCand);
+   root->SetBranchAddress("MuonInfo.geninfo_index",MuonInfo_geninfo_index);
    
 
    root->SetBranchAddress("TrackInfo.size",&TrackInfo_size);
@@ -250,6 +253,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("TrackInfo.dzPV",TrackInfo_dzPV);
    root->SetBranchAddress("TrackInfo.dxyPV",TrackInfo_dxyPV);
    root->SetBranchAddress("TrackInfo.isGoodCand",TrackInfo_isGoodCand);
+   root->SetBranchAddress("TrackInfo.geninfo_index",TrackInfo_geninfo_index);
    
    root->SetBranchAddress("BInfo.uj_size",&BInfo_uj_size);
    root->SetBranchAddress("BInfo.uj_index",BInfo_uj_index);
@@ -327,7 +331,6 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("BInfo.tktk_vtxdof",BInfo_tktk_vtxdof);
    root->SetBranchAddress("BInfo.tktk_vtxchi2",BInfo_tktk_vtxchi2);
    
-   /*   
    root->SetBranchAddress("GenInfo.size",&GenInfo_size);
    root->SetBranchAddress("GenInfo.index",&GenInfo_index);
    root->SetBranchAddress("GenInfo.handle_index",&GenInfo_handle_index);
@@ -349,7 +352,6 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("Geninfo.mhtk2_index",&GenInfo_mhtk2_index);
    root->SetBranchAddress("GenInfo.mhujMass",&GenInfo_mhujMass);
    root->SetBranchAddress("GenInfo.mhxbMass",&GenInfo_mhxbMass);
-   */   
 
 //     This is the loop skeleton
 //       To read only selected branches, Insert statements like:
