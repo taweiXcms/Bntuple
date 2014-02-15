@@ -88,7 +88,7 @@ void fitB(char *infname)
    double ptBins[nBins+1] = {5,10,15,20,25,60};
    TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
 
-   for (int i=0;i<5;i++)
+   for (int i=0;i<nBins;i++)
    {
       TF1 *f = fit(nt,ptBins[i],ptBins[i+1]);
       hPt->SetBinContent(i+1,f->GetParameter(0)*100./(ptBins[i+1]-ptBins[i]));
