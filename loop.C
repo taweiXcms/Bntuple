@@ -3,15 +3,17 @@
 #include <iostream>
 #include <TNtuple.h>
 #include <TVector3.h>
+#include <TLorentzVector.h>
 
 #include "loop.h"
 
-#define REAL 1 //1:real data; 0:MC
 
 class bNtuple
 {
 public:
   float mass;
+  float y;
+  float phi;
   float pt;
   float d0;
   float px;
@@ -39,6 +41,8 @@ public:
 
   void buildBranch(TTree* nt){
     nt->Branch("mass",&mass);
+    nt->Branch("y",&y);
+    nt->Branch("phi",&phi);
     nt->Branch("pt",&pt);
     nt->Branch("gen",&gen);
     nt->Branch("px",&px);
@@ -68,6 +72,8 @@ public:
 
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 {
+         TLorentzVector bVec;
+         bVec.SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
          bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
          bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
                        BInfo_vtxY[j]-EvtInfo_PVy,
@@ -81,6 +87,8 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 	 b->vy = BInfo_vtxY[j] - EvtInfo_PVy;
          b->d0Err = sqrt(BInfo_vtxXE[j]*BInfo_vtxXE[j]+BInfo_vtxYE[j]*BInfo_vtxYE[j]);
          b->mass = BInfo_mass[j];
+         b->y = bVec.Rapidity();
+         b->phi = bVec.Phi();
          b->chi2ndf = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
 	 
 	 b->trk1Dxy = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
@@ -164,7 +172,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 	 
 }
 
-void loop(){
+void loop(int REAL = 1){
 //////////////////////////////////////////////////////////
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
