@@ -237,6 +237,8 @@ void loop(int REAL = 1){
        b5->buildBranch(nt5);
        TTree* nt6 = new TTree("ntmix","");
        b6->buildBranch(nt6);
+       TNtuple* ntGen = new TNtuple("ntGen","","y:eta:phi:pt:pdgId");
+
 
    Long64_t nentries = root->GetEntries();
    Long64_t nbytes = 0;
@@ -249,6 +251,7 @@ void loop(int REAL = 1){
       for (int j=0;j<BInfo_size;j++) {
 	if(BInfo_type[j]>7) continue;
 	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+        
 	if(BInfo_type[j]==1)
 	  {
 	    fillTree(b0,bP,bVtx,j);
@@ -286,6 +289,18 @@ void loop(int REAL = 1){
 	  }
 	
 	 
+      }
+
+      for (int j=0;j<GenInfo_size;j++)
+      {
+       
+         if (fabs(GenInfo_pdgId[j])==521&&GenInfo_nDa[j]==2&&GenInfo_da1[j]!=-1&&GenInfo_da2[j]!=-1) {
+            if (fabs(GenInfo_pdgId[GenInfo_da1[j]]!=443)) continue; //jpsi
+            if (fabs(GenInfo_pdgId[GenInfo_da2[j]]!=321)) continue; // k+
+            TLorentzVector bGen;
+            bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
+            ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j]);
+         }   
       }
    }
 
