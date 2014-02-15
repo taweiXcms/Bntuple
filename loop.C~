@@ -263,7 +263,7 @@ void loop(){
    else
      {
       cout<<"--- MC ---"<<endl;
-      infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full/Bfinder_v4_20140206/Bfinder_all_MC_Phi.root";
+      infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full/Bfinder_v4_20140206/Bfinder_all_MC_phi.root";
       outfname = "nt_mc.root";
      }
 

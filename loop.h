@@ -7,6 +7,66 @@
 #define MAX_BX 128
 #define N_TRIGGER_BOOKINGS 5842
 
+class bNtuple
+{
+ public:
+  float mass;
+  float pt;
+  float d0;
+  float px;
+  float py;
+  float vx;
+  float vy;
+  float d0Err;
+  float chi2ndf;
+  float dtheta;
+
+  float trk1Pt;
+  float trk1Dxy;
+  float trk1D0Err;
+  float trk1PixelHit;
+  float trk1StripHit;
+  float trk1Chi2ndf;
+
+  float trk2Pt;
+  float trk2Dxy;
+  float trk2D0Err;
+  float trk2PixelHit;
+  float trk2StripHit;
+  float trk2Chi2ndf;
+  float gen;
+
+  void buildBranch(TTree* nt){
+    nt->Branch("mass",&mass);
+    nt->Branch("pt",&pt);
+    nt->Branch("gen",&gen);
+    nt->Branch("px",&px);
+    nt->Branch("py",&py);
+    nt->Branch("d0",&d0);
+    nt->Branch("vx",&vx);
+    nt->Branch("vy",&vy);
+    nt->Branch("d0Err",&d0Err);
+    nt->Branch("chi2ndf",&chi2ndf);
+    nt->Branch("dtheta",&dtheta);
+
+    nt->Branch("trk1Pt",&trk1Pt);
+    nt->Branch("trk1Dxy",&trk1Dxy);
+    nt->Branch("trk1D0Err",&trk1D0Err);
+    nt->Branch("trk1PixelHit",&trk1PixelHit);
+    nt->Branch("trk1StripHit",&trk1StripHit);
+    nt->Branch("trk1Chi2ndf",&trk1Chi2ndf);
+
+    nt->Branch("trk2Pt",&trk2Pt);
+    nt->Branch("trk2Dxy",&trk2Dxy);
+    nt->Branch("trk2D0Err",&trk2D0Err);
+    nt->Branch("trk2PixelHit",&trk2PixelHit);
+    nt->Branch("trk2StripHit",&trk2StripHit);
+    nt->Branch("trk2Chi2ndf",&trk2Chi2ndf);
+  }
+};
+
+
+
 //Declaration of leaves types
    Int_t           EvtInfo_RunNo;
    Int_t           EvtInfo_EvtNo;
@@ -165,12 +225,12 @@
    Int_t           GenInfo_mo2[MAX_GEN];
    Int_t           GenInfo_da1[MAX_GEN];
    Int_t           GenInfo_da2[MAX_GEN];
-   Int_t           GenInfo_mhmu1_index;
-   Int_t           GenInfo_mhmu2_index;
-   Int_t           GenInfo_mhtk1_index;
-   Int_t           GenInfo_mhtk2_index;
-   Double_t        GenInfo_mhujMass;
-   Double_t        GenInfo_mhxbMass;
+//   Int_t           GenInfo_mhmu1_index;
+//   Int_t           GenInfo_mhmu2_index;
+//   Int_t           GenInfo_mhtk1_index;
+//   Int_t           GenInfo_mhtk2_index;
+//   Double_t        GenInfo_mhujMass;
+//   Double_t        GenInfo_mhxbMass;
 
 
 void setBranch(TTree *root) {
@@ -191,7 +251,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("EvtInfo.BXPU",&EvtInfo_BXPU);
    root->SetBranchAddress("EvtInfo.nPU",&EvtInfo_nPU);
    root->SetBranchAddress("EvtInfo.trueIT",&EvtInfo_trueIT);
-  
+  */  
    root->SetBranchAddress("EvtInfo.PVx",&EvtInfo_PVx);
    root->SetBranchAddress("EvtInfo.PVy",&EvtInfo_PVy);
    root->SetBranchAddress("EvtInfo.PVz",&EvtInfo_PVz);
@@ -200,7 +260,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("EvtInfo.PVzE",&EvtInfo_PVzE);
    root->SetBranchAddress("EvtInfo.PVnchi2",&EvtInfo_PVnchi2);
    root->SetBranchAddress("EvtInfo.PVchi2",&EvtInfo_PVchi2);
-  */   
+   
 
    root->SetBranchAddress("MuonInfo.size",&MuonInfo_size);
    root->SetBranchAddress("MuonInfo.index",MuonInfo_index);
@@ -346,15 +406,17 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("GenInfo.mo2",&GenInfo_mo2);
    root->SetBranchAddress("GenInfo.da1",&GenInfo_da1);
    root->SetBranchAddress("GenInfo.da2",&GenInfo_da2);
-   root->SetBranchAddress("Geninfo.mhmu1_index",&GenInfo_mhmu1_index);
-   root->SetBranchAddress("Geninfo.mhmu2_index",&GenInfo_mhmu2_index);
-   root->SetBranchAddress("Geninfo.mhtk1_index",&GenInfo_mhtk1_index);
-   root->SetBranchAddress("Geninfo.mhtk2_index",&GenInfo_mhtk2_index);
-   root->SetBranchAddress("GenInfo.mhujMass",&GenInfo_mhujMass);
-   root->SetBranchAddress("GenInfo.mhxbMass",&GenInfo_mhxbMass);
+   //root->SetBranchAddress("Geninfo.mhmu1_index",&GenInfo_mhmu1_index);
+   //root->SetBranchAddress("Geninfo.mhmu2_index",&GenInfo_mhmu2_index);
+   //root->SetBranchAddress("Geninfo.mhtk1_index",&GenInfo_mhtk1_index);
+   //root->SetBranchAddress("Geninfo.mhtk2_index",&GenInfo_mhtk2_index);
+   //root->SetBranchAddress("GenInfo.mhujMass",&GenInfo_mhujMass);
+   //root->SetBranchAddress("GenInfo.mhxbMass",&GenInfo_mhxbMass);
 
 //     This is the loop skeleton
 //       To read only selected branches, Insert statements like:
 // root->SetBranchStatus("*",0);  // disable all branches
 // TTreePlayer->SetBranchStatus("branchname",1);  // activate branchname
+
+
 }
