@@ -1,22 +1,37 @@
 #include "utilities.h"
+
+void clean0(TH1D *h)
+{
+   for (int i=1;i<=h->GetNbinsX();i++)
+   {
+      if (h->GetBinContent(i)==0) h->SetBinError(i,1);
+   }
+}
+
 TF1 *fit(TTree *nt,double ptmin,double ptmax)
 {   
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    TH1D *h = new TH1D(Form("h%d",count),"",100,4.8,5.8);
-
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*x*x+[6]*x*x*x+[7]*x*x*x*x");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*x*x+[6]*x*x*x");
    nt->Project(Form("h%d",count),"mass",Form("LD>0.02&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
+   clean0(h);
    h->Draw();
+
    f->SetParameter(1,5.28);
-   f->SetParameter(2,0.05);
+   f->SetParameter(2,0.03);
    f->SetParameter(0,100);
+   f->FixParameter(1,5.279);
    h->Fit(Form("f%d",count),"","",4.8,5.8);
-   h->Fit(Form("f%d",count),"LL","",4.8,5.8);
+   h->Fit(Form("f%d",count),"L","",4.8,5.8);
+   f->ReleaseParameter(1);
+   h->Fit(Form("f%d",count),"L","",4.8,5.8);
+   h->Fit(Form("f%d",count),"L","",4.8,5.8);
    h->SetMarkerSize(0.8);
    h->SetMarkerStyle(20);
+   cout <<h->GetEntries()<<endl;
    cout <<Form("LD>0.02&&pt>%f&&pt<%f",ptmin,ptmax)<<endl;
    // function for background shape plotting. take the fit result from f
    TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*x*x+[3]*x*x*x+[4]*x*x*x*x");
@@ -62,7 +77,7 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.23,0.89,0.40);
    leg2->AddEntry(h,"B meson","");
-   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*100.),"");
+   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",f->GetParameter(0)*100.,f->GetParError(0)*100.),"");
    leg2->Draw();
 //   c->Write();
@@ -80,13 +95,19 @@ void fitB(char *infname)
    TFile *inf = new TFile(infname);
    TTree *nt = (TTree*) inf->Get("ntKp");
 
+   TFile *infMC = new TFile("nt_mc.root");
+   TTree *ntGen = (TTree*)infMC->Get("ntGen");
+    TTree *ntMC = (TTree*)infMC->Get("ntKp");
+
    nt->SetAlias("LD","(4.239e-03*abs(trk1Dxy)/trk1D0Err +chi2ndf*1.168e-03+trk1Chi2ndf*4.045e-04+trk1PixelHit*1.595e-04+trk1StripHit*3.943e-05)");
 
 //   TFile *outf = new TFile("phiHistos.root","recreate");
 //   outf->cd();
-   const int nBins = 5;
-   double ptBins[nBins+1] = {5,10,15,20,25,60};
+   const int nBins = 6;
+   double ptBins[nBins+1] = {5,10,15,20,25,30,60};
    TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
+   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
+   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
    for (int i=0;i<nBins;i++)
    {
@@ -98,8 +119,22 @@ void fitB(char *infname)
    TCanvas *c=  new TCanvas("cResult","",600,600);
    hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
    hPt->SetYTitle("Uncorrected dN/dp_{T}");
+   hPt->Sumw2();
    hPt->Draw();
    
+   ntMC->Project("hPtMC","pt","abs(y)<1000&&gen==2222");
+   ntGen->Project("hPtGen","pt","abs(y)<1.93");
+
+   hPtMC->Sumw2();
+   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
+   hPtMC->Sumw2();
+   hEff->Divide(hPtGen);
+
+   TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
+   hPtCor->Divide(hEff);
+   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
+   hPtCor->SetYTitle("Correctd dN/dp_{T}");
+   hPtCor->Draw();
 
 //   outf->Write();
 
