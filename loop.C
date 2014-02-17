@@ -7,14 +7,15 @@
 
 #include "loop.h"
 
-#define REAL 0 //1:real data; 0:MC
-
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 {
   bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
   bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
 	       BInfo_vtxY[j]-EvtInfo_PVy,
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
+  TLorentzVector b4P;
+  b4P.SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+  b->y = b4P.Rapidity();
   b->dtheta = bP->Angle(*bVtx);
   b->pt = sqrt(BInfo_px[j]*BInfo_px[j]+BInfo_py[j]*BInfo_py[j]);
   b->px = BInfo_px[j];
@@ -323,7 +324,7 @@ int signalGen(int Btype, int j)
 }
 
 
-void loop(){
+void loop(bool REAL=0){
 //////////////////////////////////////////////////////////
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
