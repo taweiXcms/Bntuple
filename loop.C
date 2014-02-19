@@ -16,6 +16,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
   b->dtheta = bP->Angle(*bVtx);
   b->pt = sqrt(BInfo_px[j]*BInfo_px[j]+BInfo_py[j]*BInfo_py[j]);
+  b->eta = BInfo_eta[j];
   b->px = BInfo_px[j];
   b->py = BInfo_py[j];
   b->d0 = sqrt((BInfo_vtxX[j]-EvtInfo_PVx)*(BInfo_vtxX[j]-EvtInfo_PVx)+(BInfo_vtxY[j]-EvtInfo_PVy)*(BInfo_vtxY[j]-EvtInfo_PVy));
@@ -263,8 +264,9 @@ void loop(){
    else
      {
       cout<<"--- MC ---"<<endl;
-      infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full/Bfinder_v4_20140206/Bfinder_all_MC_Phi.root";
-      outfname = "nt_mc.root";
+//      infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full/Bfinder_v4_20140206/Bfinder_all_MC_Phi.root";
+      infname = "../../Bfinder_all_full_20140215/Bfinder_all_MC_Kp.root";
+      outfname = "../nt_mc.root";
      }
 
    //File type

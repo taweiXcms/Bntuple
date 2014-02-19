@@ -12,6 +12,7 @@ class bNtuple
  public:
   float mass;
   float pt;
+  float eta;
   float d0;
   float px;
   float py;
@@ -39,6 +40,7 @@ class bNtuple
   void buildBranch(TTree* nt){
     nt->Branch("mass",&mass);
     nt->Branch("pt",&pt);
+    nt->Branch("eta",&eta);
     nt->Branch("gen",&gen);
     nt->Branch("px",&px);
     nt->Branch("py",&py);
@@ -167,6 +169,7 @@ class bNtuple
    Int_t           BInfo_size;
    Int_t           BInfo_index[MAX_XB];
    Double_t        BInfo_mass[MAX_XB];
+   Double_t        BInfo_eta[MAX_XB];
    Double_t        BInfo_px[MAX_XB];
    Double_t        BInfo_py[MAX_XB];
    Double_t        BInfo_pz[MAX_XB];
@@ -343,6 +346,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("BInfo.size",&BInfo_size);
    root->SetBranchAddress("BInfo.index",BInfo_index);
    root->SetBranchAddress("BInfo.mass",BInfo_mass);
+   root->SetBranchAddress("BInfo.eta",BInfo_eta);
    root->SetBranchAddress("BInfo.px",BInfo_px);
    root->SetBranchAddress("BInfo.py",BInfo_py);
    root->SetBranchAddress("BInfo.pz",BInfo_pz);
