@@ -13,8 +13,8 @@ class bNtuple
   float mass;
   float pt;
   float d0;
-  float px;
-  float py;
+  float eta;
+  float phi;
   float vx;
   float vy;
   float d0Err;

@@ -1,5 +1,6 @@
 #include <TTree.h>
 #include <TFile.h>
+#include <TChain.h>
 #include <iostream>
 #include <TNtuple.h>
 #include <TVector3.h>
@@ -7,7 +8,7 @@
 
 #include "loop.h"
 
-#define REAL 0 //1:real data; 0:MC
+#define REAL 1 //1:real data; 0:MC
 
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 {
@@ -16,9 +17,9 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 	       BInfo_vtxY[j]-EvtInfo_PVy,
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
   b->dtheta = bP->Angle(*bVtx);
-  b->pt = sqrt(BInfo_px[j]*BInfo_px[j]+BInfo_py[j]*BInfo_py[j]);
-  b->px = BInfo_px[j];
-  b->py = BInfo_py[j];
+  b->pt = BInfo_pt[j];
+  b->eta = BInfo_eta[j];
+  b->phi = BInfo_phi[j];
   b->d0 = sqrt((BInfo_vtxX[j]-EvtInfo_PVx)*(BInfo_vtxX[j]-EvtInfo_PVx)+(BInfo_vtxY[j]-EvtInfo_PVy)*(BInfo_vtxY[j]-EvtInfo_PVy));
   b->vx = BInfo_vtxX[j] - EvtInfo_PVx;
   b->vy = BInfo_vtxY[j] - EvtInfo_PVy;
@@ -55,195 +56,200 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   
   //gen info judgement
 
-  b->gen=0;//gen init
-  int mGenIdxTk1=-1;
-  int mGenIdxTk2=-1;
-  int bGenIdxTk1=-1;
-  int bGenIdxTk2=-1;
-  int bGenIdxMu1=-1;
-  int bGenIdxMu2=-1;
-
-
-  float BId,MId,tk1Id,tk2Id;
-  //tk1:positive, tk2:negtive
-  if(BInfo_type[j]==1)
+  if(!REAL)
     {
-      BId = 521;//B+-
-      MId = -1;
-      tk1Id = 321;//K+-
-      tk2Id = -1;
-    }
-  if(BInfo_type[j]==2)
-    {
-      BId = 521;//B+-
-      MId = -1;
-      tk1Id = 211;//pi+-
-      tk2Id = -1;
-    }
-  if(BInfo_type[j]==3)
-    {
-      BId = 511;//B0
-      MId = 310;//Ks
-      tk1Id = 211;//pi+
-      tk2Id = 211;//pi-
-    }
-  if(BInfo_type[j]==4)
-    {
-      BId = 511;//B0
-      MId = 313;//K*0
-      tk1Id = 321;//K+
-      tk2Id = 211;//pi-
-    }
-  if(BInfo_type[j]==5)
-    {
-      BId = 511;//B0
-      MId = 313;//K*0
-      tk1Id = 211;//pi+
-      tk2Id = 321;//K-
-    }
-  if(BInfo_type[j]==6)
-    {
-      BId = 531;//Bs
-      MId = 333;//phi
-      tk1Id = 321;//K+
-      tk2Id = 321;//K-
-    }
-
-  int twoTks;
-  if(BInfo_type[j]==1 || BInfo_type[j]==2) twoTks=0;
-  else twoTks=1;
-
-  // tk1
-  if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
-    {
-      int level =0;
-      if(fabs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==tk1Id)
+      b->gen=0;//gen init
+      int mGenIdxTk1=-1;
+      int mGenIdxTk2=-1;
+      int bGenIdxTk1=-1;
+      int bGenIdxTk2=-1;
+      int bGenIdxMu1=-1;
+      int bGenIdxMu2=-1;
+      
+      
+      float BId,MId,tk1Id,tk2Id;
+      //tk1:positive, tk2:negtive
+      if(BInfo_type[j]==1)
 	{
-	  level = 1;
-	  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
-	    {
-	      if(!twoTks)//one trk channel
-		{
-		  mGenIdxTk1=0;
-		  if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==BId)
-		    {
-		      level = 3;
-		      bGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-		    }		  
-		}
-	      else//two trk channel
-		{
-		  if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==MId)
-		    {
-		      level = 2;
-		      if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
-			{
-			  if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
-			    {
-			      level = 3;
-			      bGenIdxTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
-			    }
-			}
-		      mGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-		    }
-		}
-	    }
+	  BId = 521;//B+-
+	  MId = -1;
+	  tk1Id = 321;//K+-
+	  tk2Id = -1;
 	}
-      b->gen=level;
-    }
-
-  //tk2
-  if(!twoTks)//one trk channel
-    {
-      b->gen+=30;
-      mGenIdxTk2=0;
-      bGenIdxTk2=0;
-    }
-  else//two trk channel
-    {
-      if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
+      if(BInfo_type[j]==2)
+	{
+	  BId = 521;//B+-
+	  MId = -1;
+	  tk1Id = 211;//pi+-
+	  tk2Id = -1;
+	}
+      if(BInfo_type[j]==3)
+	{
+	  BId = 511;//B0
+	  MId = 310;//Ks
+	  tk1Id = 211;//pi+
+	  tk2Id = 211;//pi-
+	}
+      if(BInfo_type[j]==4)
+	{
+	  BId = 511;//B0
+	  MId = 313;//K*0
+	  tk1Id = 321;//K+
+	  tk2Id = 211;//pi-
+	}
+      if(BInfo_type[j]==5)
+	{
+	  BId = 511;//B0
+	  MId = 313;//K*0
+	  tk1Id = 211;//pi+
+	  tk2Id = 321;//K-
+	}
+      if(BInfo_type[j]==6)
+	{
+	  BId = 531;//Bs
+	  MId = 333;//phi
+	  tk1Id = 321;//K+
+	  tk2Id = 321;//K-
+	}
+      
+      int twoTks;
+      if(BInfo_type[j]==1 || BInfo_type[j]==2) twoTks=0;
+      else twoTks=1;
+      
+      // tk1
+      if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
 	{
 	  int level =0;
-	  if(fabs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==tk2Id)
+	  if(fabs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==tk1Id)
 	    {
 	      level = 1;
-	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
+	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
 		{
-		  if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==MId)
+		  if(!twoTks)//one trk channel
 		    {
-		      level = 2;
-		      if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
+		      mGenIdxTk1=0;
+		      if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==BId)
 			{
-			  if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
+			  level = 3;
+			  bGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+			}		  
+		    }
+		  else//two trk channel
+		    {
+		      if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==MId)
+			{
+			  level = 2;
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
 			    {
-			      level = 3;
-			      bGenIdxTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+			      if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
+				{
+				  level = 3;
+				  bGenIdxTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+				}
 			    }
+			  mGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
 			}
-		      mGenIdxTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
 		    }
 		}
 	    }
-	  b->gen+=(level*10);
+	  b->gen=level;
 	}
-    }
-
-  //mu1
-  if(MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>-1)
-    {  
-      int level =0;
-      if(fabs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]])==13) level=1;
-      if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]>-1)
+      
+      //tk2
+      if(!twoTks)//one trk channel
 	{
-	  if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1)
-	    {
-	      if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]])==BId)
-		{
-		  level = 2;
-		  bGenIdxMu1=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
-		}
-	    } 
+	  b->gen+=30;
+	  mGenIdxTk2=0;
+	  bGenIdxTk2=0;
 	}
-      b->gen+=(level*100);
-    }
-
-  //mu2
-  if(MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>-1)
-    {  
-      int level =0;
-      if(fabs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]])==13) level = 1;
-      if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]>-1)
+      else//two trk channel
 	{
-	  if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]>-1)
+	  if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
 	    {
-	      if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]])==BId)
+	      int level =0;
+	      if(fabs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==tk2Id)
 		{
-		  level = 2;
-		  bGenIdxMu2=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]];
+		  level = 1;
+		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
+		    {
+		      if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==MId)
+			{
+			  level = 2;
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
+			    {
+			      if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
+				{
+				  level = 3;
+				  bGenIdxTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+				}
+			    }
+			  mGenIdxTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
+			}
+		    }
 		}
+	      b->gen+=(level*10);
 	    }
 	}
-      b->gen+=(level*1000);
-    }
-  
-  int level=0;
-  if(mGenIdxTk1!=-1 && mGenIdxTk2!=-1)
-    {
-      if(!twoTks) level=1;
-      else
-	{
-	  if(mGenIdxTk1==mGenIdxTk2) level=1;
+      
+      //mu1
+      if(MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>-1)
+	{  
+	  int level =0;
+	  if(fabs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]])==13) level=1;
+	  if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]>-1)
+	    {
+	      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1)
+		{
+		  if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]])==BId)
+		    {
+		      level = 2;
+		      bGenIdxMu1=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
+		    }
+		} 
+	    }
+	  b->gen+=(level*100);
 	}
+      
+      //mu2
+      if(MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>-1)
+	{  
+	  int level =0;
+	  if(fabs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]])==13) level = 1;
+	  if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]>-1)
+	    {
+	      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]>-1)
+		{
+		  if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]])==BId)
+		    {
+		      level = 2;
+		      bGenIdxMu2=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]];
+		    }
+		}
+	    }
+	  b->gen+=(level*1000);
+	}
+      
+      int level=0;
+      if(mGenIdxTk1!=-1 && mGenIdxTk2!=-1)
+	{
+	  if(!twoTks) level=1;
+	  else
+	    {
+	      if(mGenIdxTk1==mGenIdxTk2) level=1;
+	    }
+	}
+      if(bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1)
+	{
+	  if(!twoTks)
+	    {
+	      level=2;
+	    }
+	  else if(bGenIdxMu1==bGenIdxTk2) level=2;
+	}
+      b->gen+=(level*10000);
+      
     }
-  if(bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1)
-    {
-      if(!twoTks) level=2;
-      else if(bGenIdxMu1==bGenIdxTk2) level=2;
-    }
-  b->gen+=(level*10000);
-  
 }
-
 int signalGen(int Btype, int j)
 {
   float BId,MId,tk1Id,tk2Id;
@@ -337,15 +343,16 @@ void loop(){
    if(REAL)
      {
       cout<<"--- REAL DATA ---"<<endl;
-      infname = "/net/hidsk0001/d00/scratch/yjlee/bmeson/merged_pPbData_20131114.root";
-      outfname = "nt_data.root";
+      //infname = "/net/hidsk0001/d00/scratch/yjlee/bmeson/merged_pPbData_20131114.root";
+      infname = "/net/hidsk0001/d00/scratch/jwang/data_merge.root";
+      outfname = "/export/d00/scratch/jwang/ntfile/nt_data.root";
      }
    else
      {
       cout<<"--- MC ---"<<endl;
       //infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full_20140212/Bfinder_all_MC_Phi.root";
-      infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Kp.root";
-      outfname = "nt_mc.root";
+      infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Phi.root";
+      outfname = "/export/d00/scratch/jwang/ntfile/nt_mc_Phi.root";
      }
 
    //File type
@@ -354,10 +361,10 @@ void loop(){
 
    //Chain type
    //TChain* root = new TChain("demo/root");
-   //root->Add("/mnt/hadoop/cms/store/user/twang/HI_Btuple/20131202_PPMuon_Run2013A-PromptReco-v1_RECO/Bfinder_all_*");
-
-   setBranch(root);
+   //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/*.root");
    TFile *outf = new TFile(outfname,"recreate");
+   setBranch(root);
+
 
    int ifchannel[7];
    ifchannel[0] = 1; //jpsi+Kp
@@ -442,15 +449,18 @@ void loop(){
 	  }
       }
 
-      for (int j=0;j<GenInfo_size;j++)
+      if(!REAL)
 	{
-	  for(type=1;type<8;type++)
+	  for (int j=0;j<GenInfo_size;j++)
 	    {
-	      if(signalGen(type,j))
+	      for(type=1;type<8;type++)
 		{
-		  bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
-		  ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j]);
-		  break;
+		  if(signalGen(type,j))
+		    {
+		      bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
+		      ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j]);
+		      break;
+		    }
 		}
 	    }
 	}
