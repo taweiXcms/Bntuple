@@ -122,7 +122,7 @@ void fitB(char *infname)
    hPt->Sumw2();
    hPt->Draw();
    
-   ntMC->Project("hPtMC","pt","abs(y)<1000&&gen==2222");
+   ntMC->Project("hPtMC","pt","abs(y)<1000&&gen==22233");
    ntGen->Project("hPtGen","pt","abs(y)<1.93");
 
    hPtMC->Sumw2();

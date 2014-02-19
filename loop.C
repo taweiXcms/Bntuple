@@ -3,10 +3,9 @@
 #include <iostream>
 #include <TNtuple.h>
 #include <TVector3.h>
+#include <TLorentzVector.h>
 
 #include "loop.h"
-
-#define REAL 0 //1:real data; 0:MC
 
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 {
@@ -14,6 +13,9 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
 	       BInfo_vtxY[j]-EvtInfo_PVy,
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
+  TLorentzVector b4P;
+  b4P.SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+  b->y = b4P.Rapidity();
   b->dtheta = bP->Angle(*bVtx);
   b->pt = sqrt(BInfo_px[j]*BInfo_px[j]+BInfo_py[j]*BInfo_py[j]);
   b->eta = BInfo_eta[j];
@@ -62,6 +64,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   int bGenIdxTk2=-1;
   int bGenIdxMu1=-1;
   int bGenIdxMu2=-1;
+
 
   float BId,MId,tk1Id,tk2Id;
   //tk1:positive, tk2:negtive
@@ -243,8 +246,86 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   
 }
 
+int signalGen(int Btype, int j)
+{
+  float BId,MId,tk1Id,tk2Id;
+  int twoTks;
+  //tk1:positive, tk2:negtive
+  if(Btype==1)
+    {
+      BId = 521;//B+-
+      MId = -1;
+      tk1Id = 321;//K+-
+      tk2Id = -1;
+      twoTks = 0;
+    }
+  if(Btype==2)
+    {
+      BId = 521;//B+-
+      MId = -1;
+      tk1Id = 211;//pi+-
+      tk2Id = -1;
+      twoTks = 0;
+    }
+  if(Btype==3)
+    {
+      BId = 511;//B0
+      MId = 310;//Ks
+      tk1Id = 211;//pi+
+      tk2Id = 211;//pi-
+      twoTks = 1;
+    }
+  if(Btype==4)
+    {
+      BId = 511;//B0
+      MId = 313;//K*0
+      tk1Id = 321;//K+
+      tk2Id = 211;//pi-
+      twoTks = 1;
+    }
+  if(Btype==5)
+    {
+      BId = 511;//B0
+      MId = 313;//K*0
+      tk1Id = 211;//pi+
+      tk2Id = 321;//K-
+      twoTks = 1;
+    }
+  if(Btype==6)
+    {
+      BId = 531;//Bs
+      MId = 333;//phi
+      tk1Id = 321;//K+
+      tk2Id = 321;//K-
+      twoTks = 1;
+    }
 
-void loop(){
+  int flag=0;
+  if (fabs(GenInfo_pdgId[j])==BId&&GenInfo_nDa[j]==2&&GenInfo_da1[j]!=-1&&GenInfo_da2[j]!=-1)
+    {
+      if (fabs(GenInfo_pdgId[GenInfo_da1[j]]==443))//jpsi
+	{
+	  if(!twoTks)
+	    {
+	      if(fabs(GenInfo_pdgId[GenInfo_da2[j]])==tk1Id) flag++;
+	    }
+	  else
+	    {
+	      if (fabs(GenInfo_pdgId[GenInfo_da2[j]])==MId) 
+		{
+		  if(GenInfo_da1[GenInfo_da2[j]]!=-1 && GenInfo_da2[GenInfo_da2[j]]!=-1)
+		    {
+		      if(fabs(GenInfo_pdgId[GenInfo_da1[GenInfo_da2[j]]])==tk1Id && fabs(GenInfo_pdgId[GenInfo_da2[GenInfo_da2[j]]])==tk2Id) flag++;
+		    }
+		}
+	    }
+	}
+    }
+  return flag;
+}
+
+
+void loop(bool REAL=0){
 //////////////////////////////////////////////////////////
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -264,9 +345,15 @@ void loop(){
    else
      {
       cout<<"--- MC ---"<<endl;
+<<<<<<< HEAD
 //      infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full/Bfinder_v4_20140206/Bfinder_all_MC_Phi.root";
       infname = "../../Bfinder_all_full_20140215/Bfinder_all_MC_Kp.root";
       outfname = "../nt_mc.root";
+=======
+      //infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full_20140212/Bfinder_all_MC_Phi.root";
+      infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Kp.root";
+      outfname = "nt_mc.root";
+>>>>>>> bed1cc35267d5556599b3adbee98acf2747b9928
      }
 
    //File type
@@ -311,10 +398,14 @@ void loop(){
    TTree* nt6 = new TTree("ntmix","");
    b6->buildBranch(nt6);
 
+   TNtuple* ntGen = new TNtuple("ntGen","","y:eta:phi:pt:pdgId");
+
    Long64_t nentries = root->GetEntries();
    Long64_t nbytes = 0;
    TVector3* bP = new TVector3;
    TVector3* bVtx = new TVector3;
+   TLorentzVector bGen;
+   int type;
 
    for (Long64_t i=0; i<nentries;i++) {
       nbytes += root->GetEntry(i);
@@ -358,8 +449,23 @@ void loop(){
 	    nt6->Fill();
 	  }
       }
+
+      for (int j=0;j<GenInfo_size;j++)
+	{
+	  for(type=1;type<8;type++)
+	    {
+	      if(signalGen(type,j))
+		{
+		  bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
+		  ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j]);
+		  break;
+		}
+	    }
+	}
    }
 
   outf->Write();
   outf->Close();
 }
+
+

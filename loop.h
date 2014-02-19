@@ -12,7 +12,11 @@ class bNtuple
  public:
   float mass;
   float pt;
+<<<<<<< HEAD
   float eta;
+=======
+  float y;
+>>>>>>> bed1cc35267d5556599b3adbee98acf2747b9928
   float d0;
   float px;
   float py;
@@ -40,7 +44,11 @@ class bNtuple
   void buildBranch(TTree* nt){
     nt->Branch("mass",&mass);
     nt->Branch("pt",&pt);
+<<<<<<< HEAD
     nt->Branch("eta",&eta);
+=======
+    nt->Branch("y",&y);
+>>>>>>> bed1cc35267d5556599b3adbee98acf2747b9928
     nt->Branch("gen",&gen);
     nt->Branch("px",&px);
     nt->Branch("py",&py);
