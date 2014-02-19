@@ -12,14 +12,17 @@ class bNtuple
  public:
   float mass;
   float pt;
-  float d0;
   float eta;
   float phi;
+  float y;
+  float d0;
   float vx;
   float vy;
   float d0Err;
   float chi2ndf;
   float dtheta;
+  float gen;
+  float genIndex;
 
   float trk1Pt;
   float trk1Dxy;
@@ -34,20 +37,22 @@ class bNtuple
   float trk2PixelHit;
   float trk2StripHit;
   float trk2Chi2ndf;
-  float gen;
+
 
   void buildBranch(TTree* nt){
     nt->Branch("mass",&mass);
     nt->Branch("pt",&pt);
-    nt->Branch("gen",&gen);
-    nt->Branch("px",&px);
-    nt->Branch("py",&py);
+    nt->Branch("eta",&eta);
+    nt->Branch("phi",&phi);
+    nt->Branch("y",&y);
     nt->Branch("d0",&d0);
     nt->Branch("vx",&vx);
     nt->Branch("vy",&vy);
     nt->Branch("d0Err",&d0Err);
     nt->Branch("chi2ndf",&chi2ndf);
     nt->Branch("dtheta",&dtheta);
+    nt->Branch("gen",&gen);
+    nt->Branch("genIndex",&genIndex);
 
     nt->Branch("trk1Pt",&trk1Pt);
     nt->Branch("trk1Dxy",&trk1Dxy);
@@ -167,9 +172,12 @@ class bNtuple
    Int_t           BInfo_size;
    Int_t           BInfo_index[MAX_XB];
    Double_t        BInfo_mass[MAX_XB];
+   Double_t        BInfo_eta[MAX_XB];
+   Double_t        BInfo_phi[MAX_XB];
    Double_t        BInfo_px[MAX_XB];
    Double_t        BInfo_py[MAX_XB];
    Double_t        BInfo_pz[MAX_XB];
+   Double_t        BInfo_pt[MAX_XB];
    Double_t        BInfo_pxE[MAX_XB];
    Double_t        BInfo_pyE[MAX_XB];
    Double_t        BInfo_pzE[MAX_XB];
@@ -255,15 +263,16 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("EvtInfo.PVx",&EvtInfo_PVx);
    root->SetBranchAddress("EvtInfo.PVy",&EvtInfo_PVy);
    root->SetBranchAddress("EvtInfo.PVz",&EvtInfo_PVz);
-   root->SetBranchAddress("EvtInfo.PVxE",&EvtInfo_PVxE);
-   root->SetBranchAddress("EvtInfo.PVyE",&EvtInfo_PVyE);
-   root->SetBranchAddress("EvtInfo.PVzE",&EvtInfo_PVzE);
-   root->SetBranchAddress("EvtInfo.PVnchi2",&EvtInfo_PVnchi2);
-   root->SetBranchAddress("EvtInfo.PVchi2",&EvtInfo_PVchi2);
+   //root->SetBranchAddress("EvtInfo.PVxE",&EvtInfo_PVxE);
+   //root->SetBranchAddress("EvtInfo.PVyE",&EvtInfo_PVyE);
+   //root->SetBranchAddress("EvtInfo.PVzE",&EvtInfo_PVzE);
+   //root->SetBranchAddress("EvtInfo.PVnchi2",&EvtInfo_PVnchi2);
+   //root->SetBranchAddress("EvtInfo.PVchi2",&EvtInfo_PVchi2);
    
 
    root->SetBranchAddress("MuonInfo.size",&MuonInfo_size);
    root->SetBranchAddress("MuonInfo.index",MuonInfo_index);
+   /* 
    root->SetBranchAddress("MuonInfo.handle_index",MuonInfo_handle_index);
    root->SetBranchAddress("MuonInfo.charge",MuonInfo_charge);
    root->SetBranchAddress("MuonInfo.pt",MuonInfo_pt);
@@ -292,11 +301,13 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("MuonInfo.iso_hcal",MuonInfo_iso_hcal);
    root->SetBranchAddress("MuonInfo.n_matches",MuonInfo_n_matches);
    root->SetBranchAddress("MuonInfo.isGoodCand",MuonInfo_isGoodCand);
+   */
    root->SetBranchAddress("MuonInfo.geninfo_index",MuonInfo_geninfo_index);
    
 
    root->SetBranchAddress("TrackInfo.size",&TrackInfo_size);
    root->SetBranchAddress("TrackInfo.index",TrackInfo_index);
+   /*
    root->SetBranchAddress("TrackInfo.handle_index",TrackInfo_handle_index);
    root->SetBranchAddress("TrackInfo.charge",TrackInfo_charge);
    root->SetBranchAddress("TrackInfo.pt",TrackInfo_pt);
@@ -313,10 +324,12 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("TrackInfo.dzPV",TrackInfo_dzPV);
    root->SetBranchAddress("TrackInfo.dxyPV",TrackInfo_dxyPV);
    root->SetBranchAddress("TrackInfo.isGoodCand",TrackInfo_isGoodCand);
+   */
    root->SetBranchAddress("TrackInfo.geninfo_index",TrackInfo_geninfo_index);
    
    root->SetBranchAddress("BInfo.uj_size",&BInfo_uj_size);
    root->SetBranchAddress("BInfo.uj_index",BInfo_uj_index);
+   /*
    root->SetBranchAddress("BInfo.uj_mass",BInfo_uj_mass);
    root->SetBranchAddress("BInfo.uj_px",BInfo_uj_px);
    root->SetBranchAddress("BInfo.uj_py",BInfo_uj_py);
@@ -338,13 +351,15 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("BInfo.uj_rfmu2_px",BInfo_uj_rfmu2_px);
    root->SetBranchAddress("BInfo.uj_rfmu2_py",BInfo_uj_rfmu2_py);
    root->SetBranchAddress("BInfo.uj_rfmu2_pz",BInfo_uj_rfmu2_pz);
-   
+   */
 
    root->SetBranchAddress("BInfo.size",&BInfo_size);
    root->SetBranchAddress("BInfo.index",BInfo_index);
    root->SetBranchAddress("BInfo.mass",BInfo_mass);
+   root->SetBranchAddress("BInfo.eta",BInfo_eta);
    root->SetBranchAddress("BInfo.px",BInfo_px);
    root->SetBranchAddress("BInfo.py",BInfo_py);
+   root->SetBranchAddress("BInfo.pt",BInfo_pt);
    root->SetBranchAddress("BInfo.pz",BInfo_pz);
    root->SetBranchAddress("BInfo.pxE",BInfo_pxE);
    root->SetBranchAddress("BInfo.pyE",BInfo_pyE);
@@ -364,6 +379,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("BInfo.isGoodCand",BInfo_isGoodCand);
    root->SetBranchAddress("BInfo.type",BInfo_type);
    
+   /*
    root->SetBranchAddress("BInfo.rfmu1_px",BInfo_rfmu1_px);
    root->SetBranchAddress("BInfo.rfmu1_py",BInfo_rfmu1_py);
    root->SetBranchAddress("BInfo.rfmu1_pz",BInfo_rfmu1_pz);
@@ -390,7 +406,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("BInfo.tktk_vtxZE",BInfo_tktk_vtxZE);
    root->SetBranchAddress("BInfo.tktk_vtxdof",BInfo_tktk_vtxdof);
    root->SetBranchAddress("BInfo.tktk_vtxchi2",BInfo_tktk_vtxchi2);
-   
+   */
    root->SetBranchAddress("GenInfo.size",&GenInfo_size);
    root->SetBranchAddress("GenInfo.index",&GenInfo_index);
    root->SetBranchAddress("GenInfo.handle_index",&GenInfo_handle_index);

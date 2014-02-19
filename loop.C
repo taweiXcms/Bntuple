@@ -8,7 +8,8 @@
 
 #include "loop.h"
 
-#define REAL 1 //1:real data; 0:MC
+#define REAL 0 //1:real data; 0:MC
+
 
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 {
@@ -16,10 +17,14 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
 	       BInfo_vtxY[j]-EvtInfo_PVy,
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
+  TLorentzVector b4P;
+  b4P.SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+  b->y = b4P.Rapidity();
   b->dtheta = bP->Angle(*bVtx);
   b->pt = BInfo_pt[j];
   b->eta = BInfo_eta[j];
   b->phi = BInfo_phi[j];
+
   b->d0 = sqrt((BInfo_vtxX[j]-EvtInfo_PVx)*(BInfo_vtxX[j]-EvtInfo_PVx)+(BInfo_vtxY[j]-EvtInfo_PVy)*(BInfo_vtxY[j]-EvtInfo_PVy));
   b->vx = BInfo_vtxX[j] - EvtInfo_PVx;
   b->vy = BInfo_vtxY[j] - EvtInfo_PVy;
@@ -59,6 +64,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   if(!REAL)
     {
       b->gen=0;//gen init
+      b->genIndex=-1;//gen init
       int mGenIdxTk1=-1;
       int mGenIdxTk2=-1;
       int bGenIdxTk1=-1;
@@ -243,8 +249,13 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
 	  if(!twoTks)
 	    {
 	      level=2;
+	      b->genIndex = bGenIdxMu1;
 	    }
-	  else if(bGenIdxMu1==bGenIdxTk2) level=2;
+	  else if(bGenIdxMu1==bGenIdxTk2)
+	    {
+	      level=2;
+	      b->genIndex = bGenIdxMu1;
+	    }
 	}
       b->gen+=(level*10000);
       
@@ -325,6 +336,7 @@ int signalGen(int Btype, int j)
 	    }
 	}
     }
+
   return flag;
 }
 
@@ -350,9 +362,9 @@ void loop(){
    else
      {
       cout<<"--- MC ---"<<endl;
-      //infname = "/net/hisrv0001/home/jwang/myPublic/Bfinder_all_full_20140212/Bfinder_all_MC_Phi.root";
       infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Phi.root";
-      outfname = "/export/d00/scratch/jwang/ntfile/nt_mc_Phi.root";
+      //outfname = "/export/d00/scratch/jwang/ntfile/nt_mc_Phi.root";
+      outfname = "test_mc.root";
      }
 
    //File type
@@ -397,14 +409,14 @@ void loop(){
    TTree* nt6 = new TTree("ntmix","");
    b6->buildBranch(nt6);
 
-   TNtuple* ntGen = new TNtuple("ntGen","","y:eta:phi:pt:pdgId");
+   TNtuple* ntGen = new TNtuple("ntGen","","y:eta:phi:pt:pdgId:isSignal");
 
    Long64_t nentries = root->GetEntries();
    Long64_t nbytes = 0;
    TVector3* bP = new TVector3;
    TVector3* bVtx = new TVector3;
    TLorentzVector bGen;
-   int type;
+   int type,flag;
 
    for (Long64_t i=0; i<nentries;i++) {
       nbytes += root->GetEntry(i);
@@ -453,15 +465,14 @@ void loop(){
 	{
 	  for (int j=0;j<GenInfo_size;j++)
 	    {
+	      flag=0;
 	      for(type=1;type<8;type++)
 		{
-		  if(signalGen(type,j))
-		    {
-		      bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
-		      ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j]);
-		      break;
-		    }
+		  flag = signalGen(type,j);
+		  if(flag) break;
 		}
+	      bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
+	      ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j],flag);
 	    }
 	}
    }

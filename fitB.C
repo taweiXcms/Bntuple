@@ -117,6 +117,7 @@ void fitB()
       TF1 *f = fit(nt,ptBins[i],ptBins[i+1]);
       hPt->SetBinContent(i+1,f->GetParameter(0)*100./(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,f->GetParError(0)*100./(ptBins[i+1]-ptBins[i]));
+<<<<<<< HEAD
     }  
   
   TCanvas *c=  new TCanvas("cResult","",600,600);
@@ -141,4 +142,30 @@ void fitB()
   
   //   outf->Write();
   
+=======
+   }  
+
+   TCanvas *c=  new TCanvas("cResult","",600,600);
+   hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
+   hPt->SetYTitle("Uncorrected dN/dp_{T}");
+   hPt->Sumw2();
+   hPt->Draw();
+   
+   ntMC->Project("hPtMC","pt","abs(y)<1000&&gen==22233");
+   ntGen->Project("hPtGen","pt","abs(y)<1.93");
+
+   hPtMC->Sumw2();
+   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
+   hPtMC->Sumw2();
+   hEff->Divide(hPtGen);
+
+   TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
+   hPtCor->Divide(hEff);
+   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
+   hPtCor->SetYTitle("Correctd dN/dp_{T}");
+   hPtCor->Draw();
+
+//   outf->Write();
+
+>>>>>>> eb74b81c27376c8893998840eff41185b4976fa8
 }
