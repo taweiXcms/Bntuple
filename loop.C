@@ -10,7 +10,7 @@
 #include "loop.h"
 
 
-void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
+void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
 {
   //b section
   bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
@@ -34,28 +34,28 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   b->chi2ndf = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
 
   //muon section
-  b->mu1Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[j]];
-  b->mu1Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[j]];
-  b->mu1Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu1_index[j]]/MuonInfo_i_ndf[BInfo_uj_rfmu1_index[j]];
-  b->mu1dxy = MuonInfo_dxyPV[BInfo_uj_rfmu1_index[j]];
-  b->mu1dz = MuonInfo_dzPV[BInfo_uj_rfmu1_index[j]];
-  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[j]]&16) b->mu1TrackerMuArbitrated = 1;
+  b->mu1Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
+  b->mu1Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
+  b->mu1Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
+  b->mu1dxy = MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
+  b->mu1dz = MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
+  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]]&16) b->mu1TrackerMuArbitrated = 1;
   else b->mu1TrackerMuArbitrated = 0;
-  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[j]]&4096) b->mu1StationTight = 1;
+  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]]&4096) b->mu1StationTight = 1;
   else b->mu1StationTight = 0;
 
-  b->mu2Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[j]];
-  b->mu2Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[j]];
-  b->mu2Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu2_index[j]]/MuonInfo_i_ndf[BInfo_uj_rfmu2_index[j]];
-  b->mu2dxy = MuonInfo_dxyPV[BInfo_uj_rfmu2_index[j]];
-  b->mu2dz = MuonInfo_dzPV[BInfo_uj_rfmu2_index[j]];
-  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[j]]&16) b->mu2TrackerMuArbitrated = 1;
+  b->mu2Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
+  b->mu2Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
+  b->mu2Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
+  b->mu2dxy = MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
+  b->mu2dz = MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
+  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]]&16) b->mu2TrackerMuArbitrated = 1;
   else b->mu2TrackerMuArbitrated = 0;
-  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[j]]&4096) b->mu2StationTight = 1;
+  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]]&4096) b->mu2StationTight = 1;
   else b->mu2StationTight = 0;
   
-  b->ujmass = BInfo_uj_mass[j];
-  b->ujvProb = TMath::Prob(BInfo_uj_vtxchi2[j],BInfo_uj_vtxdof[j]);
+  b->ujmass = BInfo_uj_mass[BInfo_uj_index[j]];
+  b->ujvProb = TMath::Prob(BInfo_uj_vtxchi2[BInfo_uj_index[j]],BInfo_uj_vtxdof[BInfo_uj_index[j]]);
 
   //track section
   b->trk1Dxy = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
@@ -89,7 +89,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
     }
 
   
-  //gen info judgement  b->mu1Tklayer = MuonInfo.i_nStripLayer[BInfo_uj_rfmu1_index[j]];
+  //gen info judgement
 
   if(!REAL)
     {
@@ -373,7 +373,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile, string outfile, bool REAL=0){
+void loop(string infile, string outfile, bool REAL=1){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -383,7 +383,10 @@ void loop(string infile, string outfile, bool REAL=0){
 
   const char* infname;
   const char* outfname;
-  
+
+  if(REAL) cout<<"--- REAL DATA ---"<<endl;
+  else cout<<"--- MC ---"<<endl;
+
   /*
   if(REAL)
     {
@@ -481,37 +484,37 @@ void loop(string infile, string outfile, bool REAL=0){
       if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==1)
 	{
-	  fillTree(b0,bP,bVtx,j);
+	  fillTree(b0,bP,bVtx,j,REAL);
 	  nt0->Fill();
 	}
       if(BInfo_type[j]==2)
 	{
-	  fillTree(b1,bP,bVtx,j);
+	  fillTree(b1,bP,bVtx,j,REAL);
 	  nt1->Fill();
 	}
       if(BInfo_type[j]==3)
 	{
-	  fillTree(b2,bP,bVtx,j);
+	  fillTree(b2,bP,bVtx,j,REAL);
 	  nt2->Fill();
 	}
       if(BInfo_type[j]==4)
 	{
-	  fillTree(b3,bP,bVtx,j);
+	  fillTree(b3,bP,bVtx,j,REAL);
 	  nt3->Fill();
 	  }
       if(BInfo_type[j]==5)
 	{
-	  fillTree(b4,bP,bVtx,j);
+	  fillTree(b4,bP,bVtx,j,REAL);
 	  nt4->Fill();
 	}
       if(BInfo_type[j]==6)
 	{
-	  fillTree(b5,bP,bVtx,j);
+	  fillTree(b5,bP,bVtx,j,REAL);
 	  nt5->Fill();
 	}
       if(BInfo_type[j]==7)
 	{
-	  fillTree(b6,bP,bVtx,j);
+	  fillTree(b6,bP,bVtx,j,REAL);
 	  nt6->Fill();
 	}
     }

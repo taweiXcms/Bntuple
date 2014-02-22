@@ -11,7 +11,6 @@ class bNtuple
 {
  public:
   float mass;
-  float tktkmass;
   float pt;
   float eta;
   float phi;
@@ -408,6 +407,8 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("BInfo.index",BInfo_index);
    root->SetBranchAddress("BInfo.mass",BInfo_mass);
    root->SetBranchAddress("BInfo.eta",BInfo_eta);
+   root->SetBranchAddress("BInfo.phi",BInfo_phi);
+
    root->SetBranchAddress("BInfo.px",BInfo_px);
    root->SetBranchAddress("BInfo.py",BInfo_py);
    root->SetBranchAddress("BInfo.pt",BInfo_pt);
