@@ -8,7 +8,7 @@
 
 #include "loop.h"
 
-#define REAL 0 //1:real data; 0:MC
+#define REAL 1 //1:real data; 0:MC
 
 
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
@@ -30,6 +30,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j)
   b->vy = BInfo_vtxY[j] - EvtInfo_PVy;
   b->d0Err = sqrt(BInfo_vtxXE[j]*BInfo_vtxXE[j]+BInfo_vtxYE[j]*BInfo_vtxYE[j]);
   b->mass = BInfo_mass[j];
+  b->tktkmass = BInfo_tktk_mass[j];
   b->chi2ndf = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
   
   b->trk1Dxy = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
@@ -342,7 +343,7 @@ int signalGen(int Btype, int j)
 
 
 void loop(){
-//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
 //   from TTree root/root
@@ -356,13 +357,16 @@ void loop(){
      {
       cout<<"--- REAL DATA ---"<<endl;
       //infname = "/net/hidsk0001/d00/scratch/yjlee/bmeson/merged_pPbData_20131114.root";
-      infname = "/net/hidsk0001/d00/scratch/jwang/data_merge.root";
-      outfname = "/export/d00/scratch/jwang/ntfile/nt_data.root";
+//      infname = "/net/hidsk0001/d00/scratch/jwang/data_merge.root";
+        infname = "sample/merged_20140213_PAMuon_HIRun2013_PromptReco_v1.root";
+      outfname = "test.root";
      }
    else
      {
       cout<<"--- MC ---"<<endl;
       infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Phi.root";
+//        infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Kstar.root";
+//        infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_.root";
       //outfname = "/export/d00/scratch/jwang/ntfile/nt_mc_Phi.root";
       outfname = "test_mc.root";
      }

@@ -11,6 +11,7 @@ class bNtuple
 {
  public:
   float mass;
+  float tktkmass;
   float pt;
   float eta;
   float phi;
@@ -41,6 +42,7 @@ class bNtuple
 
   void buildBranch(TTree* nt){
     nt->Branch("mass",&mass);
+    nt->Branch("tktkmass",&tktkmass);
     nt->Branch("pt",&pt);
     nt->Branch("eta",&eta);
     nt->Branch("phi",&phi);
