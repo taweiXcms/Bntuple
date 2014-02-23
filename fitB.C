@@ -16,7 +16,7 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
    TH1D *h = new TH1D(Form("h%d",count),"",100,4.8,5.8);
    // Fit function
    TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*x*x+[6]*x*x*x");
-   nt->Project(Form("h%d",count),"mass",Form("LD>0.02&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
+   nt->Project(Form("h%d",count),"mass",Form("abs(y)<1.93&&LD>0.02&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
    clean0(h);
    h->Draw();
 
@@ -92,7 +92,7 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
 //void fitB(char *infname)
 void fitB()
 {
-  TFile *inf = new TFile("/net/hisrv0001/home/yenjie/slocal/bmeson/Bntuple/nt_data_2.root");
+  TFile *inf = new TFile("/net/hisrv0001/home/yenjie/slocal/bmeson/Bntuple/nt_20140218_PAMuon_HIRun2013_PromptReco_v1.root");
   //TFile *inf = new TFile("/net/hidsk0001/d00/scratch/jwang/nt_data.root");
   //TFile *inf = new TFile("nt_mc.root");
   TTree *nt = (TTree*) inf->Get("ntKp");
@@ -102,6 +102,7 @@ void fitB()
   TTree *ntMC = (TTree*)infMC->Get("ntKp");
   
   nt->SetAlias("LD","(4.239e-03*abs(trk1Dxy)/trk1D0Err +chi2ndf*1.168e-03+trk1Chi2ndf*4.045e-04+trk1PixelHit*1.595e-04+trk1StripHit*3.943e-05)");
+  ntMC->SetAlias("LD","(4.239e-03*abs(trk1Dxy)/trk1D0Err +chi2ndf*1.168e-03+trk1Chi2ndf*4.045e-04+trk1PixelHit*1.595e-04+trk1StripHit*3.943e-05)");
   //nt->SetAlias("LD","(-2.704e-02-4.649e-03*(d0/d0Err)+5.805e-4*chi2ndf+2.021e-03*abs(trk1Dxy/trk1D0Err)-7.560e-04*trk1PixelHit+1.405e-05*trk1StripHit-2.786e-04*trk1Chi2ndf)");
   
   //   TFile *outf = new TFile("phiHistos.root","recreate");
@@ -111,13 +112,21 @@ void fitB()
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
-  
+
+  TH1D *hRef = new TH1D("hRef","",nBins,ptBins);
+  hRef->SetBinContent(1,2.509091);
+  hRef->SetBinContent(2,0.5519121);
+  hRef->SetBinContent(3,0.1522497);
+  hRef->SetBinContent(4,0.05214935);
+  hRef->SetBinContent(5,0.00657091);
+
+  hRef->Scale(208*30000*115*1.028*5.93*1e-5/10.);  
+
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ptBins[i],ptBins[i+1]);
       hPt->SetBinContent(i+1,f->GetParameter(0)*100./(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,f->GetParError(0)*100./(ptBins[i+1]-ptBins[i]));
-<<<<<<< HEAD
     }  
   
   TCanvas *c=  new TCanvas("cResult","",600,600);
@@ -126,7 +135,7 @@ void fitB()
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt","abs(y)<1000&&gen==22233");
+  ntMC->Project("hPtMC","pt","LD>0.02&&abs(y)<1.93&&gen==22233");
   ntGen->Project("hPtGen","pt","abs(y)<1.93");
   
   hPtMC->Sumw2();
@@ -139,33 +148,9 @@ void fitB()
   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
   hPtCor->SetYTitle("Correctd dN/dp_{T}");
   hPtCor->Draw();
+
+
+
   
-  //   outf->Write();
-  
-=======
-   }  
-
-   TCanvas *c=  new TCanvas("cResult","",600,600);
-   hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-   hPt->SetYTitle("Uncorrected dN/dp_{T}");
-   hPt->Sumw2();
-   hPt->Draw();
-   
-   ntMC->Project("hPtMC","pt","abs(y)<1000&&gen==22233");
-   ntGen->Project("hPtGen","pt","abs(y)<1.93");
-
-   hPtMC->Sumw2();
-   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-   hPtMC->Sumw2();
-   hEff->Divide(hPtGen);
-
-   TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-   hPtCor->Divide(hEff);
-   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-   hPtCor->SetYTitle("Correctd dN/dp_{T}");
-   hPtCor->Draw();
-
-//   outf->Write();
-
->>>>>>> eb74b81c27376c8893998840eff41185b4976fa8
+  //   outf->Write();  
 }
