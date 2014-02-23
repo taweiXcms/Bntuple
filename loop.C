@@ -34,28 +34,28 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
   b->chi2ndf = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
 
   //muon section
-  b->mu1Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
-  b->mu1Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
-  b->mu1Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
-  b->mu1dxy = MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
-  b->mu1dz = MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]];
-  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]]&16) b->mu1TrackerMuArbitrated = 1;
+  b->mu1Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  b->mu1Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  b->mu1Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  b->mu1dxy = MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  b->mu1dz = MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&16) b->mu1TrackerMuArbitrated = 1;
   else b->mu1TrackerMuArbitrated = 0;
-  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_uj_index[j]]]&4096) b->mu1StationTight = 1;
+  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096) b->mu1StationTight = 1;
   else b->mu1StationTight = 0;
 
-  b->mu2Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
-  b->mu2Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
-  b->mu2Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
-  b->mu2dxy = MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
-  b->mu2dz = MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]];
-  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]]&16) b->mu2TrackerMuArbitrated = 1;
+  b->mu2Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  b->mu2Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  b->mu2Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  b->mu2dxy = MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  b->mu2dz = MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&16) b->mu2TrackerMuArbitrated = 1;
   else b->mu2TrackerMuArbitrated = 0;
-  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_uj_index[j]]]&4096) b->mu2StationTight = 1;
+  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096) b->mu2StationTight = 1;
   else b->mu2StationTight = 0;
   
-  b->ujmass = BInfo_uj_mass[BInfo_uj_index[j]];
-  b->ujvProb = TMath::Prob(BInfo_uj_vtxchi2[BInfo_uj_index[j]],BInfo_uj_vtxdof[BInfo_uj_index[j]]);
+  b->ujmass = BInfo_uj_mass[BInfo_rfuj_index[j]];
+  b->ujvProb = TMath::Prob(BInfo_uj_vtxchi2[BInfo_rfuj_index[j]],BInfo_uj_vtxdof[BInfo_rfuj_index[j]]);
 
   //track section
   b->trk1Dxy = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
