@@ -384,6 +384,7 @@ void loop(string infile, string outfile, bool REAL=1){
   const char* infname;
   const char* outfname;
 
+
   if(REAL) cout<<"--- REAL DATA ---"<<endl;
   else cout<<"--- MC ---"<<endl;
 
@@ -526,8 +527,10 @@ void loop(string infile, string outfile, bool REAL=1){
 	    flag=0;
 	    for(type=1;type<8;type++)
 	      {
-		flag = signalGen(type,j);
-		if(flag) break;
+		if (signalGen(type,j)) {
+                  flag=type;
+		  break;
+                }
 	      }
 	    bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
 	    ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j],flag);
