@@ -9,8 +9,20 @@
 #include <TEfficiency.h>
 #include <TCanvas.h>
 #include <TGraphAsymmErrors.h>
+#include <TMath.h>
+#include <TLorentzVector.h>
 ////Include Bfinder interface/format.h here
-#include "~/HeavyFlavor_20131030/Bfinder/CMSSW_5_3_8_patch3/src/Bfinder/Bfinder/interface/format.h"
+//#include "~/HeavyFlavor_20131030/Bfinder/CMSSW_5_3_8_patch3/src/Bfinder/Bfinder/interface/format.h"
+#include "/net/hisrv0001/home/tawei/HeavyFlavor_20131030/Bfinder/CMSSW_5_3_8_patch3/src/Bfinder/Bfinder/interface/format.h"
+
+#define MUON_MASS   0.10565837
+#define PION_MASS   0.13957018
+#define KAON_MASS   0.493677
+#define KSHORT_MASS 0.497614
+#define KSTAR_MASS  0.89594
+#define PHI_MASS    1.019455
+#define JPSI_MASS   3.096916
+#define PSI2S_MASS  3.686109
    
 void effXacc(){
 
@@ -19,17 +31,24 @@ void effXacc(){
 //	MCflag = 2;//K*
 //	MCflag = 3;//Phi
 	TFile* fout;
-	if(MCflag == 1)
-		fout = new TFile("fout_kp.root","recreate");
-	if(MCflag == 2)
+	if(MCflag == 1){
+//		fout = new TFile("fout_kp.root","recreate");
+//		fout = new TFile("fout_kp_temp.root","recreate");
+		fout = new TFile("fout_kp_cutted.root","recreate");
+//		fout = new TFile("fout_kp_temp_cutted.root","recreate");
+	}
+	if(MCflag == 2){
 		fout = new TFile("fout_kstar.root","recreate");
-	if(MCflag == 3)
+	}
+	if(MCflag == 3){
 		fout = new TFile("fout_phi.root","recreate");
+	}
 	TCanvas*c1 = new TCanvas("c1", "", 200, 10, 1000, 800);
 
 	TChain *root = new TChain("demo/root");
 	if(MCflag == 1)
 		root->Add("../../Bfinder_all_full_20140215/Bfinder_all_MC_Kp.root");
+//		root->Add("~/HeavyFlavor_20131030/Bfinder/CMSSW_5_3_8_patch3/src/Bfinder/PyquenMix_STARTHI53_V27_embedHIJING_boostedMC_GEN_SIM_DIGI_RECO_Bp2JpsiKp_Bpt5_5TeV_v1/Bfinder_all.root");
 	if(MCflag == 2)
 		root->Add("../../Bfinder_all_full_20140215/Bfinder_all_MC_Kstar.root");
 	if(MCflag == 3)
@@ -50,6 +69,7 @@ void effXacc(){
     double ptBins[nBins+1] = {5,10,15,20,25,30,60};
 	TH1F* reco_bsig_pt = new TH1F("reco bsig pt", "", nBins,ptBins);
 	TH1F* gen_bsig_pt = new TH1F("gen bsig pt", "", nBins,ptBins);
+	TH1F* CutLevel = new TH1F("cutlevel", "cutlevel", 20, 0, 20);
 		
 	int total_reco_true_bsig = 0;
 	int total_gen_bsig = 0;
@@ -59,7 +79,6 @@ void effXacc(){
 //	for(int entry=0; entry<9979; entry++){
     	if ((entry%10000) == 0) printf("Loading event #%d of %d.\n",entry,nevents_total);
         root->GetEntry(entry);
-
 		
 		int mu1idx = -1;
 		int mu2idx = -1;
@@ -72,6 +91,11 @@ void effXacc(){
 		int tk2genidx = -1;
 		int jpgenidx = -1;
 		vector<int> bsig_genidx;
+
+		TVector3 PV;
+		PV.SetXYZ(EvtInfo.PVx, EvtInfo.PVy, EvtInfo.PVz);
+		TVector3 JpsiVtx;
+		TVector3 deltaJpsiPV;
 
 		int Ngenbsig = 0;
 		for(int i = 0; i < BInfo.size; i++){
@@ -88,6 +112,107 @@ void effXacc(){
 			tk1genidx = TrackInfo.geninfo_index[tk1idx];
 			tk2genidx = TrackInfo.geninfo_index[tk2idx];
 			jpgenidx = GenInfo.mo1[mu1genidx];
+
+			bool pass = 1;
+			int clevel = 0;
+            CutLevel->Fill(clevel);clevel++;//0
+
+			//Selections
+			//Muon
+			if(MuonInfo.i_striphit[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] <= 5 ||
+			   MuonInfo.i_striphit[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] <= 5) pass = 0;
+            else CutLevel->Fill(clevel);clevel++;//1
+
+			if(MuonInfo.i_pixelhit[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] <= 1 ||
+			   MuonInfo.i_pixelhit[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] <= 1) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//2
+
+			if(MuonInfo.i_chi2[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]]/MuonInfo.i_ndf[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] >= 1.8 ||
+			   MuonInfo.i_chi2[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]]/MuonInfo.i_ndf[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] >= 1.8) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//3
+
+			if(MuonInfo.dxyPV[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] >= 3.0 ||
+			   MuonInfo.dxyPV[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] >= 3.0) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//4
+
+			if(MuonInfo.dzPV[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] >= 30. ||
+			   MuonInfo.dzPV[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] >= 30.) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//5
+
+			if(!(MuonInfo.muqual[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] & 4096) ||
+			   !(MuonInfo.muqual[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] & 4096)) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//6
+
+			if(!(MuonInfo.muqual[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] & 16) ||
+			   !(MuonInfo.muqual[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] & 16)) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//7
+
+			//Jpsi
+			if(TMath::Prob(BInfo.uj_vtxchi2[BInfo.rfuj_index[i]],BInfo.uj_vtxdof[BInfo.rfuj_index[i]]) <= 0.01) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//8
+
+			JpsiVtx.SetXYZ(BInfo.uj_vtxX[BInfo.rfuj_index[i]], BInfo.uj_vtxY[BInfo.rfuj_index[i]], BInfo.uj_vtxZ[BInfo.rfuj_index[i]]);
+			JpsiVtx =PV-JpsiVtx;
+			float JpsiCt = JpsiVtx.Mag()*JPSI_MASS/BInfo.uj_pt[BInfo.rfuj_index[i]];
+			if(JpsiCt <= 0.15 ) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//9
+
+			//Track
+			if(TrackInfo.striphit[BInfo.rftk1_index[i]] <= 3) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//10
+
+			if(TrackInfo.pixelhit[BInfo.rftk1_index[i]] <= 0) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//11
+
+			if(TrackInfo.chi2[BInfo.rftk1_index[i]]/TrackInfo.ndf[BInfo.rftk1_index[i]] >= 5) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//12
+
+			if(TMath::Prob(TrackInfo.chi2[BInfo.rftk1_index[i]],TrackInfo.ndf[BInfo.rftk1_index[i]]) <= 0.001) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//13
+
+			if(TrackInfo.pt[BInfo.rftk1_index[i]] <= 2.) pass = 0;
+            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//14
+
+			if(MCflag != 1){
+				if(TrackInfo.striphit[BInfo.rftk2_index[i]] <= 3) pass = 0;
+				if(TrackInfo.pixelhit[BInfo.rftk2_index[i]] <= 0) pass = 0;
+				if(TrackInfo.chi2[BInfo.rftk2_index[i]]/TrackInfo.ndf[BInfo.rftk2_index[i]] >= 5) pass = 0;
+				if(TMath::Prob(TrackInfo.chi2[BInfo.rftk2_index[i]],TrackInfo.ndf[BInfo.rftk2_index[i]]) <= 0.001) pass = 0;
+				if(TrackInfo.pt[BInfo.rftk2_index[i]] <= 2.) pass = 0;
+			}
+
+			//Triplet mass 4.95~5.5
+			TLorentzVector mu1, mu2, tk1, tk2, theB;
+			mu1.SetPtEtaPhiM(MuonInfo.pt[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]], MuonInfo.eta[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]], MuonInfo.phi[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]], 0.10565837);
+			mu2.SetPtEtaPhiM(MuonInfo.pt[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]], MuonInfo.eta[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]], MuonInfo.phi[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]], 0.10565837);
+
+			double tk1_mass = 0;
+			double tk2_mass = 0;
+			if(MCflag == 1) tk1_mass = 0.493677;
+			if(MCflag == 2 && BInfo.type[i] == 4) tk1_mass = 0.493677;
+			if(MCflag == 2 && BInfo.type[i] == 4) tk2_mass = 0.13957018;
+			if(MCflag == 2 && BInfo.type[i] == 5) tk1_mass = 0.13957018;
+			if(MCflag == 2 && BInfo.type[i] == 5) tk2_mass = 0.493677;
+			if(MCflag == 3) tk1_mass = 0.493677;
+			if(MCflag == 3) tk2_mass = 0.493677;
+
+			tk1.SetPtEtaPhiM(TrackInfo.pt[BInfo.rftk1_index[i]], TrackInfo.eta[BInfo.rftk1_index[i]], TrackInfo.phi[BInfo.rftk1_index[i]], tk1_mass);
+			tk2.SetPtEtaPhiM(TrackInfo.pt[BInfo.rftk2_index[i]], TrackInfo.eta[BInfo.rftk2_index[i]], TrackInfo.phi[BInfo.rftk2_index[i]], tk2_mass);
+
+			if(MCflag == 1) {
+				theB = mu1+mu2+tk1;
+				if(theB.M() < 4.6 || theB.M() > 6.0) pass = 0;
+	            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//15
+			}
+			
+			if(MCflag == 2 || MCflag == 3) {
+				theB = mu1+mu2+tk1+tk2;
+				if(theB.M() < 4.6 || theB.M() > 6.0) pass = 0;
+            	else if (pass == 1) CutLevel->Fill(clevel);clevel++;//15
+			}
+
+			//Selections
+			if(!pass) continue;
 
 			if(abs(GenInfo.pdgId[mu1genidx]) == 13 && abs(GenInfo.pdgId[mu2genidx]) == 13) {//both reco mu are gen mu
 				if(GenInfo.nMo[mu1genidx] > 0 && GenInfo.nMo[mu2genidx] > 0){//both gen mu has at least 1 mother
@@ -155,7 +280,7 @@ void effXacc(){
 			}
 			//Phi
 		}
-		if(bsig_genidx.size() > 1) printf("Got %i B signal in one event\n", bsig_genidx.size());
+		if(bsig_genidx.size() > 1) printf("Got %lu B signal in one event\n", bsig_genidx.size());
 
 		vector<int> geninfo_bidx;
 		for(int i = 0; i < GenInfo.size; i++){
@@ -204,7 +329,7 @@ void effXacc(){
 			}	
 		}
 		if(geninfo_bidx.size() > 1) {
-			printf("Got %i B gen signal in one event\n", geninfo_bidx.size());
+			printf("Got %lu B gen signal in one event\n", geninfo_bidx.size());
 			printf("%i, %i, %i, %i, %i, %i\n", geninfo_bidx[0], GenInfo.pdgId[geninfo_bidx[0]], GenInfo.pdgId[GenInfo.da1[geninfo_bidx[0]]], GenInfo.pdgId[GenInfo.da2[geninfo_bidx[0]]], 
 			GenInfo.pdgId[GenInfo.da1[GenInfo.da1[geninfo_bidx[0]]]], GenInfo.pdgId[GenInfo.da2[GenInfo.da1[geninfo_bidx[0]]]]);
 			printf("%i, %i, %i, %i, %i, %i\n", geninfo_bidx[1], GenInfo.pdgId[geninfo_bidx[1]], GenInfo.pdgId[GenInfo.da1[geninfo_bidx[1]]], GenInfo.pdgId[GenInfo.da2[geninfo_bidx[1]]],
