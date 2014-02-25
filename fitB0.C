@@ -16,8 +16,8 @@ TF1 *fit(TTree *nt,TTree *nt2,double ptmin,double ptmax)
    TH1D *h = new TH1D(Form("h%d",count),"",100,4.8,5.8);
    // Fit function
    TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*x*x+[6]*x*x*x");
-   nt->Project(Form("h%d",count),"mass",Form("LD>0.075&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
-   nt2->Project(Form("h%d",count),"mass",Form("LD>0.065&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
+   nt->Project(Form("h%d",count),"mass",Form("LD>0.075&&abs(y+0.465)<1.93&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
+   nt2->Project(Form("h%d",count),"mass",Form("LD>0.075&&abs(y+0.465)<1.93&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
    clean0(h);
    h->Draw();
 
@@ -144,9 +144,9 @@ void fitB0()
   hPt->Draw();
   
 
-  ntMC->Project("hPtMC","pt","LD>0.075&&abs(y)<1000&&gen==22233");
-  ntMC2->Project("hPtMC","pt","LD>0.065&&abs(y)<1000&&gen==22233");
-  ntGen->Project("hPtGen","pt","abs(y)<1.93&&isSignal!=0");
+  ntMC->Project("hPtMC","pt","LD>0.08&&abs(y+0.465)<1.93&&gen==22233");
+  ntMC2->Project("hPtMC","pt","LD>0.08&&abs(y+0.465)<1.93&&gen==22233");
+  ntGen->Project("hPtGen","pt","abs(y+0.465)<1.93&&isSignal!=0");
   
   hPtMC->Sumw2();
   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
