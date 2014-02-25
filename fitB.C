@@ -80,7 +80,6 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
    leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",f->GetParameter(0)*100.,f->GetParError(0)*100.),"");
    leg2->Draw();
-//   c->Write();
 
    c->SaveAs(Form("BFigure/BMass-%d.C",count));
    c->SaveAs(Form("BFigure/BMass-%d.gif",count));
@@ -93,11 +92,12 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
 void fitB()
 {
   TFile *inf = new TFile("/net/hisrv0001/home/yenjie/slocal/bmeson/Bntuple/nt_20140218_PAMuon_HIRun2013_PromptReco_v1.root");
+
   //TFile *inf = new TFile("/net/hidsk0001/d00/scratch/jwang/nt_data.root");
   //TFile *inf = new TFile("nt_mc.root");
   TTree *nt = (TTree*) inf->Get("ntKp");
 
-  TFile *infMC = new TFile("nt_mc_Kp.root");
+  TFile *infMC = new TFile("/net/hisrv0001/home/tawei/HeavyFlavor_20131030/Common/test/nt_mc_kp.root");
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
   TTree *ntMC = (TTree*)infMC->Get("ntKp");
   
@@ -136,7 +136,7 @@ void fitB()
   hPt->Draw();
   
   ntMC->Project("hPtMC","pt","LD>0.02&&abs(y)<1.93&&gen==22233");
-  ntGen->Project("hPtGen","pt","abs(y)<1.93");
+  ntGen->Project("hPtGen","pt","abs(y)<1.93&&abs(pdgId)==521&&isSignal==1");
   
   hPtMC->Sumw2();
   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
@@ -149,8 +149,14 @@ void fitB()
   hPtCor->SetYTitle("Correctd dN/dp_{T}");
   hPtCor->Draw();
 
+  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
+  double lumi = 29.6e-3;  // pb, temporary number for prompt reco only
+  hPtSigma->Scale(1./lumi/208./6.1e-5);
+  hPtSigma->SetYTitle("d#sigma/dp_{T}");
 
+  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
+  hPtSigma->Draw();
   
   //   outf->Write();  
 }
