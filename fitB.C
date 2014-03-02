@@ -1,29 +1,42 @@
 #include "utilities.h"
 
-void clean0(TH1D *h)
-{
-   for (int i=1;i<=h->GetNbinsX();i++)
-   {
-      if (h->GetBinContent(i)==0) h->SetBinError(i,1);
-   }
+double luminosity=34*1e-3;
+double setparam0=100.;
+double setparam1=5.28;
+double setparam2=0.03;
+double fixparam1=5.279;
+
+TString inputdata="../InputsFits/nt_20140218_PAMuon_HIRun2013_PromptReco_v1.root";
+TString inputmc="../InputsFits/nt_mc_Kp.root";
+
+TString cut="chi2cl>0.0104&&(d0)/d0Err>3.37&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.42";
+
+TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
+TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
+
+void clean0(TH1D *h){
+  for (int i=1;i<=h->GetNbinsX();i++){
+    if (h->GetBinContent(i)==0) h->SetBinError(i,1);
+  }
 }
 
-TF1 *fit(TTree *nt,double ptmin,double ptmax)
-{   
+TF1 *fit(TTree *nt,double ptmin,double ptmax){   
+   //cout<<cut.Data()<<endl;
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    TH1D *h = new TH1D(Form("h%d",count),"",100,4.8,5.8);
    // Fit function
    TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*x*x+[6]*x*x*x");
-   nt->Project(Form("h%d",count),"mass",Form("abs(y+0.465)<1.93&&LD>0.02&&pt>%f&&pt<%f",ptmin,ptmax));    // You can change the selection cut here
+   nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
    h->Draw();
-
-   f->SetParameter(1,5.28);
-   f->SetParameter(2,0.03);
-   f->SetParameter(0,100);
-   f->FixParameter(1,5.279);
+   
+   f->SetParameter(0,setparam0);
+   f->SetParameter(1,setparam1);
+   f->SetParameter(2,setparam2);
+   f->FixParameter(1,fixparam1);
    h->GetEntries();
    h->Fit(Form("f%d",count),"","",4.8,5.8);
    h->Fit(Form("f%d",count),"L","",4.8,5.8);
@@ -33,7 +46,7 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
    h->SetMarkerSize(0.8);
    h->SetMarkerStyle(20);
    cout <<h->GetEntries()<<endl;
-   cout <<Form("LD>0.02&&pt>%f&&pt<%f",ptmin,ptmax)<<endl;
+
    // function for background shape plotting. take the fit result from f
    TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*x*x+[3]*x*x*x+[4]*x*x*x*x");
    background->SetParameter(0,f->GetParameter(3));
@@ -44,6 +57,7 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
    background->SetLineColor(4);
    background->SetRange(4.8,5.8);
    background->SetLineStyle(2);
+   
    // function for signal shape plotting. take the fit result from f
    TF1 *mass = new TF1(Form("fmass",count),"[0]*TMath::BreitWigner(x,[1],[2])");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2));
@@ -82,46 +96,27 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",f->GetParameter(0)*100.,f->GetParError(0)*100.),"");
    leg2->Draw();
 
-   c->SaveAs(Form("BFigure/BMass-%d.C",count));
-   c->SaveAs(Form("BFigure/BMass-%d.gif",count));
-   c->SaveAs(Form("BFigure/phiMass-%d.eps",count));
+   c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
+   c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
+   c->SaveAs(Form("ResultsBplus/phiMass-%d.eps",count));
 
    return f;
 }
 
-void fitB(char *infname)
-//void fitB()
-{
-  TFile *inf = new TFile(infname);//"/net/hisrv0001/home/yenjie/slocal/bmeson/Bntuple/nt_20140218_PAMuon_HIRun2013_PromptReco_v1.root");
+void fitB(){
 
-  //TFile *inf = new TFile("/net/hidsk0001/d00/scratch/jwang/nt_data.root");
-  //TFile *inf = new TFile("nt_mc.root");
+  TFile *inf = new TFile(inputdata.Data());
   TTree *nt = (TTree*) inf->Get("ntKp");
 
-  TFile *infMC = new TFile("/net/hisrv0001/home/tawei/HeavyFlavor_20131030/Common/test/nt_mc_kp.root");
+  TFile *infMC = new TFile(inputmc.Data());
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
   TTree *ntMC = (TTree*)infMC->Get("ntKp");
-  
-  nt->SetAlias("LD","(4.239e-03*abs(trk1Dxy)/trk1D0Err +chi2ndf*1.168e-03+trk1Chi2ndf*4.045e-04+trk1PixelHit*1.595e-04+trk1StripHit*3.943e-05)");
-  ntMC->SetAlias("LD","(4.239e-03*abs(trk1Dxy)/trk1D0Err +chi2ndf*1.168e-03+trk1Chi2ndf*4.045e-04+trk1PixelHit*1.595e-04+trk1StripHit*3.943e-05)");
-  //nt->SetAlias("LD","(-2.704e-02-4.649e-03*(d0/d0Err)+5.805e-4*chi2ndf+2.021e-03*abs(trk1Dxy/trk1D0Err)-7.560e-04*trk1PixelHit+1.405e-05*trk1StripHit-2.786e-04*trk1Chi2ndf)");
-  
-  //   TFile *outf = new TFile("phiHistos.root","recreate");
-  //   outf->cd();
+    
   const int nBins = 6;
   double ptBins[nBins+1] = {5,10,15,20,25,30,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
-
-  TH1D *hRef = new TH1D("hRef","",nBins,ptBins);
-  hRef->SetBinContent(1,2.509091);
-  hRef->SetBinContent(2,0.5519121);
-  hRef->SetBinContent(3,0.1522497);
-  hRef->SetBinContent(4,0.05214935);
-  hRef->SetBinContent(5,0.00657091);
-
-  hRef->Scale(208*30000*115*1.028*5.93*1e-5/10.);  
 
   for (int i=0;i<nBins;i++)
     {
@@ -132,12 +127,12 @@ void fitB(char *infname)
   
   TCanvas *c=  new TCanvas("cResult","",600,600);
   hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected dN/dp_{T}");
+  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt","LD>0.02&&abs(y+0.465)<1.93&&gen==22233");
-  ntGen->Project("hPtGen","pt","abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1");
+  ntMC->Project("hPtMC","pt",selmc.Data());
+  ntGen->Project("hPtGen","pt",selmcgen.Data());
   
   hPtMC->Sumw2();
   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
@@ -147,17 +142,23 @@ void fitB(char *infname)
   TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
   hPtCor->Divide(hEff);
   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Correctd dN/dp_{T}");
+  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
   hPtCor->Draw();
 
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double lumi = 29.6e-3;  // pb, temporary number for prompt reco only
-  hPtSigma->Scale(1./lumi/208./6.1e-5);
-  hPtSigma->SetYTitle("d#sigma/dp_{T}");
+  hPtSigma->Scale(1./(2*luminosity));
+  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
   hPtSigma->Draw();
   
-  //   outf->Write();  
+  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
+  outf->cd();
+  hPt->Write();
+  hEff->Write();
+  hPtCor->Write();
+  hPtSigma->Write();
+  outf->Close();
+  delete outf;
 }
