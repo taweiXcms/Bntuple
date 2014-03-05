@@ -1,16 +1,19 @@
 // B+ analysis 
+// Date:5 March 2014
 
 TString inputdata="";
 TString inputmc="";
 TString cut="chi2cl>0.01&&(d0)/d0Err>3.&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
 
 // B0 analysis 
+// Date:5 March 2014
 
 TString inputdata="";
 TString inputmc="";
 TString cut="";
 
 // B+s analysis 
+// Date:5 March 2014
 
 TString inputdata="";
 TString inputmc="";
