@@ -3,13 +3,16 @@
 double luminosity=34*1e-3;
 double setparam0=100.;
 double setparam1=5.28;
-double setparam2=0.03;
+double setparam2=0.033;
 double fixparam1=5.279;
 
 TString inputdata="../InputsFits/nt_20140218_PAMuon_HIRun2013_PromptReco_v1.root";
+//TString inputdata="../InputsFits/nt_mc_Kp.root";
+//TString inputdata="../InputsFits/nt_mc_Kp.root";
 TString inputmc="../InputsFits/nt_mc_Kp.root";
 
-TString cut="chi2cl>0.0104&&(d0)/d0Err>3.37&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.42";
+//TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
+TString cut="chi2cl>0.01&&(d0)/d0Err>3.&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
@@ -26,9 +29,9 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax){
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
-   TH1D *h = new TH1D(Form("h%d",count),"",100,4.8,5.8);
+   TH1D *h = new TH1D(Form("h%d",count),"",100,5.00,6.00);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*x*x+[6]*x*x*x");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*Gaus(x,5.08,0.05)");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
    h->Draw();
@@ -38,26 +41,34 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax){
    f->SetParameter(2,setparam2);
    f->FixParameter(1,fixparam1);
    h->GetEntries();
-   h->Fit(Form("f%d",count),"","",4.8,5.8);
-   h->Fit(Form("f%d",count),"L","",4.8,5.8);
+   h->Fit(Form("f%d",count),"","",5,6);
+   h->Fit(Form("f%d",count),"L","",5,6);
    f->ReleaseParameter(1);
-   h->Fit(Form("f%d",count),"L","",4.8,5.8);
-   h->Fit(Form("f%d",count),"LL","",4.8,5.8);
+   h->Fit(Form("f%d",count),"L","",5,6);
+   h->Fit(Form("f%d",count),"L m","",5,6);
    h->SetMarkerSize(0.8);
    h->SetMarkerStyle(20);
    cout <<h->GetEntries()<<endl;
 
    // function for background shape plotting. take the fit result from f
-   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*x*x+[3]*x*x*x+[4]*x*x*x*x");
+   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*Gaus(x,5.08,0.05)");
    background->SetParameter(0,f->GetParameter(3));
    background->SetParameter(1,f->GetParameter(4));
    background->SetParameter(2,f->GetParameter(5));
    background->SetParameter(3,f->GetParameter(6));
-   background->SetParameter(4,f->GetParameter(7));
    background->SetLineColor(4);
-   background->SetRange(4.8,5.8);
+   background->SetRange(5,6);
    background->SetLineStyle(2);
    
+   // function for signal shape plotting. take the fit result from f
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*Gaus(x,5.08,0.05)");
+   Bkpi->SetParameter(0,f->GetParameter(5));
+   Bkpi->SetLineColor(kGreen+1);
+   Bkpi->SetFillColor(kGreen+1);
+   Bkpi->SetRange(5.00,5.28);
+   Bkpi->SetLineStyle(1);
+   Bkpi->SetFillStyle(3004);
+
    // function for signal shape plotting. take the fit result from f
    TF1 *mass = new TF1(Form("fmass",count),"[0]*TMath::BreitWigner(x,[1],[2])");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2));
@@ -71,14 +82,15 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax){
    h->SetMarkerStyle(24);
    h->SetStats(0);
    h->Draw("e");
-   h->SetXTitle("M_{KK} (GeV/c^{2})");
+   h->SetXTitle("M_{B} (GeV/c^{2})");
    h->SetYTitle("Entries / (1 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
    h->SetTitleOffset(1.65,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
+   Bkpi->Draw("same");
    background->Draw("same");   
-   mass->SetRange(4.8,5.8);
+   mass->SetRange(5,6);
    mass->Draw("same");
    mass->SetLineStyle(2);
    mass->SetFillStyle(3004);
@@ -90,7 +102,7 @@ TF1 *fit(TTree *nt,double ptmin,double ptmax){
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","pl");
    leg->Draw();
-   TLegend *leg2 = myLegend(0.44,0.23,0.89,0.40);
+   TLegend *leg2 = myLegend(0.44,0.53,0.89,0.70);
    leg2->AddEntry(h,"B meson","");
    leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",f->GetParameter(0)*100.,f->GetParError(0)*100.),"");
@@ -133,6 +145,8 @@ void fitB(){
   
   ntMC->Project("hPtMC","pt",selmc.Data());
   ntGen->Project("hPtGen","pt",selmcgen.Data());
+  divideBinWidth(hPtMC);
+  divideBinWidth(hPtGen);
   
   hPtMC->Sumw2();
   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
@@ -144,6 +158,7 @@ void fitB(){
   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
   hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
   hPtCor->Draw();
+  hPtGen->Draw("same hist");
 
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
   hPtSigma->Scale(1./(2*luminosity));
@@ -157,6 +172,7 @@ void fitB(){
   outf->cd();
   hPt->Write();
   hEff->Write();
+  hPtGen->Write();
   hPtCor->Write();
   hPtSigma->Write();
   outf->Close();
