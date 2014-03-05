@@ -69,6 +69,7 @@ void NuclearModification(TString particle="Bplus"){
   gRpAsystFONLL->SetMarkerColor(1);
   gRpAsystFONLL->SetMarkerStyle(21);
   gRpAsystFONLL->SetLineWidth(5.);
+  gRpAsystFONLL->SetFillColor(5);
   gRpAsystFONLL->SetFillStyle(300);
 
     
