@@ -10,11 +10,11 @@ double fixparam2=0.04;
 TString inputdata="../InputsFits/nt_20140218_PAMuon_HIRun2013_PromptReco_v1.root";
 TString inputmc="../InputsFits/nt_mc_Kstar.root";
 
-TString cut="chi2cl>0.0104&&(d0)/d0Err>3.37&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.42";
+TString cut="chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89594)<0.14";
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
-TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal!=0";
+TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
 
 void clean0(TH1D *h)
 {
@@ -31,7 +31,7 @@ TF1 *fit(TTree *nt,TTree *nt2,double ptmin,double ptmax)
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    TH1D *h = new TH1D(Form("h%d",count),"",100,4.8,5.8);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x+[5]*x*x+[6]*x*x*x");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*TMath::BreitWigner(x,[1],[2])+[3]+[4]*x");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    nt2->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
@@ -131,7 +131,7 @@ void fitB0()
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
-  for (int i=2;i<nBins;i++)
+  for (int i=1;i<nBins;i++)
     {
       TF1 *f = fit(nt,nt2,ptBins[i],ptBins[i+1]);
       hPt->SetBinContent(i+1,f->GetParameter(0)*100./(ptBins[i+1]-ptBins[i]));
