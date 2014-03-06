@@ -12,7 +12,7 @@ TString inputdata="../InputsFits/nt_20140218_PAMuon_HIRun2013_PromptReco_v1.root
 TString inputmc="../InputsFits/nt_mc_Kp.root";
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
-TString cut="chi2cl>0.01&&(d0)/d0Err>3.&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
+TString cut="chi2cl>0.005&&(d0)/d0Err>3.3&&cos(dtheta)>-0.5&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9";
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
