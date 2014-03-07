@@ -65,7 +65,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
   b->ujpt = b4P->Pt();
   b->ujeta = b4P->PseudoRapidity();
   b->ujy = b4P->Rapidity();
-  b->ujlxy = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/BInfo_uj_pt[BInfo_rfuj_index[j]];
+  b->ujlxy = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/b->ujpt;
 
   //track section
   b->trk1Dxy = TrackInfo_dxyPV[BInfo_rftk1_index[j]];

@@ -130,7 +130,7 @@ class bNtuple
 
     nt->Branch("tktkmass",&tktkmass);
     nt->Branch("tktkvProb",&tktkvProb);
-    nt->Branch("tktkpt",&tktktpt);
+    nt->Branch("tktkpt",&tktkpt);
     nt->Branch("tktketa",&tktketa);
     nt->Branch("tktky",&tktky);
   }
