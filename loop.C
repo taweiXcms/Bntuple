@@ -6,20 +6,20 @@
 #include <TNtuple.h>
 #include <TVector3.h>
 #include <TLorentzVector.h>
-
+#include <cmath>
 #include "loop.h"
 
 
-void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
+void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int REAL)
 {
   //b section
   bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
   bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
 	       BInfo_vtxY[j]-EvtInfo_PVy,
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
-  TLorentzVector b4P;
-  b4P.SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
-  b->y = b4P.Rapidity();
+
+  b4P->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+  b->y = b4P->Rapidity();
   b->dtheta = bP->Angle(*bVtx);
   b->pt = BInfo_pt[j];
   b->eta = BInfo_eta[j];
@@ -32,6 +32,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
   b->mass = BInfo_mass[j];
   b->tktkmass = BInfo_tktk_mass[j];
   b->chi2ndf = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
+  b->lxy = ((BInfo_vtxX[j]-EvtInfo_PVx)*BInfo_px[j] + (BInfo_vtxY[j]-EvtInfo_PVy)*BInfo_py[j])/BInfo_pt[j];
 
   //muon section
   b->mu1Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
@@ -54,8 +55,17 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
   if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096) b->mu2StationTight = 1;
   else b->mu2StationTight = 0;
   
+  //jpsi section
   b->ujmass = BInfo_uj_mass[BInfo_rfuj_index[j]];
   b->ujvProb = TMath::Prob(BInfo_uj_vtxchi2[BInfo_rfuj_index[j]],BInfo_uj_vtxdof[BInfo_rfuj_index[j]]);
+  b4P->SetXYZM(BInfo_uj_px[BInfo_rfuj_index[j]],
+	       BInfo_uj_py[BInfo_rfuj_index[j]],
+	       BInfo_uj_pz[BInfo_rfuj_index[j]],
+	       BInfo_uj_mass[BInfo_rfuj_index[j]]);
+  b->ujpt = b4P->Pt();
+  b->ujeta = b4P->PseudoRapidity();
+  b->ujy = b4P->Rapidity();
+  b->ujlxy = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/BInfo_uj_pt[BInfo_rfuj_index[j]];
 
   //track section
   b->trk1Dxy = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
@@ -75,6 +85,9 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
       b->trk2Chi2ndf = 0;
       b->tktkmass = -1;
       b->tktkvProb = -1;
+      b->tktkpt = -1;
+      b->tktketa = -1;
+      b->tktky = -1;
     }  
   else
     {
@@ -86,6 +99,10 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
       b->trk2Chi2ndf = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
       b->tktkmass = BInfo_tktk_mass[j];
       b->tktkvProb = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
+      b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
+      b->tktkpt = b4P->Pt();
+      b->tktketa = b4P->PseudoRapidity();
+      b->tktky = b4P->Rapidity();
     }
 
   
@@ -95,6 +112,8 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
     {
       b->gen=0;//gen init
       b->genIndex=-1;//gen init
+      b->genpt=-1;
+      b->geny=-1;
       int mGenIdxTk1=-1;
       int mGenIdxTk2=-1;
       int bGenIdxTk1=-1;
@@ -288,7 +307,17 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, int j, int REAL)
 	    }
 	}
       b->gen+=(level*10000);
-      
+      int tgenIndex=b->genIndex;
+      if(b->gen==22233)
+	{
+	  b->genpt = GenInfo_pt[tgenIndex];
+	  b->geneta = GenInfo_eta[tgenIndex];
+	  b4P->SetXYZM(GenInfo_pt[tgenIndex]*cos(GenInfo_phi[tgenIndex]),
+		       GenInfo_pt[tgenIndex]*sin(GenInfo_phi[tgenIndex]),
+		       GenInfo_pt[tgenIndex]*sinh(GenInfo_eta[tgenIndex]),
+		       GenInfo_mass[tgenIndex]);
+	  b->geny = b4P->Rapidity();
+	}
     }
 }
 
@@ -474,6 +503,7 @@ void loop(string infile, string outfile, bool REAL=1){
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
+  TLorentzVector* b4P = new TLorentzVector;
   TLorentzVector bGen;
   int type,flag;
   
@@ -485,37 +515,37 @@ void loop(string infile, string outfile, bool REAL=1){
       if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==1)
 	{
-	  fillTree(b0,bP,bVtx,j,REAL);
+	  fillTree(b0,bP,bVtx,b4P,j,REAL);
 	  nt0->Fill();
 	}
       if(BInfo_type[j]==2)
 	{
-	  fillTree(b1,bP,bVtx,j,REAL);
+	  fillTree(b1,bP,bVtx,b4P,j,REAL);
 	  nt1->Fill();
 	}
       if(BInfo_type[j]==3)
 	{
-	  fillTree(b2,bP,bVtx,j,REAL);
+	  fillTree(b2,bP,bVtx,b4P,j,REAL);
 	  nt2->Fill();
 	}
       if(BInfo_type[j]==4)
 	{
-	  fillTree(b3,bP,bVtx,j,REAL);
+	  fillTree(b3,bP,bVtx,b4P,j,REAL);
 	  nt3->Fill();
 	  }
       if(BInfo_type[j]==5)
 	{
-	  fillTree(b4,bP,bVtx,j,REAL);
+	  fillTree(b4,bP,bVtx,b4P,j,REAL);
 	  nt4->Fill();
 	}
       if(BInfo_type[j]==6)
 	{
-	  fillTree(b5,bP,bVtx,j,REAL);
+	  fillTree(b5,bP,bVtx,b4P,j,REAL);
 	  nt5->Fill();
 	}
       if(BInfo_type[j]==7)
 	{
-	  fillTree(b6,bP,bVtx,j,REAL);
+	  fillTree(b6,bP,bVtx,b4P,j,REAL);
 	  nt6->Fill();
 	}
     }

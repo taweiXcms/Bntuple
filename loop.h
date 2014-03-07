@@ -21,8 +21,12 @@ class bNtuple
   float d0Err;
   float chi2ndf;
   float dtheta;
+  float lxy;
   float gen;
-  float genIndex;
+  int genIndex;
+  float genpt;
+  float geneta;
+  float geny;
   float chi2cl;//b vertex chi2 confidence level
 
   float mu1Striplayer;
@@ -42,6 +46,10 @@ class bNtuple
 
   float ujmass;
   float ujvProb;//jpsi vertex probability
+  float ujpt;
+  float ujeta;
+  float ujy;
+  float ujlxy;
 
   float trk1Pt;
   float trk1Dxy;
@@ -59,6 +67,9 @@ class bNtuple
 
   float tktkmass;
   float tktkvProb;
+  float tktkpt;
+  float tktketa;
+  float tktky;
 
   void buildBranch(TTree* nt){
     nt->Branch("mass",&mass);
@@ -73,8 +84,12 @@ class bNtuple
     nt->Branch("d0Err",&d0Err);
     nt->Branch("chi2ndf",&chi2ndf);
     nt->Branch("dtheta",&dtheta);
+    nt->Branch("lxy",&lxy);
     nt->Branch("gen",&gen);
     nt->Branch("genIndex",&genIndex);
+    nt->Branch("genpt",&genpt);
+    nt->Branch("geny",&geny);
+    nt->Branch("geneta",&geneta);
     nt->Branch("chi2cl",&chi2cl);
 
     nt->Branch("mu1Striplayer",&mu1Striplayer);
@@ -94,6 +109,10 @@ class bNtuple
 
     nt->Branch("ujmass",&ujmass);
     nt->Branch("ujvProb",&ujvProb);
+    nt->Branch("ujpt",&ujpt);
+    nt->Branch("ujeta",&ujeta);
+    nt->Branch("ujy",&ujy);
+    nt->Branch("ujlxy",&ujlxy);
 
     nt->Branch("trk1Pt",&trk1Pt);
     nt->Branch("trk1Dxy",&trk1Dxy);
@@ -111,6 +130,9 @@ class bNtuple
 
     nt->Branch("tktkmass",&tktkmass);
     nt->Branch("tktkvProb",&tktkvProb);
+    nt->Branch("tktkpt",&tktktpt);
+    nt->Branch("tktketa",&tktketa);
+    nt->Branch("tktky",&tktky);
   }
 };
 
