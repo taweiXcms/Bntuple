@@ -543,10 +543,10 @@ void loop(string infile, string outfile, bool REAL=1){
     while (flagEvt==0)
     {
        hlt->GetEntry(i+offsetHltTree);
-       cout <<offsetHltTree<<" "<<Event<<" "<<EvtInfo_EvtNo<<endl;
+//       cout <<offsetHltTree<<" "<<Event<<" "<<EvtInfo_EvtNo<<endl;
        if (Event ==EvtInfo_EvtNo && Run == EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
     } 
-    if (i%1==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
+    if (i%10000==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
     for (int j=0;j<BInfo_size;j++) {
       if(BInfo_type[j]>7) continue;
       if (ifchannel[BInfo_type[j]-1]!=1) continue;
