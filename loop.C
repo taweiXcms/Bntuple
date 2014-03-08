@@ -12,6 +12,26 @@
 
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int REAL)
 {
+  // event and trigger info
+  b->Event = Event;
+  b->Run = Run;
+  b->HLT_PAL1DoubleMu0_v1 = HLT_PAL1DoubleMu0_v1;
+  b->HLT_PAL1DoubleMu0_v1_Prescl = HLT_PAL1DoubleMu0_v1_Prescl;
+  b->HLT_PADimuon0_NoVertexing_v1 = HLT_PADimuon0_NoVertexing_v1;
+  b->HLT_PADimuon0_NoVertexing_v1_Prescl = HLT_PADimuon0_NoVertexing_v1_Prescl;
+  b->HLT_PAL1DoubleMu0_HighQ_v1 = HLT_PAL1DoubleMu0_HighQ_v1;
+  b->HLT_PAL1DoubleMu0_HighQ_v1_Prescl = HLT_PAL1DoubleMu0_HighQ_v1_Prescl;
+  b->HLT_PAL1DoubleMuOpen_v1 = HLT_PAL1DoubleMuOpen_v1;
+  b->HLT_PAL1DoubleMuOpen_v1_Prescl = HLT_PAL1DoubleMuOpen_v1_Prescl;
+  b->HLT_PAL2DoubleMu3_v1 = HLT_PAL2DoubleMu3_v1;
+  b->HLT_PAL2DoubleMu3_v1_Prescl = HLT_PAL2DoubleMu3_v1_Prescl;
+  b->HLT_PAMu3_v1 = HLT_PAMu3_v1;
+  b->HLT_PAMu3_v1_Prescl = HLT_PAMu3_v1_Prescl;
+  b->HLT_PAMu7_v1 = HLT_PAMu7_v1;
+  b->HLT_PAMu7_v1_Prescl = HLT_PAMu7_v1_Prescl;
+  b->HLT_PAMu12_v1 = HLT_PAMu12_v1;
+  b->HLT_PAMu12_v1_Prescl = HLT_PAMu12_v1_Prescl;
+
   //b section
   bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
   bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
@@ -455,6 +475,11 @@ void loop(string infile, string outfile, bool REAL=1){
   TFile *f = new TFile(infname);
   TTree *root = (TTree*)f->Get("demo/root");
   TTree *hlt = (TTree*)f->Get("hltanalysis/HltTree");
+  if (root->GetEntries()!=hlt->GetEntries()) {
+     cout <<"Inconsistent number of entries!!!"<<endl;
+     cout <<"HLT tree: "<<hlt->GetEntries()<<endl;
+     cout <<"Bfinder tree: "<<root->GetEntries()<<endl;
+  }
   
   //Chain type
   //TChain* root = new TChain("demo/root");
@@ -465,6 +490,7 @@ void loop(string infile, string outfile, bool REAL=1){
   
   TFile *outf = new TFile(outfname,"recreate");
   setBranch(root);
+  setHltBranch(hlt);
   
   
   int ifchannel[7];
@@ -507,10 +533,20 @@ void loop(string infile, string outfile, bool REAL=1){
   TLorentzVector* b4P = new TLorentzVector;
   TLorentzVector bGen;
   int type,flag;
+  int flagEvt=0;  
+  int offsetHltTree=0;
   
   for (Long64_t i=0; i<nentries;i++) {
     nbytes += root->GetEntry(i);
-    if (i%10000==0) cout <<i<<" / "<<nentries<<endl;
+
+    flagEvt=0;
+    while (flagEvt==0)
+    {
+       hlt->GetEntry(i+offsetHltTree);
+       cout <<offsetHltTree<<" "<<Event<<" "<<EvtInfo_EvtNo<<endl;
+       if (Event ==EvtInfo_EvtNo && Run == EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
+    } 
+    if (i%1==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
     for (int j=0;j<BInfo_size;j++) {
       if(BInfo_type[j]>7) continue;
       if (ifchannel[BInfo_type[j]-1]!=1) continue;
