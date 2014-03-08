@@ -454,6 +454,7 @@ void loop(string infile, string outfile, bool REAL=1){
   //File type
   TFile *f = new TFile(infname);
   TTree *root = (TTree*)f->Get("demo/root");
+  TTree *hlt = (TTree*)f->Get("hltanalysis/HltTree");
   
   //Chain type
   //TChain* root = new TChain("demo/root");
