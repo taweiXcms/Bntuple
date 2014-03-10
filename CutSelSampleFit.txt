@@ -3,14 +3,14 @@
 
 TString inputdata="";
 TString inputmc="";
-TString cut="chi2cl>0.01&&(d0)/d0Err>3.&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
+TString cut="chi2cl>5.5e-03 && (d0/d0Err)>3.3e00 && cos(dtheta)>-5.3e01 && abs(trk1Dxy/trk1D0Err)>1.9e+00";
 
 // B0 analysis 
 // Date:5 March 2014
 
 TString inputdata="";
 TString inputmc="";
-TString cut="";
+TString cut="chi2cl>1.5e-01 && (d0/d0Err)>8.1e+00 && -4.4e-01 && abs(trk1Dxy/trk1D0Err)>8.1e-01 && abs(tktkmass-0.89594)<1.4e-01";
 
 // B+s analysis 
 // Date:5 March 2014
