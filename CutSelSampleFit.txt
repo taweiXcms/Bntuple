@@ -17,4 +17,4 @@ TString cut="chi2cl>1.5e-01 && (d0/d0Err)>8.1e+00 && cos(dtheta)>-4.4e-01 && abs
 
 TString inputdata="";
 TString inputmc="";
-TString cut="";
+TString cut="chi2cl>3.8e-02 && (d0/d0Err)>3.2e+00 && cos(dtheta)>7.4e-01 && abs(trk2Dxy/trk2D0Err)>1.3e+00 && abs(tktkmass-1.01944)<1.5e-02";
