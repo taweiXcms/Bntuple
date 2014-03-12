@@ -24,6 +24,7 @@ void NuclearModification(TString particle="Bplus"){
   Double_t ySigmapPbStat[nbins];                 //y err stat pPb
   Double_t yPercSigmapPbStat[nbins];             //y err stat pPb
   
+  Double_t yFONLL[nbins];                        //1
   Double_t yRpA[nbins];                          //value y RpA 
   Double_t yRpAStat[nbins];                      //y err stat RpA 
   Double_t yRpAsystFONLLhigh[nbins];             //y err syst FONLL RpA high
@@ -50,8 +51,9 @@ void NuclearModification(TString particle="Bplus"){
   for(Int_t i=0;i<nbins;i++) {
     yRpA[i]=ySigmapPb[i]/yRefPP[i];
     yRpAStat[i]=ySigmapPbStat[i]/yRefPP[i];
-    yRpAsystFONLLhigh[i]=yPercPPsystFONLLlow[i]*yRpA[i];
-    yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i]*yRpA[i];
+    yFONLL[i]=1;
+    yRpAsystFONLLhigh[i]=yPercPPsystFONLLlow[i];//*yRpA[i];
+    yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i];//*yRpA[i];
   }
   
   Double_t xbins[nbins]={7.5,12.5,17.5,22.5,27.5,45.};
@@ -64,7 +66,7 @@ void NuclearModification(TString particle="Bplus"){
   gRpAstat->SetLineWidth(2);   
   gRpAstat->SetMarkerStyle(22);
    
-  TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
+  TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
   gRpAsystFONLL->SetMarkerColor(1);
   gRpAsystFONLL->SetMarkerStyle(21);
