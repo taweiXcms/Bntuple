@@ -1,16 +1,16 @@
 #include "utilities.h"
 
-double luminosity=34*1e-3;
+double luminosity=34.8*1e-3;
 double setparam0=100.;
 double setparam1=5.28;
 double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 
-//TString inputdata="/d00/bmeson/data/nt_20140308_PAMuon_HIRun2013_PromptRecoAndRereco_v1.root";
+TString inputdata="/d00/bmeson/data/nt_20140308_PAMuon_HIRun2013_PromptRecoAndRereco_v1.root";
 //TString inputdata="../InputsFits/nt_mc_Kp.root";
 //TString inputdata="../InputsFits/nt_mc_Kp.root";
-TString inputdata="nt_nonPrompt_Jpsi.root";
+//TString inputdata="nt_nonPrompt_Jpsi.root";
 //TString inputdata="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
 TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
 
@@ -41,8 +41,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    clean0(h);
    h->Draw();
    f->SetParLimits(4,-1000,0);
-   f->SetParLimits(2,0.01,0.04);
-   f->SetParLimits(8,0.01,0.04);
+   f->SetParLimits(2,0.01,0.05);
+   f->SetParLimits(8,0.01,0.05);
    f->SetParLimits(7,0,1);
    f->SetParameter(0,setparam0);
    f->SetParameter(1,setparam1);
@@ -162,6 +162,7 @@ void fitB(TString infname="")
   const int nBins = 6;
   double ptBins[nBins+1] = {5,10,15,20,25,30,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
+  TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
@@ -179,7 +180,11 @@ void fitB(TString infname="")
   hPt->Draw();
   
   ntMC->Project("hPtMC","pt",selmc.Data());
+  nt->Project("hRecoTruth","pt",TCut(seldata.Data())&&"gen==22233");
   ntGen->Project("hPtGen","pt",selmcgen.Data());
+  divideBinWidth(hRecoTruth);
+  
+  hRecoTruth->Draw("same hist");
   divideBinWidth(hPtMC);
   divideBinWidth(hPtGen);
   
