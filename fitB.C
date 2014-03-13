@@ -163,14 +163,14 @@ void fitB(TString infname="")
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
   TTree *ntMC = (TTree*)infMC->Get("ntKp");
     
-  const int nBins = 6;
-  double ptBins[nBins+1] = {5,10,15,20,25,30,60};
+  const int nBins = 5;
+  double ptBins[nBins+1] = {10,15,20,25,30,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
-  for (int i=1;i<nBins;i++)
+  for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
       double yield = f->Integral(5,6)/0.02;
