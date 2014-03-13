@@ -187,10 +187,12 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 	  tk2Id = 321;//K-
 	}
       
-      int twoTks;
+      int twoTks,kStar,flagkstar=0;
       if(BInfo_type[j]==1 || BInfo_type[j]==2) twoTks=0;
       else twoTks=1;
-      
+      if(BInfo_type[j]==4 || BInfo_type[j]==5) kStar=1;
+      else kStar=0;
+
       // tk1
       if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
 	{
@@ -265,7 +267,8 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 	      b->gen+=(level*10);
 	    }
 	}
-      
+
+     
       //mu1
       if(MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>-1)
 	{  
@@ -279,6 +282,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 		    {
 		      level = 2;
 		      bGenIdxMu1=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
+		      flagkstar++;///////////////////////////////////////////////=1
 		    }
 		} 
 	    }
@@ -298,6 +302,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 		    {
 		      level = 2;
 		      bGenIdxMu2=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]];
+		      flagkstar++;///////////////////////////////////////////////////=2
 		    }
 		}
 	    }
@@ -327,6 +332,68 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 	    }
 	}
       b->gen+=(level*10000);
+
+      //kstar#############################################################################
+      if(kStar)
+	{
+	  //tk1
+	  if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
+	    {
+	      if(fabs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==tk2Id)
+		{
+		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
+		    {
+		      if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==MId)
+			{
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+			    {
+			      if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
+				{
+				  flagkstar++;//////////////////////////////////////////////=3
+				  bGenIdxTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+				}
+			    }
+			  mGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+			}
+		    }
+		}
+	    }
+	  
+	  //tk2
+	  if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
+	    {
+	      if(fabs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==tk1Id)
+		{
+		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
+		    {
+		      if(fabs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==MId)
+			{
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
+			    {
+			      if(fabs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
+				{
+				  flagkstar++;////////////////////////////////////////////////////=4
+				  bGenIdxTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+				}
+			    }
+			  mGenIdxTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
+			}
+		    }
+		}
+	    }
+	  if(flagkstar==4)
+	    {
+	      if((bGenIdxMu1!=-1) 
+		 && (bGenIdxMu1==bGenIdxMu2)
+		 && (bGenIdxMu1==bGenIdxTk1)
+		 && (bGenIdxMu1==bGenIdxTk2)
+		 )
+		{
+		  b->gen=41000;
+		}
+	    }
+	}//kstar End#############################################################################
+
       int tgenIndex=b->genIndex;
       if(b->gen==22233)
 	{
@@ -422,7 +489,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile, string outfile, bool REAL=1){
+void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140303_kstar.root", string outfile="test_kstar.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
