@@ -32,8 +32,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
-   TH1D *h = new TH1D(Form("h%d",count),"",100,5,6);
-   TH1D *hMC = new TH1D(Form("hMC%d",count),"",100,5,6);
+   TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
+   TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])+(1-[7])*Gaus(x,[1],[8]))+[3]+[4]*x+[5]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
@@ -125,6 +125,10 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    mass->SetFillColor(2);
    f->Draw("same");
 
+   double yield = mass->Integral(5,6)/0.02;
+   double yieldErr = mass->Integral(5,6)/0.02*mass->GetParError(0)/mass->GetParameter(0);
+
+
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
    leg->AddEntry(h,"CMS Preliminary","");
@@ -138,15 +142,15 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
    leg2->AddEntry(h,"B meson","");
-   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
-   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",f->GetParameter(0)*5.,f->GetParError(0)*5.),"");
+   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
+   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
    c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
    c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
 
-   return f;
+   return mass;
 }
 
 void fitB(TString infname="")
@@ -169,8 +173,10 @@ void fitB(TString infname="")
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
-      hPt->SetBinContent(i+1,f->GetParameter(0)*5./(ptBins[i+1]-ptBins[i]));
-      hPt->SetBinError(i+1,f->GetParError(0)*5./(ptBins[i+1]-ptBins[i]));
+      double yield = f->Integral(5,6)/0.02;
+      double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
+      hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
+      hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
   
   TCanvas *c=  new TCanvas("cResult","",600,600);
@@ -179,7 +185,7 @@ void fitB(TString infname="")
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt",selmc.Data());
+  ntMC->Project("hPtMC","pt",TCut(selmc.Data())&&"gen==22233");
   nt->Project("hRecoTruth","pt",TCut(seldata.Data())&&"gen==22233");
   ntGen->Project("hPtGen","pt",selmcgen.Data());
   divideBinWidth(hRecoTruth);
