@@ -15,7 +15,7 @@ TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140313_kstar_selectedMuon.root";
 
 TString cut="(HLT_PAL1DoubleMu0_v1||HLT_PAMu3_v1)&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
 //TString cut="chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
-
+//abs(y+0.465)<1.93
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
@@ -187,14 +187,14 @@ void fitB0(TString infname="")
   //ntMC->SetAlias("LD",LDalias.Data());
   //ntMC2->SetAlias("LD",LDalias.Data());
   
-  const int nBins = 5;
-  double ptBins[nBins+1] = {5,10,15,20,25,60};
+  const int nBins = 3;
+  double ptBins[nBins+1] = {10,15,20,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
-  for (int i=1;i<nBins;i++)
+  for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,nt2,ntMC,ntMC2,ptBins[i],ptBins[i+1]);
       double yield = f->Integral(5,6)/0.02;
