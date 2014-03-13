@@ -7,7 +7,7 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 
-TString inputdata="/d00/bmeson/data/nt_20140308_PAMuon_HIRun2013_PromptRecoAndRereco_v1.root";
+TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching.root";
 //TString inputdata="../InputsFits/nt_mc_Kp.root";
 //TString inputdata="../InputsFits/nt_mc_Kp.root";
 //TString inputdata="nt_nonPrompt_Jpsi.root";
@@ -111,7 +111,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    h->SetStats(0);
    h->Draw("e");
    h->SetXTitle("M_{B} (GeV/c^{2})");
-   h->SetYTitle("Entries / (1 MeV/c^{2})");
+   h->SetYTitle("Entries / (2 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
    h->SetTitleOffset(1.4,"Y");
@@ -170,7 +170,7 @@ void fitB(TString infname="")
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
-  for (int i=0;i<nBins;i++)
+  for (int i=1;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
       double yield = f->Integral(5,6)/0.02;
