@@ -8,12 +8,12 @@
   const int nbins=1;
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
-
-
+  
   TString particle="Bplus";
   const int nbins=5;
   Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+
 
 
 
@@ -24,6 +24,7 @@
   const int nbins=3;
   Double_t xbins[nbins]={12.5,17.5,40};
   Double_t exl[nbins]={2.5,2.5,20};
+
 
 void NuclearModification(){
 
@@ -90,8 +91,8 @@ void NuclearModification(){
     yPercSigmapPbSystYield[i]=0.05;
     yPercSigmapPbSystLumi[i]=0.05;
     yPercSigmapPbSystCutEff[i]=0.05;
-    yPercSigmapPbSystTot[i]=TMath::Sqrt(yPercSigmapPbSystYield[i]*yPercSigmapPbSystYield[i]+ySigmapPbSystLumi[i]*ySigmapPbSystLumi[i]+ySigmapPbSystCutEff[i]*ySigmapPbSystCutEff[i]);
-    ySigmapPbSystTot[i]=yPercSigmapPbSystTot[i]*ySigmapPbStat[i];
+    yPercSigmapPbSystTot[i]=TMath::Sqrt(yPercSigmapPbSystYield[i]*yPercSigmapPbSystYield[i]+yPercSigmapPbSystLumi[i]*yPercSigmapPbSystLumi[i]+yPercSigmapPbSystCutEff[i]*yPercSigmapPbSystCutEff[i]);
+    ySigmapPbSystTot[i]=yPercSigmapPbSystTot[i]*ySigmapPb[i];
   }
   
   for(Int_t i=0;i<nbins;i++) {
@@ -102,6 +103,7 @@ void NuclearModification(){
     yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i];//*yRpA[i];
     yPercRpPbSystTot[i]=yPercSigmapPbSystTot[i];
     yRpPbSystTot[i]=yPercRpPbSystTot[i]*yRpA[i];
+    cout<<yRpPbSystTot[i]<<endl;
     
   }
   
