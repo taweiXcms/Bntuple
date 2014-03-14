@@ -1,12 +1,24 @@
-void NuclearModification(TString particle="Bplus"){
+/*
+  TString particle="Bplus";
+  const int nbins=5;
+  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
+  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+*/
 
-  const int nbins=6;
+  TString particle="Bzero";
+  const int nbins=3;
+  Double_t xbins[nbins]={12.5,17.5,40};
+  Double_t exl[nbins]={2.5,2.5,20};
+
+
+void NuclearModification(){
+
   gROOT->SetStyle("Plain");
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
   
-  TFile*filePPReference=new TFile("../fonll/outputBpluszerosdpt.root");  
-  TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gae%s",particle.Data()));
+  TFile*filePPReference=new TFile(Form("../fonll/output%s.root",particle.Data()));  
+  TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
   TFile*filepPb=new TFile(Form("Results%s/Sigma%s.root",particle.Data(),particle.Data()));
@@ -56,9 +68,6 @@ void NuclearModification(TString particle="Bplus"){
     yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i];//*yRpA[i];
   }
   
-  Double_t xbins[nbins]={7.5,12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,2.5,15.};
-
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
   gRpAstat->SetMarkerColor(2);
@@ -72,7 +81,7 @@ void NuclearModification(TString particle="Bplus"){
   gRpAsystFONLL->SetMarkerStyle(21);
   gRpAsystFONLL->SetLineWidth(5.);
   gRpAsystFONLL->SetFillColor(5);
-  gRpAsystFONLL->SetFillStyle(300);
+  //gRpAsystFONLL->SetFillStyle(300);
 
     
   TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
@@ -91,7 +100,7 @@ void NuclearModification(TString particle="Bplus"){
   
   TH2F* hempty=new TH2F("hempty","",10,0.,60,10.,0.1,1e7.);  
   hempty->GetXaxis()->SetTitle("p_{t} (GeV/c)");
-  hempty->GetYaxis()->SetTitle("d#sigma/dp_{t} (GeV^{-1})");
+  hempty->GetYaxis()->SetTitle("d#sigma/dp_{T} (pb c GeV^{-1})");
   hempty->GetXaxis()->SetTitleOffset(1.);
   hempty->GetYaxis()->SetTitleOffset(1.05);
   hempty->GetXaxis()->SetTitleSize(0.045);
@@ -111,7 +120,13 @@ void NuclearModification(TString particle="Bplus"){
   gaeBplusReference->SetFillStyle(0);
   gaeBplusReference->SetMarkerColor(kWhite);
   gaeBplusReference->SetMarkerStyle(24);
-  gaeBplusReference->Draw("2");
+  gaeBplusReference->SetFillColor(5);
+  gaeBplusReference->SetMarkerColor(1);
+  gaeBplusReference->SetMarkerStyle(21);
+  gaeBplusReference->SetLineWidth(5.);
+  gaeBplusReference->SetFillColor(5);
+  
+  //gaeBplusReference->Draw("2");
 
     
 //  gaeBplusReference->SetLineStyle(3);
@@ -159,43 +174,53 @@ void NuclearModification(TString particle="Bplus"){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.5362903,0.7505285,0.7822581,0.8858351,"");
+  TLegend *legendRpA=new TLegend(0.3024194,0.7293869,0.5483871,0.8646934,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
   legendRpA->SetFillStyle(1001);
   legendRpA->SetTextFont(42);
-  legendRpA->SetTextSize(0.029);
+  legendRpA->SetTextSize(0.04);
 
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R_{pA} stat unc","P");
-  ent_RpAstat->SetTextFont(42);
-  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","P");
-  ent_RpAsystFONLL->SetTextFont(42);
-
-  TH2F* hempty=new TH2F("hempty","",10,0.,60,10.,0.,4.);  
-  hempty->GetXaxis()->SetTitle("p_{t} (GeV/c)");
-  hempty->GetYaxis()->SetTitle("R_{pA} (B^{0} mesons)");
-  hempty->GetXaxis()->SetTitleOffset(1.);
-  hempty->GetYaxis()->SetTitleOffset(1.05);
+  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.);  
+  hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R_{pA} (B^{+})");
+  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R_{pA} (B^{0})");
+  hempty->GetXaxis()->SetTitleOffset(1.1);
+  hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
   hempty->GetYaxis()->SetTitleSize(0.045);
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.035);
-  hempty->GetYaxis()->SetLabelSize(0.035);  
+  hempty->GetXaxis()->SetLabelSize(0.04);
+  hempty->GetYaxis()->SetLabelSize(0.04);  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
   legendRpA->Draw();
   gRpAstat->SetMarkerStyle(21);
+  gRpAstat->SetLineColor(1);
+  gRpAstat->SetMarkerColor(1);
 
   gRpAsystFONLL->SetLineStyle(3);
   gRpAsystFONLL->SetLineWidth(3);
-  gRpAsystFONLL->SetLineColor(1);//kAzure-3);
+  gRpAsystFONLL->SetFillColor(5);
+  gRpAsystFONLL->SetLineColor(5);//kAzure-3);
+  gRpAsystFONLL->SetMarkerColor(5);//kAzure-3);
   gRpAsystFONLL->Draw("2same");
   gRpAstat->Draw("psame");
+  
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R_{pA} stat unc","P");
+  ent_RpAstat->SetTextFont(42);
+  ent_RpAstat->SetLineColor(2);
+  ent_RpAstat->SetMarkerColor(2);
+  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","P");
+  ent_RpAsystFONLL->SetTextFont(42);
+  ent_RpAsystFONLL->SetLineColor(5);
+  ent_RpAsystFONLL->SetMarkerColor(5);
+
   
   canvasRpA->SaveAs(Form("Results%s/canvasRpA%s.eps",particle.Data(),particle.Data()));  
 }
