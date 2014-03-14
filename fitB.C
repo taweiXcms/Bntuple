@@ -21,6 +21,10 @@ TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
 
+TString weight = "(27.493+pt*(-0.218769))";
+
+
+
 void clean0(TH1D *h){
   for (int i=1;i<=h->GetNbinsX();i++){
     if (h->GetBinContent(i)==0) h->SetBinError(i,1);
@@ -153,8 +157,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    return mass;
 }
 
-void fitB(TString infname="")
+void fitB(TString infname="",bool doweight = 1)
 {
+  if (doweight==0) weight="1";
   if (infname=="") infname=inputdata.Data();
   TFile *inf = new TFile(infname.Data());
   TTree *nt = (TTree*) inf->Get("ntKp");
@@ -166,7 +171,8 @@ void fitB(TString infname="")
   const int nBins = 5;
   double ptBins[nBins+1] = {10,15,20,25,30,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
-  TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
+  TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
+  TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
@@ -185,12 +191,12 @@ void fitB(TString infname="")
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt",TCut(selmc.Data())&&"gen==22233");
-  nt->Project("hRecoTruth","pt",TCut(seldata.Data())&&"gen==22233");
-  ntGen->Project("hPtGen","pt",selmcgen.Data());
-  divideBinWidth(hRecoTruth);
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==22233"));
+  nt->Project("hPtRecoTruth","pt",TCut(seldata.Data())&&"gen==22233");
+  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
+  divideBinWidth(hPtRecoTruth);
   
-  hRecoTruth->Draw("same hist");
+  hPtRecoTruth->Draw("same hist");
   divideBinWidth(hPtMC);
   divideBinWidth(hPtGen);
   

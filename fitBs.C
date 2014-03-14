@@ -17,6 +17,7 @@ TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
 TString selmcgen="abs(y+0.465)<1.93&&isSignal>0";
 
+TString weight = "27.493+pt*(-0.218769)";
 
 void clean0(TH1D *h)
 {
@@ -154,8 +155,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    return mass;
 }
 
-void fitBs(TString infname="")
+void fitBs(TString infname="",bool doweight = 1)
 {
+   if (doweight==0) weight="1";
    if (infname=="") infname=inputdata.Data();
    TFile *inf = new TFile(infname.Data());
    TTree *nt = (TTree*) inf->Get("ntphi");
@@ -172,8 +174,8 @@ void fitBs(TString infname="")
    TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
    TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
    TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
-   ntMC->Project("hPtMC","pt",selmc.Data());
-   ntGen->Project("hPtGen","pt",selmcgen.Data());
+   ntMC->Project("hPtMC","pt",TCut(weight)*(selmc.Data()));
+   ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
 
    for (int i=0;i<nBins;i++)
    {
