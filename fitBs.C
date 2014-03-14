@@ -112,8 +112,8 @@ void fitBs()
    //nt->SetAlias("LD",LDalias.Data());
    //ntMC->SetAlias("LD",LDalias.Data());
 
-   const int nBins = 3;
-   double ptBins[nBins+1] = {10,15,20,60};
+   const int nBins = 1;
+   double ptBins[nBins+1] = {10,60};
    TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
    TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
    TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
