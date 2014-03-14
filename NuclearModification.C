@@ -3,6 +3,12 @@
   const int nbins=5;
   Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+
+  TString particle="Bs";
+  const int nbins=1;
+  Double_t xbins[nbins]={35};
+  Double_t exl[nbins]={25};
+
 */
 
   TString particle="Bzero";
@@ -43,6 +49,10 @@ void NuclearModification(){
   Double_t yRpAsystFONLLlow[nbins];              //y err syst FONLL RpA lzow
   Double_t yPercRpAsystFONLLhigh[nbins];         //y percentuale err syst FONLL RpA high
   Double_t yPercRpAsystFONLLlow[nbins];          //y percentuale err syst FONLL RpA low
+  
+  
+  
+  
   
   
   double x,y;
@@ -186,6 +196,7 @@ void NuclearModification(){
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R_{pA} (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R_{pA} (B^{0})");
+  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R_{pA} (B_{s})");
   hempty->GetXaxis()->SetTitleOffset(1.1);
   hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
