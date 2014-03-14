@@ -9,13 +9,21 @@
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
 
+
+  TString particle="Bplus";
+  const int nbins=5;
+  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
+  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+
+
+
+  
 */
 
   TString particle="Bzero";
   const int nbins=3;
   Double_t xbins[nbins]={12.5,17.5,40};
   Double_t exl[nbins]={2.5,2.5,20};
-
 
 void NuclearModification(){
 
@@ -36,7 +44,7 @@ void NuclearModification(){
   Double_t yPPsystFONLLlow[nbins];               //y err syst FONLL low
   Double_t yPercPPsystFONLLhigh[nbins];          //y percentuale err syst FONLL high
   Double_t yPercPPsystFONLLlow[nbins];           //y percentuale err syst FONLL low
-  
+    
   Double_t ySigmapPb[nbins];                     //value y pPb 
   Double_t xSigmapPb[nbins];                     //value x pPb
   Double_t ySigmapPbStat[nbins];                 //y err stat pPb
@@ -50,10 +58,21 @@ void NuclearModification(){
   Double_t yPercRpAsystFONLLhigh[nbins];         //y percentuale err syst FONLL RpA high
   Double_t yPercRpAsystFONLLlow[nbins];          //y percentuale err syst FONLL RpA low
   
+  Double_t yPercSigmapPbSystYield[nbins];        //y percentuale err syst pPb TOT
+  Double_t yPercSigmapPbSystLumi[nbins];        //y percentuale err syst pPb TOT
+  Double_t yPercSigmapPbSystCutEff[nbins];       //y percentuale err syst pPb TOT
+  Double_t yPercSigmapPbSystTot[nbins];          //y percentuale err syst pPb TOT
+
   
+  Double_t ySigmapPbSystYield[nbins];            //y percentuale err syst pPb TOT
+  Double_t ySigmapPbSystLumi[nbins];        //y percentuale err syst pPb TOT
+  Double_t ySigmapPbSystCutEff[nbins];           //y percentuale err syst pPb TOT
+  Double_t ySigmapPbSystTot[nbins];              //y percentuale err syst pPb TOT
+
   
-  
-  
+  Double_t yPercRpPbSystTot[nbins];          //y percentuale err syst RpPb TOT
+  Double_t yRpPbSystTot[nbins];              //y percentuale err syst RpPb TOT
+
   
   double x,y;
   for (Int_t i=0;i<nbins;i++) {
@@ -68,6 +87,11 @@ void NuclearModification(){
     ySigmapPb[i]=hSigmapPbStat->GetBinContent(i+1);
     ySigmapPbStat[i]=hSigmapPbStat->GetBinError(i+1);
     yPercSigmapPbStat[i]=ySigmapPbStat[i]/ySigmapPb[i];
+    yPercSigmapPbSystYield[i]=0.05;
+    yPercSigmapPbSystLumi[i]=0.05;
+    yPercSigmapPbSystCutEff[i]=0.05;
+    yPercSigmapPbSystTot[i]=TMath::Sqrt(yPercSigmapPbSystYield[i]*yPercSigmapPbSystYield[i]+ySigmapPbSystLumi[i]*ySigmapPbSystLumi[i]+ySigmapPbSystCutEff[i]*ySigmapPbSystCutEff[i]);
+    ySigmapPbSystTot[i]=yPercSigmapPbSystTot[i]*ySigmapPbStat[i];
   }
   
   for(Int_t i=0;i<nbins;i++) {
@@ -76,6 +100,9 @@ void NuclearModification(){
     yFONLL[i]=1;
     yRpAsystFONLLhigh[i]=yPercPPsystFONLLlow[i];//*yRpA[i];
     yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i];//*yRpA[i];
+    yPercRpPbSystTot[i]=yPercSigmapPbSystTot[i];
+    yRpPbSystTot[i]=yPercRpPbSystTot[i]*yRpA[i];
+    
   }
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
@@ -84,6 +111,14 @@ void NuclearModification(){
   gRpAstat->SetLineColor(2);
   gRpAstat->SetLineWidth(2);   
   gRpAstat->SetMarkerStyle(22);
+  
+  TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTot,yRpPbSystTot);
+  gRpAsyst->SetTitle("RpA syst uncertainty from pPb");
+  gRpAsyst->SetMarkerColor(4);
+  gRpAsyst->SetLineColor(4);
+  gRpAsyst->SetLineWidth(2);   
+  gRpAsyst->SetMarkerStyle(21);
+
    
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
@@ -155,7 +190,7 @@ void NuclearModification(){
   
   hSigmapPbStat->Draw("same");
   
-  TLegend *legendSigma=new TLegend(0.5544355,0.6934461,0.8004032,0.8287526,"");
+  TLegend *legendSigma=new TLegend(0.3024194,0.6744186,0.5483871,0.8646934,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -184,7 +219,7 @@ void NuclearModification(){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.3024194,0.7293869,0.5483871,0.8646934,"");
+  TLegend *legendRpA=new TLegend(0.3145161,0.6194503,0.5604839,0.8097252,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
@@ -192,7 +227,7 @@ void NuclearModification(){
   legendRpA->SetTextFont(42);
   legendRpA->SetTextSize(0.04);
 
-  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.);  
+  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R_{pA} (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R_{pA} (B^{0})");
@@ -222,15 +257,40 @@ void NuclearModification(){
   gRpAsystFONLL->SetMarkerColor(5);//kAzure-3);
   gRpAsystFONLL->Draw("2same");
   gRpAstat->Draw("psame");
+  gRpAsyst->SetFillColor(0);
+  gRpAsyst->SetFillStyle(0);
+  gRpAsyst->Draw("2same");
   
+
   TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R_{pA} stat unc","P");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"Syst err pPb data","P");
+  ent_RpAsystData->SetTextFont(42);
+  ent_RpAsystData->SetLineColor(4);
+  ent_RpAsystData->SetMarkerColor(1);
+
+  
   TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","P");
   ent_RpAsystFONLL->SetTextFont(42);
   ent_RpAsystFONLL->SetLineColor(5);
   ent_RpAsystFONLL->SetMarkerColor(5);
+  
+  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  tlatex1->SetNDC();
+  tlatex1->SetTextColor(1);
+  tlatex1->SetTextFont(42);
+  tlatex1->SetTextSize(0.04);
+  tlatex1->Draw();
+  
+  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  tlatex2->SetNDC();
+  tlatex2->SetTextColor(1);
+  tlatex2->SetTextFont(42);
+  tlatex2->SetTextSize(0.04);
+  tlatex2->Draw();
+
 
   
   canvasRpA->SaveAs(Form("Results%s/canvasRpA%s.eps",particle.Data(),particle.Data()));  
