@@ -152,10 +152,10 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    return mass;
 }
 
-void fitBs()
+void fitBs(TString infname="")
 {
-
-   TFile *inf = new TFile(inputdata.Data());
+   if (infname=="") infname=inputdata.Data();
+   TFile *inf = new TFile(infname.Data());
    TTree *nt = (TTree*) inf->Get("ntphi");
 
    TFile *infMC = new TFile(inputmc.Data());
