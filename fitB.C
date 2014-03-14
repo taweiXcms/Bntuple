@@ -12,13 +12,13 @@ TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRe
 //TString inputdata="../InputsFits/nt_mc_Kp.root";
 //TString inputdata="nt_nonPrompt_Jpsi.root";
 //TString inputdata="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
+TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140313_kp_matchingMuon.root";
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
-TString cut="(HLT_PAL1DoubleMu0_v1||HLT_PAMu3_v1)&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9";
+TString cut="(HLT_PAMu3_v1)&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9&&mass>5&&mass<6";
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&gen==10033&&%s",cut.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
 
 void clean0(TH1D *h){
@@ -185,8 +185,8 @@ void fitB(TString infname="")
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt",TCut(selmc.Data())&&"gen==22233");
-  nt->Project("hRecoTruth","pt",TCut(seldata.Data())&&"gen==22233");
+  ntMC->Project("hPtMC","pt",TCut(selmc.Data())&&"gen==10033");
+  nt->Project("hRecoTruth","pt",TCut(seldata.Data())&&"gen==10033");
   ntGen->Project("hPtGen","pt",selmcgen.Data());
   divideBinWidth(hRecoTruth);
   
