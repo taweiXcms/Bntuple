@@ -4,32 +4,46 @@
   const int nbins=1;
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
-  Double_t yPercSigmapPbSystHigh[nbins]={0.3309};
-  Double_t yPercSigmapPbSystLow[nbins]={0.1996};
-  
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.089};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.089};
+
+  Double_t commonErrorP = 0.22 ;
+  Double_t commonErrorN = 0.24  ;
+    
   TString particle="Bzero";
   const int nbins=3;
   Double_t xbins[nbins]={12.5,17.5,40};
   Double_t exl[nbins]={2.5,2.5,20};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.0996,0.0988,0.0981};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.0996,0.0988,0.0981};
-  
-    TString particle="Bplus";
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};
+
+  Double_t commonErrorP = 0.0555 ;
+  Double_t commonErrorN = 0.0555  ;
+
+
+   TString particle="Bplus";
   const int nbins=5;
   Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.086,0.084,0.0814,0.119,0.0907};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.086,0.084,0.0814,0.119,0.0907};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.117,0.116,0.113,0.143,0.120};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.117,0.116,0.113,0.143,0.120};
 
+  Double_t commonErrorP = 0.0445 ;
+  Double_t commonErrorN = 0.0445  ;
+ 
 
 */
+  TString particle="Bs";
+  const int nbins=1;
+  Double_t xbins[nbins]={35};
+  Double_t exl[nbins]={25};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.102};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.102};
 
-    TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.086,0.084,0.0814,0.119,0.0907};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.086,0.084,0.0814,0.119,0.0907};
+  Double_t commonErrorP = 0.22 ;
+  Double_t commonErrorN = 0.24  ;
+    
+
 
 
 void NuclearModification(){
@@ -166,7 +180,7 @@ void NuclearModification(){
   gSigmasyst->Draw("2esame");
   
   
-  TLegend *legendSigma=new TLegend(0.5685484,0.5264271,0.8145161,0.7167019,"");
+  TLegend *legendSigma=new TLegend(0.5685484,0.5864271,0.8145161,0.7167019,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -251,7 +265,7 @@ void NuclearModification(){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.3145161,0.6194503,0.5604839,0.8097252,"");
+  TLegend *legendRpA=new TLegend(0.3145161,0.5804503,0.5604839,0.770252,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
@@ -277,6 +291,10 @@ void NuclearModification(){
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
+  
+  TLine *l = new TLine(0,1,70,1);
+  l->SetLineStyle(2);
+  
   legendRpA->Draw();
   gRpAstat->SetMarkerStyle(21);
   gRpAstat->SetLineColor(1);
@@ -294,6 +312,11 @@ void NuclearModification(){
   gRpAsyst->Draw("2same");
   
 
+  TBox *b = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  b->SetLineColor(1);
+  b->SetFillColor(kGray);
+  b->Draw();
+
   TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R_{pA} stat unc","P");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
@@ -302,6 +325,10 @@ void NuclearModification(){
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(4);
   ent_RpAsystData->SetMarkerColor(1);
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst Lumi+BR","f");
+  ent_RpAsystData->SetTextFont(42);
+  ent_RpAsystData->SetLineColor(2);
+  ent_RpAsystData->SetMarkerColor(2);
 
   
   TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","P");
@@ -323,7 +350,13 @@ void NuclearModification(){
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
 
+  TLatex * tlatex2=new TLatex(0.5564516,0.8,"L_{int} = 34.8 nb^{-1}");
+  tlatex2->SetNDC();
+  tlatex2->SetTextColor(1);
+  tlatex2->SetTextFont(42);
+  tlatex2->SetTextSize(0.04);
+  tlatex2->Draw();
 
-  
+//  l->Draw();  
   canvasRpA->SaveAs(Form("Results%s/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
 }
