@@ -37,8 +37,8 @@
   const int nbins=1;
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.102};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.102};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.114};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.114};
 
   Double_t commonErrorP = 0.22 ;
   Double_t commonErrorN = 0.24  ;
