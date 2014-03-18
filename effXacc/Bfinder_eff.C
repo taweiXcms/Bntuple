@@ -24,8 +24,18 @@
 #define PHI_MASS    1.019455
 #define JPSI_MASS   3.096916
 #define PSI2S_MASS  3.686109
+
+// T&P efficiency re-weight factor
+TFile* fEffWeight1 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin1CS.root");
+TH1D* hEffCorr1 = (TH1D*)fEffWeight1->Get("hRD");
+TFile* fEffWeight2 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin2CS.root");
+TH1D* hEffCorr2 = (TH1D*)fEffWeight2->Get("hRD");
+TFile*fEffWeight3 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin3CS.root");
+TH1D* hEffCorr3 = (TH1D*)fEffWeight3->Get("hRD");
    
-void Bfinder_eff(){
+bool kineCut(bool, double muPt, double muEta, double muP);
+float getEffWeight(bool isBoosted=0,  float mupt1=0, float mueta1=0, float mupt2=0, float mueta2=0);
+void Bfinder_eff(bool useDataDrivenEff=1){
 
 //Setting the corresponding channel
 	int MCflag = 1;//K+
@@ -81,11 +91,11 @@ void Bfinder_eff(){
     BInfo.setbranchadd(root);
     GenInfo.setbranchadd(root); 
 //    setHltBranch(hlt);
-	hlt->SetBranchAddress("HLT_PAMu3_v1",&HLT_PAMu3_v1);
-	
-	const int nBins = 6;
+    hlt->SetBranchAddress("HLT_PAMu3_v1",&HLT_PAMu3_v1);
+    
+    const int nBins = 6;
     double ptBins[nBins+1] = {5,10,15,20,25,30,60};
-	const int nEtaBins = 4;
+    const int nEtaBins = 4;
     double etaBins[nEtaBins+1] = {-2.395, -1.47, -0.47, 0.53, 1.465};
 	TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
 	TH1F* reco_bsig_pt_stage2 = new TH1F("reco_bsig_pt_stage2", "", nBins,ptBins);
@@ -434,9 +444,20 @@ TH1F* gen_dauSum_y = new TH1F("gen_dauSum_y", "", 100, -3.5, 3.5);
 			if(BInfo.eta[i] < etaBins[0] || BInfo.eta[i] > etaBins[nEtaBins]) continue;
 
 //			reco_bsig_eta->Fill(GenInfo.eta[GenInfo.mo1[jpgenidx]]);
-			reco_bsig_eta->Fill(BInfo.eta[i]);
+			
+			float effWeight = 1;
+			if (useDataDrivenEff) {
+			  effWeight = getEffWeight( true,
+						    MuonInfo.pt[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]], 
+						    MuonInfo.eta[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]],
+						    MuonInfo.pt[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]], 
+						    MuonInfo.eta[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]]		    );
+			}
+			
+			
+			reco_bsig_eta->Fill(BInfo.eta[i],effWeight);
 			eta_total_reco_true_bsig++;
-			reco_bsig_pt->Fill(BInfo.pt[i]);
+			reco_bsig_pt->Fill(BInfo.pt[i],effWeight);
 			bsig_genidx.push_back(GenInfo.mo1[jpgenidx]);
 			total_reco_true_bsig++;
 
@@ -467,19 +488,19 @@ TH1F* gen_dauSum_y = new TH1F("gen_dauSum_y", "", 100, -3.5, 3.5);
 				if((d0)/d0Err>8.1) { optc2++; stage2++;}
  				if(cos(dtheta)>-0.44) { optc3++; stage2++;}
  				if(TMath::Abs((trk1Dxy)/trk1D0Err)>0.81) { optc4++;stage2++;}
-				if(abs(tktkmass-0.89591)<0.140) { optc5++; stage2++;}
+				if(TMath::Abs(tktkmass-0.89591)<0.140) { optc5++; stage2++;}
 			}
 			if(MCflag == 3) {
 				if(chi2cl>3.8e-02) { optc1++; stage2++;}
 				if((d0)/d0Err>3.2e+00) { optc2++; stage2++;}
  				if(cos(dtheta)>7.4e-01) { optc3++; stage2++;}
  				if(TMath::Abs((trk1Dxy)/trk1D0Err)>1.3e+00) { optc4++;stage2++;}
-				if(abs(tktkmass-1.01944)<1.5e-02) { optc5++; stage2++;}
+				if(TMath::Abs(tktkmass-1.01944)<1.5e-02) { optc5++; stage2++;}
 			}
 			if(stage2==5){
-				reco_bsig_eta_stage2->Fill(BInfo.eta[i]);
+			  reco_bsig_eta_stage2->Fill(BInfo.eta[i],effWeight);
 				eta_total_reco_true_bsig_stage2++;
-				reco_bsig_pt_stage2->Fill(BInfo.pt[i]);
+				reco_bsig_pt_stage2->Fill(BInfo.pt[i],effWeight);
 				total_reco_true_bsig_stage2++;
 			}
 
@@ -598,3 +619,48 @@ TH1F* gen_dauSum_y = new TH1F("gen_dauSum_y", "", 100, -3.5, 3.5);
 		c4->SaveAs("fig_effstage2/phi_eta_eff.pdf");
 	}
 }//main
+
+
+float getEffWeight(bool isBoosted,  float mupt1, float mueta1, float mupt2, float mueta2) {
+  float mup1 = mupt1* cosh(mueta1);
+  float mup2 = mupt2* cosh(mueta2);
+
+  if ( kineCut( isBoosted, mupt1, mueta1, mup1)==false)
+    return 0;
+  if ( kineCut( isBoosted, mupt2, mueta2, mup2)==false)
+    return 0;
+
+  TH1D* hw1;
+  TH1D* hw2;
+  if ( mueta1 < -1.47 )   hw1 = hEffCorr1;
+  else if ( mueta1 < 0.28 )   hw1 = hEffCorr2;
+  else    hw1 = hEffCorr3;
+  if ( mueta2 < -1.47 )   hw2 = hEffCorr1;
+  else if ( mueta2 < 0.28 )   hw2 = hEffCorr2;
+  else    hw2 = hEffCorr3;
+
+  int bin1 = hw1->FindBin(mupt1);
+  int bin2 = hw1->FindBin(mupt2);
+
+  float effWeight1 = hw1->GetBinContent(bin1);
+  float effWeight2 = hw1->GetBinContent(bin2);
+  return effWeight1 * effWeight2;
+}
+
+
+
+bool kineCut(bool isBoosted, double muPt, double muEta, double muP) {
+
+  if(muEta<-2.4 || muEta>=1.93)
+    //      if(muEta<-2.4 || muEta>=2.4) //single muon eta cut
+    {return false;}
+  else if(TMath::Abs(muEta)>=2.2 && TMath::Abs(muEta)<2.4 && muPt<=0.8)
+    {return false;}
+  else if(TMath::Abs(muEta)>=1.3 && TMath::Abs(muEta)<2.2 && muP<=2.9)
+    {return false;}
+  else if(TMath::Abs(muEta)<1.3 && muPt<=3.3)
+    {return false;}
+
+  else {return true;}
+
+}
