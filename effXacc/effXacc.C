@@ -13,7 +13,8 @@
 #include <TLorentzVector.h>
 ////Include Bfinder interface/format.h here
 //#include "~/HeavyFlavor_20131030/Bfinder/CMSSW_5_3_8_patch3/src/Bfinder/Bfinder/interface/format.h"
-#include "/net/hisrv0001/home/tawei/HeavyFlavor_20131030/Bfinder/CMSSW_5_3_8_patch3/src/Bfinder/Bfinder/interface/format.h"
+//#include "/net/hisrv0001/home/tawei/HeavyFlavor_20131030/Bfinder/CMSSW_5_3_8_patch3/src/Bfinder/Bfinder/interface/format.h"
+#include "format.h"
 
 #define MUON_MASS   0.10565837
 #define PION_MASS   0.13957018
@@ -114,64 +115,63 @@ void effXacc(){
 			jpgenidx = GenInfo.mo1[mu1genidx];
 
 			bool pass = 1;
-			int clevel = 0;
-            CutLevel->Fill(clevel);clevel++;//0
+            CutLevel->Fill(0);
 
 			//Selections
 			//Muon
 			if(MuonInfo.i_striphit[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] <= 5 ||
 			   MuonInfo.i_striphit[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] <= 5) pass = 0;
-            else CutLevel->Fill(clevel);clevel++;//1
+            if (pass == 1)CutLevel->Fill(1);;
 
 			if(MuonInfo.i_pixelhit[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] <= 1 ||
 			   MuonInfo.i_pixelhit[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] <= 1) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//2
+            if (pass == 1) CutLevel->Fill(2);
 
 			if(MuonInfo.i_chi2[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]]/MuonInfo.i_ndf[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] >= 1.8 ||
 			   MuonInfo.i_chi2[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]]/MuonInfo.i_ndf[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] >= 1.8) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//3
+            if (pass == 1) CutLevel->Fill(3);
 
 			if(MuonInfo.dxyPV[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] >= 3.0 ||
 			   MuonInfo.dxyPV[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] >= 3.0) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//4
+            if (pass == 1) CutLevel->Fill(4);
 
 			if(MuonInfo.dzPV[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] >= 30. ||
 			   MuonInfo.dzPV[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] >= 30.) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//5
+            if (pass == 1) CutLevel->Fill(5);
 
 			if(!(MuonInfo.muqual[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] & 4096) ||
 			   !(MuonInfo.muqual[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] & 4096)) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//6
+            if (pass == 1) CutLevel->Fill(6);
 
 			if(!(MuonInfo.muqual[BInfo.uj_rfmu1_index[BInfo.rfuj_index[i]]] & 16) ||
 			   !(MuonInfo.muqual[BInfo.uj_rfmu2_index[BInfo.rfuj_index[i]]] & 16)) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//7
+            if (pass == 1) CutLevel->Fill(7);
 
 			//Jpsi
 			if(TMath::Prob(BInfo.uj_vtxchi2[BInfo.rfuj_index[i]],BInfo.uj_vtxdof[BInfo.rfuj_index[i]]) <= 0.01) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//8
+            if (pass == 1) CutLevel->Fill(8);
 
 			JpsiVtx.SetXYZ(BInfo.uj_vtxX[BInfo.rfuj_index[i]], BInfo.uj_vtxY[BInfo.rfuj_index[i]], BInfo.uj_vtxZ[BInfo.rfuj_index[i]]);
 			JpsiVtx =PV-JpsiVtx;
 			float JpsiCt = JpsiVtx.Mag()*JPSI_MASS/BInfo.uj_pt[BInfo.rfuj_index[i]];
 			if(JpsiCt <= 0.15 ) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//9
+            if (pass == 1) CutLevel->Fill(9);
 
 			//Track
 			if(TrackInfo.striphit[BInfo.rftk1_index[i]] <= 3) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//10
+            if (pass == 1) CutLevel->Fill(10);
 
 			if(TrackInfo.pixelhit[BInfo.rftk1_index[i]] <= 0) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//11
+            if (pass == 1) CutLevel->Fill(11);
 
 			if(TrackInfo.chi2[BInfo.rftk1_index[i]]/TrackInfo.ndf[BInfo.rftk1_index[i]] >= 5) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//12
+            if (pass == 1) CutLevel->Fill(12);
 
 			if(TMath::Prob(TrackInfo.chi2[BInfo.rftk1_index[i]],TrackInfo.ndf[BInfo.rftk1_index[i]]) <= 0.001) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//13
+            if (pass == 1) CutLevel->Fill(13);
 
 			if(TrackInfo.pt[BInfo.rftk1_index[i]] <= 2.) pass = 0;
-            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//14
+            if (pass == 1) CutLevel->Fill(14);
 
 			if(MCflag != 1){
 				if(TrackInfo.striphit[BInfo.rftk2_index[i]] <= 3) pass = 0;
@@ -202,17 +202,18 @@ void effXacc(){
 			if(MCflag == 1) {
 				theB = mu1+mu2+tk1;
 				if(theB.M() < 4.6 || theB.M() > 6.0) pass = 0;
-	            else if (pass == 1) CutLevel->Fill(clevel);clevel++;//15
+	            if (pass == 1) CutLevel->Fill(15);
 			}
 			
 			if(MCflag == 2 || MCflag == 3) {
 				theB = mu1+mu2+tk1+tk2;
 				if(theB.M() < 4.6 || theB.M() > 6.0) pass = 0;
-            	else if (pass == 1) CutLevel->Fill(clevel);clevel++;//15
+            	if (pass == 1) CutLevel->Fill(15);
 			}
 
 			//Selections
-			if(!pass) continue;
+//			if(!pass) continue;
+//if(BInfo.pt[i] < 10) continue;
 
 			if(abs(GenInfo.pdgId[mu1genidx]) == 13 && abs(GenInfo.pdgId[mu2genidx]) == 13) {//both reco mu are gen mu
 				if(GenInfo.nMo[mu1genidx] > 0 && GenInfo.nMo[mu2genidx] > 0){//both gen mu has at least 1 mother
@@ -361,6 +362,7 @@ void effXacc(){
 	reco_gen_eff_pt->Write();
 
 	c1->Write();
+	CutLevel->Scale(1./CutLevel->GetBinContent(1));
     fout->Write();
     fout->Close();
 }//main
