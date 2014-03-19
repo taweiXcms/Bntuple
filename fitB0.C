@@ -16,7 +16,7 @@ TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140313_kstar_selectedMuon.root";
 TString cut="(HLT_PAMu3_v1)&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
 //TString cut="chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
 //abs(y+0.465)<1.93
-TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+TString seldata=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
 
