@@ -43,6 +43,7 @@ class bNtuple
   float mu2TrackerMuArbitrated;
   float mu1StationTight;//one station tight
   float mu2StationTight;//one station tight
+  float mumumass;
 
   float ujmass;
   float ujvProb;//jpsi vertex probability
@@ -129,6 +130,7 @@ class bNtuple
     nt->Branch("mu2dz",&mu2dz);
     nt->Branch("mu2TrackerMuArbitrated",&mu2TrackerMuArbitrated);
     nt->Branch("mu2StationTight",&mu2StationTight);
+    nt->Branch("mumumass",&mumumass);
 
     nt->Branch("ujmass",&ujmass);
     nt->Branch("ujvProb",&ujvProb);
@@ -1122,13 +1124,13 @@ void setBranch(TTree *root) {
 
    root->SetBranchAddress("MuonInfo.size",&MuonInfo_size);
    root->SetBranchAddress("MuonInfo.index",MuonInfo_index);
-   /*    
+
    root->SetBranchAddress("MuonInfo.handle_index",MuonInfo_handle_index);
    root->SetBranchAddress("MuonInfo.charge",MuonInfo_charge);
    root->SetBranchAddress("MuonInfo.pt",MuonInfo_pt);
    root->SetBranchAddress("MuonInfo.eta",MuonInfo_eta);
    root->SetBranchAddress("MuonInfo.phi",MuonInfo_phi);
-   */
+
    root->SetBranchAddress("MuonInfo.i_striphit",MuonInfo_i_striphit);
    root->SetBranchAddress("MuonInfo.i_pixelhit",MuonInfo_i_pixelhit);
    root->SetBranchAddress("MuonInfo.i_nStripLayer",MuonInfo_i_nStripLayer);

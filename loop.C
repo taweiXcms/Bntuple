@@ -9,6 +9,7 @@
 #include <cmath>
 #include "loop.h"
 
+#define MUON_MASS   0.10565837
 
 void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int REAL)
 {
@@ -75,6 +76,26 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
   if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096) b->mu2StationTight = 1;
   else b->mu2StationTight = 0;
   
+  float mu1px,mu1py,mu1pz,mu1E;
+  float mu2px,mu2py,mu2pz,mu2E;
+
+  mu1px = MuonInfo_pt[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]*cos(MuonInfo_phi[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]);
+  mu1py = MuonInfo_pt[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]*sin(MuonInfo_phi[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]);
+  mu1pz = MuonInfo_pt[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]*sinh(MuonInfo_eta[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]);
+  b4P->SetXYZM(mu1px,mu1py,mu1pz,MUON_MASS);
+  mu1E = b4P->E();
+  //cout<<mu1px<<"  "<<mu1py<<"  "<<mu1pz<<endl;
+  mu2px = MuonInfo_pt[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]*cos(MuonInfo_phi[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]);
+  mu2py = MuonInfo_pt[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]*sin(MuonInfo_phi[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]);
+  mu2pz = MuonInfo_pt[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]*sinh(MuonInfo_eta[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]);
+  b4P->SetXYZM(mu2px,mu2py,mu2pz,MUON_MASS);
+  mu2E = b4P->E();
+  b4P->SetPxPyPzE(mu1px+mu2px,
+		  mu1py+mu2py,
+		  mu1pz+mu2pz,
+		  mu1E+mu2E);
+  b->mumumass = b4P->Mag();
+  //cout<<b->mumumass<<endl;
   //jpsi section
   b->ujmass = BInfo_uj_mass[BInfo_rfuj_index[j]];
   b->ujvProb = TMath::Prob(BInfo_uj_vtxchi2[BInfo_rfuj_index[j]],BInfo_uj_vtxdof[BInfo_rfuj_index[j]]);
@@ -489,7 +510,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140303_kstar.root", string outfile="test_kstar.root", bool REAL=0){
+void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/d00/bmeson/MC/nt_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -605,7 +626,6 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140303_kstar.root", 
   
   for (Long64_t i=0; i<nentries;i++) {
     nbytes += root->GetEntry(i);
-
     flagEvt=0;
     while (flagEvt==0)
     {
