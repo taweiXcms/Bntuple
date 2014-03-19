@@ -26,12 +26,13 @@
 #define PSI2S_MASS  3.686109
 
 // T&P efficiency re-weight factor
-TFile* fEffWeight1 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin1CS.root");
+TFile* fEffWeight1 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin1CS_1st_20140318.root");
 TH1D* hEffCorr1 = (TH1D*)fEffWeight1->Get("hRD");
-TFile* fEffWeight2 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin2CS.root");
+TFile* fEffWeight2 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin2CS_1st_20140318.root");
 TH1D* hEffCorr2 = (TH1D*)fEffWeight2->Get("hRD");
-TFile*fEffWeight3 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin3CS.root");
+TFile*fEffWeight3 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin3CS_1st_20140318.root");
 TH1D* hEffCorr3 = (TH1D*)fEffWeight3->Get("hRD");
+
    
 bool kineCut(bool, double muPt, double muEta, double muP);
 float getEffWeight(bool isBoosted=0,  float mupt1=0, float mueta1=0, float mupt2=0, float mueta2=0);
