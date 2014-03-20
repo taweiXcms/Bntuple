@@ -240,7 +240,8 @@ void fitB0(TString infname="",bool doweight = 1)
   hPtGen->Draw("same hist");
 
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  hPtSigma->Scale(1./(2*luminosity));
+  double BRchain=7.93833e-5;
+  hPtSigma->Scale(1./(2*luminosity*BRchain));
   hPtSigma->SetYTitle("d#sigma/dp_{T} (B^{0}) ");
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
