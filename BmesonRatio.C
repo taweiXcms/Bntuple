@@ -13,12 +13,9 @@ void BmesonRatio(){
   
   TH1F*hSigmapPbStatBplusOriginal=(TH1F*)filepPbBplus->Get("hPtSigma");  
   TH1F*hSigmapPbStatBzero=(TH1F*)filepPbBzero->Get("hPtSigma");  
-
-  TGraphAsymmErrors*gSigmasystBplus=(TGraphAsymmErrors*)filepPbBplus->Get("gSigmasyst");  
-  TGraphAsymmErrors*gSigmasystBzero=(TGraphAsymmErrors*)filepPbBzero->Get("gSigmasyst");  
   
-  gSigmasystBplus->SetName("gSigmasystBplus");
-  gSigmasystBzero->SetName("gSigmasystBzero");
+  hSigmapPbStatBplusOriginal->Scale(Bplus);
+  hSigmapPbStatBzero->Scale(Bzero);
   
   double rebin[4] = {10,15,20,60};
   
