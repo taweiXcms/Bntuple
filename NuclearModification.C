@@ -37,8 +37,8 @@
   const int nbins=1;
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.114};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.114};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.089};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.089};
 
   Double_t commonErrorP = 0.22 ;
   Double_t commonErrorN = 0.24  ;
@@ -141,9 +141,11 @@ void NuclearModification(){
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,10,1e5.);  
+  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,1e5,1e10.);  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (pb GeV^{-1}c)");
+  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
+  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
+  if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B_{s}) (pb GeV^{-1}c)");
   hempty->GetXaxis()->SetTitleOffset(1.);
   hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
