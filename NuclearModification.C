@@ -359,4 +359,11 @@ void NuclearModification(){
 
 //  l->Draw();  
   canvasRpA->SaveAs(Form("Results%s/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+  
+  TFile *fout=new TFile(Form("Results%s/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
+  fout->cd();
+  gSigmasyst->SetName("gSigmasyst");
+  gSigmasyst->Write();
+  gaeBplusReference->Write();
+  hSigmapPbStat->Write();
 }
