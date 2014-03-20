@@ -165,9 +165,10 @@ TF1 *fit(TTree *nt,TTree *nt2, TTree *ntMC, TTree *ntMC2,double ptmin,double ptm
    leg2->Draw();
 
 
-   c->SaveAs(Form("ResultsBzero/BMass-%d.C",count));
-   c->SaveAs(Form("ResultsBzero/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBzero/BMass-%d.eps",count));
+   //c->SaveAs(Form("ResultsBzero/BMass-%d.C",count));
+   //c->SaveAs(Form("ResultsBzero/BMass-%d.gif",count));
+   //c->SaveAs(Form("ResultsBzero/BMass-%d.eps",count));
+   c->SaveAs(Form("ResultsBzero/BMass-%d.pdf",count));
 
    return mass;
 }
