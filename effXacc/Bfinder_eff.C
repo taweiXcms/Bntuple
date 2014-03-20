@@ -26,18 +26,18 @@
 #define PSI2S_MASS  3.686109
 
 // T&P efficiency re-weight factor
-TFile* fEffWeight1 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin1CS_1st_20140319.root");
+TFile* fEffWeight1 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin1CS_1st_for_B_20140319.root");
 TH1D* hEffCorr1 = (TH1D*)fEffWeight1->Get("hRD");
-TFile* fEffWeight2 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin2CS_1st_20140319.root");
+TFile* fEffWeight2 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin2CS_1st_for_B_20140319.root");
 TH1D* hEffCorr2 = (TH1D*)fEffWeight2->Get("hRD");
-TFile*fEffWeight3 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin3CS_1st_20140319.root");
+TFile*fEffWeight3 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin3CS_1st_for_B_20140319.root");
 TH1D* hEffCorr3 = (TH1D*)fEffWeight3->Get("hRD");
 
-TFile* fEffWeightMuId1 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin1CS_1st_20140319.root");
+TFile* fEffWeightMuId1 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin1CS_1st_for_B_20140319.root");
 TH1D* hEffCorrMuId1 = (TH1D*)fEffWeightMuId1->Get("hRD");
-TFile* fEffWeightMuId2 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin2CS_1st_20140319.root");
+TFile* fEffWeightMuId2 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin2CS_1st_for_B_20140319.root");
 TH1D* hEffCorrMuId2 = (TH1D*)fEffWeightMuId2->Get("hRD");
-TFile*fEffWeightMuId3 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin3CS_1st_20140319.root");
+TFile*fEffWeightMuId3 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin3CS_1st_for_B_20140319.root");
 TH1D* hEffCorrMuId3 = (TH1D*)fEffWeightMuId3->Get("hRD");
 
    
