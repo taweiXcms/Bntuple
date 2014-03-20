@@ -11,7 +11,7 @@ TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRe
 TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140313_phi_selectedMuon.root";
 
 //TString cut="(HLT_PAMu3_v1)&&chi2cl>0.135&&(d0)/d0Err>3.24&&dtheta<2.03&&TMath::Abs((trk1Dxy/trk1D0Err))>0.792&&TMath::Abs(trk2Dxy/trk2D0Err)>0.742&&TMath::Abs(tktkmass-1.020)<1.02e-02";
-TString cut="(HLT_PAMu3_v1)&&chi2cl>3.8e-02 && (d0/d0Err)>3.2e+00 && cos(dtheta)>7.4e-01 && abs(trk2Dxy/trk2D0Err)>1.3e+00 && abs(tktkmass-1.01944)<1.5e-02";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>3.8e-02 && (d0/d0Err)>3.2e+00 && cos(dtheta)>7.4e-01 && abs(trk2Dxy/trk2D0Err)>1.3e+00 && abs(tktkmass-1.01944)<1.5e-02";
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
