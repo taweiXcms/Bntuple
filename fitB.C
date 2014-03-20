@@ -147,9 +147,10 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
+   //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
+   //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
+   //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
+   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
 
    return mass;
 }
