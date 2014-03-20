@@ -26,12 +26,19 @@
 #define PSI2S_MASS  3.686109
 
 // T&P efficiency re-weight factor
-TFile* fEffWeight1 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin1CS_1st_20140318.root");
+TFile* fEffWeight1 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin1CS_1st_20140319.root");
 TH1D* hEffCorr1 = (TH1D*)fEffWeight1->Get("hRD");
-TFile* fEffWeight2 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin2CS_1st_20140318.root");
+TFile* fEffWeight2 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin2CS_1st_20140319.root");
 TH1D* hEffCorr2 = (TH1D*)fEffWeight2->Get("hRD");
-TFile*fEffWeight3 = new TFile("TNPeffciiencyWeight/WeightFactor_etabin3CS_1st_20140318.root");
+TFile*fEffWeight3 = new TFile("TNPeffciiencyWeight/WeightFactor_total_etabin3CS_1st_20140319.root");
 TH1D* hEffCorr3 = (TH1D*)fEffWeight3->Get("hRD");
+
+TFile* fEffWeightMuId1 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin1CS_1st_20140319.root");
+TH1D* hEffCorrMuId1 = (TH1D*)fEffWeightMuId1->Get("hRD");
+TFile* fEffWeightMuId2 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin2CS_1st_20140319.root");
+TH1D* hEffCorrMuId2 = (TH1D*)fEffWeightMuId2->Get("hRD");
+TFile*fEffWeightMuId3 = new TFile("TNPeffciiencyWeight/WeightFactor_MuId_etabin3CS_1st_20140319.root");
+TH1D* hEffCorrMuId3 = (TH1D*)fEffWeightMuId3->Get("hRD");
 
    
 bool kineCut(bool, double muPt, double muEta, double muP);
@@ -98,37 +105,37 @@ void Bfinder_eff(bool useDataDrivenEff=1){
     double ptBins[nBins+1] = {5,10,15,20,25,30,60};
     const int nEtaBins = 4;
     double etaBins[nEtaBins+1] = {-2.395, -1.47, -0.47, 0.53, 1.465};
-	TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
-	TH1F* reco_bsig_pt_stage2 = new TH1F("reco_bsig_pt_stage2", "", nBins,ptBins);
-	TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
-	TH1F* reco_bsig_eta_stage2 = new TH1F("reco_bsig_eta_stage2", "", nEtaBins,etaBins);
-	TH1F* reco_bsig_eta = new TH1F("reco_bsig_eta", "", nEtaBins,etaBins);
-	TH1F* gen_bsig_eta = new TH1F("gen_bsig_eta", "", nEtaBins,etaBins);
-	reco_bsig_pt->SetMinimum(0);
-	gen_bsig_pt->SetMinimum(0);
-	reco_bsig_eta->SetMinimum(0);
-	gen_bsig_eta->SetMinimum(0);
-
-////For test
-TH1F* gen_sig_eta = new TH1F("gen_sig_eta", "", 100, -3.5, 3.5);
-TH1F* gen_dauSum_eta = new TH1F("gen_dauSum_eta", "", 100, -3.5, 3.5);
-TH1F* gen_sig_y = new TH1F("gen_sig_y", "", 100, -3.5, 3.5);
-TH1F* gen_dauSum_y = new TH1F("gen_dauSum_y", "", 100, -3.5, 3.5);
-		
-	TH1F* CutLevel = new TH1F("cutlevel", "cutlevel", 20, 0, 20);
-	double  total_reco_true_bsig_stage2 = 0;
-	double  total_reco_true_bsig = 0;
-	double  total_gen_bsig = 0;
-	double  eta_total_reco_true_bsig_stage2 = 0;
-	double  eta_total_reco_true_bsig = 0;
-	double  eta_total_gen_bsig = 0;
-	double  optc1 = 0;
-	double  optc2 = 0;
-	double  optc3 = 0;
-	double  optc4 = 0;
-	double  optc5 = 0;
-	double  optc6 = 0;
-
+    TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
+    TH1F* reco_bsig_pt_stage2 = new TH1F("reco_bsig_pt_stage2", "", nBins,ptBins);
+    TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
+    TH1F* reco_bsig_eta_stage2 = new TH1F("reco_bsig_eta_stage2", "", nEtaBins,etaBins);
+    TH1F* reco_bsig_eta = new TH1F("reco_bsig_eta", "", nEtaBins,etaBins);
+    TH1F* gen_bsig_eta = new TH1F("gen_bsig_eta", "", nEtaBins,etaBins);
+    reco_bsig_pt->SetMinimum(0);
+    gen_bsig_pt->SetMinimum(0);
+    reco_bsig_eta->SetMinimum(0);
+    gen_bsig_eta->SetMinimum(0);
+    
+    ////For test
+    TH1F* gen_sig_eta = new TH1F("gen_sig_eta", "", 100, -3.5, 3.5);
+    TH1F* gen_dauSum_eta = new TH1F("gen_dauSum_eta", "", 100, -3.5, 3.5);
+    TH1F* gen_sig_y = new TH1F("gen_sig_y", "", 100, -3.5, 3.5);
+    TH1F* gen_dauSum_y = new TH1F("gen_dauSum_y", "", 100, -3.5, 3.5);
+    
+    TH1F* CutLevel = new TH1F("cutlevel", "cutlevel", 20, 0, 20);
+    double  total_reco_true_bsig_stage2 = 0;
+    double  total_reco_true_bsig = 0;
+    double  total_gen_bsig = 0;
+    double  eta_total_reco_true_bsig_stage2 = 0;
+    double  eta_total_reco_true_bsig = 0;
+    double  eta_total_gen_bsig = 0;
+    double  optc1 = 0;
+    double  optc2 = 0;
+    double  optc3 = 0;
+    double  optc4 = 0;
+    double  optc5 = 0;
+    double  optc6 = 0;
+    
     int offsetHltTree=0; 
     int nevents_total = root->GetEntries();
 //	for(int entry=400000; entry<nevents_total; entry++){
@@ -633,18 +640,21 @@ float getEffWeight(bool isBoosted,  float mupt1, float mueta1, float mupt2, floa
 
   TH1D* hw1;
   TH1D* hw2;
+  // Trigger + MuId efficiency
   if ( mueta1 < -1.47 )   hw1 = hEffCorr1;
   else if ( mueta1 < 0.28 )   hw1 = hEffCorr2;
   else    hw1 = hEffCorr3;
-  if ( mueta2 < -1.47 )   hw2 = hEffCorr1;
-  else if ( mueta2 < 0.28 )   hw2 = hEffCorr2;
-  else    hw2 = hEffCorr3;
+
+  // MuId efficiency Only
+  if ( mueta2 < -1.47 )   hw2 = hEffCorrMuId1;
+  else if ( mueta2 < 0.28 )   hw2 = hEffCorrMuId2;
+  else    hw2 = hEffCorrMuId3;  
 
   int bin1 = hw1->FindBin(mupt1);
-  int bin2 = hw1->FindBin(mupt2);
+  int bin2 = hw2->FindBin(mupt2);
 
   float effWeight1 = hw1->GetBinContent(bin1);
-  float effWeight2 = hw1->GetBinContent(bin2);
+  float effWeight2 = hw2->GetBinContent(bin2);
   return effWeight1 * effWeight2;
 }
 
