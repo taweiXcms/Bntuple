@@ -8,9 +8,9 @@ double fixparam1=5.279;
 double setparam3=0.03;
 double fixparam2=0.04;
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching.root";
+TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching_2.root";
 //TString inputdata="/d00/bmeson/MC/nt_BoostedMC_20140303_kstar.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140313_kstar_selectedMuon.root";
+TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140318_Kstar_TriggerMatchingMuon.root";
 
 
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
