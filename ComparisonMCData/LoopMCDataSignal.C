@@ -1,12 +1,20 @@
 #include "utilities.h"
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
+TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching_2.root";
+TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
 
-TString cut="mass>5.2&&mass<5.34&&chi2cl>0.005&&(d0)/d0Err>3.3&&cos(dtheta)>-0.5&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9";
-TString seldata=Form("%s&&pt>10.&&pt<60.",cut.Data());
-TString selmc=Form("%s&&gen!=22233&&pt>10.&&pt<60.",cut.Data());
-TString selmcsignal=Form("%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
+
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9&&mass>5.24&&mass<5.31";
+
+TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.",cut.Data());
+TString selmc="1";//Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60.",cut.Data());
+TString selmcsignal=Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
+
+
+
+//TString seldata=Form("%s&&pt>10.&&pt<60.",cut.Data());
+//TString selmc=Form("%s&&gen!=22233&&pt>10.&&pt<60.",cut.Data());
+//TString selmcsignal=Form("%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
 
 void LoopMCDataSignal(){
 
@@ -123,7 +131,9 @@ void LoopMCDataSignal(){
   hd0d0Err_MC->SetLineColor(1);
   hd0d0Err_MCsignal->SetLineColor(4);
   hd0d0Err_Data->GetXaxis()->SetRangeUser(0.,200.);
-  hd0d0Err_Data->SetMaximum(5.);
+    hd0d0Err_Data->SetMaximum(10.);
+  hd0d0Err_Data->SetMinimum(1e-6);
+
   
     TLegend* legd0d0Err=new TLegend(0.1210007,0.7162524,0.4000186,0.8868177);
   legd0d0Err->SetFillStyle(0);
@@ -169,7 +179,8 @@ void LoopMCDataSignal(){
   hchi2cl_MC->SetLineColor(1);
   hchi2cl_MCsignal->SetLineColor(4);
   hchi2cl_Data->GetXaxis()->SetRangeUser(-0,1.05.);
-  hchi2cl_Data->SetMaximum(0.7);
+  hchi2cl_Data->SetMinimum(1e-4);
+  hchi2cl_Data->SetMaximum(1);
   
   TLegend* legchi2cl=new TLegend(0.1210007,0.7162524,0.4000186,0.8868177);
   legchi2cl->SetFillStyle(0);
@@ -208,7 +219,8 @@ void LoopMCDataSignal(){
   hcostheta_MC->SetLineColor(1);
   hcostheta_MCsignal->SetLineColor(4);
   hcostheta_Data->GetXaxis()->SetRangeUser(-1.05,1.05.);
-  hcostheta_Data->SetMaximum(1);
+  hcostheta_Data->SetMinimum(1e-6);
+  hcostheta_Data->SetMaximum(5);
   
   TLegend* legcostheta=new TLegend(0.1210007,0.7162524,0.4000186,0.8868177);
   legcostheta->SetFillStyle(0);
@@ -246,6 +258,7 @@ void LoopMCDataSignal(){
   htrk1D0Err_MC->SetLineColor(1);
   htrk1D0Err_MCsignal->SetLineColor(4);
   htrk1D0Err_Data->GetXaxis()->SetRangeUser(0.,100.);
+  htrk1D0Err_Data->SetMinimum(1e-7);
   htrk1D0Err_Data->SetMaximum(5.);
   
   TLegend* legtrk1D0Err=new TLegend(0.1210007,0.7162524,0.4000186,0.8868177);
@@ -268,7 +281,7 @@ void LoopMCDataSignal(){
   latextrk1D0Err->SetTextSize(0.05);
   latextrk1D0Err->SetTextColor(1);
   latextrk1D0Err->SetTextFont(42);
-  latextrk1D0Err->Draw();
+  //latextrk1D0Err->Draw();
   
   canvas->SaveAs("Plots/canvasSignal.png");
 
