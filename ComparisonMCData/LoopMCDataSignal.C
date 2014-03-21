@@ -283,6 +283,6 @@ void LoopMCDataSignal(){
   latextrk1D0Err->SetTextFont(42);
   //latextrk1D0Err->Draw();
   
-  canvas->SaveAs("Plots/canvasSignal.png");
+  canvas->SaveAs("Plots/canvasSignal.pdf");
 
 }
