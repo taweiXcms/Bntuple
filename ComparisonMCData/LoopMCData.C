@@ -1,14 +1,21 @@
 #include "utilities.h"
 
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
+TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching_2.root";
+TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
 
-//TString cut="chi2cl>0.005&&(d0)/d0Err>3.3&&cos(dtheta)>-0.5&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9";
+//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9&&mass>5&&mass<6";
+
+//TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+//TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
+//TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
+
 TString cut="1";
-TString seldata=Form("%s&&pt>10.&&pt<60.",cut.Data());
-TString selmc=Form("%s&&gen!=22233&&pt>10.&&pt<60.",cut.Data());
-TString selmcsignal=Form("%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
+TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60.",cut.Data());
+TString selmcsignal=Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
+
+//TString selmcsignal="1";//Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.&&abs(pdgId)==521",cut.Data());
 
 void LoopMCData(){
 
@@ -51,7 +58,7 @@ void LoopMCData(){
 
   TH1D *hd0d0Err_Data = new TH1D("hd0d0Err_Data","hd0d0Err_Data",100,-.1,200);
   TH1D *hchi2cl_Data = new TH1D("hchi2cl_Data","hchi2cl_Data",100,-.1,1);
-  TH1D *hcostheta_Data = new TH1D("hcostheta_Data","hcostheta_Data",200,-1,1);
+  TH1D *hcostheta_Data = new TH1D("hcostheta_Data","hcostheta_Data",200,0,1);
   TH1D *htrk1D0Err_Data = new TH1D("htrk1D0Err_Data","htrk1D0Err_Data",100,-.1,100);
   
   //hd0d0Err_Data->Sumw2();
@@ -68,13 +75,13 @@ void LoopMCData(){
 
   TH1D *hd0d0Err_MCsignal = new TH1D("hd0d0Err_MCsignal","hd0d0Err_MCsignal",100,-.1,200);  
   TH1D *hchi2cl_MCsignal = new TH1D("hchi2cl_MCsignal","hchi2cl_MCsignal",100,-.1,1);
-  TH1D *hcostheta_MCsignal = new TH1D("hcostheta_MCsignal","hcostheta_MCsignal",200,-1,1);
+  TH1D *hcostheta_MCsignal = new TH1D("hcostheta_MCsignal","hcostheta_MCsignal",200,0,1);
   TH1D *htrk1D0Err_MCsignal = new TH1D("htrk1D0Err_MCsignal","htrk1D0Err_MCsignal",100,-.1,100);
 
   ntMC->Project("hd0d0Err_MCsignal","(d0)/d0Err",selmcsignal.Data());  
   ntMC->Project("hchi2cl_MCsignal","chi2cl",selmcsignal.Data());
   ntMC->Project("hcostheta_MCsignal","cos(dtheta)",selmcsignal.Data());
-  ntMC->Project("htrk1D0Err_MCsignal","TMath::Abs((trk1Dxy)/trk1D0Err)",selmcsignal.Data());
+  ntMC->Project("htrk1D0Err_MCsignal","TMath::Abs((trk1Dxy)/trk1D0Err)",selmcsignal.Data()); 
   
   TH1D *hd0d0Err_MC = new TH1D("hd0d0Err_MC","hd0d0Err_MC",100,-.1,200);  
   TH1D *hchi2cl_MC = new TH1D("hchi2cl_MC","hchi2cl_MC",100,-.1,1);
@@ -144,7 +151,8 @@ void LoopMCData(){
   hd0d0Err_MC->SetLineColor(1);
   hd0d0Err_MCsignal->SetLineColor(4);
   hd0d0Err_Data->GetXaxis()->SetRangeUser(0.,200.);
-  hd0d0Err_Data->SetMaximum(5.);
+  hd0d0Err_Data->SetMaximum(10.);
+  hd0d0Err_Data->SetMinimum(1e-6);
   
   TLegend* legd0d0Err=new TLegend(0.5282258,0.5338983,0.8084677,0.7067797);
   legd0d0Err->SetFillStyle(0);
@@ -194,7 +202,8 @@ void LoopMCData(){
   hchi2cl_MC->SetLineColor(1);
   hchi2cl_MCsignal->SetLineColor(4);
   hchi2cl_Data->GetXaxis()->SetRangeUser(-0,1.05.);
-  hchi2cl_Data->SetMaximum(0.4);
+  hchi2cl_Data->SetMinimum(1e-4);
+  hchi2cl_Data->SetMaximum(1);
   
   TLegend* legchi2cl=new TLegend(0.5282258,0.5338983,0.8084677,0.7067797);
   legchi2cl->SetFillStyle(0);
@@ -242,7 +251,8 @@ void LoopMCData(){
   hcostheta_MC->SetLineColor(1);
   hcostheta_MCsignal->SetLineColor(4);
   hcostheta_Data->GetXaxis()->SetRangeUser(-1.05,1.05.);
-  hcostheta_Data->SetMaximum(1);
+  hcostheta_Data->SetMinimum(1e-6);
+  hcostheta_Data->SetMaximum(5);
   
   TLegend* legcostheta=new TLegend(0.5282258,0.5338983,0.8084677,0.7067797);
   legcostheta->SetFillStyle(0);
@@ -262,7 +272,7 @@ void LoopMCData(){
   entDecayLength->SetTextColor(4);
   legcostheta->Draw(); 
   
-  TLatex*latexcostheta=new TLatex(-0.9,0.35,"10 <p_{t}< 60 GeV/c");
+  TLatex*latexcostheta=new TLatex(0.1,0.35,"10 <p_{t}< 60 GeV/c");
   latexcostheta->SetTextSize(0.05);
   latexcostheta->SetTextColor(1);
   latexcostheta->SetTextFont(42);
@@ -289,6 +299,7 @@ void LoopMCData(){
   htrk1D0Err_MC->SetLineColor(1);
   htrk1D0Err_MCsignal->SetLineColor(4);
   htrk1D0Err_Data->GetXaxis()->SetRangeUser(0.,100.);
+  htrk1D0Err_Data->SetMinimum(1e-7);
   htrk1D0Err_Data->SetMaximum(5.);
   
   TLegend* legtrk1D0Err=new TLegend(0.5282258,0.5338983,0.8084677,0.7067797);
@@ -303,7 +314,7 @@ void LoopMCData(){
   
   TLegendEntry* entDecayLength=legtrk1D0Err->AddEntry(htrk1D0Err_Data,"Data","PL");
   entDecayLength->SetTextColor(htrk1D0Err_Data->GetMarkerColor());
-  TLegendEntry* entDecayLength=legtrk1D0Err->AddEntry(htrk1D0Err_MC,"MC","PL");
+  TLegendEntry* entDecayLength=legtrk1D0Err->AddEntry(htrk1D0Err_MC,"Background","PL");
   entDecayLength->SetTextColor(htrk1D0Err_MC->GetMarkerColor());
   TLegendEntry* entDecayLength=legtrk1D0Err->AddEntry(htrk1D0Err_MCsignal,"Signal","PL");
   entDecayLength->SetTextColor(4);
@@ -315,9 +326,7 @@ void LoopMCData(){
   latextrk1D0Err->SetTextColor(1);
   latextrk1D0Err->SetTextFont(42);
   latextrk1D0Err->Draw();
-  //linetrk1D0Err->Draw("same");
   
   canvas->SaveAs("Plots/canvasBkg.png");
-
 
 }
