@@ -327,6 +327,6 @@ void LoopMCData(){
   latextrk1D0Err->SetTextFont(42);
   latextrk1D0Err->Draw();
   
-  canvas->SaveAs("Plots/canvasBkg.png");
+  canvas->SaveAs("Plots/canvasBkg.pdf");
 
 }
