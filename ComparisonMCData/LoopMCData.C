@@ -11,8 +11,8 @@ TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon.roo
 //TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
 
 TString cut="1";
-TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.",cut.Data());
-TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60.",cut.Data());
+TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.&&mass>5.4&&mass<5.5",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60&&mass>5.4&&mass<5.5",cut.Data());
 TString selmcsignal=Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
 
 //TString selmcsignal="1";//Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.&&abs(pdgId)==521",cut.Data());
