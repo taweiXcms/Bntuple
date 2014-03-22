@@ -11,70 +11,76 @@
 
 #define MUON_MASS   0.10565837
 
-void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int REAL)
+void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, int REAL)
 {
-  // event and trigger info
-  b->Event = Event;
-  b->Run = Run;
-  b->HLT_PAL1DoubleMu0_v1 = HLT_PAL1DoubleMu0_v1;
-  b->HLT_PAL1DoubleMu0_v1_Prescl = HLT_PAL1DoubleMu0_v1_Prescl;
-  b->HLT_PADimuon0_NoVertexing_v1 = HLT_PADimuon0_NoVertexing_v1;
-  b->HLT_PADimuon0_NoVertexing_v1_Prescl = HLT_PADimuon0_NoVertexing_v1_Prescl;
-  b->HLT_PAL1DoubleMu0_HighQ_v1 = HLT_PAL1DoubleMu0_HighQ_v1;
-  b->HLT_PAL1DoubleMu0_HighQ_v1_Prescl = HLT_PAL1DoubleMu0_HighQ_v1_Prescl;
-  b->HLT_PAL1DoubleMuOpen_v1 = HLT_PAL1DoubleMuOpen_v1;
-  b->HLT_PAL1DoubleMuOpen_v1_Prescl = HLT_PAL1DoubleMuOpen_v1_Prescl;
-  b->HLT_PAL2DoubleMu3_v1 = HLT_PAL2DoubleMu3_v1;
-  b->HLT_PAL2DoubleMu3_v1_Prescl = HLT_PAL2DoubleMu3_v1_Prescl;
-  b->HLT_PAMu3_v1 = HLT_PAMu3_v1;
-  b->HLT_PAMu3_v1_Prescl = HLT_PAMu3_v1_Prescl;
-  b->HLT_PAMu7_v1 = HLT_PAMu7_v1;
-  b->HLT_PAMu7_v1_Prescl = HLT_PAMu7_v1_Prescl;
-  b->HLT_PAMu12_v1 = HLT_PAMu12_v1;
-  b->HLT_PAMu12_v1_Prescl = HLT_PAMu12_v1_Prescl;
 
-  //b section
+  //Event Info
+  Event = EvtInfo_EvtNo;
+  Run = EvtInfo_RunNo;
+  size = typesize+1;
+
+  // Trigger Info
+  HLT_PAL1DoubleMu0_v1 = Bfr_HLT_PAL1DoubleMu0_v1;
+  HLT_PAL1DoubleMu0_v1_Prescl = Bfr_HLT_PAL1DoubleMu0_v1_Prescl;
+  HLT_PADimuon0_NoVertexing_v1 = Bfr_HLT_PADimuon0_NoVertexing_v1;
+  HLT_PADimuon0_NoVertexing_v1_Prescl = Bfr_HLT_PADimuon0_NoVertexing_v1_Prescl;
+  HLT_PAL1DoubleMu0_HighQ_v1 = Bfr_HLT_PAL1DoubleMu0_HighQ_v1;
+  HLT_PAL1DoubleMu0_HighQ_v1_Prescl = Bfr_HLT_PAL1DoubleMu0_HighQ_v1_Prescl;
+  HLT_PAL1DoubleMuOpen_v1 = Bfr_HLT_PAL1DoubleMuOpen_v1;
+  HLT_PAL1DoubleMuOpen_v1_Prescl = Bfr_HLT_PAL1DoubleMuOpen_v1_Prescl;
+  HLT_PAL2DoubleMu3_v1 = Bfr_HLT_PAL2DoubleMu3_v1;
+  HLT_PAL2DoubleMu3_v1_Prescl = Bfr_HLT_PAL2DoubleMu3_v1_Prescl;
+  HLT_PAMu3_v1 = Bfr_HLT_PAMu3_v1;
+  HLT_PAMu3_v1_Prescl = Bfr_HLT_PAMu3_v1_Prescl;
+  HLT_PAMu7_v1 = Bfr_HLT_PAMu7_v1;
+  HLT_PAMu7_v1_Prescl = Bfr_HLT_PAMu7_v1_Prescl;
+  HLT_PAMu12_v1 = Bfr_HLT_PAMu12_v1;
+  HLT_PAMu12_v1_Prescl = Bfr_HLT_PAMu12_v1_Prescl;
+
+
+  //B Info
   bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
   bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
 	       BInfo_vtxY[j]-EvtInfo_PVy,
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
-
   b4P->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
-  b->y = b4P->Rapidity();
-  b->dtheta = bP->Angle(*bVtx);
-  b->pt = BInfo_pt[j];
-  b->eta = BInfo_eta[j];
-  b->phi = BInfo_phi[j];
-  b->chi2cl = TMath::Prob(BInfo_vtxchi2[j],BInfo_vtxdof[j]);
-  b->d0 = sqrt((BInfo_vtxX[j]-EvtInfo_PVx)*(BInfo_vtxX[j]-EvtInfo_PVx)+(BInfo_vtxY[j]-EvtInfo_PVy)*(BInfo_vtxY[j]-EvtInfo_PVy));
-  b->vx = BInfo_vtxX[j] - EvtInfo_PVx;
-  b->vy = BInfo_vtxY[j] - EvtInfo_PVy;
-  b->d0Err = sqrt(BInfo_vtxXE[j]*BInfo_vtxXE[j]+BInfo_vtxYE[j]*BInfo_vtxYE[j]);
-  b->mass = BInfo_mass[j];
-  b->tktkmass = BInfo_tktk_mass[j];
-  b->chi2ndf = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
-  b->lxy = ((BInfo_vtxX[j]-EvtInfo_PVx)*BInfo_px[j] + (BInfo_vtxY[j]-EvtInfo_PVy)*BInfo_py[j])/BInfo_pt[j];
 
+  y[typesize] = b4P->Rapidity();
+  dtheta[typesize] = bP->Angle(*bVtx);
+  pt[typesize] = BInfo_pt[j];
+  eta[typesize] = BInfo_eta[j];
+  phi[typesize] = BInfo_phi[j];
+  chi2cl[typesize] = TMath::Prob(BInfo_vtxchi2[j],BInfo_vtxdof[j]);
+  d0[typesize] = sqrt((BInfo_vtxX[j]-EvtInfo_PVx)*(BInfo_vtxX[j]-EvtInfo_PVx)+(BInfo_vtxY[j]-EvtInfo_PVy)*(BInfo_vtxY[j]-EvtInfo_PVy));
+  vx[typesize] = BInfo_vtxX[j] - EvtInfo_PVx;
+  vy[typesize] = BInfo_vtxY[j] - EvtInfo_PVy;
+  d0Err[typesize] = sqrt(BInfo_vtxXE[j]*BInfo_vtxXE[j]+BInfo_vtxYE[j]*BInfo_vtxYE[j]);
+  mass[typesize] = BInfo_mass[j];
+  tktkmass[typesize] = BInfo_tktk_mass[j];
+  chi2ndf[typesize] = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
+  lxy[typesize] = ((BInfo_vtxX[j]-EvtInfo_PVx)*BInfo_px[j] + (BInfo_vtxY[j]-EvtInfo_PVy)*BInfo_py[j])/BInfo_pt[j];
+
+  
   //muon section
-  b->mu1Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
-  b->mu1Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
-  b->mu1Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
-  b->mu1dxy = MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
-  b->mu1dz = MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
-  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&16) b->mu1TrackerMuArbitrated = 1;
-  else b->mu1TrackerMuArbitrated = 0;
-  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096) b->mu1StationTight = 1;
-  else b->mu1StationTight = 0;
+  mu1Striplayer[typesize] = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  mu1Pixellayer[typesize] = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  mu1Chi2ndf[typesize] = MuonInfo_i_chi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  mu1dxy[typesize] = MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  mu1dz[typesize] = MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&16) mu1TrackerMuArbitrated[typesize] = 1;
+  else mu1TrackerMuArbitrated[typesize] = 0;
+  if(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096) mu1StationTight[typesize] = 1;
+  else mu1StationTight[typesize] = 0;
 
-  b->mu2Striplayer = MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
-  b->mu2Pixellayer = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
-  b->mu2Chi2ndf = MuonInfo_i_chi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
-  b->mu2dxy = MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
-  b->mu2dz = MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
-  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&16) b->mu2TrackerMuArbitrated = 1;
-  else b->mu2TrackerMuArbitrated = 0;
-  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096) b->mu2StationTight = 1;
-  else b->mu2StationTight = 0;
+  mu2Striplayer[typesize] = MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  mu2Pixellayer[typesize] = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  mu2Chi2ndf[typesize] = MuonInfo_i_chi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]/MuonInfo_i_ndf[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  mu2dxy[typesize] = MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  mu2dz[typesize] = MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&16) mu2TrackerMuArbitrated[typesize] = 1;
+  else mu2TrackerMuArbitrated[typesize] = 0;
+  if(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096) mu2StationTight[typesize] = 1;
+  else mu2StationTight[typesize] = 0;
   
   float mu1px,mu1py,mu1pz,mu1E;
   float mu2px,mu2py,mu2pz,mu2E;
@@ -94,56 +100,56 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 		  mu1py+mu2py,
 		  mu1pz+mu2pz,
 		  mu1E+mu2E);
-  b->mumumass = b4P->Mag();
-  //cout<<b->mumumass<<endl;
+  mumumass[typesize] = b4P->Mag();
+  //cout<<mumumass<<endl;
   //jpsi section
-  b->ujmass = BInfo_uj_mass[BInfo_rfuj_index[j]];
-  b->ujvProb = TMath::Prob(BInfo_uj_vtxchi2[BInfo_rfuj_index[j]],BInfo_uj_vtxdof[BInfo_rfuj_index[j]]);
+  ujmass[typesize] = BInfo_uj_mass[BInfo_rfuj_index[j]];
+  ujvProb[typesize] = TMath::Prob(BInfo_uj_vtxchi2[BInfo_rfuj_index[j]],BInfo_uj_vtxdof[BInfo_rfuj_index[j]]);
   b4P->SetXYZM(BInfo_uj_px[BInfo_rfuj_index[j]],
 	       BInfo_uj_py[BInfo_rfuj_index[j]],
 	       BInfo_uj_pz[BInfo_rfuj_index[j]],
 	       BInfo_uj_mass[BInfo_rfuj_index[j]]);
-  b->ujpt = b4P->Pt();
-  b->ujeta = b4P->PseudoRapidity();
-  b->ujy = b4P->Rapidity();
-  b->ujlxy = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/b->ujpt;
+  ujpt[typesize] = b4P->Pt();
+  ujeta[typesize] = b4P->PseudoRapidity();
+  ujy[typesize] = b4P->Rapidity();
+  ujlxy[typesize] = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/ujpt[typesize];
 
   //track section
-  b->trk1Dxy = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
-  b->trk1D0Err = TrackInfo_d0error[BInfo_rftk1_index[j]];
-  b->trk1PixelHit = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
-  b->trk1StripHit = TrackInfo_striphit[BInfo_rftk1_index[j]];
-  b->trk1Pt = TrackInfo_pt[BInfo_rftk1_index[j]];
-  b->trk1Chi2ndf = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
+  trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
+  trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
+  trk1PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
+  trk1StripHit[typesize] = TrackInfo_striphit[BInfo_rftk1_index[j]];
+  trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
+  trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
   
   if(BInfo_type[j]==1 || BInfo_type[j]==2)
     {
-      b->trk2Dxy = 0;
-      b->trk2D0Err = 0;
-      b->trk2PixelHit = 0;
-      b->trk2StripHit = 0;
-      b->trk2Pt = 0;
-      b->trk2Chi2ndf = 0;
-      b->tktkmass = -1;
-      b->tktkvProb = -1;
-      b->tktkpt = -1;
-      b->tktketa = -1;
-      b->tktky = -1;
+      trk2Dxy[typesize] = 0;
+      trk2D0Err[typesize] = 0;
+      trk2PixelHit[typesize] = 0;
+      trk2StripHit[typesize] = 0;
+      trk2Pt[typesize] = 0;
+      trk2Chi2ndf[typesize] = 0;
+      tktkmass[typesize] = -1;
+      tktkvProb[typesize] = -1;
+      tktkpt[typesize] = -1;
+      tktketa[typesize] = -1;
+      tktky[typesize] = -1;
     }  
   else
     {
-      b->trk2Dxy = TrackInfo_dxyPV[BInfo_rftk2_index[j]];
-      b->trk2D0Err = TrackInfo_d0error[BInfo_rftk2_index[j]];
-      b->trk2PixelHit = TrackInfo_pixelhit[BInfo_rftk2_index[j]];
-      b->trk2StripHit = TrackInfo_striphit[BInfo_rftk2_index[j]];
-      b->trk2Pt = TrackInfo_pt[BInfo_rftk2_index[j]];
-      b->trk2Chi2ndf = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
-      b->tktkmass = BInfo_tktk_mass[j];
-      b->tktkvProb = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
+      trk2Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk2_index[j]];
+      trk2D0Err[typesize] = TrackInfo_d0error[BInfo_rftk2_index[j]];
+      trk2PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk2_index[j]];
+      trk2StripHit[typesize] = TrackInfo_striphit[BInfo_rftk2_index[j]];
+      trk2Pt[typesize] = TrackInfo_pt[BInfo_rftk2_index[j]];
+      trk2Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
+      tktkmass[typesize] = BInfo_tktk_mass[j];
+      tktkvProb[typesize] = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
       b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
-      b->tktkpt = b4P->Pt();
-      b->tktketa = b4P->PseudoRapidity();
-      b->tktky = b4P->Rapidity();
+      tktkpt[typesize] = b4P->Pt();
+      tktketa[typesize] = b4P->PseudoRapidity();
+      tktky[typesize] = b4P->Rapidity();
     }
 
   
@@ -151,10 +157,10 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 
   if(!REAL)
     {
-      b->gen=0;//gen init
-      b->genIndex=-1;//gen init
-      b->genpt=-1;
-      b->geny=-1;
+      gen[typesize] = 0;//gen init
+      genIndex[typesize] = -1;//gen init
+      genpt[typesize] = -1;
+      geny[typesize] = -1;
       int mGenIdxTk1=-1;
       int mGenIdxTk2=-1;
       int bGenIdxTk1=-1;
@@ -250,13 +256,13 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 		    }
 		}
 	    }
-	  b->gen=level;
+	  gen[typesize]=level;
 	}
       
       //tk2
       if(!twoTks)//one trk channel
 	{
-	  b->gen+=30;
+	  gen[typesize]+=30;
 	  mGenIdxTk2=0;
 	  bGenIdxTk2=0;
 	}
@@ -285,7 +291,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 			}
 		    }
 		}
-	      b->gen+=(level*10);
+	      gen[typesize]+=(level*10);
 	    }
 	}
 
@@ -307,7 +313,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 		    }
 		} 
 	    }
-	  b->gen+=(level*100);
+	  gen[typesize]+=(level*100);
 	}
       
       //mu2
@@ -327,7 +333,7 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 		    }
 		}
 	    }
-	  b->gen+=(level*1000);
+	  gen[typesize]+=(level*1000);
 	}
       
       int level=0;
@@ -344,15 +350,15 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 	  if(!twoTks)
 	    {
 	      level=2;
-	      b->genIndex = bGenIdxMu1;
+	      genIndex[typesize] = bGenIdxMu1;
 	    }
 	  else if(bGenIdxMu1==bGenIdxTk2)
 	    {
 	      level=2;
-	      b->genIndex = bGenIdxMu1;
+	      genIndex[typesize] = bGenIdxMu1;
 	    }
 	}
-      b->gen+=(level*10000);
+      gen[typesize]+=(level*10000);
 
       //kstar#############################################################################
       if(kStar)
@@ -410,21 +416,21 @@ void fillTree(bNtuple* b, TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int
 		 && (bGenIdxMu1==bGenIdxTk2)
 		 )
 		{
-		  b->gen=41000;
+		  gen[typesize]=41000;
 		}
 	    }
 	}//kstar End#############################################################################
 
-      int tgenIndex=b->genIndex;
-      if(b->gen==22233)
+      int tgenIndex=genIndex[typesize];
+      if(gen[typesize]==22233)
 	{
-	  b->genpt = GenInfo_pt[tgenIndex];
-	  b->geneta = GenInfo_eta[tgenIndex];
+	  genpt[typesize] = GenInfo_pt[tgenIndex];
+	  geneta[typesize] = GenInfo_eta[tgenIndex];
 	  b4P->SetXYZM(GenInfo_pt[tgenIndex]*cos(GenInfo_phi[tgenIndex]),
 		       GenInfo_pt[tgenIndex]*sin(GenInfo_phi[tgenIndex]),
 		       GenInfo_pt[tgenIndex]*sinh(GenInfo_eta[tgenIndex]),
 		       GenInfo_mass[tgenIndex]);
-	  b->geny = b4P->Rapidity();
+	  geny[typesize] = b4P->Rapidity();
 	}
     }
 }
@@ -510,7 +516,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/d00/bmeson/MC/nt_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", bool REAL=0){
+void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMatchingMuon.root", string outfile="/d00/bmeson/MC/nt_20140318_Kp_testEventBaseLoopC.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -525,36 +531,6 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Phi_TriggerMa
   if(REAL) cout<<"--- REAL DATA ---"<<endl;
   else cout<<"--- MC ---"<<endl;
 
-  /*
-  if(REAL)
-    {
-      cout<<"--- REAL DATA ---"<<endl;
-      //infname = "/net/hidsk0001/d00/scratch/yjlee/bmeson/merged_pPbData_20131114.root";
-      //infname = "/net/hidsk0001/d00/scratch/jwang/data_merge.root";
-      //infname = "/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140218_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_100_1_Jrd.root";
-      //outfname = "/export/d00/scratch/jwang/ntfile/nt_data.root";
-      //outfname = "nt_data_test.root";
-    }
-   else
-     {
-       cout<<"--- MC ---"<<endl;
-       infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140219/Bfinder_all_MC_Kp.root";
-       //outfname = "/export/d00/scratch/jwang/ntfile/mc_20140218/nt_mc_Kstar.root";
-       outfname = "nt_mc_kp.root";
-//      infname = "/net/hidsk0001/d00/scratch/jwang/data_merge.root";
-        infname = "sample/merged_20140213_PAMuon_HIRun2013_PromptReco_v1.root";
-      outfname = "test.root";
-     }
-   else
-     {
-      cout<<"--- MC ---"<<endl;
-      infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Phi.root";
-//        infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_Kstar.root";
-//        infname = "/net/hidsk0001/d00/scratch/jwang/Bfinder_all_full_20140215/Bfinder_all_MC_.root";
-      //outfname = "/export/d00/scratch/jwang/ntfile/nt_mc_Phi.root";
-      outfname = "test_mc.root";
-     }
-  */
 
   infname = infile.c_str();
   outfname = outfile.c_str();
@@ -577,6 +553,7 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Phi_TriggerMa
   //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_102_1_NyI.root");
   
   TFile *outf = new TFile(outfname,"recreate");
+
   setBranch(root);
   setHltBranch(hlt);
   
@@ -589,32 +566,29 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Phi_TriggerMa
   ifchannel[4] = 1; //jpsi+K*(K-,pi+)
   ifchannel[5] = 1; //jpsi+phi
   ifchannel[6] = 1; //jpsi+pi pi <= psi', X(3872), Bs->J/psi f0
-  bNtuple* b0 = new bNtuple;
-  bNtuple* b1 = new bNtuple;
-  bNtuple* b2 = new bNtuple;
-  bNtuple* b3 = new bNtuple;
-  bNtuple* b4 = new bNtuple;
-  bNtuple* b5 = new bNtuple;
-  bNtuple* b6 = new bNtuple;
   
   TTree* nt0 = new TTree("ntKp","");
-  b0->buildBranch(nt0);
+  buildBranch(nt0);
   TTree* nt1 = new TTree("ntpi","");
-  b1->buildBranch(nt1);
+  buildBranch(nt1);
   TTree* nt2 = new TTree("ntKs","");
-  b2->buildBranch(nt2);
+  buildBranch(nt2);
   TTree* nt3 = new TTree("ntKstar1","");
-  b3->buildBranch(nt3);
+  buildBranch(nt3);
   TTree* nt4 = new TTree("ntKstar2","");
-  b4->buildBranch(nt4);
+  buildBranch(nt4);
   TTree* nt5 = new TTree("ntphi","");
-  b5->buildBranch(nt5);
+  buildBranch(nt5);
   TTree* nt6 = new TTree("ntmix","");
-  b6->buildBranch(nt6);
-  
-  TNtuple* ntGen = new TNtuple("ntGen","","y:eta:phi:pt:pdgId:isSignal");
+  buildBranch(nt6);  
+  TTree* ntGen = new TTree("ntGen","");
+  buildGenBranch(ntGen);
+  //TNtuple* ntGen = new TNtuple("ntGen","","y:eta:phi:pt:pdgId:isSignal");////////////////////////////////////////////////
+
+  cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
+  //Long64_t nentries = 10000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
@@ -630,47 +604,58 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Phi_TriggerMa
     while (flagEvt==0)
     {
        hlt->GetEntry(i+offsetHltTree);
-//       cout <<offsetHltTree<<" "<<Event<<" "<<EvtInfo_EvtNo<<endl;
-       if (Event ==EvtInfo_EvtNo && Run == EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
+       //cout <<offsetHltTree<<" "<<Bfr_HLT_Event<<" "<<EvtInfo_EvtNo<<endl;
+       if (Bfr_HLT_Event==EvtInfo_EvtNo && Bfr_HLT_Run==EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
     } 
+
     if (i%10000==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
+
+
+    int type1size=0,type2size=0,type3size=0,type4size=0,type5size=0,type6size=0,type7size=0;
     for (int j=0;j<BInfo_size;j++) {
       if(BInfo_type[j]>7) continue;
       if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==1)
 	{
-	  fillTree(b0,bP,bVtx,b4P,j,REAL);
+	  fillTree(bP,bVtx,b4P,j,type1size,REAL);
 	  nt0->Fill();
+	  type1size++;
 	}
       if(BInfo_type[j]==2)
 	{
-	  fillTree(b1,bP,bVtx,b4P,j,REAL);
+	  fillTree(bP,bVtx,b4P,j,type2size,REAL);
 	  nt1->Fill();
+	  type2size++;
 	}
       if(BInfo_type[j]==3)
 	{
-	  fillTree(b2,bP,bVtx,b4P,j,REAL);
+	  fillTree(bP,bVtx,b4P,j,type3size,REAL);
 	  nt2->Fill();
+	  type3size++;
 	}
       if(BInfo_type[j]==4)
 	{
-	  fillTree(b3,bP,bVtx,b4P,j,REAL);
+	  fillTree(bP,bVtx,b4P,j,type4size,REAL);
 	  nt3->Fill();
-	  }
+	  type4size++;
+	}
       if(BInfo_type[j]==5)
 	{
-	  fillTree(b4,bP,bVtx,b4P,j,REAL);
+	  fillTree(bP,bVtx,b4P,j,type5size,REAL);
 	  nt4->Fill();
+	  type5size++;
 	}
       if(BInfo_type[j]==6)
 	{
-	  fillTree(b5,bP,bVtx,b4P,j,REAL);
+	  fillTree(bP,bVtx,b4P,j,type6size,REAL);
 	  nt5->Fill();
+	  type6size++;
 	}
       if(BInfo_type[j]==7)
 	{
-	  fillTree(b6,bP,bVtx,b4P,j,REAL);
+	  fillTree(bP,bVtx,b4P,j,type7size,REAL);
 	  nt6->Fill();
+	  type7size++;
 	}
     }
     
@@ -687,7 +672,14 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Phi_TriggerMa
                 }
 	      }
 	    bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
-	    ntGen->Fill(bGen.Rapidity(),bGen.Eta(),bGen.Phi(),bGen.Pt(),GenInfo_pdgId[j],flag);
+	    Gensize = GenInfo_size;
+	    Geny[j] = bGen.Rapidity();
+	    Geneta[j] = bGen.Eta();
+	    Genphi[j] = bGen.Phi();
+	    Genpt[j] = bGen.Pt();
+	    GenpdgId[j] = GenInfo_pdgId[j];
+	    GenisSignal[j] = flag;
+	    ntGen->Fill();
 	  }
       }
   }
