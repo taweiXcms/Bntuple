@@ -11,67 +11,69 @@ Int_t   Run;
 Int_t   Event;
 Int_t   size;
 
-Float_t mass[MAX_XB];
-Float_t pt[MAX_XB];
-Float_t eta[MAX_XB];
-Float_t phi[MAX_XB];
-Float_t y[MAX_XB];
-Float_t d0[MAX_XB];
-Float_t vx[MAX_XB];
-Float_t vy[MAX_XB];
-Float_t d0Err[MAX_XB];
-Float_t chi2ndf[MAX_XB];
-Float_t dtheta[MAX_XB];
-Float_t lxy[MAX_XB];
-Float_t gen[MAX_XB];
-Int_t genIndex[MAX_XB];
-Float_t genpt[MAX_XB];
-Float_t geneta[MAX_XB];
-Float_t geny[MAX_XB];
-Float_t chi2cl[MAX_XB];//b vertex chi2 confidence level
+//Float_t mass[MAX_XB];
+//double mass[MAX_XB];
+float mass[MAX_XB];
+float pt[MAX_XB];
+float eta[MAX_XB];
+float phi[MAX_XB];
+float y[MAX_XB];
+float d0[MAX_XB];
+float vx[MAX_XB];
+float vy[MAX_XB];
+float d0Err[MAX_XB];
+float chi2ndf[MAX_XB];
+float dtheta[MAX_XB];
+float lxy[MAX_XB];
+float gen[MAX_XB];
+int genIndex[MAX_XB];
+float genpt[MAX_XB];
+float geneta[MAX_XB];
+float geny[MAX_XB];
+float chi2cl[MAX_XB];//b vertex chi2 confidence level
 
-Float_t mu1Striplayer[MAX_XB];
-Float_t mu2Striplayer[MAX_XB];
-Float_t mu1Pixellayer[MAX_XB];
-Float_t mu2Pixellayer[MAX_XB];
-Float_t mu1Chi2ndf[MAX_XB];
-Float_t mu2Chi2ndf[MAX_XB];
-Float_t mu1dxy[MAX_XB];
-Float_t mu2dxy[MAX_XB];
-Float_t mu1dz[MAX_XB];
-Float_t mu2dz[MAX_XB];
-Float_t mu1TrackerMuArbitrated[MAX_XB];
-Float_t mu2TrackerMuArbitrated[MAX_XB];
-Float_t mu1StationTight[MAX_XB];//one station tight
-Float_t mu2StationTight[MAX_XB];//one station tight
-Float_t mumumass[MAX_XB];
+float mu1Striplayer[MAX_XB];
+float mu2Striplayer[MAX_XB];
+float mu1Pixellayer[MAX_XB];
+float mu2Pixellayer[MAX_XB];
+float mu1Chi2ndf[MAX_XB];
+float mu2Chi2ndf[MAX_XB];
+float mu1dxy[MAX_XB];
+float mu2dxy[MAX_XB];
+float mu1dz[MAX_XB];
+float mu2dz[MAX_XB];
+float mu1TrackerMuArbitrated[MAX_XB];
+float mu2TrackerMuArbitrated[MAX_XB];
+float mu1StationTight[MAX_XB];//one station tight
+float mu2StationTight[MAX_XB];//one station tight
+float mumumass[MAX_XB];
 
-Float_t ujmass[MAX_XB];
-Float_t ujvProb[MAX_XB];//jpsi vertex probability
-Float_t ujpt[MAX_XB];
-Float_t ujeta[MAX_XB];
-Float_t ujy[MAX_XB];
-Float_t ujlxy[MAX_XB];
+float ujmass[MAX_XB];
+float ujvProb[MAX_XB];//jpsi vertex probability
+float ujpt[MAX_XB];
+float ujeta[MAX_XB];
+float ujy[MAX_XB];
+float ujlxy[MAX_XB];
 
-Float_t trk1Pt[MAX_XB];
-Float_t trk1Dxy[MAX_XB];
-Float_t trk1D0Err[MAX_XB];
-Float_t trk1PixelHit[MAX_XB];
-Float_t trk1StripHit[MAX_XB];
-Float_t trk1Chi2ndf[MAX_XB];
+float trk1Pt[MAX_XB];
+float trk1Dxy[MAX_XB];
+float trk1D0Err[MAX_XB];
+float trk1PixelHit[MAX_XB];
+float trk1StripHit[MAX_XB];
+float trk1Chi2ndf[MAX_XB];
 
-Float_t trk2Pt[MAX_XB];
-Float_t trk2Dxy[MAX_XB];
-Float_t trk2D0Err[MAX_XB];
-Float_t trk2PixelHit[MAX_XB];
-Float_t trk2StripHit[MAX_XB];
-Float_t trk2Chi2ndf[MAX_XB];
+float trk2Pt[MAX_XB];
+float trk2Dxy[MAX_XB];
+float trk2D0Err[MAX_XB];
+float trk2PixelHit[MAX_XB];
+float trk2StripHit[MAX_XB];
+float trk2Chi2ndf[MAX_XB];
 
-Float_t tktkmass[MAX_XB];
-Float_t tktkvProb[MAX_XB];
-Float_t tktkpt[MAX_XB];
-Float_t tktketa[MAX_XB];
-Float_t tktky[MAX_XB];
+float tktkmass[MAX_XB];
+float tktkvProb[MAX_XB];
+float tktkpt[MAX_XB];
+float tktketa[MAX_XB];
+float tktky[MAX_XB];
 
 
 Int_t HLT_PAL1DoubleMu0_v1;
@@ -97,70 +99,69 @@ void buildBranch(TTree* nt){
   nt->Branch("Event",&Event);
   nt->Branch("size",&size);
 
-  nt->Branch("mass",mass);
-  nt->Branch("tktkmass",tktkmass);
-  nt->Branch("pt",pt);
-  nt->Branch("eta",eta);
-  nt->Branch("phi",phi);
-  nt->Branch("y",y);
-  nt->Branch("d0",d0);
-  nt->Branch("vx",vx);
-  nt->Branch("vy",vy);
-  nt->Branch("d0Err",d0Err);
-  nt->Branch("chi2ndf",chi2ndf);
-  nt->Branch("dtheta",dtheta);
-  nt->Branch("lxy",lxy);
-  nt->Branch("gen",gen);
-  nt->Branch("genIndex",genIndex);
-  nt->Branch("genpt",genpt);
-  nt->Branch("geny",geny);
-  nt->Branch("geneta",geneta);
-  nt->Branch("chi2cl",chi2cl);
+  nt->Branch("mass",mass, "mass[size]/F");
+  nt->Branch("tktkmass",tktkmass, "tktkmass[size]/F");
+  nt->Branch("pt",pt, "pt[size]/F");
+  nt->Branch("eta",eta, "eta[size]/F");
+  nt->Branch("phi",phi, "phi[size]/F");
+  nt->Branch("y",y, "y[size]/F");
+  nt->Branch("d0",d0, "d0[size]/F");
+  nt->Branch("vx",vx, "vx[size]/F");
+  nt->Branch("vy",vy, "vy[size]/F");
+  nt->Branch("d0Err",d0Err, "d0Err[size]/F");
+  nt->Branch("chi2ndf",chi2ndf, "chi2ndf[size]/F");
+  nt->Branch("dtheta",dtheta, "dtheta[size]/F");
+  nt->Branch("lxy",lxy, "lxy[size]/F");
+  nt->Branch("gen",gen, "gen[size]/F");
+  nt->Branch("genIndex",genIndex, "genIndex[size]/I");
+  nt->Branch("genpt",genpt, "genpt[size]/F");
+  nt->Branch("geny",geny, "geny[size]/F");
+  nt->Branch("geneta",geneta, "geneta[size]/F");
+  nt->Branch("chi2cl",chi2cl, "chi2cl[size]/F");
   
-  nt->Branch("mu1Striplayer",mu1Striplayer);
-  nt->Branch("mu1Pixellayer",mu1Pixellayer);
-  nt->Branch("mu1Chi2ndf",mu1Chi2ndf);
-  nt->Branch("mu1dxy",mu1dxy);
-  nt->Branch("mu1dz",mu1dz);
-  nt->Branch("mu1TrackerMuArbitrated",mu1TrackerMuArbitrated);
-  nt->Branch("mu1StationTight",mu1StationTight);
-  nt->Branch("mu2Striplayer",mu2Striplayer);
-  nt->Branch("mu2Pixellayer",mu2Pixellayer);
-  nt->Branch("mu2Chi2ndf",mu2Chi2ndf);
-  nt->Branch("mu2dxy",mu2dxy);
-  nt->Branch("mu2dz",mu2dz);
-  nt->Branch("mu2TrackerMuArbitrated",mu2TrackerMuArbitrated);
-  nt->Branch("mu2StationTight",mu2StationTight);
-  nt->Branch("mumumass",mumumass);
+  nt->Branch("mu1Striplayer",mu1Striplayer, "mu1Striplayer[size]/F");
+  nt->Branch("mu1Pixellayer",mu1Pixellayer, "mu1Pixellayer[size]/F");
+  nt->Branch("mu1Chi2ndf",mu1Chi2ndf, "mu1Chi2ndf[size]/F");
+  nt->Branch("mu1dxy",mu1dxy, "mu1dxy[size]/F");
+  nt->Branch("mu1dz",mu1dz, "mu1dz[size]/F");
+  nt->Branch("mu1TrackerMuArbitrated",mu1TrackerMuArbitrated, "mu1TrackerMuArbitrated[size]/F");
+  nt->Branch("mu1StationTight",mu1StationTight, "mu1StationTight[size]/F");
+  nt->Branch("mu2Striplayer",mu2Striplayer, "mu2Striplayer[size]/F");
+  nt->Branch("mu2Pixellayer",mu2Pixellayer, "mu2Pixellayer[size]/F");
+  nt->Branch("mu2Chi2ndf",mu2Chi2ndf, "mu2Chi2ndf[size]/F");
+  nt->Branch("mu2dxy",mu2dxy, "mu2dxy[size]/F");
+  nt->Branch("mu2dz",mu2dz, "mu2dz[size]/F");
+  nt->Branch("mu2TrackerMuArbitrated",mu2TrackerMuArbitrated, "mu2TrackerMuArbitrated[size]/F");
+  nt->Branch("mu2StationTight",mu2StationTight, "mu2StationTight[size]/F");
+  nt->Branch("mumumass",mumumass, "mumumass[size]/F");
   
-  nt->Branch("ujmass",ujmass);
-  nt->Branch("ujvProb",ujvProb);
-  nt->Branch("ujpt",ujpt);
-  nt->Branch("ujeta",ujeta);
-  nt->Branch("ujy",ujy);
-  nt->Branch("ujlxy",ujlxy);
+  nt->Branch("ujmass",ujmass, "ujmass[size]/F");
+  nt->Branch("ujvProb",ujvProb, "ujvProb[size]/F");
+  nt->Branch("ujpt",ujpt, "ujpt[size]/F");
+  nt->Branch("ujeta",ujeta, "ujeta[size]/F");
+  nt->Branch("ujy",ujy, "ujy[size]/F");
+  nt->Branch("ujlxy",ujlxy, "ujlxy[size]/F");
   
-  nt->Branch("trk1Pt",trk1Pt);
-  nt->Branch("trk1Dxy",trk1Dxy);
-  nt->Branch("trk1D0Err",trk1D0Err);
-  nt->Branch("trk1PixelHit",trk1PixelHit);
-  nt->Branch("trk1StripHit",trk1StripHit);
-  nt->Branch("trk1Chi2ndf",trk1Chi2ndf);
+  nt->Branch("trk1Pt",trk1Pt, "trk1Pt[size]/F");
+  nt->Branch("trk1Dxy",trk1Dxy, "trk1Dxy[size]/F");
+  nt->Branch("trk1D0Err",trk1D0Err, "trk1D0Err[size]/F");
+  nt->Branch("trk1PixelHit",trk1PixelHit, "trk1PixelHit[size]/F");
+  nt->Branch("trk1StripHit",trk1StripHit, "trk1StripHit[size]/F");
+  nt->Branch("trk1Chi2ndf",trk1Chi2ndf, "trk1Chi2ndf[size]/F");
   
-  nt->Branch("trk2Pt",trk2Pt);
-  nt->Branch("trk2Dxy",trk2Dxy);
-  nt->Branch("trk2D0Err",trk2D0Err);
-  nt->Branch("trk2PixelHit",trk2PixelHit);
-  nt->Branch("trk2StripHit",trk2StripHit);
-  nt->Branch("trk2Chi2ndf",trk2Chi2ndf);
+  nt->Branch("trk2Pt",trk2Pt, "trk2Pt[size]/F");
+  nt->Branch("trk2Dxy",trk2Dxy, "trk2Dxy[size]/F");
+  nt->Branch("trk2D0Err",trk2D0Err, "trk2D0Err[size]/F");
+  nt->Branch("trk2PixelHit",trk2PixelHit, "trk2PixelHit[size]/F");
+  nt->Branch("trk2StripHit",trk2StripHit, "trk2StripHit[size]/F");
+  nt->Branch("trk2Chi2ndf",trk2Chi2ndf, "trk2Chi2ndf[size]/F");
   
-  nt->Branch("tktkmass",tktkmass);
-  nt->Branch("tktkvProb",tktkvProb);
-  nt->Branch("tktkpt",tktkpt);
-  nt->Branch("tktketa",tktketa);
-  nt->Branch("tktky",tktky);
+  nt->Branch("tktkmass",tktkmass, "tktkmass[size]/F");
+  nt->Branch("tktkvProb",tktkvProb, "tktkvProb[size]/F");
+  nt->Branch("tktkpt",tktkpt, "tktkpt[size]/F");
+  nt->Branch("tktketa",tktketa, "tktketa[size]/F");
+  nt->Branch("tktky",tktky, "tktky[size]/F");
   
-
   nt->Branch("HLT_PAL1DoubleMu0_v1",&HLT_PAL1DoubleMu0_v1);
   nt->Branch("HLT_PAL1DoubleMu0_v1_Prescl",&HLT_PAL1DoubleMu0_v1_Prescl);
   nt->Branch("HLT_PADimuon0_NoVertexing_v1",&HLT_PADimuon0_NoVertexing_v1);
@@ -191,12 +192,12 @@ Float_t GenisSignal[MAX_GEN];
 void buildGenBranch(TTree* nt)
 {
   nt->Branch("size",&Gensize);
-  nt->Branch("y",Geny);
-  nt->Branch("eta",Geneta);
-  nt->Branch("phi",Genphi);
-  nt->Branch("pt",Genpt);
-  nt->Branch("pdgId",GenpdgId);
-  nt->Branch("isSignal",GenisSignal);
+  nt->Branch("y",Geny, "y[size]/F");
+  nt->Branch("eta",Geneta, "eta[size]/F");
+  nt->Branch("phi",Genphi, "phi[size]/F");
+  nt->Branch("pt",Genpt, "pt[size]/F");
+  nt->Branch("pdgId",GenpdgId, "pdgId[size]/F");
+  nt->Branch("isSignal",GenisSignal, "isSignal[size]/F");
 }
 
 //#########################################################################################

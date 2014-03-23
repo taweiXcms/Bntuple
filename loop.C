@@ -160,6 +160,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       gen[typesize] = 0;//gen init
       genIndex[typesize] = -1;//gen init
       genpt[typesize] = -1;
+      geneta[typesize] = -20;
       geny[typesize] = -1;
       int mGenIdxTk1=-1;
       int mGenIdxTk2=-1;
@@ -527,13 +528,14 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMat
   const char* infname;
   const char* outfname;
 
-
   if(REAL) cout<<"--- REAL DATA ---"<<endl;
   else cout<<"--- MC ---"<<endl;
 
 
   infname = infile.c_str();
+  infname = "/net/hisrv0001/home/tawei/jwang/Bfinder_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
   outfname = outfile.c_str();
+  outfname = "nt_BoostedMC_20140318_Kp_TriggerMatchingMuon_EvtBase.root";
 
   //File type
   TFile *f = new TFile(infname);
@@ -612,55 +614,93 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMat
 
 
     int type1size=0,type2size=0,type3size=0,type4size=0,type5size=0,type6size=0,type7size=0;
+	size=0;
     for (int j=0;j<BInfo_size;j++) {
       if(BInfo_type[j]>7) continue;
       if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==1)
 	{
 	  fillTree(bP,bVtx,b4P,j,type1size,REAL);
-	  nt0->Fill();
 	  type1size++;
 	}
+	}
+	nt0->Fill();
+
+	size=0;
+    for (int j=0;j<BInfo_size;j++) {
+      if(BInfo_type[j]>7) continue;
+      if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==2)
 	{
 	  fillTree(bP,bVtx,b4P,j,type2size,REAL);
-	  nt1->Fill();
 	  type2size++;
 	}
+	}
+	nt1->Fill();
+
+	size=0;
+    for (int j=0;j<BInfo_size;j++) {
+      if(BInfo_type[j]>7) continue;
+      if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==3)
 	{
 	  fillTree(bP,bVtx,b4P,j,type3size,REAL);
-	  nt2->Fill();
 	  type3size++;
 	}
+	}
+	nt2->Fill();
+
+	size=0;
+    for (int j=0;j<BInfo_size;j++) {
+      if(BInfo_type[j]>7) continue;
+      if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==4)
 	{
 	  fillTree(bP,bVtx,b4P,j,type4size,REAL);
-	  nt3->Fill();
 	  type4size++;
 	}
+	}
+    nt3->Fill();
+
+	size=0;
+    for (int j=0;j<BInfo_size;j++) {
+      if(BInfo_type[j]>7) continue;
+      if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==5)
 	{
 	  fillTree(bP,bVtx,b4P,j,type5size,REAL);
-	  nt4->Fill();
 	  type5size++;
 	}
+	}
+	nt4->Fill();
+
+	size=0;
+    for (int j=0;j<BInfo_size;j++) {
+      if(BInfo_type[j]>7) continue;
+      if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==6)
 	{
 	  fillTree(bP,bVtx,b4P,j,type6size,REAL);
-	  nt5->Fill();
 	  type6size++;
 	}
+	}
+	nt5->Fill();
+
+	size=0;
+    for (int j=0;j<BInfo_size;j++) {
+      if(BInfo_type[j]>7) continue;
+      if (ifchannel[BInfo_type[j]-1]!=1) continue;
       if(BInfo_type[j]==7)
 	{
 	  fillTree(bP,bVtx,b4P,j,type7size,REAL);
-	  nt6->Fill();
 	  type7size++;
 	}
-    }
+	}
+	nt6->Fill();
     
     if(!REAL)
       {
+	Gensize = 0;
 	for (int j=0;j<GenInfo_size;j++)
 	  {
 	    flag=0;
@@ -679,8 +719,8 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMat
 	    Genpt[j] = bGen.Pt();
 	    GenpdgId[j] = GenInfo_pdgId[j];
 	    GenisSignal[j] = flag;
-	    ntGen->Fill();
 	  }
+	  ntGen->Fill();
       }
   }
   
