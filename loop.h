@@ -10,9 +10,9 @@
 Int_t   Run;
 Int_t   Event;
 Int_t   size;
+Int_t   bestchi2;
 
-//Float_t mass[MAX_XB];
-//double mass[MAX_XB];
+int   bindex[MAX_XB];
 float mass[MAX_XB];
 float pt[MAX_XB];
 float eta[MAX_XB];
@@ -31,6 +31,7 @@ float genpt[MAX_XB];
 float geneta[MAX_XB];
 float geny[MAX_XB];
 float chi2cl[MAX_XB];//b vertex chi2 confidence level
+int isbestchi2[MAX_XB]; 
 
 float mu1Striplayer[MAX_XB];
 float mu2Striplayer[MAX_XB];
@@ -75,7 +76,6 @@ float tktkpt[MAX_XB];
 float tktketa[MAX_XB];
 float tktky[MAX_XB];
 
-
 Int_t HLT_PAL1DoubleMu0_v1;
 Int_t HLT_PAL1DoubleMu0_v1_Prescl;
 Int_t HLT_PADimuon0_NoVertexing_v1;
@@ -98,7 +98,9 @@ void buildBranch(TTree* nt){
   nt->Branch("Run",&Run);
   nt->Branch("Event",&Event);
   nt->Branch("size",&size);
+  nt->Branch("bestchi2",&bestchi2);
 
+  nt->Branch("bindex",bindex, "bindex[size]/I");
   nt->Branch("mass",mass, "mass[size]/F");
   nt->Branch("tktkmass",tktkmass, "tktkmass[size]/F");
   nt->Branch("pt",pt, "pt[size]/F");
@@ -118,6 +120,7 @@ void buildBranch(TTree* nt){
   nt->Branch("geny",geny, "geny[size]/F");
   nt->Branch("geneta",geneta, "geneta[size]/F");
   nt->Branch("chi2cl",chi2cl, "chi2cl[size]/F");
+  nt->Branch("isbestchi2",isbestchi2, "isbestchi2[size]/I");
   
   nt->Branch("mu1Striplayer",mu1Striplayer, "mu1Striplayer[size]/F");
   nt->Branch("mu1Pixellayer",mu1Pixellayer, "mu1Pixellayer[size]/F");

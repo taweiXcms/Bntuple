@@ -45,6 +45,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
   b4P->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
 
+  bindex[typesize] = typesize;
   y[typesize] = b4P->Rapidity();
   dtheta[typesize] = bP->Angle(*bVtx);
   pt[typesize] = BInfo_pt[j];
@@ -59,7 +60,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   tktkmass[typesize] = BInfo_tktk_mass[j];
   chi2ndf[typesize] = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
   lxy[typesize] = ((BInfo_vtxX[j]-EvtInfo_PVx)*BInfo_px[j] + (BInfo_vtxY[j]-EvtInfo_PVy)*BInfo_py[j])/BInfo_pt[j];
-
+  isbestchi2[typesize] = 0;
   
   //muon section
   mu1Striplayer[typesize] = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
@@ -517,7 +518,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMatchingMuon.root", string outfile="/d00/bmeson/MC/nt_20140318_Kp_testEventBaseLoopC.root", bool REAL=0){
+void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140318_Kp_TriggerMatchingMuon.root", string outfile="testkp.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -533,9 +534,9 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMat
 
 
   infname = infile.c_str();
-  infname = "/net/hisrv0001/home/tawei/jwang/Bfinder_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
+  //infname = "/net/hisrv0001/home/tawei/jwang/Bfinder_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
   outfname = outfile.c_str();
-  outfname = "nt_BoostedMC_20140318_Kp_TriggerMatchingMuon_EvtBase.root";
+  //outfname = "nt_BoostedMC_20140318_Kp_TriggerMatchingMuon_EvtBase.root";
 
   //File type
   TFile *f = new TFile(infname);
@@ -589,8 +590,8 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMat
 
   cout<<"--- Tree building finished ---"<<endl;
   
-  Long64_t nentries = root->GetEntries();
-  //Long64_t nentries = 10000;
+  //Long64_t nentries = root->GetEntries();
+  Long64_t nentries = 1000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
@@ -612,91 +613,162 @@ void loop(string infile="/d00/bmeson/MC/Bfinder_BoostedMC_20140318_Kp_TriggerMat
 
     if (i%10000==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
 
-
     int type1size=0,type2size=0,type3size=0,type4size=0,type5size=0,type6size=0,type7size=0;
-	size=0;
-    for (int j=0;j<BInfo_size;j++) {
-      if(BInfo_type[j]>7) continue;
-      if (ifchannel[BInfo_type[j]-1]!=1) continue;
-      if(BInfo_type[j]==1)
-	{
-	  fillTree(bP,bVtx,b4P,j,type1size,REAL);
-	  type1size++;
-	}
-	}
-	nt0->Fill();
+    float best;
+    int bestindex;
+    size=0;
+    best=-1;
+    bestindex=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	if(BInfo_type[j]==1)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type1size,REAL);
+	    if(chi2cl[type1size]>best)
+	      {
+		best = chi2cl[type1size];
+		bestindex = type1size;
+	      }
+	    type1size++;
+	  }
+      }
+    bestchi2 = bestindex;
+    isbestchi2[bestindex] = 1;
+    nt0->Fill();
 
-	size=0;
-    for (int j=0;j<BInfo_size;j++) {
-      if(BInfo_type[j]>7) continue;
-      if (ifchannel[BInfo_type[j]-1]!=1) continue;
-      if(BInfo_type[j]==2)
-	{
-	  fillTree(bP,bVtx,b4P,j,type2size,REAL);
-	  type2size++;
-	}
-	}
-	nt1->Fill();
-
-	size=0;
-    for (int j=0;j<BInfo_size;j++) {
-      if(BInfo_type[j]>7) continue;
-      if (ifchannel[BInfo_type[j]-1]!=1) continue;
-      if(BInfo_type[j]==3)
-	{
-	  fillTree(bP,bVtx,b4P,j,type3size,REAL);
-	  type3size++;
-	}
-	}
-	nt2->Fill();
-
-	size=0;
-    for (int j=0;j<BInfo_size;j++) {
-      if(BInfo_type[j]>7) continue;
-      if (ifchannel[BInfo_type[j]-1]!=1) continue;
-      if(BInfo_type[j]==4)
-	{
-	  fillTree(bP,bVtx,b4P,j,type4size,REAL);
-	  type4size++;
-	}
-	}
+    size=0;
+    best=-1;
+    bestindex=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	if(BInfo_type[j]==2)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type2size,REAL);
+	    if(chi2cl[type2size]>best)
+	      {
+		best = chi2cl[type2size];
+		bestindex = type2size;
+	      }
+	    type2size++;
+	  }
+      }
+    bestchi2 = bestindex;
+    isbestchi2[bestindex] = 1;
+    nt1->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	if(BInfo_type[j]==3)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type3size,REAL);
+	    if(chi2cl[type3size]>best)
+	      {
+		best = chi2cl[type3size];
+		bestindex = type3size;
+	      }
+	    type3size++;
+	  }
+      }
+    bestchi2 = bestindex;
+    isbestchi2[bestindex] = 1;
+    nt2->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	if(BInfo_type[j]==4)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type4size,REAL);
+	    if(chi2cl[type4size]>best)
+	      {
+		best = chi2cl[type4size];
+		bestindex = type4size;
+	      }
+	    type4size++;
+	  }
+      }
+    bestchi2 = bestindex;
+    isbestchi2[bestindex] = 1;
     nt3->Fill();
-
-	size=0;
-    for (int j=0;j<BInfo_size;j++) {
-      if(BInfo_type[j]>7) continue;
-      if (ifchannel[BInfo_type[j]-1]!=1) continue;
-      if(BInfo_type[j]==5)
-	{
-	  fillTree(bP,bVtx,b4P,j,type5size,REAL);
-	  type5size++;
-	}
-	}
-	nt4->Fill();
-
-	size=0;
-    for (int j=0;j<BInfo_size;j++) {
-      if(BInfo_type[j]>7) continue;
-      if (ifchannel[BInfo_type[j]-1]!=1) continue;
-      if(BInfo_type[j]==6)
-	{
-	  fillTree(bP,bVtx,b4P,j,type6size,REAL);
-	  type6size++;
-	}
-	}
-	nt5->Fill();
-
-	size=0;
-    for (int j=0;j<BInfo_size;j++) {
-      if(BInfo_type[j]>7) continue;
-      if (ifchannel[BInfo_type[j]-1]!=1) continue;
-      if(BInfo_type[j]==7)
-	{
-	  fillTree(bP,bVtx,b4P,j,type7size,REAL);
-	  type7size++;
-	}
-	}
-	nt6->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	if(BInfo_type[j]==5)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type5size,REAL);
+	    if(chi2cl[type5size]>best)
+	      {
+		best = chi2cl[type5size];
+		bestindex = type5size;
+	      }
+	    type5size++;
+	  }
+      }
+    bestchi2 = bestindex;
+    isbestchi2[bestindex] = 1;
+    nt4->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	if(BInfo_type[j]==6)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type6size,REAL);
+	    if(chi2cl[type6size]>best)
+	      {
+		best = chi2cl[type6size];
+		bestindex = type6size;
+	      }
+	    type6size++;
+	  }
+      }
+    bestchi2 = bestindex;
+    isbestchi2[bestindex] = 1;
+    nt5->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	if(BInfo_type[j]==7)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type7size,REAL);
+	    if(chi2cl[type7size]>best)
+	      {
+		best = chi2cl[type7size];
+		bestindex = type7size;
+	      }
+	    type7size++;
+	  }
+      }
+    bestchi2 = bestindex;
+    isbestchi2[bestindex] = 1;
+    nt6->Fill();
     
     if(!REAL)
       {
