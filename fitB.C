@@ -8,11 +8,11 @@ double setparam3=0.03;
 double fixparam1=5.279;
 
 //svmit2
-//TString inputdata="/data/bmeson/data/nt_201403019_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase.root";
-//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon_EvtBase.root";
+//TString inputdata="/data/bmeson/data/nt_20140403_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140403_Kp_TriggerMatchingMuon_EvtBase_skim.root;
 //cgate
-TString inputdata="/net/hidsk0001/d00/scratch/jwang/nt_201403019_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase.root";
-TString inputmc="/net/hidsk0001/d00/scratch/jwang/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon_EvtBase.root";
+TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140403_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140403_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
@@ -41,7 +41,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])+(1-[7])*Gaus(x,[1],[8]))+[3]+[4]*x+[5]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
@@ -102,7 +102,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    Bkpi->SetFillStyle(3004);
 
    // function for signal shape plotting. take the fit result from f
-   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])+(1-[3])*Gaus(x,[1],[4]))");
+   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
    mass->SetParError(0,f->GetParError(0));
    mass->SetParError(1,f->GetParError(1));
