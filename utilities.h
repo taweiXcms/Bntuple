@@ -21,6 +21,7 @@
 #include <TLegend.h>
 #include <TLine.h>
 #include <TLatex.h>
+#include <TNtuple.h>
 #include <TGraphAsymmErrors.h>
 
 static const int nColor = 5;
