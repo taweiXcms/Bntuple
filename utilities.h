@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include <TRandom.h>
+#include <TRandom3.h>
 #include <TH1D.h>
 #include <TH1F.h>
 #include <TProfile.h>
