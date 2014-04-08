@@ -33,16 +33,16 @@
  
 
 */
-  TString particle="Bs";
-  const int nbins=1;
-  Double_t xbins[nbins]={35};
-  Double_t exl[nbins]={25};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.089};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.089};
-
-  Double_t commonErrorP = 0.22 ;
-  Double_t commonErrorN = 0.24  ;
     
+  TString particle="Bzero";
+  const int nbins=3;
+  Double_t xbins[nbins]={12.5,17.5,40};
+  Double_t exl[nbins]={2.5,2.5,20};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};
+
+  Double_t commonErrorP = 0.0555 ;
+  Double_t commonErrorN = 0.0555  ;
 
 
 

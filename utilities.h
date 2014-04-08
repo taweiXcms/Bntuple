@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include <TRandom.h>
+#include <TRandom3.h>
 #include <TH1D.h>
 #include <TH1F.h>
 #include <TProfile.h>
@@ -20,6 +21,7 @@
 #include <TLegend.h>
 #include <TLine.h>
 #include <TLatex.h>
+#include <TNtuple.h>
 #include <TGraphAsymmErrors.h>
 
 static const int nColor = 5;

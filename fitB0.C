@@ -19,8 +19,8 @@ TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.15&&(d0)/
 TString cut_pik="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
 TString seldata_kpi=Form("abs(y+0.465)<1.93&&%s",cut_kpi.Data());
 TString seldata_pik=Form("abs(y+0.465)<1.93&&%s",cut_pik.Data());
-TString seldata_2y_kpi=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
-TString seldata_2y_pik=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_pik.Data());
+TString seldata_2y_kpi=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
+TString seldata_2y_pik=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_pik.Data());
 TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut_kpi.Data());
 TString selmc_pik=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut_pik.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
@@ -201,6 +201,7 @@ void fitB0(TString infname="",bool doweight = 1)
   
   const int nBins = 3;
   double ptBins[nBins+1] = {10,15,20,60};
+
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
   TH1D *hRecoTruth2 = new TH1D("hRecoTruth2","",nBins,ptBins);
@@ -251,7 +252,12 @@ void fitB0(TString infname="",bool doweight = 1)
   hPtGen->Draw("same hist");
 
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double BRchain=7.93833e-5;
+
+  // B0->J/psi K*0(892) = 1.34 +- 0.06 x 10^-3
+  // J/psi -> mumu = 5.93 +- 0.06 x 10^-2
+  // K*0(892) -> K+ pi- = 66%
+  double BRchain=5.244e-5;
+
   hPtSigma->Scale(1./(2*luminosity*BRchain));
   hPtSigma->SetYTitle("d#sigma/dp_{T} (B^{0}) ");
 
