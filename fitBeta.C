@@ -204,7 +204,7 @@ void fitBeta(TString infname="",bool doweight = 1)
   hPt1->SetYTitle("Uncorrected B^{+} dN/dy");
   hPt1->Sumw2();
   hPt1->Draw();
-  c1->SaveAs("ResultsBplus_1.gif");
+  c1->SaveAs("ResultsBplus/unCor1.gif");
 
   for (int i=0;i<nBins;i++)
     {
@@ -219,7 +219,7 @@ void fitBeta(TString infname="",bool doweight = 1)
   hPt2->SetYTitle("Uncorrected B^{+} dN/dy");
   hPt2->Sumw2();
   hPt2->Draw();
-  c2->SaveAs("ResultsBplus_2.gif");
+  c2->SaveAs("ResultsBplus/unCor2.gif");
 
   ntMC->Project("hPtMC","(y+0.465)",TCut(weight)*(TCut(selmc.Data())&&"gen==22233"));
   ntGen->Project("hPtGen","(y+0.465)",TCut(weight)*(TCut(selmcgen.Data())));
