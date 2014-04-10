@@ -50,8 +50,8 @@ TF1 *fit(TTree *nt,TTree *nt2, TTree *ntMC, TTree *ntMC2,double ptmin,double ptm
    // Fit function
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
-   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_pik.Data(),ptmin,ptmax));   
-   nt2->Project(Form("h2%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
+   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_kpi.Data(),ptmin,ptmax));   
+   nt2->Project(Form("h2%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_pik.Data(),ptmin,ptmax));   
    ntMC2->Project(Form("hMC2%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_pik.Data(),ptmin,ptmax));   
    h->Add(h2);
    hMC->Add(hMC2);
