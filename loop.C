@@ -61,7 +61,8 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   chi2ndf[typesize] = BInfo_vtxchi2[j]/BInfo_vtxdof[j];
   lxy[typesize] = ((BInfo_vtxX[j]-EvtInfo_PVx)*BInfo_px[j] + (BInfo_vtxY[j]-EvtInfo_PVy)*BInfo_py[j])/BInfo_pt[j];
   isbestchi2[typesize] = 0;
-  
+  kstar[typesize] = 0;
+
   //muon section
   mu1Striplayer[typesize] = MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
   mu1Pixellayer[typesize] = MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
@@ -496,29 +497,34 @@ int signalGen(int Btype, int j)
     {
       if (abs(GenInfo_pdgId[GenInfo_da1[j]]==443))//jpsi
 	{
-	  if(!twoTks)
+	  if(GenInfo_da1[GenInfo_da1[j]]!=-1&&GenInfo_da2[GenInfo_da1[j]]!=-1)
 	    {
-	      if(abs(GenInfo_pdgId[GenInfo_da2[j]])==tk1Id) flag++;
-	    }
-	  else
-	    {
-	      if (abs(GenInfo_pdgId[GenInfo_da2[j]])==MId) 
+	      if(abs(GenInfo_pdgId[GenInfo_da1[GenInfo_da1[j]]])==13&&abs(GenInfo_pdgId[GenInfo_da2[GenInfo_da1[j]]])==13)
 		{
-		  if(GenInfo_da1[GenInfo_da2[j]]!=-1 && GenInfo_da2[GenInfo_da2[j]]!=-1)
+		  if(!twoTks)
 		    {
-		      if(GenInfo_pdgId[GenInfo_da1[GenInfo_da2[j]]]==tk1Id && GenInfo_pdgId[GenInfo_da2[GenInfo_da2[j]]]==tk2Id) flag++;
+		      if(abs(GenInfo_pdgId[GenInfo_da2[j]])==tk1Id) flag++;
+		    }
+		  else
+		    {
+		      if (abs(GenInfo_pdgId[GenInfo_da2[j]])==MId) 
+			{
+			  if(GenInfo_da1[GenInfo_da2[j]]!=-1 && GenInfo_da2[GenInfo_da2[j]]!=-1)
+			    {
+			      if(GenInfo_pdgId[GenInfo_da1[GenInfo_da2[j]]]==tk1Id && GenInfo_pdgId[GenInfo_da2[GenInfo_da2[j]]]==tk2Id) flag++;
+			    }
+			}
 		    }
 		}
 	    }
 	}
     }
-
   return flag;
 }
 
 
 
-void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="/export/d00/scratch/jwang/nt_boostedMC_20140405_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV_skim.root", bool REAL=0){
+void loop(string infile="/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140309_PAMuon_HIRun2013_PromptReco_v1_MuonMatching/Bfinder_all_351_1_tSx.root", string outfile="/export/d00/scratch/jwang/nt_20140410_promptreco_muonmatching_evtbase_skim_280.root", bool REAL=1){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -574,10 +580,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hi
   buildBranch(nt1);
   TTree* nt2 = new TTree("ntKs","");
   buildBranch(nt2);
-  TTree* nt3 = new TTree("ntKstar1","");
+  TTree* nt3 = new TTree("ntKstar","");
   buildBranch(nt3);
-  TTree* nt4 = new TTree("ntKstar2","");
-  buildBranch(nt4);
   TTree* nt5 = new TTree("ntphi","");
   buildBranch(nt5);
   TTree* nt6 = new TTree("ntmix","");
@@ -648,8 +652,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hi
       }
     if(size>0)
     {
-	bestchi2 = bestindex;
-	isbestchi2[bestindex] = 1;
+      bestchi2 = bestindex;
+      isbestchi2[bestindex] = 1;
     }
     nt0->Fill();
 
@@ -752,7 +756,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hi
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<9.9) continue;
 	//}}}
-	if(BInfo_type[j]==4)
+	if(BInfo_type[j]==4 || BInfo_type[j]==5)
 	  {
 	    fillTree(bP,bVtx,b4P,j,type4size,REAL);
 	    if(chi2cl[type4size]>best)
@@ -760,6 +764,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hi
 		best = chi2cl[type4size];
 		bestindex = type4size;
 	      }
+	    if(BInfo_type[j]==4) kstar[type4size]=1;
+	    else kstar[type4size]=2;
 	    type4size++;
 	  }
       }
@@ -769,45 +775,6 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hi
 	isbestchi2[bestindex] = 1;
       }
     nt3->Fill();
-    
-    size=0;
-    best=-1;
-    bestindex=-1;
-    for (int j=0;j<BInfo_size;j++) 
-      {
-	if(BInfo_type[j]>7) continue;
-	if (ifchannel[BInfo_type[j]-1]!=1) continue;
-	//skim{{{
-	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
-	temy = b4Pout->Rapidity();
-	if(REAL)
-	  {
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
-	  }
-	else
-	  {
-	    if(abs(temy+0.465)>=1.93) continue;
-	  }
-	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
-	if(BInfo_pt[j]<9.9) continue;
-	//}}}
-	if(BInfo_type[j]==5)
-	  {
-	    fillTree(bP,bVtx,b4P,j,type5size,REAL);
-	    if(chi2cl[type5size]>best)
-	      {
-		best = chi2cl[type5size];
-		bestindex = type5size;
-	      }
-	    type5size++;
-	  }
-      }
-    if(size>0)
-      {
-	bestchi2 = bestindex;
-	isbestchi2[bestindex] = 1;
-      }
-    nt4->Fill();
     
     size=0;
     best=-1;
@@ -901,6 +868,19 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hi
 		  break;
                 }
 	      }
+            if(flag!=0)
+              {
+		//cout<<flag<<"  ";
+		//cout<<GenInfo_pdgId[j]<<endl;
+		//if(GenInfo_da1[GenInfo_da1[j]]==-1||GenInfo_da2[GenInfo_da1[j]]==-1) cout<<"no muon!"<<endl;
+                Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1p[j] = Genmu1pt[j]*cosh(Genmu1eta[j]);
+                Genmu2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2p[j] = Genmu2pt[j]*cosh(Genmu2eta[j]);
+		
+              }
 	    Gensize = GenInfo_size;
 	    Geny[j] = bGen.Rapidity();
 	    Geneta[j] = bGen.Eta();
@@ -908,8 +888,9 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_boostedMC_20140405_Hi
 	    Genpt[j] = bGen.Pt();
 	    GenpdgId[j] = GenInfo_pdgId[j];
 	    GenisSignal[j] = flag;
+	    //cout<<flag<<"  "<<GenInfo_pdgId[j]<<"  "<<GenisSignal[j]<<"  "<<GenpdgId[j]<<endl;
 	  }
-	  ntGen->Fill();
+	ntGen->Fill();
       }
   }
   

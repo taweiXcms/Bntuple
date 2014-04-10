@@ -32,6 +32,7 @@ float geneta[MAX_XB];
 float geny[MAX_XB];
 float chi2cl[MAX_XB];//b vertex chi2 confidence level
 int isbestchi2[MAX_XB]; 
+int kstar[MAX_XB]; 
 
 float mu1Striplayer[MAX_XB];
 float mu2Striplayer[MAX_XB];
@@ -121,6 +122,7 @@ void buildBranch(TTree* nt){
   nt->Branch("geneta",geneta, "geneta[size]/F");
   nt->Branch("chi2cl",chi2cl, "chi2cl[size]/F");
   nt->Branch("isbestchi2",isbestchi2, "isbestchi2[size]/I");
+  nt->Branch("kstar",kstar, "kstar[size]/I");
   
   nt->Branch("mu1Striplayer",mu1Striplayer, "mu1Striplayer[size]/F");
   nt->Branch("mu1Pixellayer",mu1Pixellayer, "mu1Pixellayer[size]/F");
@@ -191,6 +193,13 @@ Float_t Genphi[MAX_GEN];
 Float_t Genpt[MAX_GEN];
 Float_t GenpdgId[MAX_GEN];
 Float_t GenisSignal[MAX_GEN];
+Float_t Genmu1pt[MAX_GEN];
+Float_t Genmu2pt[MAX_GEN];
+Float_t Genmu1p[MAX_GEN];
+Float_t Genmu2p[MAX_GEN];
+Float_t Genmu1eta[MAX_GEN];
+Float_t Genmu2eta[MAX_GEN];
+
 
 void buildGenBranch(TTree* nt)
 {
@@ -201,6 +210,12 @@ void buildGenBranch(TTree* nt)
   nt->Branch("pt",Genpt, "pt[size]/F");
   nt->Branch("pdgId",GenpdgId, "pdgId[size]/F");
   nt->Branch("isSignal",GenisSignal, "isSignal[size]/F");
+  nt->Branch("mu1eta",Genmu1eta,"mu1eta[size]/F");
+  nt->Branch("mu1pt",Genmu1pt,"mu1pt[size]/F");
+  nt->Branch("mu1p",Genmu1p,"mu1p[size]/F");
+  nt->Branch("mu2eta",Genmu2eta,"mu2eta[size]/F");
+  nt->Branch("mu2pt",Genmu2pt,"mu2pt[size]/F");
+  nt->Branch("mu2p",Genmu2p,"mu2p[size]/F");
 }
 
 //#########################################################################################
