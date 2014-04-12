@@ -653,7 +653,7 @@ float calTktkmass(int j,TLorentzVector* b4P,float track_mass1,float track_mass2)
   return b4P->Mag();
 }
 
-void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_CandBase_skim.root", bool REAL=0){
+void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140412_Phi_TriggerMatchingMuon_CandBase_skim.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -953,7 +953,7 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 	  }
       }
 
-    /*
+    
     if(!REAL)
       {
 	Gensize = 0;
@@ -970,34 +970,36 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 	      }
             if(flag!=0)
               {
-                Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1p[j] = Genmu1pt[j]*cosh(Genmu1eta[j]);
-                Genmu2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
-                Genmu2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
-                Genmu2p[j] = Genmu2pt[j]*cosh(Genmu2eta[j]);
+                Genmu1pt = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1eta = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1p = Genmu1pt*cosh(Genmu1eta);
+                Genmu2pt = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2eta = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2p = Genmu2pt*cosh(Genmu2eta);
 		if(flag==1||flag==2)
 		  {
-		    Gentk1pt[j] = GenInfo_pt[GenInfo_da2[j]];
-		    Gentk1eta[j] = GenInfo_eta[GenInfo_da2[j]];
+		    Gentk1pt = GenInfo_pt[GenInfo_da2[j]];
+		    Gentk1eta = GenInfo_eta[GenInfo_da2[j]];
 		  }
 		else
 		  {
-		    Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da2[j]]];
-		    Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk1pt = GenInfo_pt[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk1eta = GenInfo_eta[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk2pt = GenInfo_pt[GenInfo_da2[GenInfo_da2[j]]];
+		    Gentk2eta = GenInfo_eta[GenInfo_da2[GenInfo_da2[j]]];
 		  }
               }
 	    Gensize = GenInfo_size;
-	    Geny[j] = bGen.Rapidity();
-	    Geneta[j] = bGen.Eta();
-	    Genphi[j] = bGen.Phi();
-	    Genpt[j] = bGen.Pt();
-	    GenpdgId[j] = GenInfo_pdgId[j];
-	    GenisSignal[j] = flag;
+	    Geny = bGen.Rapidity();
+	    Geneta = bGen.Eta();
+	    Genphi = bGen.Phi();
+	    Genpt = bGen.Pt();
+	    GenpdgId = GenInfo_pdgId[j];
+	    GenisSignal = flag;
 	  }
 	ntGen->Fill();
       }
-    */
+    
   }
 
   outf->Write();
