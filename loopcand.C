@@ -653,7 +653,7 @@ float calTktkmass(int j,TLorentzVector* b4P,float track_mass1,float track_mass2)
   return b4P->Mag();
 }
 
-void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140412_Phi_TriggerMatchingMuon_CandBase_skim.root", bool REAL=0){
+void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Kstar_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140412_Kstar_TriggerMatchingMuon_CandBase_skim.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -714,7 +714,7 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  //nentries = 10000;
+  //nentries = 1000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
@@ -821,7 +821,7 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 	    trktrkmass = calTktkmass(j,b4Pout,PION_MASS,PION_MASS);
 	    if(abs(trktrkmass-KSHORT_MASS)<best2_3)
 	      {
-		best2_3 = trktrkmass;
+		best2_3 = abs(trktrkmass-KSHORT_MASS);
 		best2index_3 = type3size;
 	      }
 	    type3size++;
@@ -835,9 +835,9 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 	      }
 	    if(BInfo_type[j]==4) trktrkmass=calTktkmass(j,b4Pout,KAON_MASS,PION_MASS);
 	    if(BInfo_type[j]==5) trktrkmass=calTktkmass(j,b4Pout,PION_MASS,KAON_MASS);
-	    if(abs(trktrkmass-KSTAR_MASS)<best2_3)
+	    if(abs(trktrkmass-KSTAR_MASS)<best2_4)
 	      {
-		best2_4 = trktrkmass;
+		best2_4 = abs(trktrkmass-KSTAR_MASS);
 		best2index_4 = type4size;
 	      }
 	    type4size++;
@@ -852,9 +852,9 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 		bestindex_6 = type6size;
 	      }
 	    trktrkmass = calTktkmass(j,b4Pout,KAON_MASS,KAON_MASS);
-	    if(abs(trktrkmass-PHI_MASS)<best2_3)
+	    if(abs(trktrkmass-PHI_MASS)<best2_6)
 	      {
-		best2_6 = trktrkmass;
+		best2_6 = abs(trktrkmass-PHI_MASS);
 		best2index_6 = type6size;
 	      }
 	    type6size++;
@@ -931,6 +931,8 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 	    if(type4size==best2index_4) isbesttktkmass=1;
 	    nt3->Fill();
 	    type4size++;
+	    //if(BInfo_type[j]==4)cout<<Event<<" "<<abs(calTktkmass(j,b4Pout,KAON_MASS,PION_MASS)-KSTAR_MASS)<<"  "<<abs(tktkmass-KSTAR_MASS)<<"  "<<isbesttktkmass<<endl;
+	    //if(BInfo_type[j]==5)cout<<Event<<" "<<abs(calTktkmass(j,b4Pout,PION_MASS,KAON_MASS)-KSTAR_MASS)<<"  "<<abs(tktkmass-KSTAR_MASS)<<"  "<<isbesttktkmass<<endl;
 	  }
 
 	if(BInfo_type[j]==6)
@@ -950,7 +952,7 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 	    if(type7size==bestindex_7) isbestchi2=1;
 	    nt6->Fill();
 	    type7size++;
-	  }
+	  }       
       }
 
     
