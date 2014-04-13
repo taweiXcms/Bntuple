@@ -996,8 +996,9 @@ void loopcand(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_2014031
 	    Genpt = bGen.Pt();
 	    GenpdgId = GenInfo_pdgId[j];
 	    GenisSignal = flag;
+	    ntGen->Fill();
 	  }
-	ntGen->Fill();
+
       }
     
   }
