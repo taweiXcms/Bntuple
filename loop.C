@@ -18,9 +18,6 @@
 #define PHI_MASS    1.019455
 #define JPSI_MASS   3.096916
 
-TString input="32_1_sPS";
-TString output = "109";
-
 void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, float track_mass1, float track_mass2, int REAL)
 {
 
@@ -638,7 +635,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile=Form("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140319_PAMuon_HIRun2013_28Sep2013_v1_MuonMatching/Bfinder_all_%s.root",input.Data()), string outfile=Form("/export/d00/scratch/jwang/nt_20140411_rereco_muonmatching_evtbase_skim_%s.root",output.Data()), bool REAL=1){
+void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Kstar_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
