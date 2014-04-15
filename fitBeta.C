@@ -146,7 +146,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, int positive){
    TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
-   leg->AddEntry(h,Form("%.1f<|y_{CM}|<%.1f GeV/c",ptmin,ptmax),"");
+   leg->AddEntry(h,Form("%.1f<y_{CM}<%.1f GeV/c",ptmin,ptmax),"");
    leg->AddEntry(h,"Data","pl");
    leg->AddEntry(f,"Fit","l");
    leg->AddEntry(mass,"Signal","f");
@@ -159,10 +159,10 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, int positive){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
+   //c->SaveAs(Form("ResultsBplusY/BMass-%d.C",count));
+   //c->SaveAs(Form("ResultsBplusY/BMass-%d.gif",count));
+   //c->SaveAs(Form("ResultsBplusY/BMass-%d.eps",count));
+   c->SaveAs(Form("ResultsBplusY/BMass-%d.pdf",count));
 
    return mass;
 }
@@ -200,11 +200,11 @@ void fitBeta(TString infname="",bool doweight = 1)
       hPt1->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
   TCanvas *c1=  new TCanvas("c1","",600,600);
-  hPt1->SetXTitle("B^{+} p_{T} (GeV/c)");
+  hPt1->SetXTitle("B^{+} y");
   hPt1->SetYTitle("Uncorrected B^{+} dN/dy");
   hPt1->Sumw2();
   hPt1->Draw();
-  c1->SaveAs("ResultsBplus/unCor1.gif");
+  c1->SaveAs("ResultsBplusY/unCor_1.gif");
 
   for (int i=0;i<nBins;i++)
     {
@@ -215,11 +215,11 @@ void fitBeta(TString infname="",bool doweight = 1)
       hPt2->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
   TCanvas *c2=  new TCanvas("c2","",600,600);
-  hPt2->SetXTitle("B^{+} p_{T} (GeV/c)");
+  hPt2->SetXTitle("B^{+} y");
   hPt2->SetYTitle("Uncorrected B^{+} dN/dy");
   hPt2->Sumw2();
   hPt2->Draw();
-  c2->SaveAs("ResultsBplus/unCor2.gif");
+  c2->SaveAs("ResultsBplusY/unCor_2.gif");
 
   ntMC->Project("hPtMC","(y+0.465)",TCut(weight)*(TCut(selmc.Data())&&"gen==22233"));
   ntGen->Project("hPtGen","(y+0.465)",TCut(weight)*(TCut(selmcgen.Data())));
@@ -235,10 +235,10 @@ void fitBeta(TString infname="",bool doweight = 1)
 
   TH1D *hEfftotal1 = (TH1D*)hPtMC->Clone("hEfftotal1");
   hEfftotal1->Divide(hPtGen);
-  hEfftotal1->SetYTitle("total Efficiency");
+  hEfftotal1->SetYTitle("total Efficiency B^{+}");
   TCanvas *cEfftotal1 = new TCanvas("cEfftotal1","",600,600);
   hEfftotal1->Draw();
-  cEfftotal1->SaveAs("ResultsBplus/Efftotal_1.gif");
+  cEfftotal1->SaveAs("ResultsBplusY/Efftotal_1.gif");
   
   TH1D *hEfftotaltem = (TH1D*)hPtMC->Clone("hEfftotaltem");
   hEfftotaltem->Divide(hPtGen);
@@ -250,21 +250,21 @@ void fitBeta(TString infname="",bool doweight = 1)
     }
   TCanvas *cEfftotal2 = new TCanvas("cEfftotal2","",600,600);
   hEfftotal2->Draw();
-  cEfftotal2->SaveAs("ResultsBplus/Efftotal_2.gif");
+  cEfftotal2->SaveAs("ResultsBplusY/Efftotal_2.gif");
 
   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
   hEff->Divide(hPtGenAcc);
-  hEff->SetYTitle("cut Efficiency");
+  hEff->SetYTitle("cut&reco Efficiency B^{+}");
   TCanvas *cEff = new TCanvas("cEff","",600,600);
   hEff->Draw();
-  cEff->SaveAs("ResultsBplus/Eff.gif");
+  cEff->SaveAs("ResultsBplusY/Eff.gif");
   
   TH1D *hAcc = (TH1D*)hPtGenAcc->Clone("hAcc");
   hAcc->Divide(hPtGen);
-  hAcc->SetYTitle("Acceptance");
+  hAcc->SetYTitle("Acceptance B^{+}");
   TCanvas *cAcc = new TCanvas("cAcc","",600,600);
   hAcc->Draw();
-  cAcc->SaveAs("ResultsBplus/Acc.gif");
+  cAcc->SaveAs("ResultsBplusY/Acc.gif");
 
   TH1D *hPtCor1 = (TH1D*)hPt1->Clone("hPtCor1");
   hPtCor1->Divide(hEfftotal1);
@@ -272,7 +272,7 @@ void fitBeta(TString infname="",bool doweight = 1)
   hPtCor1->SetYTitle("Corrected B^{+} dN/dy");
   hPtCor1->Draw();
   //hPtGen->Draw("same hist");
-  cCor1->SaveAs("ResultsBplus/Cor_1.gif");
+  cCor1->SaveAs("ResultsBplusY/Cor_1.gif");
 
   TH1D *hPtCor2 = (TH1D*)hPt2->Clone("hPtCor2");
   hPtCor2->Divide(hEfftotal2);
@@ -280,14 +280,37 @@ void fitBeta(TString infname="",bool doweight = 1)
   hPtCor2->SetYTitle("Corrected B^{+} dN/dy");
   hPtCor2->Draw();
   //hPtGen->Draw("same hist");
-  cCor2->SaveAs("ResultsBplus/Cor_2.gif");
+  cCor2->SaveAs("ResultsBplusY/Cor_2.gif");
 
   TH1D *hPtCor = (TH1D*)hPtCor1->Clone("hPtCor");
   hPtCor->Add(hPtCor2);
   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
   hPtCor->SetYTitle("Corrected B^{+} dN/dy");
   hPtCor->Draw();
-  cCor->SaveAs("ResultsBplus/Cor.gif");
+  cCor->SaveAs("ResultsBplusY/Cor.gif");
+
+  double yBin[3] = {0,1,1.93};
+  TH1D *hRfb = new TH1D("hRfb",";|y_{CM}|;R_{FB}",2,yBin);
+  TH1D *hRfb2 = new TH1D("hRfb2",";|y_{CM}|;R_{FB}",2,yBin);
+  hRfb->SetBinContent(1,hPtCor->GetBinContent(2));
+  hRfb->SetBinError(1,hPtCor->GetBinError(2));
+  hRfb->SetBinContent(2,hPtCor->GetBinContent(1));
+  hRfb->SetBinError(2,hPtCor->GetBinError(1));
+  hRfb->Sumw2();
+  hRfb2->SetBinContent(1,hPtCor->GetBinContent(3));
+  hRfb2->SetBinError(1,hPtCor->GetBinError(3));
+  hRfb2->SetBinContent(2,hPtCor->GetBinContent(4));
+  hRfb2->SetBinError(2,hPtCor->GetBinError(4));
+  hRfb->Sumw2();
+  hRfb->Divide(hRfb2);
+  TCanvas *cRfb=  new TCanvas("cRfb","",600,600);
+  hRfb->SetYTitle("R_{FB} B^{+}");
+  hRfb->Draw();
+  cRfb->SaveAs("ResultsBplusY/Rfb.gif");
+
+  cout<<"#######################RFB###################"<<endl;
+  cout<<hPtCor->GetBinContent(1)<<"  "<<hPtCor->GetBinContent(2)<<"  "<<hPtCor->GetBinContent(3)<<"  "<<hPtCor->GetBinContent(4)<<endl;
+
 
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
   double BRchain=6.09604e-5;
@@ -295,9 +318,9 @@ void fitBeta(TString infname="",bool doweight = 1)
   hPtSigma->SetYTitle("d#sigma (B^{+})/dy");
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
   hPtSigma->Draw();
-  cCor->SaveAs("ResultsBplus/Sigma.gif");
+  cCor->SaveAs("ResultsBplusY/Sigma.gif");
   
-  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
+  TFile *outf = new TFile("ResultsBplusY/SigmaBplus.root","recreate");
   outf->cd();
   hPt1->Write();
   hPt2->Write();
