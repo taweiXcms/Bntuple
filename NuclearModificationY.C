@@ -120,7 +120,7 @@ void NuclearModificationY(){
   for(Int_t i=0;i<nbins;i++) {
     yRpA[i]=ySigmapPb[i]/yRefPP[i];
     yRpAStat[i]=ySigmapPbStat[i]/yRefPP[i];
-    yFONLL[i]=1;
+    yFONLL[i]=yRpA[i];
     yRpAsystFONLLhigh[i]=yPercPPsystFONLLlow[i];//*yRpA[i];
     yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i];//*yRpA[i];
     yRpPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*yRpA[i];
