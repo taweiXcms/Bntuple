@@ -8,14 +8,15 @@ double setparam3=0.03;
 double fixparam1=5.37;
 
 //svmit02
-//TString inputdata="/data/bmeson/data/nt_20140403_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140403_Phi_TriggerMatchingMuon_EvtBase_skim.root";
+//TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140412_Phi_TriggerMatchingMuon_CandBase_skim.root";
 //cgate
-TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140403_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140403_Phi_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
 
 //TString cut="(HLT_PAMu3_v1)&&chi2cl>0.135&&(d0)/d0Err>3.24&&dtheta<2.03&&TMath::Abs((trk1Dxy/trk1D0Err))>0.792&&TMath::Abs(trk2Dxy/trk2D0Err)>0.742&&TMath::Abs(tktkmass-1.020)<1.02e-02";
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>3.8e-02 && (d0/d0Err)>3.2e+00 && cos(dtheta)>7.4e-01 && abs(trk2Dxy/trk2D0Err)>1.3e+00 && abs(tktkmass-1.01944)<1.5e-02&&mass>5&&mass<6";
+//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>3.8e-02 && (d0/d0Err)>3.2e+00 && cos(dtheta)>7.4e-01 && abs(trk2Dxy/trk2D0Err)>1.3e+00 && abs(tktkmass-1.01944)<1.5e-02&&mass>5&&mass<6";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>2.7e-02&&(d0/d0Err)>2.8&&cos(dtheta)>-0.8&&abs(tktkmass-1.01944)<0.014&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7";                           
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());

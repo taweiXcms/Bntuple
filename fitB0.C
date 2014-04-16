@@ -9,20 +9,17 @@ double setparam3=0.03;
 double fixparam2=0.04;
 
 //svmit02
-//TString inputdata="/data/bmeson/data/nt_20140403_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140403_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+//TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140412_Kstar_TriggerMatchingMuon_CandBase_skim.root";
 //cgate
-TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140403_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140403_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 
-TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk2Dxy)/trk2D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
-TString cut_pik="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk1Dxy)/trk1D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
+//TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk2Dxy)/trk2D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
+TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.069&&(d0)/d0Err>3.2&&cos(dtheta)>-0.7&&abs(tktkmass-0.89591)<0.13&&mass>5&&mass<6&&isbesttktkmass";                                  
 TString seldata_kpi=Form("abs(y+0.465)<1.93&&%s",cut_kpi.Data());
-TString seldata_pik=Form("abs(y+0.465)<1.93&&%s",cut_pik.Data());
 TString seldata_2y_kpi=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
-TString seldata_2y_pik=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_pik.Data());
 TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut_kpi.Data());
-TString selmc_pik=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut_pik.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
 
 TString weight = "27.493+pt*(-0.218769)";
@@ -35,7 +32,7 @@ void clean0(TH1D *h)
    }
 }
 
-TF1 *fit(TTree *nt,TTree *nt2, TTree *ntMC, TTree *ntMC2,double ptmin,double ptmax)
+TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
 {   
    //cout<<cut.Data()<<endl;
    static int count=0;
@@ -51,10 +48,6 @@ TF1 *fit(TTree *nt,TTree *nt2, TTree *ntMC, TTree *ntMC2,double ptmin,double ptm
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_kpi.Data(),ptmin,ptmax));   
-   nt2->Project(Form("h2%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_pik.Data(),ptmin,ptmax));   
-   ntMC2->Project(Form("hMC2%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_pik.Data(),ptmin,ptmax));   
-   h->Add(h2);
-   hMC->Add(hMC2);
 //   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
 //   nt2->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
 
@@ -185,13 +178,11 @@ void fitB0(TString infname="",bool doweight = 1)
   if (doweight==0) weight="1";
   if (infname=="") infname=inputdata.Data();
   TFile *inf = new TFile(infname.Data());
-  TTree *nt = (TTree*) inf->Get("ntKstar1");
-  TTree *nt2 = (TTree*) inf->Get("ntKstar2");
+  TTree *nt = (TTree*) inf->Get("ntKstar");
 
   TFile *infMC = new TFile(inputmc.Data());
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
-  TTree *ntMC = (TTree*)infMC->Get("ntKstar1");
-  TTree *ntMC2 = (TTree*)infMC->Get("ntKstar2");
+  TTree *ntMC = (TTree*)infMC->Get("ntKstar");
 
   //nt->SetAlias("LD",LDalias.Data());
   //nt2->SetAlias("LD",LDalias.Data());
@@ -204,14 +195,12 @@ void fitB0(TString infname="",bool doweight = 1)
 
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
-  TH1D *hRecoTruth2 = new TH1D("hRecoTruth2","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
-  TH1D *hPtMC2 = new TH1D("hPtMC2","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
   for (int i=0;i<nBins;i++)
     {
-      TF1 *f = fit(nt,nt2,ntMC,ntMC2,ptBins[i],ptBins[i+1]);
+      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
       double yield = f->Integral(5,6)/0.02;
       double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
@@ -226,12 +215,8 @@ void fitB0(TString infname="",bool doweight = 1)
   
 
   ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_kpi.Data())&&"(gen==22233||gen==41000)"));
-  ntMC2->Project("hPtMC2","pt",TCut(weight)*(TCut(seldata_pik.Data())&&"(gen==22233||gen==41000)"));
-  hPtMC->Add(hPtMC2);
 
   nt->Project("hRecoTruth","pt",TCut(seldata_kpi.Data())&&"(gen==22233||gen==41000)");
-  nt2->Project("hRecoTruth2","pt",TCut(seldata_pik.Data())&&"(gen==22233||gen==41000)");
-  hRecoTruth->Add(hRecoTruth2);
   ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
   divideBinWidth(hRecoTruth);
   
