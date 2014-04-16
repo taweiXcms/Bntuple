@@ -7,8 +7,8 @@
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.089};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.089};
 
-  Double_t commonErrorP = 0.22 ;
-  Double_t commonErrorN = 0.24  ;
+  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
+  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
     
   TString particle="Bzero";
   const int nbins=3;
@@ -17,8 +17,8 @@
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};
 
-  Double_t commonErrorP = 0.0555 ;
-  Double_t commonErrorN = 0.0555  ;
+  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
+  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
 
 
    TString particle="Bplus";
@@ -28,19 +28,9 @@
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.117,0.116,0.113,0.143,0.120};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.117,0.116,0.113,0.143,0.120};
 
-  Double_t commonErrorP = 0.0445 ;
-  Double_t commonErrorN = 0.0445  ;
+  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
+  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
 
-    
-  TString particle="Bzero";
-  const int nbins=3;
-  Double_t xbins[nbins]={12.5,17.5,40};
-  Double_t exl[nbins]={2.5,2.5,20};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};
-
-  Double_t commonErrorP = 0.0555 ;
-  Double_t commonErrorN = 0.0555  ;
 */
 
 TString particle="Bplus";
