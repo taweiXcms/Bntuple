@@ -10,7 +10,7 @@ double fixparam2=0.04;
 
 //svmit02
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140412_Kstar_TriggerMatchingMuon_CandBase_skim.root";
+//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
 TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
