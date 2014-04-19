@@ -104,6 +104,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   b4P->SetXYZM(mu1px,mu1py,mu1pz,MUON_MASS);
   mu1E = b4P->E();
   mu1eta[typesize] = b4P->Eta();
+  mu1phi[typesize] = b4P->Phi();
   mu1y[typesize] = b4P->Rapidity();
   mu1pt[typesize] = b4P->Pt();
   mu1p[typesize] = b4P->P();
@@ -114,6 +115,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   b4P->SetXYZM(mu2px,mu2py,mu2pz,MUON_MASS);
   mu2E = b4P->E();
   mu2eta[typesize] = b4P->Eta();
+  mu2phi[typesize] = b4P->Phi();
   mu2y[typesize] = b4P->Rapidity();
   mu2pt[typesize] = b4P->Pt();
   mu2p[typesize] = b4P->P();
@@ -124,6 +126,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		  mu1E+mu2E);
   mumumass[typesize] = b4P->Mag();
   mumueta[typesize] = b4P->Eta();
+  mumuphi[typesize] = b4P->Phi();
   mumuy[typesize] = b4P->Rapidity();
   mumupt[typesize] = b4P->Pt();
 
@@ -137,6 +140,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	       BInfo_uj_mass[BInfo_rfuj_index[j]]);
   ujpt[typesize] = b4P->Pt();
   ujeta[typesize] = b4P->PseudoRapidity();
+  ujphi[typesize] = b4P->Phi();
   ujy[typesize] = b4P->Rapidity();
   ujlxy[typesize] = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/ujpt[typesize];
 
@@ -154,6 +158,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
       trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
       trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
+      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
       trk1Y[typesize] = b4P->Rapidity();
 
       trk2Dxy[typesize] = -1;
@@ -162,17 +167,20 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       trk2StripHit[typesize] = -1;
       trk2Pt[typesize] = -1;
       trk2Chi2ndf[typesize] = -1;
-      trk2Eta[typesize] = -1;
+      trk2Eta[typesize] = -20;
+      trk2Phi[typesize] = -20;
       trk2Y[typesize] = -1;
 
       tktkmass[typesize] = -1;
       tktkvProb[typesize] = -1;
       tktkpt[typesize] = -1;
-      tktketa[typesize] = -1;
+      tktketa[typesize] = -20;
+      tktkphi[typesize] = -20;
       tktky[typesize] = -1;
       doubletmass[typesize] = -1;
       doubletpt[typesize] = -1;
-      doubleteta[typesize] = -1;
+      doubleteta[typesize] = -20;
+      doubletphi[typesize] = -20;
       doublety[typesize] = -1;
     }  
   else if(BInfo_type[j]==5)
@@ -185,6 +193,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk2_index[j]];
       trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
       trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk2_index[j]];
+      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk2_index[j]];
       trk1Y[typesize] = b4P->Rapidity();
       tk1px = b4P->Px();
       tk1py = b4P->Py();
@@ -199,6 +208,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       trk2Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
       trk2Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
       trk2Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
+      trk2Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
       trk2Y[typesize] = b4P->Rapidity();
       tk2px = b4P->Px();
       tk2py = b4P->Py();
@@ -211,6 +221,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		      tk1E+tk2E);
       tktkmass[typesize] = b4P->Mag();
       tktketa[typesize] = b4P->Eta();
+      tktkphi[typesize] = b4P->Phi();
       tktky[typesize] = b4P->Rapidity();
       tktkpt[typesize] = b4P->Pt();
       tktkvProb[typesize] = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
@@ -218,6 +229,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
       doubletpt[typesize] = b4P->Pt();
       doubleteta[typesize] = b4P->PseudoRapidity();
+      doubletphi[typesize] = b4P->Phi();
       doublety[typesize] = b4P->Rapidity();
     }
   else
@@ -230,6 +242,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
       trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
       trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
+      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
       trk1Y[typesize] = b4P->Rapidity();
       tk1px = b4P->Px();
       tk1py = b4P->Py();
@@ -244,6 +257,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       trk2Pt[typesize] = TrackInfo_pt[BInfo_rftk2_index[j]];
       trk2Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
       trk2Eta[typesize] = TrackInfo_eta[BInfo_rftk2_index[j]];
+      trk2Phi[typesize] = TrackInfo_phi[BInfo_rftk2_index[j]];
       trk2Y[typesize] = b4P->Rapidity();
       tk2px = b4P->Px();
       tk2py = b4P->Py();
@@ -256,6 +270,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		      tk1E+tk2E);
       tktkmass[typesize] = b4P->Mag();
       tktketa[typesize] = b4P->Eta();
+      tktkphi[typesize] = b4P->Phi();
       tktky[typesize] = b4P->Rapidity();
       tktkpt[typesize] = b4P->Pt();
       tktkvProb[typesize] = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
@@ -263,6 +278,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
       doubletpt[typesize] = b4P->Pt();
       doubleteta[typesize] = b4P->PseudoRapidity();
+      doubletphi[typesize] = b4P->Phi();
       doublety[typesize] = b4P->Rapidity();
     }
 
@@ -274,6 +290,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       genIndex[typesize] = -1;//gen init
       genpt[typesize] = -1;
       geneta[typesize] = -20;
+      genphi[typesize] = -20;
       geny[typesize] = -1;
       int mGenIdxTk1=-1;
       int mGenIdxTk2=-1;
@@ -540,6 +557,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	{
 	  genpt[typesize] = GenInfo_pt[tgenIndex];
 	  geneta[typesize] = GenInfo_eta[tgenIndex];
+	  genphi[typesize] = GenInfo_phi[tgenIndex];
 	  b4P->SetXYZM(GenInfo_pt[tgenIndex]*cos(GenInfo_phi[tgenIndex]),
 		       GenInfo_pt[tgenIndex]*sin(GenInfo_phi[tgenIndex]),
 		       GenInfo_pt[tgenIndex]*sinh(GenInfo_eta[tgenIndex]),
@@ -635,7 +653,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Kstar_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root", bool REAL=0){
+void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Phi_TriggerMatchingMuon_EvtBase_skim.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -730,12 +748,12 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Ks
     int type1size=0,type2size=0,type3size=0,type4size=0,type5size=0,type6size=0,type7size=0;
     float best,best2,temy;
     int bestindex,best2index;
+
     size=0;
     best=-1;
     bestindex=-1;
     best2=10000.;
     best2index=-1;
-
     for (int j=0;j<BInfo_size;j++) 
       {
 	if(BInfo_type[j]>7) continue;
@@ -756,7 +774,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Ks
 	//}}}
 	if(BInfo_type[j]==1)
 	  {
-	    if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.9) continue;
+	    //if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.9) continue;
 	    fillTree(bP,bVtx,b4P,j,type1size,KAON_MASS,0,REAL);
 	    if(chi2cl[type1size]>best)
 	      {
@@ -935,8 +953,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Ks
 	//}}}
 	if(BInfo_type[j]==6)
 	  {
-	    if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.7) continue;
-	    if(TrackInfo_pt[BInfo_rftk2_index[j]]<0.7) continue;
+	    //if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.7) continue;
+	    //if(TrackInfo_pt[BInfo_rftk2_index[j]]<0.7) continue;
 	    fillTree(bP,bVtx,b4P,j,type6size,KAON_MASS,KAON_MASS,REAL);
 	    if(chi2cl[type6size]>best)
 	      {
@@ -1015,25 +1033,45 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Ks
 		  break;
                 }
 	      }
+	    Genmu1pt[j] = -1;
+	    Genmu1eta[j] = -20;
+	    Genmu1phi[j] = -20;
+	    Genmu1p[j] = -1;
+	    Genmu2pt[j] = -1;
+	    Genmu2eta[j] = -20;
+	    Genmu2phi[j] = -20;
+	    Genmu2p[j] = -1;
+	    Gentk1pt[j] = -1;
+	    Gentk1eta[j] = -20;
+	    Gentk1phi[j] = -20;
+	    Gentk2pt[j] = -1;
+	    Gentk2eta[j] = -20;
+	    Gentk2phi[j] = -20;
+
             if(flag!=0)
               {
                 Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
                 Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da1[j]]];
                 Genmu1p[j] = Genmu1pt[j]*cosh(Genmu1eta[j]);
                 Genmu2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
                 Genmu2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
+		Genmu2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da1[j]]];
                 Genmu2p[j] = Genmu2pt[j]*cosh(Genmu2eta[j]);
 		if(flag==1||flag==2)
 		  {
 		    Gentk1pt[j] = GenInfo_pt[GenInfo_da2[j]];
 		    Gentk1eta[j] = GenInfo_eta[GenInfo_da2[j]];
+		    Gentk1phi[j] = GenInfo_phi[GenInfo_da2[j]];
 		  }
 		else
 		  {
 		    Gentk1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da2[j]]];
 		    Gentk1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da2[j]]];
 		    Gentk2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da2[j]]];
 		    Gentk2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da2[j]]];
+		    Gentk2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da2[j]]];
 		  }
               }
 	    Gensize = GenInfo_size;

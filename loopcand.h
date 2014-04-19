@@ -23,15 +23,18 @@ float d0Err;
 float chi2ndf;
 float dtheta;
 float lxy;
-float gen;
-int genIndex;
-float genpt;
-float geneta;
-float geny;
 float chi2cl;//b vertex chi2 confidence level
 int isbestchi2; 
 int isbesttktkmass;
 int kstar; 
+
+float gen;
+int genIndex;
+float genpt;
+float geneta;
+float genphi;
+float geny;
+
 
 float mu1Striplayer;
 float mu2Striplayer;
@@ -48,16 +51,19 @@ float mu2TrackerMuArbitrated;
 float mu1StationTight;//one station tight
 float mu2StationTight;//one station tight
 float mu1eta;
+float mu1phi;
 float mu1y;
 float mu1pt;
 float mu1p;
 float mu2eta;
+float mu2phi;
 float mu2y;
 float mu2pt;
 float mu2p;
 
 float mumumass;
 float mumueta;
+float mumuphi;
 float mumuy;
 float mumupt;
 
@@ -65,11 +71,13 @@ float ujmass;
 float ujvProb;//jpsi vertex probability
 float ujpt;
 float ujeta;
+float ujphi;
 float ujy;
 float ujlxy;
 
 float trk1Pt;
 float trk1Eta;
+float trk1Phi;
 float trk1Y;
 float trk1Dxy;
 float trk1D0Err;
@@ -79,6 +87,7 @@ float trk1Chi2ndf;
 
 float trk2Pt;
 float trk2Eta;
+float trk2Phi;
 float trk2Y;
 float trk2Dxy;
 float trk2D0Err;
@@ -90,10 +99,12 @@ float tktkmass;
 float tktkvProb;
 float tktkpt;
 float tktketa;
+float tktkphi;
 float tktky;
 float doubletmass;
 float doubletpt;
 float doubleteta;
+float doubletphi;
 float doublety;
 
 Int_t HLT_PAL1DoubleMu0_v1;
@@ -137,6 +148,7 @@ void buildBranch(TTree* nt){
   nt->Branch("genpt",&genpt);
   nt->Branch("geny",&geny);
   nt->Branch("geneta",&geneta);
+  nt->Branch("genphi",&genphi);
   nt->Branch("chi2cl",&chi2cl);
   nt->Branch("isbestchi2",&isbestchi2);
   nt->Branch("isbesttktkmass",&isbesttktkmass);
@@ -150,6 +162,7 @@ void buildBranch(TTree* nt){
   nt->Branch("mu1TrackerMuArbitrated",&mu1TrackerMuArbitrated);
   nt->Branch("mu1StationTight",&mu1StationTight);
   nt->Branch("mu1eta",&mu1eta);
+  nt->Branch("mu1phi",&mu1phi);
   nt->Branch("mu1y",&mu1y);
   nt->Branch("mu1pt",&mu1pt);
   nt->Branch("mu1p",&mu1p);
@@ -161,19 +174,21 @@ void buildBranch(TTree* nt){
   nt->Branch("mu2TrackerMuArbitrated",&mu2TrackerMuArbitrated);
   nt->Branch("mu2StationTight",&mu2StationTight);
   nt->Branch("mu2eta",&mu2eta);
+  nt->Branch("mu2phi",&mu2phi);
   nt->Branch("mu2dy",&mu2y);
   nt->Branch("mu2pt",&mu2pt);
   nt->Branch("mu2p",&mu2p);
 
   nt->Branch("mumumass",&mumumass);
   nt->Branch("mumueta",&mumueta);
+  nt->Branch("mumuphi",&mumuphi);
   nt->Branch("mumuy",&mumuy);
   nt->Branch("mumupt",&mumupt);
   
   nt->Branch("ujmass",&ujmass);
   nt->Branch("ujvProb",&ujvProb);
   nt->Branch("ujpt",&ujpt);
-  nt->Branch("ujeta",&ujeta);
+  nt->Branch("ujphi",&ujphi);
   nt->Branch("ujy",&ujy);
   nt->Branch("ujlxy",&ujlxy);
   
@@ -184,6 +199,7 @@ void buildBranch(TTree* nt){
   nt->Branch("trk1StripHit",&trk1StripHit);
   nt->Branch("trk1Chi2ndf",&trk1Chi2ndf);
   nt->Branch("trk1Eta",&trk1Eta);
+  nt->Branch("trk1Phi",&trk1Phi);
   nt->Branch("trk1Y",&trk1Y);
 
   nt->Branch("trk2Pt",&trk2Pt);
@@ -193,17 +209,20 @@ void buildBranch(TTree* nt){
   nt->Branch("trk2StripHit",&trk2StripHit);
   nt->Branch("trk2Chi2ndf",&trk2Chi2ndf);
   nt->Branch("trk2Eta",&trk2Eta);
+  nt->Branch("trk2Phi",&trk2Phi);
   nt->Branch("trk2Y",&trk2Y);
   
   nt->Branch("tktkmass",&tktkmass);
   nt->Branch("tktkvProb",&tktkvProb);
   nt->Branch("tktkpt",&tktkpt);
   nt->Branch("tktketa",&tktketa);
+  nt->Branch("tktkphi",&tktkphi);
   nt->Branch("tktky",&tktky);
 
   nt->Branch("doubletmass",&doubletmass);
   nt->Branch("doubletpt",&doubletpt);
   nt->Branch("doubleteta",&doubleteta);
+  nt->Branch("doubletphi",&doubletphi);
   nt->Branch("doublety",&doublety);
 
   nt->Branch("HLT_PAL1DoubleMu0_v1",&HLT_PAL1DoubleMu0_v1);
@@ -238,10 +257,14 @@ Float_t Genmu1p;
 Float_t Genmu2p;
 Float_t Genmu1eta;
 Float_t Genmu2eta;
+Float_t Genmu1phi;
+Float_t Genmu2phi;
 Float_t Gentk1pt;
 Float_t Gentk2pt;
 Float_t Gentk1eta;
 Float_t Gentk2eta;
+Float_t Gentk1phi;
+Float_t Gentk2phi;
 
 void buildGenBranch(TTree* nt)
 {
@@ -252,15 +275,19 @@ void buildGenBranch(TTree* nt)
   nt->Branch("pdgId",&GenpdgId);
   nt->Branch("isSignal",&GenisSignal);
   nt->Branch("mu1eta",&Genmu1eta);
+  nt->Branch("mu1phi",&Genmu1phi);
   nt->Branch("mu1pt",&Genmu1pt);
   nt->Branch("mu1p",&Genmu1p);
   nt->Branch("mu2eta",&Genmu2eta);
+  nt->Branch("mu2phi",&Genmu2phi);
   nt->Branch("mu2pt",&Genmu2pt);
   nt->Branch("mu2p",&Genmu2p);
   nt->Branch("tk1pt",&Gentk1pt);
   nt->Branch("tk1eta",&Gentk1eta);
+  nt->Branch("tk1phi",&Gentk1phi);
   nt->Branch("tk2pt",&Gentk2pt);
   nt->Branch("tk2eta",&Gentk2eta);
+  nt->Branch("tk2phi",&Gentk2phi);
 }
 
 //#########################################################################################
