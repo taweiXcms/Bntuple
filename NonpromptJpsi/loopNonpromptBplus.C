@@ -180,23 +180,23 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	int trkMuon = 13;//K+-
 	
 	int trk1geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
-	int pdgtrk1=abs(GenInfo_pdgId[trk1geninfo]);
+	int pdgtrk1=abs(GenInfo_pdgId[trk1geninfo]); 
 	int mothertrk1geninfo=GenInfo_mo1[trk1geninfo];
 	int pdgmothertrk1=abs(GenInfo_pdgId[mothertrk1geninfo]);
 	int grandmothertrk1geninfo=GenInfo_mo1[mothertrk1geninfo];
-	int pdggrandmothertrk1=abs(grandmothertrk1geninfo);
+	int pdggrandmothertrk1=abs(GenInfo_pdgId[grandmothertrk1geninfo]);
     
     int muon1geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
     int pdgmuon1=abs(GenInfo_pdgId[muon1geninfo]);
     int mothermuon1geninfo=GenInfo_mo1[muon1geninfo];
     int grandmothermuon1geninfo=GenInfo_mo1[mothermuon1geninfo];
-    int pdggrandmothermuon1=abs(grandmothermuon1geninfo);
+    int pdggrandmothermuon1=abs(GenInfo_pdgId[grandmothermuon1geninfo]);
     
     int muon2geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
     int pdgmuon2=abs(GenInfo_pdgId[muon2geninfo]);
     int mothermuon2geninfo=GenInfo_mo1[muon2geninfo];
     int grandmothermuon2geninfo=GenInfo_mo1[mothermuon2geninfo];
-    int pdggrandmothermuon2=abs(grandmothermuon2geninfo);
+    int pdggrandmothermuon2=abs(GenInfo_pdgId[grandmothermuon2geninfo]);
     
     bool okTrk1=false;
     bool okMuon1=false;
@@ -233,7 +233,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	    if(mothermuon2geninfo>-1){
 	      if(grandmothermuon2geninfo>-1){
 		    if(pdggrandmothermuon2==BplusId){
-		      bGenIdxMu1=grandmothermuon2geninfo;
+		      bGenIdxMu2=grandmothermuon2geninfo;
 		      okMuon2=true;
 		    }//if compatible with Bid	  
 		  }//if GenInfo_mo1_mo1>-1 
@@ -242,7 +242,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     }//end muon2geninfo 
 
     if(okMuon2&&okMuon1&&okTrk1){
-      if(bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
+      if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
         okTotal=true;
       }
     }
