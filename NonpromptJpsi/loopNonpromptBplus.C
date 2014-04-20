@@ -197,7 +197,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	   	}//if GenInfo_mo1>-1
 	  }//is trk1d==pdg
     }//end trk1geninfo  
-    gen[typesize]=1;
+    gen[typesize]=(float)(levelBplustoJpsiK);
   }//end is not real
 }//end fillTree
 
@@ -244,7 +244,7 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 100000;
+  nentries = 200000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
@@ -312,5 +312,3 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   outf->Write();
   outf->Close();
 }
-
-
