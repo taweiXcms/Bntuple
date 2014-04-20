@@ -162,8 +162,46 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   doubletpt[typesize] = -1;
   doubleteta[typesize] = -1;
   doublety[typesize] = -1;
+  
+  if(!REAL){
+    gen[typesize] = 0;//gen init
+    int mGenIdxTk1=-1;
+    int mGenIdxTk2=-1;
+    int bGenIdxTk1=-1;
+    int bGenIdxTk2=-1;
+    int bGenIdxMu1=-1;
+    int bGenIdxMu2=-1;
+    
+    float BId,MId,tk1Id,tk2Id;
+    //tk1:positive, tk2:negtive
+    
+	BId = 521;//B+-
+	tk1Id = 321;//K+-
+	
+	bool levelBplustoJpsiK=kFALSE;
+	
+	int trk1geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
+	int pdgtrk1=abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]);
+	int mothertrk1geninfo=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+	int pdgmothertrk1=abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]);
+	int grandmothertrk1geninfo=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+	int pdggrandmothertrk1=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]]);
+	
+	if(trk1geninfo>-1){
+	  if(pdgtrk1==tk1Id){
+	    if(mothertrk1geninfo>-1){
+		  if(pdgmothertrk1==BId){
+			bGenIdxTk1=mothertrk1geninfo;
+			levelBplustoJpsiK=kTRUE;
+		    }//if compatible with Bid	  
+	   	  }//if GenInfo_mo1>-1
+	    }//is trk1d==pdg
+      }//if track info>-1
+    }//end trk1 
+    gen[typesize]=int(levelBplustoJpsiK);
+  }//end is not real
+}//end fillTree
 
-}
 
 
 void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBplus.root", bool REAL=0){
