@@ -162,7 +162,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   doubletpt[typesize] = -1;
   doubleteta[typesize] = -1;
   doublety[typesize] = -1;
-  
+
   if(!REAL){
     gen[typesize] = 0;//gen init
     int mGenIdxTk1=-1;
@@ -186,19 +186,18 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	int pdgmothertrk1=abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]);
 	int grandmothertrk1geninfo=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
 	int pdggrandmothertrk1=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]]);
-	
+
 	if(trk1geninfo>-1){
-	  if(pdgtrk1==tk1Id){
+	  if(pdgtrk1==tk1Id){//
 	    if(mothertrk1geninfo>-1){
 		  if(pdgmothertrk1==BId){
 			bGenIdxTk1=mothertrk1geninfo;
 			levelBplustoJpsiK=kTRUE;
-		    }//if compatible with Bid	  
-	   	  }//if GenInfo_mo1>-1
-	    }//is trk1d==pdg
-      }//if track info>-1
-    }//end trk1 
-    gen[typesize]=int(levelBplustoJpsiK);
+		  }//if compatible with Bid	  
+	   	}//if GenInfo_mo1>-1
+	  }//is trk1d==pdg
+    }//end trk1geninfo  
+    gen[typesize]=1;
   }//end is not real
 }//end fillTree
 
@@ -245,7 +244,7 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 500000;
+  nentries = 100000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
