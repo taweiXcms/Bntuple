@@ -164,7 +164,8 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   doublety[typesize] = -1;
 
   if(!REAL){
-    gen[typesize] = 0;//gen init
+    genBplusToPhiK[typesize] = 0;//gen init
+    genB0[typesize] = 0;//gen init
 	
 	int trk1geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
 	int pdgtrk1=abs(GenInfo_pdgId[trk1geninfo]); 
@@ -188,7 +189,14 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     bool isbplustophik=IsBplusToPhiK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
-    gen[typesize]=(int)(isbplustophik);
+    bool isb0=IsB0(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
+
+    
+    
+    genBplusToPhiK[typesize]=(int)(isbplustophik);
+    genB0[typesize]=(int)(isb0); 
     
   }//end is not real
 }//end fillTree
@@ -262,6 +270,33 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
   }
   return okTotal;
 }
+
+bool IsB0(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+  
+  int mGenIdxTk1=-1;
+  int mGenIdxTk2=-1;
+  int bGenIdxTk1=-1;
+  int bGenIdxTk2=-1;
+  int bGenIdxMu1=-1;
+  int bGenIdxMu2=-1;
+
+    //tk1:positive, tk2:negtive
+    
+  int BzeroId = 511;//B0
+  int BsubsId = 531;//Bsubs
+
+  bool okTrk1=false;
+  bool okMuon1=false;
+  bool okMuon2=false;
+  bool okTotal=false;
+  
+  
+  if(mypdgmothertrk1==BzeroId || mypdggrandmothertrk1==BzeroId || mypdgmothertrk1==BsubsId || mypdggrandmothertrk1==BsubsId  ) okTotal=true;
+  return okTotal;
+}
+
 
 void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBplus.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
