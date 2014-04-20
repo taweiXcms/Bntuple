@@ -7,8 +7,8 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 
-TString inputdata="outputNonprompt/myoutputBplus.root";
-TString inputmc="outputNonprompt/myoutputBplus.root";
+TString inputdata="../output/myoutputBplus.root";
+TString inputmc="../output/myoutputBplus.root";
 
 TString cut="(HLT_PAMu3_v1)";
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
@@ -146,7 +146,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
+   c->SaveAs(Form("ResultsBplus/BMassNonPrompt-%d.pdf",count));
 
    return mass;
 }
@@ -159,7 +159,6 @@ void fitnonpromptBplus(TString infname="",bool doweight = 1)
   TTree *nt = (TTree*) inf->Get("ntKp");
 
   TFile *infMC = new TFile(inputmc.Data());
-  TTree *ntGen = (TTree*)infMC->Get("ntGen");
   TTree *ntMC = (TTree*)infMC->Get("ntKp");
     
   const int nBins = 1;
@@ -184,45 +183,4 @@ void fitnonpromptBplus(TString infname="",bool doweight = 1)
   hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
   hPt->Sumw2();
   hPt->Draw();
-  
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==22233"));
-  nt->Project("hPtRecoTruth","pt",TCut(seldata.Data())&&"gen==22233");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
-  divideBinWidth(hPtRecoTruth);
-  
-  hPtRecoTruth->Draw("same hist");
-  divideBinWidth(hPtMC);
-  divideBinWidth(hPtGen);
-  
-  hPtMC->Sumw2();
-  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-  hPtMC->Sumw2();
-  hEff->Divide(hPtGen);
-  
-  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-  hPtCor->Divide(hEff);
-  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
-  hPtCor->Draw();
-  hPtGen->Draw("same hist");
-
-  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double BRchain=6.09604e-5;
-
-  hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
-
-  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
-  hPtSigma->Draw();
-  
-  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
-  outf->cd();
-  hPt->Write();
-  hEff->Write();
-  hPtGen->Write();
-  hPtCor->Write();
-  hPtSigma->Write();
-  outf->Close();
-  delete outf;
 }
