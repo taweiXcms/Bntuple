@@ -27,7 +27,9 @@ float chi2ndf[MAX_XB];
 float dtheta[MAX_XB];
 float lxy[MAX_XB];
 float genBplusToPhiK[MAX_XB];
-float genB0[MAX_XB];
+float genBplusToPhiPi[MAX_XB];
+float genBzero[MAX_XB];
+float genBsubs[MAX_XB];
 int genIndex[MAX_XB];
 float genpt[MAX_XB];
 float geneta[MAX_XB];
@@ -119,7 +121,9 @@ Int_t HLT_PAMu12_v1_Prescl;
 
 
 bool IsBplusToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
-bool IsB0(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBplusToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBzero(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBsubs(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 
 
 void buildBranch(TTree* nt){
@@ -144,7 +148,9 @@ void buildBranch(TTree* nt){
   nt->Branch("dtheta",dtheta, "dtheta[size]/F");
   nt->Branch("lxy",lxy, "lxy[size]/F");
   nt->Branch("genBplusToPhiK",genBplusToPhiK, "genBplusToPhiK[size]/F");
-  nt->Branch("genB0",genB0, "genB0[size]/F");
+  nt->Branch("genBplusToPhiPi",genBplusToPhiPi, "genBplusToPhiPi[size]/F");
+  nt->Branch("genBzero",genBzero, "genBzero[size]/F");
+  nt->Branch("genBsubs",genBsubs, "genBsubs[size]/F");
   nt->Branch("genIndex",genIndex, "genIndex[size]/I");
   nt->Branch("genpt",genpt, "genpt[size]/F");
   nt->Branch("geny",geny, "geny[size]/F");
