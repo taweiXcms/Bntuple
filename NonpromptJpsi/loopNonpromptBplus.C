@@ -165,7 +165,10 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 
   if(!REAL){
     genBplusToPhiK[typesize] = 0;//gen init
-    genB0[typesize] = 0;//gen init
+    genBplusToPhiPi[typesize] = 0;//gen init
+    
+    genBzero[typesize] = 0;//gen init
+    genBsubs[typesize] = 0;//gen init
 	
 	int trk1geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
 	int pdgtrk1=abs(GenInfo_pdgId[trk1geninfo]); 
@@ -186,17 +189,23 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     int grandmothermuon2geninfo=GenInfo_mo1[mothermuon2geninfo];
     int pdggrandmothermuon2=abs(GenInfo_pdgId[grandmothermuon2geninfo]);
     
+    bool isbplustophipi=IsBplusToPhiPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
     bool isbplustophik=IsBplusToPhiK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
-    bool isb0=IsB0(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+    bool isbzero=IsBzero(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
+    bool isbsubs=IsBsubs(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
 
-    
-    
     genBplusToPhiK[typesize]=(int)(isbplustophik);
-    genB0[typesize]=(int)(isb0); 
+    genBplusToPhiPi[typesize]=(int)(isbplustophipi);
+    genBzero[typesize]=(int)(isbzero); 
+    genBsubs[typesize]=(int)(isbsubs); 
     
   }//end is not real
 }//end fillTree
@@ -271,7 +280,77 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
   return okTotal;
 }
 
-bool IsB0(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+bool IsBplusToPhiPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+  
+  int mGenIdxTk1=-1;
+  int mGenIdxTk2=-1;
+  int bGenIdxTk1=-1;
+  int bGenIdxTk2=-1;
+  int bGenIdxMu1=-1;
+  int bGenIdxMu2=-1;
+
+    //tk1:positive, tk2:negtive
+    
+  int BplusId = 521;//B+-
+  int trkKaonId = 211;//pion
+  int trkMuon = 13;//K+-
+
+
+  bool okTrk1=false;
+  bool okMuon1=false;
+  bool okMuon2=false;
+  bool okTotal=false;
+
+  if(mytrk1geninfo>-1){
+	if(mypdgtrk1==trkKaonId){
+	  if(mymothertrk1geninfo>-1){
+		if(mypdgmothertrk1==BplusId){
+		  bGenIdxTk1=mymothertrk1geninfo;
+		  okTrk1=true;
+		}//if compatible with Bid	  
+	  }//if GenInfo_mo1>-1
+	}//is trk1d==pdg
+  }//end trk1geninfo  
+    
+  //mu1
+  if(mymuon1geninfo>-1){  
+	if(mypdgmuon1==trkMuon){
+	  if(mymothermuon1geninfo>-1){
+	    if(mygrandmothermuon1geninfo>-1){
+		  if(mypdggrandmothermuon1==BplusId){
+		    bGenIdxMu1=mygrandmothermuon1geninfo;
+		    okMuon1=true;
+		  }//if compatible with Bid	  
+		}//if GenInfo_mo1_mo1>-1
+	  }//if GenInfo_mo1>-1
+	}//is muon1==pdg
+  }//end muon1geninfo 
+    
+  if(mymuon2geninfo>-1){  
+	if(mypdgmuon2==trkMuon){
+	  if(mymothermuon2geninfo>-1){
+	    if(mygrandmothermuon2geninfo>-1){
+		  if(mypdggrandmothermuon2==BplusId){
+		    bGenIdxMu2=mygrandmothermuon2geninfo;
+		    okMuon2=true;
+		  }//if compatible with Bid	  
+		}//if GenInfo_mo1_mo1>-1 
+	  }//if GenInfo_mo1>-1
+	}//is muon2==pdg
+  }//end muon2geninfo 
+  
+  if(okMuon2&&okMuon1&&okTrk1){
+    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
+      okTotal=true;
+    }
+  }
+  return okTotal;
+}
+
+
+bool IsBzero(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
                    int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
                    int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
   
@@ -293,10 +372,35 @@ bool IsB0(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothe
   bool okTotal=false;
   
   
-  if(mypdgmothertrk1==BzeroId || mypdggrandmothertrk1==BzeroId || mypdgmothertrk1==BsubsId || mypdggrandmothertrk1==BsubsId  ) okTotal=true;
+  if(mypdgmothertrk1==BzeroId || mypdggrandmothertrk1==BzeroId) okTotal=true;
   return okTotal;
 }
 
+bool IsBsubs(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+  
+  int mGenIdxTk1=-1;
+  int mGenIdxTk2=-1;
+  int bGenIdxTk1=-1;
+  int bGenIdxTk2=-1;
+  int bGenIdxMu1=-1;
+  int bGenIdxMu2=-1;
+
+    //tk1:positive, tk2:negtive
+    
+  int BzeroId = 511;//B0
+  int BsubsId = 531;//Bsubs
+
+  bool okTrk1=false;
+  bool okMuon1=false;
+  bool okMuon2=false;
+  bool okTotal=false;
+  
+  
+  if(mypdgmothertrk1==BsubsId || mypdggrandmothertrk1==BsubsId) okTotal=true;
+  return okTotal;
+}
 
 void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBplus.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
@@ -339,7 +443,7 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 200000;
+  nentries = 1000000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
