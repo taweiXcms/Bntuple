@@ -10,7 +10,8 @@ double fixparam1=5.279;
 TString inputdata="../../output/myoutputBplus.root";
 TString inputmc="../../output/myoutputBplus.root";
 
-TString cut="(HLT_PAMu3_v1)";
+//TString cut="(HLT_PAMu3_v1)&&gen==1";
+TString cut="(HLT_PAMu3_v1)&&gen==1";
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 
 TString selmc="1";
