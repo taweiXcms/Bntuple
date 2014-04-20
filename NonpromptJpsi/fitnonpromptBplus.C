@@ -10,8 +10,13 @@ double fixparam1=5.279;
 TString inputdata="../../output/myoutputBplus.root";
 TString inputmc="../../output/myoutputBplus.root";
 
-//TString cut="(HLT_PAMu3_v1)&&gen==1";
-TString cut="(HLT_PAMu3_v1)&&genB0==1";
+//TString mysuffix="genBzero";
+//TString mysuffix="genBsubs";
+//TString mysuffix="genBplusToPhiK";
+TString mysuffix="genBplusToPhiPi";
+
+TString cut=Form("(HLT_PAMu3_v1)&&%s",mysuffix.Data());
+
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 
 TString selmc="1";
@@ -147,7 +152,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
-   c->SaveAs(Form("ResultsBplus/BMassNonPrompt-%d.pdf",count));
+   c->SaveAs(Form("ResultsBplus/BMassNonPrompt%s.pdf",mysuffix.Data()));
 
    return mass;
 }
