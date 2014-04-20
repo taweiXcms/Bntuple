@@ -117,6 +117,9 @@ Int_t HLT_PAMu12_v1;
 Int_t HLT_PAMu12_v1_Prescl;
 
 
+bool IsBplusToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+
+
 void buildBranch(TTree* nt){
   nt->Branch("Run",&Run);
   nt->Branch("Event",&Event);
