@@ -212,12 +212,30 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 }//end fillTree
 
 
+bool IsTrackfromBdirect(int mytrkgeninfo,int mypdgtrk,int myBmesongeninfo,int mypdgBmeson,
+                        int pdgtrk,int pdgBmeson, int &Bindex){
+                        
+  bool okTrk=false;
+                        
+  if(mytrkgeninfo>-1){
+	if(mypdgtrk==pdgtrk){
+	  if(myBmesongeninfo>-1){
+		if(mypdgBmeson==pdgBmeson){
+		  Bindex=myBmesongeninfo;
+		  okTrk=true;
+		}//if compatible with Bid	  
+	  }//if GenInfo_mo1>-1
+	}//is trk1d==pdg
+  }//end trk1geninfo  
+  std::cout<<"e andata cosi"<<okTrk<<std::endl;
+  std::cout<<"Bindex"<<Bindex<<std::endl;
+  return okTrk;
+}
+
 bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
                    int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
                    int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
   
-  int mGenIdxTk1=-1;
-  int mGenIdxTk2=-1;
   int bGenIdxTk1=-1;
   int bGenIdxTk2=-1;
   int bGenIdxMu1=-1;
@@ -229,22 +247,13 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
   int trkKaonId = 321;//K+-
   int trkMuon = 13;//K+-
 
-
   bool okTrk1=false;
   bool okMuon1=false;
   bool okMuon2=false;
   bool okTotal=false;
-
-  if(mytrk1geninfo>-1){
-	if(mypdgtrk1==trkKaonId){
-	  if(mymothertrk1geninfo>-1){
-		if(mypdgmothertrk1==BplusId){
-		  bGenIdxTk1=mymothertrk1geninfo;
-		  okTrk1=true;
-		}//if compatible with Bid	  
-	  }//if GenInfo_mo1>-1
-	}//is trk1d==pdg
-  }//end trk1geninfo  
+  
+  okTrk1=IsTrackfromBdirect(mytrk1geninfo,mypdgtrk1,mymothertrk1geninfo,mypdgmothertrk1,trkKaonId,BplusId,bGenIdxTk1);
+  if (okTrk1)std::cout<<"bGenIdxTk1="<<bGenIdxTk1<<std::endl;//
     
   //mu1
   if(mymuon1geninfo>-1){  
@@ -253,7 +262,8 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
 	    if(mygrandmothermuon1geninfo>-1){
 		  if(mypdggrandmothermuon1==BplusId){
 		    bGenIdxMu1=mygrandmothermuon1geninfo;
-		    okMuon1=true;
+		    okMuon1=true;	    
+		    std::cout<<"bGenIdxMu1="<<bGenIdxMu1<<std::endl;
 		  }//if compatible with Bid	  
 		}//if GenInfo_mo1_mo1>-1
 	  }//if GenInfo_mo1>-1
@@ -267,6 +277,7 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
 		  if(mypdggrandmothermuon2==BplusId){
 		    bGenIdxMu2=mygrandmothermuon2geninfo;
 		    okMuon2=true;
+		    std::cout<<"bGenIdxMu2="<<bGenIdxMu2<<std::endl;
 		  }//if compatible with Bid	  
 		}//if GenInfo_mo1_mo1>-1 
 	  }//if GenInfo_mo1>-1
@@ -278,7 +289,11 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
       okTotal=true;
     }
   }
+  std::cout<<"FINALE"<<okTotal<<std::endl;
+  std::cout<<"-------------------------------------"<<std::endl;
+
   return okTotal;
+  
 }
 
 bool IsBplusToPhiPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
@@ -545,7 +560,7 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 500000;
+  nentries = 100000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
