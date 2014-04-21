@@ -180,32 +180,22 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     int muon1geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
     int pdgmuon1=abs(GenInfo_pdgId[muon1geninfo]);
     int mothermuon1geninfo=GenInfo_mo1[muon1geninfo];
+    int pdgmothermuon1=abs(GenInfo_pdgId[mothermuon1geninfo]);
     int grandmothermuon1geninfo=GenInfo_mo1[mothermuon1geninfo];
     int pdggrandmothermuon1=abs(GenInfo_pdgId[grandmothermuon1geninfo]);
-    
-    int muon2geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
+
+    int muon2geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
     int pdgmuon2=abs(GenInfo_pdgId[muon2geninfo]);
     int mothermuon2geninfo=GenInfo_mo1[muon2geninfo];
+    int pdgmothermuon2=abs(GenInfo_pdgId[mothermuon2geninfo]);
     int grandmothermuon2geninfo=GenInfo_mo1[mothermuon2geninfo];
     int pdggrandmothermuon2=abs(GenInfo_pdgId[grandmothermuon2geninfo]);
-    
-    bool isbplustophipi=IsBplusToPhiPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
-                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
-                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
-    bool isbplustophik=IsBplusToPhiK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
-                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
-                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
-    bool isbzerotok0starK=IsBzeroToK0starK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
-                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
-                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
-    bool isbzerotok0starpi=IsBzeroToK0starPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
-                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
-                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
 
+    bool isbplustophik=IsBplusToPhiK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
+                                    
     genBplusToPhiK[typesize]=(int)(isbplustophik);
-    genBplusToPhiPi[typesize]=(int)(isbplustophipi);
-    genBzeroToK0starK[typesize]=(int)(isbzerotok0starK);
-    genBzeroToK0starPi[typesize]=(int)(isbzerotok0starpi); 
 
     
   }//end is not real
@@ -213,7 +203,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 
 
 bool IsTrackfromBdirect(int mytrkgeninfo,int mypdgtrk,int myBmesongeninfo,int mypdgBmeson,
-                        int pdgtrk,int pdgBmeson, int &Bindex){
+                        int pdgtrk,int pdgBmeson,int &Bindex){
                         
   bool okTrk=false;
                         
@@ -227,14 +217,35 @@ bool IsTrackfromBdirect(int mytrkgeninfo,int mypdgtrk,int myBmesongeninfo,int my
 	  }//if GenInfo_mo1>-1
 	}//is trk1d==pdg
   }//end trk1geninfo  
-  std::cout<<"e andata cosi"<<okTrk<<std::endl;
-  std::cout<<"Bindex"<<Bindex<<std::endl;
   return okTrk;
 }
 
+bool IsFromBviaresonance(int myparticlegeninfo,int mypdgparticle,int myresonancegeninfo,int mypdgresonance,
+                         int myBmesongeninfo,int mypdgBmeson,
+                         int pdgparticle,int pdgresonance, int pdgBmeson, int &Bindex){
+                        
+  bool okparticle=false;
+                        
+  if(myparticlegeninfo>-1){  
+	if(mypdgparticle==pdgparticle){
+	  if(myresonancegeninfo>-1){
+	    if(mypdgresonance==pdgresonance){
+	      if(myBmesongeninfo>-1){
+		    if(mypdgBmeson==pdgBmeson){
+		      Bindex=myBmesongeninfo;
+		      okparticle=true;	    
+		    }//if compatible with Bid	  
+		  }//if GenInfo_mo1_mo1>-1
+		}//is resonance==pdg
+	  }//if GenInfo_mo1>-1
+	}//is particle==pdg
+  }//end particlegeninfo 
+  return okparticle;
+}
+
 bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
-                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
-                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mypdgmothermuon1,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mypdgmothermuon2,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
   
   int bGenIdxTk1=-1;
   int bGenIdxTk2=-1;
@@ -245,7 +256,8 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
     
   int BplusId = 521;//B+-
   int trkKaonId = 321;//K+-
-  int trkMuon = 13;//K+-
+  int trkJpsiId = 443;//jpsi
+  int trkMuon = 13;//muon
 
   bool okTrk1=false;
   bool okMuon1=false;
@@ -253,270 +265,24 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
   bool okTotal=false;
   
   okTrk1=IsTrackfromBdirect(mytrk1geninfo,mypdgtrk1,mymothertrk1geninfo,mypdgmothertrk1,trkKaonId,BplusId,bGenIdxTk1);
-  if (okTrk1)std::cout<<"bGenIdxTk1="<<bGenIdxTk1<<std::endl;//
-    
-  //mu1
-  if(mymuon1geninfo>-1){  
-	if(mypdgmuon1==trkMuon){
-	  if(mymothermuon1geninfo>-1){
-	    if(mygrandmothermuon1geninfo>-1){
-		  if(mypdggrandmothermuon1==BplusId){
-		    bGenIdxMu1=mygrandmothermuon1geninfo;
-		    okMuon1=true;	    
-		    std::cout<<"bGenIdxMu1="<<bGenIdxMu1<<std::endl;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1
-	  }//if GenInfo_mo1>-1
-	}//is muon1==pdg
-  }//end muon1geninfo 
-    
-  if(mymuon2geninfo>-1){  
-	if(mypdgmuon2==trkMuon){
-	  if(mymothermuon2geninfo>-1){
-	    if(mygrandmothermuon2geninfo>-1){
-		  if(mypdggrandmothermuon2==BplusId){
-		    bGenIdxMu2=mygrandmothermuon2geninfo;
-		    okMuon2=true;
-		    std::cout<<"bGenIdxMu2="<<bGenIdxMu2<<std::endl;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1 
-	  }//if GenInfo_mo1>-1
-	}//is muon2==pdg
-  }//end muon2geninfo 
-  
+
+  okMuon1=IsFromBviaresonance(mymuon1geninfo,mypdgmuon1,mymothermuon1geninfo,mypdgmothermuon1,
+                              mygrandmothermuon1geninfo,mypdggrandmothermuon1,trkMuon,trkJpsiId,BplusId,bGenIdxMu1);
+  okMuon2=IsFromBviaresonance(mymuon2geninfo,mypdgmuon2,mymothermuon2geninfo,mypdgmothermuon2,
+                              mygrandmothermuon2geninfo,mypdggrandmothermuon2,trkMuon,trkJpsiId,BplusId,bGenIdxMu2);
+                              
   if(okMuon2&&okMuon1&&okTrk1){
     if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
       okTotal=true;
     }
   }
-  std::cout<<"FINALE"<<okTotal<<std::endl;
-  std::cout<<"-------------------------------------"<<std::endl;
+  std::cout<<"okTotal="<<okTotal<<std::endl;
+  std::cout<<"---------------------"<<std::endl;
 
   return okTotal;
   
 }
 
-bool IsBplusToPhiPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
-                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
-                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
-  
-  int mGenIdxTk1=-1;
-  int mGenIdxTk2=-1;
-  int bGenIdxTk1=-1;
-  int bGenIdxTk2=-1;
-  int bGenIdxMu1=-1;
-  int bGenIdxMu2=-1;
-
-    //tk1:positive, tk2:negtive
-    
-  int BplusId = 521;//B+-
-  int trkKaonId = 211;//pion
-  int trkMuon = 13;//K+-
-
-
-  bool okTrk1=false;
-  bool okMuon1=false;
-  bool okMuon2=false;
-  bool okTotal=false;
-
-  if(mytrk1geninfo>-1){
-	if(mypdgtrk1==trkKaonId){
-	  if(mymothertrk1geninfo>-1){
-		if(mypdgmothertrk1==BplusId){
-		  bGenIdxTk1=mymothertrk1geninfo;
-		  okTrk1=true;
-		}//if compatible with Bid	  
-	  }//if GenInfo_mo1>-1
-	}//is trk1d==pdg
-  }//end trk1geninfo  
-    
-  //mu1
-  if(mymuon1geninfo>-1){  
-	if(mypdgmuon1==trkMuon){
-	  if(mymothermuon1geninfo>-1){
-	    if(mygrandmothermuon1geninfo>-1){
-		  if(mypdggrandmothermuon1==BplusId){
-		    bGenIdxMu1=mygrandmothermuon1geninfo;
-		    okMuon1=true;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1
-	  }//if GenInfo_mo1>-1
-	}//is muon1==pdg
-  }//end muon1geninfo 
-    
-  if(mymuon2geninfo>-1){  
-	if(mypdgmuon2==trkMuon){
-	  if(mymothermuon2geninfo>-1){
-	    if(mygrandmothermuon2geninfo>-1){
-		  if(mypdggrandmothermuon2==BplusId){
-		    bGenIdxMu2=mygrandmothermuon2geninfo;
-		    okMuon2=true;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1 
-	  }//if GenInfo_mo1>-1
-	}//is muon2==pdg
-  }//end muon2geninfo 
-  
-  if(okMuon2&&okMuon1&&okTrk1){
-    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
-      okTotal=true;
-    }
-  }
-  return okTotal;
-}
-
-
-bool IsBzeroToK0starK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
-                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
-                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
-
-  int mGenIdxTk1=-1;
-  int mGenIdxTk2=-1;
-  int bGenIdxTk1=-1;
-  int bGenIdxTk2=-1;
-  int bGenIdxMu1=-1;
-  int bGenIdxMu2=-1;
-  
-    //tk1:positive, tk2:negtive
-    
-  int BzeroId = 511;//B0
-  int trkKaonId = 321;//K+-
-  int trkMuonId = 13;//muon
-  int KstarId = 313;//K*0
-
-
-  bool okTrk1=false;
-  bool okMuon1=false;
-  bool okMuon2=false;
-  bool okTotal=false;
-
-  if(mytrk1geninfo>-1){
-	if((mypdgtrk1==trkKaonId)){
-	  if(mymothertrk1geninfo>-1){
-	    if(mypdgmothertrk1==KstarId){
-	      if(mygrandmothertrk1geninfo>-1){
-		    if(mypdggrandmothertrk1==BzeroId){
-		      bGenIdxTk1=mygrandmothertrk1geninfo; 
-		      okTrk1=true;
-		    }//if compatible with Bid	
-		  }//if GenInfo_mo1_mo1>-1
-		}//if k0star pdg  
-	  }//if GenInfo_mo1>-1
-	}//is trk1d==pdg
-  }//end trk1geninfo  
-    
-  //mu1
-  if(mymuon1geninfo>-1){  
-	if(mypdgmuon1==trkMuonId){
-	  if(mymothermuon1geninfo>-1){
-	    if(mygrandmothermuon1geninfo>-1){
-		  if(mypdggrandmothermuon1==BzeroId){
-		    bGenIdxMu1=mygrandmothermuon1geninfo;
-		    okMuon1=true;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1
-	  }//if GenInfo_mo1>-1
-	}//is muon1==pdg
-  }//end muon1geninfo 
-      
-  if(mymuon2geninfo>-1){  
-	if(mypdgmuon2==trkMuonId){
-	  if(mymothermuon2geninfo>-1){
-	    if(mygrandmothermuon2geninfo>-1){
-		  if(mypdggrandmothermuon2==BzeroId){
-		    bGenIdxMu2=mygrandmothermuon2geninfo;
-		    okMuon2=true;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1 
-	  }//if GenInfo_mo1>-1
-	}//is muon2==pdg
-  }//end muon2geninfo 
-  
-
-  if(okMuon2&&okMuon1&&okTrk1){
-    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
-      okTotal=true;
-    }
-  }
-
-  return okTotal;
-}
-
-bool IsBzeroToK0starPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
-                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
-                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
-
-  int mGenIdxTk1=-1;
-  int mGenIdxTk2=-1;
-  int bGenIdxTk1=-1;
-  int bGenIdxTk2=-1;
-  int bGenIdxMu1=-1;
-  int bGenIdxMu2=-1;
-  
-    //tk1:positive, tk2:negtive
-    
-  int BzeroId = 511;//B0
-  int trkKaonId = 211;//K+-
-  int trkMuonId = 13;//muon
-  int KstarId = 313;//K*0
-
-
-  bool okTrk1=false;
-  bool okMuon1=false;
-  bool okMuon2=false;
-  bool okTotal=false;
-
-  if(mytrk1geninfo>-1){
-	if((mypdgtrk1==trkKaonId)){
-	  if(mymothertrk1geninfo>-1){
-	    if(mypdgmothertrk1==KstarId){
-	      if(mygrandmothertrk1geninfo>-1){
-		    if(mypdggrandmothertrk1==BzeroId){
-		      bGenIdxTk1=mygrandmothertrk1geninfo; 
-		      okTrk1=true;
-		    }//if compatible with Bid	
-		  }//if GenInfo_mo1_mo1>-1
-		}//if k0star pdg  
-	  }//if GenInfo_mo1>-1
-	}//is trk1d==pdg
-  }//end trk1geninfo  
-    
-  //mu1
-  if(mymuon1geninfo>-1){  
-	if(mypdgmuon1==trkMuonId){
-	  if(mymothermuon1geninfo>-1){
-	    if(mygrandmothermuon1geninfo>-1){
-		  if(mypdggrandmothermuon1==BzeroId){
-		    bGenIdxMu1=mygrandmothermuon1geninfo;
-		    okMuon1=true;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1
-	  }//if GenInfo_mo1>-1
-	}//is muon1==pdg
-  }//end muon1geninfo 
-      
-  if(mymuon2geninfo>-1){  
-	if(mypdgmuon2==trkMuonId){
-	  if(mymothermuon2geninfo>-1){
-	    if(mygrandmothermuon2geninfo>-1){
-		  if(mypdggrandmothermuon2==BzeroId){
-		    bGenIdxMu2=mygrandmothermuon2geninfo;
-		    okMuon2=true;
-		  }//if compatible with Bid	  
-		}//if GenInfo_mo1_mo1>-1 
-	  }//if GenInfo_mo1>-1
-	}//is muon2==pdg
-  }//end muon2geninfo 
-  
-
-  if(okMuon2&&okMuon1&&okTrk1){
-    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
-      okTotal=true;
-    }
-  }
-
-  return okTotal;
-}
 
 
 void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBplus.root", bool REAL=0){
