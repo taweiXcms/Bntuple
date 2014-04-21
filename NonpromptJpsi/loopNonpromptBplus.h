@@ -28,8 +28,8 @@ float dtheta[MAX_XB];
 float lxy[MAX_XB];
 float genBplusToPhiK[MAX_XB];
 float genBplusToPhiPi[MAX_XB];
-float genBzeroToK0starK[MAX_XB];
-float genBzeroToK0starPi[MAX_XB];
+float genB0ToK0star_K[MAX_XB];
+float genB0ToK0star_Pi[MAX_XB];
 int genIndex[MAX_XB];
 float genpt[MAX_XB];
 float geneta[MAX_XB];
@@ -122,6 +122,9 @@ Int_t HLT_PAMu12_v1_Prescl;
 
 bool IsBplusToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsBplusToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsB0ToK0star_K(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsB0ToK0star_Pi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+
 bool IsTrackfromBdirect(int,int,int,int,int,int,int&);
 bool IsFromBviaresonance(int,int,int,int,int,int,int,int,int,int&);
 
@@ -149,8 +152,8 @@ void buildBranch(TTree* nt){
   nt->Branch("lxy",lxy, "lxy[size]/F");
   nt->Branch("genBplusToPhiK",genBplusToPhiK, "genBplusToPhiK[size]/F");
   nt->Branch("genBplusToPhiPi",genBplusToPhiPi, "genBplusToPhiPi[size]/F");
-  nt->Branch("genBzeroToK0starK",genBzeroToK0starK, "genBzeroToK0starK[size]/F");
-  nt->Branch("genBzeroToK0starPi",genBzeroToK0starPi, "genBzeroToK0starPi[size]/F");
+  nt->Branch("genB0ToK0star_K",genB0ToK0star_K, "genB0ToK0star_K[size]/F");
+  nt->Branch("genB0ToK0star_Pi",genB0ToK0star_Pi, "genB0ToK0star_Pi[size]/F");
   nt->Branch("genIndex",genIndex, "genIndex[size]/I");
   nt->Branch("genpt",genpt, "genpt[size]/F");
   nt->Branch("geny",geny, "geny[size]/F");
