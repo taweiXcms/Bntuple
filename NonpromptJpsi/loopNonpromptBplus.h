@@ -121,6 +121,7 @@ Int_t HLT_PAMu12_v1_Prescl;
 
 
 bool IsBplusToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBplusToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsTrackfromBdirect(int,int,int,int,int,int,int&);
 bool IsFromBviaresonance(int,int,int,int,int,int,int,int,int,int&);
 
