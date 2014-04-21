@@ -125,6 +125,8 @@ bool IsBplusToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,
 bool IsBzeroToK0starK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsBzeroToK0starPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 
+bool IsTrackfromBdirect(int,int,int,int,int,int,int&);
+
 
 void buildBranch(TTree* nt){
   nt->Branch("Run",&Run);
