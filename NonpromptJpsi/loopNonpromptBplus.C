@@ -198,10 +198,15 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     bool isbzerotok0starK=IsBzeroToK0starK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
+    bool isbzerotok0starpi=IsBzeroToK0starPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,grandmothermuon2geninfo,pdggrandmothermuon2);
 
     genBplusToPhiK[typesize]=(int)(isbplustophik);
     genBplusToPhiPi[typesize]=(int)(isbplustophipi);
-    genBzeroToK0starK[typesize]=(int)(isbzerotok0starK); 
+    genBzeroToK0starK[typesize]=(int)(isbzerotok0starK);
+    genBzeroToK0starPi[typesize]=(int)(isbzerotok0starpi); 
+
     
   }//end is not real
 }//end fillTree
@@ -357,8 +362,6 @@ bool IsBzeroToK0starK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,in
   int bGenIdxMu1=-1;
   int bGenIdxMu2=-1;
   
-   std::cout<<"***************************"<<std::endl;
-
     //tk1:positive, tk2:negtive
     
   int BzeroId = 511;//B0
@@ -423,6 +426,83 @@ bool IsBzeroToK0starK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,in
 
   return okTotal;
 }
+
+bool IsBzeroToK0starPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+
+  int mGenIdxTk1=-1;
+  int mGenIdxTk2=-1;
+  int bGenIdxTk1=-1;
+  int bGenIdxTk2=-1;
+  int bGenIdxMu1=-1;
+  int bGenIdxMu2=-1;
+  
+    //tk1:positive, tk2:negtive
+    
+  int BzeroId = 511;//B0
+  int trkKaonId = 211;//K+-
+  int trkMuonId = 13;//muon
+  int KstarId = 313;//K*0
+
+
+  bool okTrk1=false;
+  bool okMuon1=false;
+  bool okMuon2=false;
+  bool okTotal=false;
+
+  if(mytrk1geninfo>-1){
+	if((mypdgtrk1==trkKaonId)){
+	  if(mymothertrk1geninfo>-1){
+	    if(mypdgmothertrk1==KstarId){
+	      if(mygrandmothertrk1geninfo>-1){
+		    if(mypdggrandmothertrk1==BzeroId){
+		      bGenIdxTk1=mygrandmothertrk1geninfo; 
+		      okTrk1=true;
+		    }//if compatible with Bid	
+		  }//if GenInfo_mo1_mo1>-1
+		}//if k0star pdg  
+	  }//if GenInfo_mo1>-1
+	}//is trk1d==pdg
+  }//end trk1geninfo  
+    
+  //mu1
+  if(mymuon1geninfo>-1){  
+	if(mypdgmuon1==trkMuonId){
+	  if(mymothermuon1geninfo>-1){
+	    if(mygrandmothermuon1geninfo>-1){
+		  if(mypdggrandmothermuon1==BzeroId){
+		    bGenIdxMu1=mygrandmothermuon1geninfo;
+		    okMuon1=true;
+		  }//if compatible with Bid	  
+		}//if GenInfo_mo1_mo1>-1
+	  }//if GenInfo_mo1>-1
+	}//is muon1==pdg
+  }//end muon1geninfo 
+      
+  if(mymuon2geninfo>-1){  
+	if(mypdgmuon2==trkMuonId){
+	  if(mymothermuon2geninfo>-1){
+	    if(mygrandmothermuon2geninfo>-1){
+		  if(mypdggrandmothermuon2==BzeroId){
+		    bGenIdxMu2=mygrandmothermuon2geninfo;
+		    okMuon2=true;
+		  }//if compatible with Bid	  
+		}//if GenInfo_mo1_mo1>-1 
+	  }//if GenInfo_mo1>-1
+	}//is muon2==pdg
+  }//end muon2geninfo 
+  
+
+  if(okMuon2&&okMuon1&&okTrk1){
+    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
+      okTotal=true;
+    }
+  }
+
+  return okTotal;
+}
+
 
 void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBplus.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
