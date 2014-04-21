@@ -194,8 +194,13 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     bool isbplustophik=IsBplusToPhiK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
-                                    
+    
+    bool isbplustophipi=IsBplusToPhiPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
+                                  
     genBplusToPhiK[typesize]=(int)(isbplustophik);
+    genBplusToPhiPi[typesize]=(int)(isbplustophipi);
 
     
   }//end is not real
@@ -255,7 +260,7 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
     //tk1:positive, tk2:negtive
     
   int BplusId = 521;//B+-
-  int trkKaonId = 321;//K+-
+  int trkparId = 321;//K+-
   int trkJpsiId = 443;//jpsi
   int trkMuon = 13;//muon
 
@@ -264,7 +269,7 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
   bool okMuon2=false;
   bool okTotal=false;
   
-  okTrk1=IsTrackfromBdirect(mytrk1geninfo,mypdgtrk1,mymothertrk1geninfo,mypdgmothertrk1,trkKaonId,BplusId,bGenIdxTk1);
+  okTrk1=IsTrackfromBdirect(mytrk1geninfo,mypdgtrk1,mymothertrk1geninfo,mypdgmothertrk1,trkparId,BplusId,bGenIdxTk1);
 
   okMuon1=IsFromBviaresonance(mymuon1geninfo,mypdgmuon1,mymothermuon1geninfo,mypdgmothermuon1,
                               mygrandmothermuon1geninfo,mypdggrandmothermuon1,trkMuon,trkJpsiId,BplusId,bGenIdxMu1);
@@ -276,13 +281,46 @@ bool IsBplusToPhiK(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int m
       okTotal=true;
     }
   }
-  std::cout<<"okTotal="<<okTotal<<std::endl;
-  std::cout<<"---------------------"<<std::endl;
-
   return okTotal;
   
 }
 
+bool IsBplusToPhiPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mypdgmothermuon1,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mypdgmothermuon2,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+  
+  int bGenIdxTk1=-1;
+  int bGenIdxTk2=-1;
+  int bGenIdxMu1=-1;
+  int bGenIdxMu2=-1;
+
+    //tk1:positive, tk2:negtive
+    
+  int BplusId = 521;//B+-
+  int trkparId = 211;//K+-
+  int trkJpsiId = 443;//jpsi
+  int trkMuon = 13;//muon
+
+  bool okTrk1=false;
+  bool okMuon1=false;
+  bool okMuon2=false;
+  bool okTotal=false;
+  
+  okTrk1=IsTrackfromBdirect(mytrk1geninfo,mypdgtrk1,mymothertrk1geninfo,mypdgmothertrk1,trkparId,BplusId,bGenIdxTk1);
+
+  okMuon1=IsFromBviaresonance(mymuon1geninfo,mypdgmuon1,mymothermuon1geninfo,mypdgmothermuon1,
+                              mygrandmothermuon1geninfo,mypdggrandmothermuon1,trkMuon,trkJpsiId,BplusId,bGenIdxMu1);
+  okMuon2=IsFromBviaresonance(mymuon2geninfo,mypdgmuon2,mymothermuon2geninfo,mypdgmothermuon2,
+                              mygrandmothermuon2geninfo,mypdggrandmothermuon2,trkMuon,trkJpsiId,BplusId,bGenIdxMu2);
+                              
+  if(okMuon2&&okMuon1&&okTrk1){
+    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
+      okTotal=true;
+    }
+  }
+  return okTotal;
+  
+}
 
 
 void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBplus.root", bool REAL=0){
@@ -326,7 +364,7 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 100000;
+  nentries = 1000000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
