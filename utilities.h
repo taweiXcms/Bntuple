@@ -31,9 +31,9 @@ static const int colorCode[nColor] = {
 
 // Algos
 static const int nAlgos = 8;
-static const char *algoName[nAlgos] = { "", "icPu5", "akPu2PF", "akPu3PF", "akPu4PF", "akPu2Calo", "akPu3Calo", "akPu4Calo" };
-static const char *algoNamePP[nAlgos] = { "", "icPu5", "ak2PF", "ak3PF", "ak4PF", "ak2Calo", "ak3Calo", "ak4Calo" };
-static const char *algoNameGen[nAlgos] = { "", "icPu5", "akPu2PF", "akPu3PF", "akPu4PF", "akPu2PF", "akPu3PF", "akPu4PF" };
+//static const char *algoName[nAlgos] = { "", "icPu5", "akPu2PF", "akPu3PF", "akPu4PF", "akPu2Calo", "akPu3Calo", "akPu4Calo" };
+//static const char *algoNamePP[nAlgos] = { "", "icPu5", "ak2PF", "ak3PF", "ak4PF", "ak2Calo", "ak3Calo", "ak4Calo" };
+//static const char *algoNameGen[nAlgos] = { "", "icPu5", "akPu2PF", "akPu3PF", "akPu4PF", "akPu2PF", "akPu3PF", "akPu4PF" };
 
 // Centrality binning
 const int nbins_cent=	     6;
@@ -507,6 +507,7 @@ TGraphAsymmErrors *getEfficiency(TTree *t,char *variable,int nBin, double binL, 
 //   hPass->Divide(hPass,hTotal,1,1,"B");
    
 //   TGraphAsymmErrors *g = new TGraphAsymmErrors(hPass);
-   delete hPass,hTotal;
+   delete hPass;
+   delete hTotal;
    return g;
 }

@@ -11,12 +11,15 @@ double fixparam1=5.37;
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Phi_TriggerMatchingMuon_EvtBase_skim.root";          
 
-//TString cut="(HLT_PAMu3_v1)&&chi2cl>0.135&&(d0)/d0Err>3.24&&dtheta<2.03&&TMath::Abs((trk1Dxy/trk1D0Err))>0.792&&TMath::Abs(trk2Dxy/trk2D0Err)>0.742&&TMath::Abs(tktkmass-1.020)<1.02e-02";
-//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>3.8e-02 && (d0/d0Err)>3.2e+00 && cos(dtheta)>7.4e-01 && abs(trk2Dxy/trk2D0Err)>1.3e+00 && abs(tktkmass-1.01944)<1.5e-02&&mass>5&&mass<6";
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>2.7e-02&&(d0/d0Err)>2.8&&cos(dtheta)>-0.8&&abs(tktkmass-1.01944)<0.014&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7";                           
+//Bs
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>3.87e-02&&(d0/d0Err)>4.38e+00&&cos(dtheta)>-7.80e-01&&abs(trk1Dxy/trk1D0Err)>3.64e-03&&abs(trk2Dxy/trk2D0Err)>2.11e-01&&abs(tktkmass-1.019455)<1.62e-02";
+//Bs_tktkmass
+//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbesttktkmass&&chi2cl>1.28e-01&&(d0/d0Err)>3.08e+00&&cos(dtheta)>8.07e-01&&abs(trk1Dxy/trk1D0Err)>8.86e-01&&abs(trk2Dxy/trk2D0Err)>7.82e-01&&abs(tktkmass-1.019455)<1.77e-02";
+//Bs_chi2
+//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&chi2cl>2.42e-02&&(d0/d0Err)>3.02e+00&&cos(dtheta)>-8.35e-01&&abs(trk1Dxy/trk1D0Err)>9.74e-01&&abs(trk2Dxy/trk2D0Err)>6.90e-01&&abs(tktkmass-1.019455)<9.97e-03";
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
