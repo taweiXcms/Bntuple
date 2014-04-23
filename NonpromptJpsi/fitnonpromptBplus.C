@@ -13,7 +13,7 @@ TString inputmc="../../output/myoutputBplus.root";
 //TString mysuffix="genBzero";
 //TString mysuffix="genBsubs";
 //TString mysuffix="genBplusToPhiK";
-TString mysuffix="genBzeroToK0starK";
+TString mysuffix="genB0ToK0star_Pi";
 
 TString cut=Form("(HLT_PAMu3_v1)&&%s",mysuffix.Data());
 
