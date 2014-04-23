@@ -172,7 +172,9 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     genBsubsToPhiPi[typesize] = 0;//gen init
     genB0ToK0star_K[typesize] = 0;//gen init
     genB0ToK0star_Pi[typesize] = 0;//gen init
-	
+	genB0ToKplusminus_K[typesize] = 0;//gen init
+    genB0ToKplusminus_Pi[typesize] = 0;//gen init
+
 	
 	int trk1geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
 	int pdgtrk1=abs(GenInfo_pdgId[trk1geninfo]); 
@@ -201,7 +203,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     bool isbplustophipi=IsBplusToPhiPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
-    
     bool isbzerotophik=IsBzeroToPhiK(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
@@ -214,13 +215,16 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     bool isbsubstophipi=IsBsubsToPhiPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);            
-
-    
-    
     bool isb0tokstar_k=IsB0ToK0star_K(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
     bool isb0tokstar_pi=IsB0ToK0star_Pi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
+    bool isb0tokplusminus_k=IsB0ToKplusminus_K(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
+    bool isb0tokplusminus_pi=IsB0ToKplusminus_Pi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
     bool isbsubstophi_K=IsBsubsTophi_K(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
@@ -238,6 +242,8 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     genBsubsToPhiPi[typesize]=(int)(isbsubstophipi);
     genB0ToK0star_K[typesize]=(int)(isb0tokstar_k);
     genB0ToK0star_Pi[typesize]=(int)(isb0tokstar_pi);
+    genB0ToKplusminus_K[typesize]=(int)(isb0tokplusminus_k);
+    genB0ToKplusminus_Pi[typesize]=(int)(isb0tokplusminus_pi);
     genBsubsTophi_K[typesize]=(int)(isbsubstophi_K);
     genBsubsTophi_Pi[typesize]=(int)(isbsubstophi_pi);
 
@@ -589,6 +595,87 @@ bool IsB0ToK0star_Pi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int
 }
 
 
+
+bool IsB0ToKplusminus_K(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mypdgmothermuon1,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mypdgmothermuon2,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+  
+  int bGenIdxTk1=-1;
+  int bGenIdxTk2=-1;
+  int bGenIdxMu1=-1;
+  int bGenIdxMu2=-1;
+  int mGenIdxTk1=-1;
+  int mGenIdxTk2=-1;
+    
+  int BmesonId = 521;//
+  int trkparId = 321;//K+-
+  int trkJpsiId = 443;//jpsi
+  int trkKplusminusId = 323;//k0star
+  int trkMuon = 13;//muon
+  
+  bool okTrk1=false;
+  bool okMuon1=false;
+  bool okMuon2=false;
+  bool okTotal=false;
+  //
+  okTrk1=IsFromBviaresonance(mytrk1geninfo,mypdgtrk1,mymothertrk1geninfo,mypdgmothertrk1,
+                              mygrandmothertrk1geninfo,mypdggrandmothertrk1,trkparId,trkKplusminusId,BmesonId,bGenIdxTk1);
+  okMuon1=IsFromBviaresonance(mymuon1geninfo,mypdgmuon1,mymothermuon1geninfo,mypdgmothermuon1,
+                              mygrandmothermuon1geninfo,mypdggrandmothermuon1,trkMuon,trkJpsiId,BmesonId,bGenIdxMu1);
+  okMuon2=IsFromBviaresonance(mymuon2geninfo,mypdgmuon2,mymothermuon2geninfo,mypdgmothermuon2,
+                              mygrandmothermuon2geninfo,mypdggrandmothermuon2,trkMuon,trkJpsiId,BmesonId,bGenIdxMu2);
+                              
+  if ((mytrk1geninfo>-1)&&(mymothertrk1geninfo>-1))std::cout<<mypdgtrk1<<"-"<<mypdgmothertrk1<<"-"<<mypdggrandmothertrk1<<std::endl;                       
+  //std::cout<<okTrk1<<okMuon1<<okMuon2<<okTotal<<std::endl;    
+                     
+  if(okMuon2&&okMuon1&&okTrk1){
+    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
+      okTotal=true;
+    }
+  }
+  return okTotal;
+  
+}
+
+
+bool IsB0ToKplusminus_Pi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
+                   int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mypdgmothermuon1,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
+                   int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mypdgmothermuon2,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
+  
+  int bGenIdxTk1=-1;
+  int bGenIdxTk2=-1;
+  int bGenIdxMu1=-1;
+  int bGenIdxMu2=-1;
+  int mGenIdxTk1=-1;
+  int mGenIdxTk2=-1;
+    
+  int BmesonId = 521;//
+  int trkparId = 211;//K+-
+  int trkJpsiId = 443;//jpsi
+  int trkKplusminusId = 323;//k0star
+  int trkMuon = 13;//muon
+  
+  bool okTrk1=false;
+  bool okMuon1=false;
+  bool okMuon2=false;
+  bool okTotal=false;
+  //
+  okTrk1=IsFromBviaresonance(mytrk1geninfo,mypdgtrk1,mymothertrk1geninfo,mypdgmothertrk1,
+                              mygrandmothertrk1geninfo,mypdggrandmothertrk1,trkparId,trkKplusminusId,BmesonId,bGenIdxTk1);
+  okMuon1=IsFromBviaresonance(mymuon1geninfo,mypdgmuon1,mymothermuon1geninfo,mypdgmothermuon1,
+                              mygrandmothermuon1geninfo,mypdggrandmothermuon1,trkMuon,trkJpsiId,BmesonId,bGenIdxMu1);
+  okMuon2=IsFromBviaresonance(mymuon2geninfo,mypdgmuon2,mymothermuon2geninfo,mypdgmothermuon2,
+                              mygrandmothermuon2geninfo,mypdggrandmothermuon2,trkMuon,trkJpsiId,BmesonId,bGenIdxMu2);
+                              
+  if(okMuon2&&okMuon1&&okTrk1){
+    if(bGenIdxMu1!=-1 && bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1){
+      okTotal=true;
+    }
+  }
+  return okTotal;
+  
+}
+
 bool IsBsubsTophi_K(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
                    int mymuon1geninfo,int mypdgmuon1,int mymothermuon1geninfo,int mypdgmothermuon1,int mygrandmothermuon1geninfo,int mypdggrandmothermuon1, 
                    int mymuon2geninfo,int mypdgmuon2,int mymothermuon2geninfo,int mypdgmothermuon2,int mygrandmothermuon2geninfo,int mypdggrandmothermuon2){
@@ -708,7 +795,7 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 500000;
+  nentries = 200000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
