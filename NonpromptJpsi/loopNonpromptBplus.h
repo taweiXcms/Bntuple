@@ -26,12 +26,18 @@ float d0Err[MAX_XB];
 float chi2ndf[MAX_XB];
 float dtheta[MAX_XB];
 float lxy[MAX_XB];
+
 float genBplusToPhiK[MAX_XB];
 float genBplusToPhiPi[MAX_XB];
+float genBzeroToPhiK[MAX_XB];
+float genBzeroToPhiPi[MAX_XB];
+float genBsubsToPhiK[MAX_XB];
+float genBsubsToPhiPi[MAX_XB];
 float genB0ToK0star_K[MAX_XB];
 float genB0ToK0star_Pi[MAX_XB];
 float genBsubsTophi_K[MAX_XB];
 float genBsubsTophi_Pi[MAX_XB];
+
 int genIndex[MAX_XB];
 float genpt[MAX_XB];
 float geneta[MAX_XB];
@@ -124,6 +130,10 @@ Int_t HLT_PAMu12_v1_Prescl;
 
 bool IsBplusToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsBplusToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBzeroToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBzeroToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBsubsToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBsubsToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsB0ToK0star_K(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsB0ToK0star_Pi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsBsubsTophi_K(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
@@ -137,7 +147,7 @@ void buildBranch(TTree* nt){
   nt->Branch("Event",&Event);
   nt->Branch("size",&size);
   nt->Branch("bestchi2",&bestchi2);
-  nt->Branch("besttktkmass",&besttktkmass);
+  nt->Branch("besttktkmass",&besttktkmass);//
 
   nt->Branch("bindex",bindex, "bindex[size]/I");
   nt->Branch("mass",mass, "mass[size]/F");
@@ -155,6 +165,10 @@ void buildBranch(TTree* nt){
   nt->Branch("lxy",lxy, "lxy[size]/F");
   nt->Branch("genBplusToPhiK",genBplusToPhiK, "genBplusToPhiK[size]/F");
   nt->Branch("genBplusToPhiPi",genBplusToPhiPi, "genBplusToPhiPi[size]/F");
+  nt->Branch("genBzeroToPhiK",genBzeroToPhiK, "genBzeroToPhiK[size]/F");
+  nt->Branch("genBzeroToPhiPi",genBzeroToPhiPi, "genBzeroToPhiPi[size]/F");
+  nt->Branch("genBsubsToPhiK",genBsubsToPhiK, "genBsubsToPhiK[size]/F");
+  nt->Branch("genBsubsToPhiPi",genBsubsToPhiPi, "genBsubsToPhiPi[size]/F");
   nt->Branch("genB0ToK0star_K",genB0ToK0star_K, "genB0ToK0star_K[size]/F");
   nt->Branch("genB0ToK0star_Pi",genB0ToK0star_Pi, "genB0ToK0star_Pi[size]/F");
   nt->Branch("genBsubsTophi_K",genBsubsTophi_K, "genBsubsTophi_K[size]/F");
