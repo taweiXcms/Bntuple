@@ -35,6 +35,9 @@ float genBsubsToPhiK[MAX_XB];
 float genBsubsToPhiPi[MAX_XB];
 float genB0ToK0star_K[MAX_XB];
 float genB0ToK0star_Pi[MAX_XB];
+float genB0ToKplusminus_K[MAX_XB];
+float genB0ToKplusminus_Pi[MAX_XB];
+
 float genBsubsTophi_K[MAX_XB];
 float genBsubsTophi_Pi[MAX_XB];
 
@@ -136,6 +139,8 @@ bool IsBsubsToPhiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,i
 bool IsBsubsToPhiPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsB0ToK0star_K(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsB0ToK0star_Pi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsB0ToKplusminus_K(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsB0ToKplusminus_Pi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsBsubsTophi_K(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsBsubsTophi_Pi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsTrackfromBdirect(int,int,int,int,int,int,int&);
@@ -171,6 +176,8 @@ void buildBranch(TTree* nt){
   nt->Branch("genBsubsToPhiPi",genBsubsToPhiPi, "genBsubsToPhiPi[size]/F");
   nt->Branch("genB0ToK0star_K",genB0ToK0star_K, "genB0ToK0star_K[size]/F");
   nt->Branch("genB0ToK0star_Pi",genB0ToK0star_Pi, "genB0ToK0star_Pi[size]/F");
+  nt->Branch("genB0ToKplusminus_K",genB0ToKplusminus_K, "genB0ToKplusminus_K[size]/F");
+  nt->Branch("genB0ToKplusminus_Pi",genB0ToKplusminus_Pi, "genB0ToKplusminus_Pi[size]/F");//  
   nt->Branch("genBsubsTophi_K",genBsubsTophi_K, "genBsubsTophi_K[size]/F");
   nt->Branch("genBsubsTophi_Pi",genBsubsTophi_Pi, "genBsubsTophi_Pi[size]/F");
   nt->Branch("genIndex",genIndex, "genIndex[size]/I");
