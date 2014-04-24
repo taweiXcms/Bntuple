@@ -209,7 +209,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	int pdggrandmothertrk1=abs(GenInfo_pdgId[grandmothertrk1geninfo]);
 	
 	
-	int trk2geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
+	int trk2geninfo=TrackInfo_geninfo_index[BInfo_rftk2_index[j]];
 	int pdgtrk2=abs(GenInfo_pdgId[trk2geninfo]); 
 	int mothertrk2geninfo=GenInfo_mo1[trk2geninfo];
 	int pdgmothertrk2=abs(GenInfo_pdgId[mothertrk2geninfo]);
@@ -224,7 +224,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     int grandmothermuon1geninfo=GenInfo_mo1[mothermuon1geninfo];
     int pdggrandmothermuon1=abs(GenInfo_pdgId[grandmothermuon1geninfo]);
 
-    int muon2geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+    int muon2geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]];
     int pdgmuon2=abs(GenInfo_pdgId[muon2geninfo]);
     int mothermuon2geninfo=GenInfo_mo1[muon2geninfo];
     int pdgmothermuon2=abs(GenInfo_pdgId[mothermuon2geninfo]);
@@ -235,252 +235,9 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
                                     trk2geninfo,pdgtrk2,mothertrk2geninfo,pdgmothertrk2,grandmothertrk2geninfo,pdggrandmothertrk2,
                                     muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
                                     muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
-           
+    std::cout<<"TOTAL"<<isbzerotojpsik0starkpi<<std::endl;
     genBzeroToJpsiK0starKPi[typesize]=(int)(isbzerotojpsik0starkpi);
      
-    /*
-    gen[typesize] = 0;//gen init
-    genIndex[typesize] = -1;//gen init
-    genpt[typesize] = -1;
-    geneta[typesize] = -20;
-    genphi[typesize] = -20;
-    geny[typesize] = -1;
-    int mGenIdxTk1=-1;
-    int mGenIdxTk2=-1;
-    int bGenIdxTk1=-1;
-    int bGenIdxTk2=-1;
-    int bGenIdxMu1=-1;
-    int bGenIdxMu2=-1;
-      
-      
-    float BId,MId,tk1Id,tk2Id;
-    //tk1:positive, tk2:negtive
-	BId = 511;//B0
-	MId = 313;//K*0
-	tk1Id = 321;//K+
-	tk2Id = 211;//pi-
-      
-      int twoTks,kStar,flagkstar=0;
-      if(BInfo_type[j]==1 || BInfo_type[j]==2) twoTks=0;
-      else twoTks=1;
-      if(BInfo_type[j]==4 || BInfo_type[j]==5) kStar=1;
-      else kStar=0;
-
-      // tk1
-      if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
-	{
-	  int level =0;
-	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==tk1Id)
-	    {
-	      level = 1;
-	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
-		{
-		  if(!twoTks)//one trk channel
-		    {
-		      mGenIdxTk1=0;
-		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==BId)
-			{
-			  level = 3;
-			  bGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-			}		  
-		    }
-		  else//two trk channel
-		    {
-		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==MId)
-			{
-			  level = 2;
-			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
-			    {
-			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
-				{
-				  level = 3;
-				  bGenIdxTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
-				}
-			    }
-			  mGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-			}
-		    }
-		}
-	    }
-	  gen[typesize]=level;
-	}
-      
-      //tk2
-      if(!twoTks)//one trk channel
-	{
-	  gen[typesize]+=30;
-	  mGenIdxTk2=0;
-	  bGenIdxTk2=0;
-	}
-      else//two trk channel
-	{
-	  if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
-	    {
-	      int level =0;
-	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==tk2Id)
-		{
-		  level = 1;
-		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
-		    {
-		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==MId)
-			{
-			  level = 2;
-			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
-			    {
-			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
-				{
-				  level = 3;
-				  bGenIdxTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
-				}
-			    }
-			  mGenIdxTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
-			}
-		    }
-		}
-	      gen[typesize]+=(level*10);
-	    }
-	}
-
-     
-      //mu1
-      if(MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>-1)
-	{  
-	  int level =0;
-	  if(abs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]])==13) level=1;
-	  if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]>-1)
-	    {
-	      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1)
-		{
-		  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]])==BId)
-		    {
-		      level = 2;
-		      bGenIdxMu1=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
-		      flagkstar++;///////////////////////////////////////////////=1
-		    }
-		} 
-	    }
-	  gen[typesize]+=(level*100);
-	}
-      
-      //mu2
-      if(MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>-1)
-	{  
-	  int level =0;
-	  if(abs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]])==13) level = 1;
-	  if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]>-1)
-	    {
-	      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]>-1)
-		{
-		  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]])==BId)
-		    {
-		      level = 2;
-		      bGenIdxMu2=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]];
-		      flagkstar++;///////////////////////////////////////////////////=2
-		    }
-		}
-	    }
-	  gen[typesize]+=(level*1000);
-	}
-      
-      int level=0;
-      if(mGenIdxTk1!=-1 && mGenIdxTk2!=-1)
-	{
-	  if(!twoTks) level=1;
-	  else
-	    {
-	      if(mGenIdxTk1==mGenIdxTk2) level=1;
-	    }
-	}
-      if(bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1)
-	{
-	  if(!twoTks)
-	    {
-	      level=2;
-	      genIndex[typesize] = bGenIdxMu1;
-	    }
-	  else if(bGenIdxMu1==bGenIdxTk2)
-	    {
-	      level=2;
-	      genIndex[typesize] = bGenIdxMu1;
-	    }
-	}
-      gen[typesize]+=(level*10000);
-
-      //kstar#############################################################################
-      if(kStar)
-	{
-	  //tk1
-	  if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
-	    {
-	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==tk2Id)
-		{
-		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
-		    {
-		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==MId)
-			{
-			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
-			    {
-			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
-				{
-				  flagkstar++;//////////////////////////////////////////////=3
-				  bGenIdxTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
-				}
-			    }
-			  mGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-			}
-		    }
-		}
-	    }
-	  
-	  //tk2
-	  if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
-	    {
-	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==tk1Id)
-		{
-		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
-		    {
-		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==MId)
-			{
-			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
-			    {
-			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
-				{
-				  flagkstar++;////////////////////////////////////////////////////=4
-				  bGenIdxTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
-				}
-			    }
-			  mGenIdxTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
-			}
-		    }
-		}
-	    }
-	  if(flagkstar==4)
-	    {
-	      if((bGenIdxMu1!=-1) 
-		 && (bGenIdxMu1==bGenIdxMu2)
-		 && (bGenIdxMu1==bGenIdxTk1)
-		 && (bGenIdxMu1==bGenIdxTk2)
-		 )
-		{
-		  gen[typesize]=41000;
-		}
-	    }
-	}//kstar End#############################################################################
-
-      int tgenIndex=genIndex[typesize];
-      if(gen[typesize]==22233)
-	{
-	  genpt[typesize] = GenInfo_pt[tgenIndex];
-	  geneta[typesize] = GenInfo_eta[tgenIndex];
-	  genphi[typesize] = GenInfo_phi[tgenIndex];
-	  b4P->SetXYZM(GenInfo_pt[tgenIndex]*cos(GenInfo_phi[tgenIndex]),
-		       GenInfo_pt[tgenIndex]*sin(GenInfo_phi[tgenIndex]),
-		       GenInfo_pt[tgenIndex]*sinh(GenInfo_eta[tgenIndex]),
-		       GenInfo_mass[tgenIndex]);
-	  geny[typesize] = b4P->Rapidity();
-	}
-	*/  	
-	
   }
 }
 
@@ -518,12 +275,17 @@ bool IsBzeroToJpsiK0starKPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geni
                               mygrandmothermuon1geninfo,mypdggrandmothermuon1,trkMuon,trkJpsiId,BmesonId,bGenIdxMu1);
   okMuon2=IsFromBviaresonance(mymuon2geninfo,mypdgmuon2,mymothermuon2geninfo,mypdgmothermuon2,
                               mygrandmothermuon2geninfo,mypdggrandmothermuon2,trkMuon,trkJpsiId,BmesonId,bGenIdxMu2);
-                              
+  
+  //std::cout<<okTrk1<<okTrk2<<okMuon1<<okMuon2<<std::endl;
+  //std::cout<<bGenIdxMu1<<"-"<<bGenIdxMu2<<"-"<<bGenIdxTk1<<"-"<<bGenIdxTk2<<std::endl;
+  //  std::cout<<"//////"<<std::endl;
+
   if(okMuon2&&okMuon1&&okTrk1&&okTrk2){
     if(bGenIdxMu1!=-1 && bGenIdxMu2!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1 && bGenIdxTk2==bGenIdxTk1){
       okTotal=true;
     }
   }
+  //std::cout<<"TOTAL"<<okTotal<<std::endl;
   return okTotal;
   
 }
