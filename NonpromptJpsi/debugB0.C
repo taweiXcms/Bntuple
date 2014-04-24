@@ -8,7 +8,7 @@
 #include <TVector3.h>
 #include <TLorentzVector.h>
 #include <cmath>
-#include "loopNonpromptBzero.h"
+#include "debugB0.h"
 
 #define MUON_MASS   0.10565837
 #define PION_MASS   0.13957018
@@ -268,20 +268,19 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
     float myd0=d0[typesize];
     double mydtheta[typesize];
     float mytktkmass=tktkmass[typesize];
-    //if(1){
-    int robaseria=(trk1geninfo>-1)&&(trk2geninfo>-1)&&(muon1geninfo>-1)&&(muon2geninfo>-1);
-  //if((abs(mymumumass-3.096916)<0.15)&&(mymass<5.2) && (mymass>5.) && myisbestchi2 && (mytrk1Pt>0.7) && (mytrk2Pt>0.7) && (mychi2cl>1.14e-01) && ((myd0/myd0Err)>3.5) && (TMath::Abs(mytktkmass-0.89594)<2.33e-01)){
-  if(robaseria&&(!(isbzerotojpsik0starkpi||isbzerotojpsik0starpik))&&(abs(mymumumass-3.096916)<0.15)&&(mymass<5.1) && (mymass>5.)&& (mytrk1Pt>0.7) && (mytrk2Pt>0.7) && (mychi2cl>1.14e-01) && ((myd0/myd0Err)>3.5) && (TMath::Abs(mytktkmass-0.89594)<2.33e-01)){
-  std::cout<<"mypdgtrk1="<<pdgtrk1<<",mypdgmothertrk1="<<pdgmothertrk1<<",mypdggrandmothertrk1="<<pdggrandmothertrk1<<std::endl;
-  std::cout<<"mypdgtrk2="<<pdgtrk2<<",mypdgmothertrk2="<<pdgmothertrk2<<",mypdggrandmothertrk2="<<pdggrandmothertrk2<<std::endl;
-  std::cout<<"mypdgmuon1="<<pdgmuon1<<",mypdgmothermuon1="<<pdgmothermuon1<<",mypdggrandmothermuon1="<<pdggrandmothermuon1<<std::endl;
-  std::cout<<"mypdgmuon2="<<pdgmuon2<<",mypdgmothermuon2="<<pdgmothermuon2<<",mypdggrandmothermuon2="<<pdggrandmothermuon2<<std::endl;
-  mycheck[typesize]=(int)(1);
-    }
 
+    int robaseria=(trk1geninfo>-1)&&(trk2geninfo>-1)&&(muon1geninfo>-1)&&(muon2geninfo>-1);
+    int isnotsignal=!(isbzerotojpsik0starkpi||isbzerotojpsik0starpik);
+    if(robaseria&&isnotsignal&&(abs(mymumumass-3.096916)<0.15)&&(mymass<5.1)&&(mymass>5.)&&(mytrk1Pt>0.7)&&(mytrk2Pt>0.7)&&(mychi2cl>1.14e-01)&&((myd0/myd0Err)>3.53)&&(abs(mytktkmass-0.89594)<2.33e-01)){
+      std::cout<<"______________"<<std::endl;
+      std::cout<<"mypdgtrk1="<<pdgtrk1<<",mypdgmothertrk1="<<pdgmothertrk1<<",mypdggrandmothertrk1="<<pdggrandmothertrk1<<std::endl;
+      std::cout<<"mypdgtrk2="<<pdgtrk2<<",mypdgmothertrk2="<<pdgmothertrk2<<",mypdggrandmothertrk2="<<pdggrandmothertrk2<<std::endl;
+      std::cout<<"mypdgmuon1="<<pdgmuon1<<",mypdgmothermuon1="<<pdgmothermuon1<<",mypdggrandmothermuon1="<<pdggrandmothermuon1<<std::endl;
+      std::cout<<"mypdgmuon2="<<pdgmuon2<<",mypdgmothermuon2="<<pdgmothermuon2<<",mypdggrandmothermuon2="<<pdggrandmothermuon2<<std::endl;
+      mycheck[typesize]=(int)(1);
+    }
    }
 }
-
 
 bool IsBzeroToJpsiK0starKPi(int mytrk1geninfo,int mypdgtrk1,int mymothertrk1geninfo,int mypdgmothertrk1,int mygrandmothertrk1geninfo,int mypdggrandmothertrk1,
                    int mytrk2geninfo,int mypdgtrk2,int mymothertrk2geninfo,int mypdgmothertrk2,int mygrandmothertrk2geninfo,int mypdggrandmothertrk2,
@@ -533,7 +532,7 @@ bool IsFromBviaresonance(int myparticlegeninfo,int mypdgparticle,int myresonance
 
 
 
-void loopNonpromptBzero(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBzero.root", bool REAL=0){
+void debugB0(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/debugB0.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
