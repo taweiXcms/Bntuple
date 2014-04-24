@@ -15,7 +15,7 @@ TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_Prompt
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Phi_TriggerMatchingMuon_EvtBase_skim.root";          
 
 //Bs
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>3.87e-02&&(d0/d0Err)>4.38e+00&&cos(dtheta)>-7.80e-01&&abs(trk1Dxy/trk1D0Err)>3.64e-03&&abs(trk2Dxy/trk2D0Err)>2.11e-01&&abs(tktkmass-1.019455)<1.62e-02";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
 //Bs_tktkmass
 //TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbesttktkmass&&chi2cl>1.28e-01&&(d0/d0Err)>3.08e+00&&cos(dtheta)>8.07e-01&&abs(trk1Dxy/trk1D0Err)>8.86e-01&&abs(trk2Dxy/trk2D0Err)>7.82e-01&&abs(tktkmass-1.019455)<1.77e-02";
 //Bs_chi2
