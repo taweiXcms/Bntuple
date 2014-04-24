@@ -148,57 +148,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   float tk1px,tk1py,tk1pz,tk1E;
   float tk2px,tk2py,tk2pz,tk2E;
 
-
-   if(BInfo_type[j]==5)
-    {
-      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk2_index[j]],TrackInfo_eta[BInfo_rftk2_index[j]],TrackInfo_phi[BInfo_rftk2_index[j]],track_mass1);
-      trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk2_index[j]];
-      trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk2_index[j]];
-      trk1PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk2_index[j]];
-      trk1StripHit[typesize] = TrackInfo_striphit[BInfo_rftk2_index[j]];
-      trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk2_index[j]];
-      trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
-      trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk2_index[j]];
-      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk2_index[j]];
-      trk1Y[typesize] = b4P->Rapidity();
-      tk1px = b4P->Px();
-      tk1py = b4P->Py();
-      tk1pz = b4P->Pz();
-      tk1E = b4P->E();
-
-      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass2);
-      trk2Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
-      trk2D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
-      trk2PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
-      trk2StripHit[typesize] = TrackInfo_striphit[BInfo_rftk1_index[j]];
-      trk2Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
-      trk2Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
-      trk2Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
-      trk2Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
-      trk2Y[typesize] = b4P->Rapidity();
-      tk2px = b4P->Px();
-      tk2py = b4P->Py();
-      tk2pz = b4P->Pz();
-      tk2E = b4P->E();
-
-      b4P->SetPxPyPzE(tk1px+tk2px,
-		      tk1py+tk2py,
-		      tk1pz+tk2pz,
-		      tk1E+tk2E);
-      tktkmass[typesize] = b4P->Mag();
-      tktketa[typesize] = b4P->Eta();
-      tktkphi[typesize] = b4P->Phi();
-      tktky[typesize] = b4P->Rapidity();
-      tktkpt[typesize] = b4P->Pt();
-      tktkvProb[typesize] = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
-      doubletmass[typesize] = BInfo_tktk_mass[j];
-      b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
-      doubletpt[typesize] = b4P->Pt();
-      doubleteta[typesize] = b4P->PseudoRapidity();
-      doubletphi[typesize] = b4P->Phi();
-      doublety[typesize] = b4P->Rapidity();
-    }
-  else if(BInfo_type[j]==4){
       b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass1);
       trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
       trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
@@ -245,7 +194,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       doubleteta[typesize] = b4P->PseudoRapidity();
       doubletphi[typesize] = b4P->Phi();
       doublety[typesize] = b4P->Rapidity();
-    }
 
   //gen info judgement
 
