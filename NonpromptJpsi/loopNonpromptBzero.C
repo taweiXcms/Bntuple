@@ -453,6 +453,49 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 }
 
 
+bool IsTrackfromBdirect(int mytrkgeninfo,int mypdgtrk,int myBmesongeninfo,int mypdgBmeson,
+                        int pdgtrk,int pdgBmeson,int &Bindex){
+                        
+  bool okTrk=false;
+                        
+  if(mytrkgeninfo>-1){
+	if(mypdgtrk==pdgtrk){
+	  if(myBmesongeninfo>-1){
+		if(mypdgBmeson==pdgBmeson){
+		  Bindex=myBmesongeninfo;
+		  okTrk=true;
+		}//if compatible with Bid	  
+	  }//if GenInfo_mo1>-1
+	}//is trk1d==pdg
+  }//end trk1geninfo  
+  return okTrk;
+}
+
+bool IsFromBviaresonance(int myparticlegeninfo,int mypdgparticle,int myresonancegeninfo,int mypdgresonance,
+                         int myBmesongeninfo,int mypdgBmeson,
+                         int pdgparticle,int pdgresonance, int pdgBmeson, int &Bindex){
+                        
+  bool okparticle=false;
+                        
+  if(myparticlegeninfo>-1){  
+	if(mypdgparticle==pdgparticle){
+	  if(myresonancegeninfo>-1){
+	    if(mypdgresonance==pdgresonance){
+	      if(myBmesongeninfo>-1){
+		    if(mypdgBmeson==pdgBmeson){
+		      Bindex=myBmesongeninfo;
+		      okparticle=true;	    
+		    }//if compatible with Bid	  
+		  }//if GenInfo_mo1_mo1>-1
+		}//is resonance==pdg
+	  }//if GenInfo_mo1>-1
+	}//is particle==pdg
+  }//end particlegeninfo 
+  return okparticle;
+}
+
+
+
 void loopNonpromptBzero(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBzero.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
