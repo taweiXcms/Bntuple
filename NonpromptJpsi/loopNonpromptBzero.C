@@ -8,7 +8,7 @@
 #include <TVector3.h>
 #include <TLorentzVector.h>
 #include <cmath>
-#include "loopNonpromptBzero.h"
+#include "loop.h"
 
 #define MUON_MASS   0.10565837
 #define PION_MASS   0.13957018
@@ -653,7 +653,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loopNonpromptBzero(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Phi_TriggerMatchingMuon_EvtBase_skim.root", bool REAL=0){
+void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Phi_TriggerMatchingMuon_EvtBase_skim.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
