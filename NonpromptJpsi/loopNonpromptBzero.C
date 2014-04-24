@@ -8,7 +8,7 @@
 #include <TVector3.h>
 #include <TLorentzVector.h>
 #include <cmath>
-#include "loop.h"
+#include "loopNonpromptBzero.h"
 
 #define MUON_MASS   0.10565837
 #define PION_MASS   0.13957018
@@ -653,7 +653,7 @@ int signalGen(int Btype, int j)
 
 
 
-void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Phi_TriggerMatchingMuon_EvtBase_skim.root", bool REAL=0){
+void loopNonpromptBzero(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBzero.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -720,7 +720,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Ph
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  //nentries = 10000;
+  nentries = 50000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
