@@ -38,6 +38,8 @@ int isbesttktkmass[MAX_XB];
 int kstar[MAX_XB]; 
 float genBzeroToJpsiK0starKPi[MAX_XB];
 float genBzeroToJpsiK0starPiK[MAX_XB]; 
+float genBplusToJpsiKX[MAX_XB]; 
+float genBplusToJpsiKstarX[MAX_XB]; 
 float mu1Striplayer[MAX_XB];
 float mu2Striplayer[MAX_XB];
 float mu1Pixellayer[MAX_XB];
@@ -127,9 +129,15 @@ Int_t HLT_PAMu12_v1;
 Int_t HLT_PAMu12_v1_Prescl;
 
 
+bool IsBplusToJpsiKX(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBplusToJpsiKstarX(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+
+bool IsBzeroToJpsiK0starPiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 bool IsBzeroToJpsiK0starKPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+
 bool IsTrackfromBdirect(int,int,int,int,int,int,int&);
 bool IsFromBviaresonance(int,int,int,int,int,int,int,int,int,int&);
+
 
 
 void buildBranch(TTree* nt){
@@ -159,6 +167,8 @@ void buildBranch(TTree* nt){
   nt->Branch("kstar",kstar, "kstar[size]/I");
   nt->Branch("genBzeroToJpsiK0starKPi",genBzeroToJpsiK0starKPi, "genBzeroToJpsiK0starKPi[size]/F");
   nt->Branch("genBzeroToJpsiK0starPiK",genBzeroToJpsiK0starPiK, "genBzeroToJpsiK0starPiK[size]/F");
+  nt->Branch("genBplusToJpsiKX",genBplusToJpsiKX, "genBplusToJpsiKX[size]/F");
+  nt->Branch("genBplusToJpsiKstarX",genBplusToJpsiKstarX, "genBplusToJpsiKstarX[size]/F");
   nt->Branch("gen",gen, "gen[size]/F");
   nt->Branch("genIndex",genIndex, "genIndex[size]/I");
   nt->Branch("genpt",genpt, "genpt[size]/F");
