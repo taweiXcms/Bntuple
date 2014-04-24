@@ -1,3 +1,4 @@
+
 #include <TTree.h>
 #include <TFile.h>
 #include <TChain.h>
@@ -17,7 +18,8 @@
 #define PHI_MASS    1.019455
 #define JPSI_MASS   3.096916
 
-void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, float track_mass1, float track_mass2, int REAL){
+void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, float track_mass1, float track_mass2, int REAL)
+{
 
   //Event Info
   Event = EvtInfo_EvtNo;
@@ -46,7 +48,9 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 
   //B Info
   bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
-  bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,BInfo_vtxY[j]-EvtInfo_PVy,BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
+  bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
+	       BInfo_vtxY[j]-EvtInfo_PVy,
+	       BInfo_vtxZ[j]*0-EvtInfo_PVz*0);
   b4P->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
 
   bindex[typesize] = typesize;
@@ -100,6 +104,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   b4P->SetXYZM(mu1px,mu1py,mu1pz,MUON_MASS);
   mu1E = b4P->E();
   mu1eta[typesize] = b4P->Eta();
+  mu1phi[typesize] = b4P->Phi();
   mu1y[typesize] = b4P->Rapidity();
   mu1pt[typesize] = b4P->Pt();
   mu1p[typesize] = b4P->P();
@@ -110,13 +115,18 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   b4P->SetXYZM(mu2px,mu2py,mu2pz,MUON_MASS);
   mu2E = b4P->E();
   mu2eta[typesize] = b4P->Eta();
+  mu2phi[typesize] = b4P->Phi();
   mu2y[typesize] = b4P->Rapidity();
   mu2pt[typesize] = b4P->Pt();
   mu2p[typesize] = b4P->P();
 
-  b4P->SetPxPyPzE(mu1px+mu2px,mu1py+mu2py,mu1pz+mu2pz,mu1E+mu2E);
+  b4P->SetPxPyPzE(mu1px+mu2px,
+		  mu1py+mu2py,
+		  mu1pz+mu2pz,
+		  mu1E+mu2E);
   mumumass[typesize] = b4P->Mag();
   mumueta[typesize] = b4P->Eta();
+  mumuphi[typesize] = b4P->Phi();
   mumuy[typesize] = b4P->Rapidity();
   mumupt[typesize] = b4P->Pt();
 
@@ -124,9 +134,13 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   //jpsi section
   ujmass[typesize] = BInfo_uj_mass[BInfo_rfuj_index[j]];
   ujvProb[typesize] = TMath::Prob(BInfo_uj_vtxchi2[BInfo_rfuj_index[j]],BInfo_uj_vtxdof[BInfo_rfuj_index[j]]);
-  b4P->SetXYZM(BInfo_uj_px[BInfo_rfuj_index[j]],BInfo_uj_py[BInfo_rfuj_index[j]],BInfo_uj_pz[BInfo_rfuj_index[j]],BInfo_uj_mass[BInfo_rfuj_index[j]]);
+  b4P->SetXYZM(BInfo_uj_px[BInfo_rfuj_index[j]],
+	       BInfo_uj_py[BInfo_rfuj_index[j]],
+	       BInfo_uj_pz[BInfo_rfuj_index[j]],
+	       BInfo_uj_mass[BInfo_rfuj_index[j]]);
   ujpt[typesize] = b4P->Pt();
   ujeta[typesize] = b4P->PseudoRapidity();
+  ujphi[typesize] = b4P->Phi();
   ujy[typesize] = b4P->Rapidity();
   ujlxy[typesize] = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/ujpt[typesize];
 
@@ -134,130 +148,512 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   float tk1px,tk1py,tk1pz,tk1E;
   float tk2px,tk2py,tk2pz,tk2E;
 
-  b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass1);
-  trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
-  trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
-  trk1PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
-  trk1StripHit[typesize] = TrackInfo_striphit[BInfo_rftk1_index[j]];
-  trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
-  trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
-  trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
-  trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
-  trk1Y[typesize] = b4P->Rapidity();
-  tk1px = b4P->Px();
-  tk1py = b4P->Py();
-  tk1pz = b4P->Pz();
-  tk1E = b4P->E();
+  if(BInfo_type[j]==1 || BInfo_type[j]==2)
+    {
+      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass1);
+      trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
+      trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
+      trk1PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
+      trk1StripHit[typesize] = TrackInfo_striphit[BInfo_rftk1_index[j]];
+      trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
+      trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
+      trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
+      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
+      trk1Y[typesize] = b4P->Rapidity();
 
-  b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk2_index[j]],TrackInfo_eta[BInfo_rftk2_index[j]],TrackInfo_phi[BInfo_rftk2_index[j]],track_mass2);
-  trk2Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk2_index[j]];
-  trk2D0Err[typesize] = TrackInfo_d0error[BInfo_rftk2_index[j]];
-  trk2PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk2_index[j]];
-  trk2StripHit[typesize] = TrackInfo_striphit[BInfo_rftk2_index[j]];
-  trk2Pt[typesize] = TrackInfo_pt[BInfo_rftk2_index[j]];
-  trk2Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
-  trk2Eta[typesize] = TrackInfo_eta[BInfo_rftk2_index[j]];
-  trk2Phi[typesize] = TrackInfo_phi[BInfo_rftk2_index[j]];
-  trk2Y[typesize] = b4P->Rapidity();
-  tk2px = b4P->Px();
-  tk2py = b4P->Py();
-  tk2pz = b4P->Pz();
-  tk2E = b4P->E();
+      trk2Dxy[typesize] = -1;
+      trk2D0Err[typesize] = -1;
+      trk2PixelHit[typesize] = -1;
+      trk2StripHit[typesize] = -1;
+      trk2Pt[typesize] = -1;
+      trk2Chi2ndf[typesize] = -1;
+      trk2Eta[typesize] = -20;
+      trk2Phi[typesize] = -20;
+      trk2Y[typesize] = -1;
 
-  b4P->SetPxPyPzE(tk1px+tk2px,
-		  tk1py+tk2py,
-		  tk1pz+tk2pz,
-		  tk1E+tk2E);
-  tktkmass[typesize] = b4P->Mag();
-  tktketa[typesize] = b4P->Eta();
-  tktkphi[typesize] = b4P->Phi();
-  tktky[typesize] = b4P->Rapidity();
-  tktkpt[typesize] = b4P->Pt();
-  tktkvProb[typesize] = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
-  doubletmass[typesize] = BInfo_tktk_mass[j];
-  b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
-  doubletpt[typesize] = b4P->Pt();
-  doubleteta[typesize] = b4P->PseudoRapidity();
-  doubletphi[typesize] = b4P->Phi();
-  doublety[typesize] = b4P->Rapidity();
+      tktkmass[typesize] = -1;
+      tktkvProb[typesize] = -1;
+      tktkpt[typesize] = -1;
+      tktketa[typesize] = -20;
+      tktkphi[typesize] = -20;
+      tktky[typesize] = -1;
+      doubletmass[typesize] = -1;
+      doubletpt[typesize] = -1;
+      doubleteta[typesize] = -20;
+      doubletphi[typesize] = -20;
+      doublety[typesize] = -1;
+    }  
+  else if(BInfo_type[j]==5)
+    {
+      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk2_index[j]],TrackInfo_eta[BInfo_rftk2_index[j]],TrackInfo_phi[BInfo_rftk2_index[j]],track_mass1);
+      trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk2_index[j]];
+      trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk2_index[j]];
+      trk1PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk2_index[j]];
+      trk1StripHit[typesize] = TrackInfo_striphit[BInfo_rftk2_index[j]];
+      trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk2_index[j]];
+      trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
+      trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk2_index[j]];
+      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk2_index[j]];
+      trk1Y[typesize] = b4P->Rapidity();
+      tk1px = b4P->Px();
+      tk1py = b4P->Py();
+      tk1pz = b4P->Pz();
+      tk1E = b4P->E();
 
-  if(!REAL){
-  	
-	int trk1geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
-	int pdgtrk1=abs(GenInfo_pdgId[trk1geninfo]); 
-	int mothertrk1geninfo=GenInfo_mo1[trk1geninfo];
-	int pdgmothertrk1=abs(GenInfo_pdgId[mothertrk1geninfo]);
-	int grandmothertrk1geninfo=GenInfo_mo1[mothertrk1geninfo];
-	int pdggrandmothertrk1=abs(GenInfo_pdgId[grandmothertrk1geninfo]);
-	
-	int trk2geninfo=TrackInfo_geninfo_index[BInfo_rftk2_index[j]];
-	int pdgtrk2=abs(GenInfo_pdgId[trk2geninfo]); 
-	int mothertrk2geninfo=GenInfo_mo1[trk2geninfo];
-	int pdgmothertrk2=abs(GenInfo_pdgId[mothertrk2geninfo]);
-	int grandmothertrk2geninfo=GenInfo_mo1[mothertrk2geninfo];
-	int pdggrandmothertrk2=abs(GenInfo_pdgId[grandmothertrk2geninfo]);
-    
-    int muon1geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
-    int pdgmuon1=abs(GenInfo_pdgId[muon1geninfo]);
-    int mothermuon1geninfo=GenInfo_mo1[muon1geninfo];
-    int pdgmothermuon1=abs(GenInfo_pdgId[mothermuon1geninfo]);
-    int grandmothermuon1geninfo=GenInfo_mo1[mothermuon1geninfo];
-    int pdggrandmothermuon1=abs(GenInfo_pdgId[grandmothermuon1geninfo]);
+      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass2);
+      trk2Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
+      trk2D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
+      trk2PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
+      trk2StripHit[typesize] = TrackInfo_striphit[BInfo_rftk1_index[j]];
+      trk2Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
+      trk2Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
+      trk2Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
+      trk2Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
+      trk2Y[typesize] = b4P->Rapidity();
+      tk2px = b4P->Px();
+      tk2py = b4P->Py();
+      tk2pz = b4P->Pz();
+      tk2E = b4P->E();
 
-    int muon2geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
-    int pdgmuon2=abs(GenInfo_pdgId[muon2geninfo]);
-    int mothermuon2geninfo=GenInfo_mo1[muon2geninfo];
-    int pdgmothermuon2=abs(GenInfo_pdgId[mothermuon2geninfo]);
-    int grandmothermuon2geninfo=GenInfo_mo1[mothermuon2geninfo];
-    int pdggrandmothermuon2=abs(GenInfo_pdgId[grandmothermuon2geninfo]);
-    
-  }//end is not real
-}//end fillTree
+      b4P->SetPxPyPzE(tk1px+tk2px,
+		      tk1py+tk2py,
+		      tk1pz+tk2pz,
+		      tk1E+tk2E);
+      tktkmass[typesize] = b4P->Mag();
+      tktketa[typesize] = b4P->Eta();
+      tktkphi[typesize] = b4P->Phi();
+      tktky[typesize] = b4P->Rapidity();
+      tktkpt[typesize] = b4P->Pt();
+      tktkvProb[typesize] = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
+      doubletmass[typesize] = BInfo_tktk_mass[j];
+      b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
+      doubletpt[typesize] = b4P->Pt();
+      doubleteta[typesize] = b4P->PseudoRapidity();
+      doubletphi[typesize] = b4P->Phi();
+      doublety[typesize] = b4P->Rapidity();
+    }
+  else
+    {
+      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass1);
+      trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
+      trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
+      trk1PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
+      trk1StripHit[typesize] = TrackInfo_striphit[BInfo_rftk1_index[j]];
+      trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
+      trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
+      trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
+      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
+      trk1Y[typesize] = b4P->Rapidity();
+      tk1px = b4P->Px();
+      tk1py = b4P->Py();
+      tk1pz = b4P->Pz();
+      tk1E = b4P->E();
 
+      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk2_index[j]],TrackInfo_eta[BInfo_rftk2_index[j]],TrackInfo_phi[BInfo_rftk2_index[j]],track_mass2);
+      trk2Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk2_index[j]];
+      trk2D0Err[typesize] = TrackInfo_d0error[BInfo_rftk2_index[j]];
+      trk2PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk2_index[j]];
+      trk2StripHit[typesize] = TrackInfo_striphit[BInfo_rftk2_index[j]];
+      trk2Pt[typesize] = TrackInfo_pt[BInfo_rftk2_index[j]];
+      trk2Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk2_index[j]]/TrackInfo_ndf[BInfo_rftk2_index[j]];
+      trk2Eta[typesize] = TrackInfo_eta[BInfo_rftk2_index[j]];
+      trk2Phi[typesize] = TrackInfo_phi[BInfo_rftk2_index[j]];
+      trk2Y[typesize] = b4P->Rapidity();
+      tk2px = b4P->Px();
+      tk2py = b4P->Py();
+      tk2pz = b4P->Pz();
+      tk2E = b4P->E();
 
-bool IsTrackfromBdirect(int mytrkgeninfo,int mypdgtrk,int myBmesongeninfo,int mypdgBmeson,
-                        int pdgtrk,int pdgBmeson,int &Bindex){
-                        
-  bool okTrk=false;
-                        
-  if(mytrkgeninfo>-1){
-	if(mypdgtrk==pdgtrk){
-	  if(myBmesongeninfo>-1){
-		if(mypdgBmeson==pdgBmeson){
-		  Bindex=myBmesongeninfo;
-		  okTrk=true;
-		}//if compatible with Bid	  
-	  }//if GenInfo_mo1>-1
-	}//is trk1d==pdg
-  }//end trk1geninfo  
-  return okTrk;
+      b4P->SetPxPyPzE(tk1px+tk2px,
+		      tk1py+tk2py,
+		      tk1pz+tk2pz,
+		      tk1E+tk2E);
+      tktkmass[typesize] = b4P->Mag();
+      tktketa[typesize] = b4P->Eta();
+      tktkphi[typesize] = b4P->Phi();
+      tktky[typesize] = b4P->Rapidity();
+      tktkpt[typesize] = b4P->Pt();
+      tktkvProb[typesize] = TMath::Prob(BInfo_tktk_vtxchi2[j],BInfo_tktk_vtxdof[j]);
+      doubletmass[typesize] = BInfo_tktk_mass[j];
+      b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
+      doubletpt[typesize] = b4P->Pt();
+      doubleteta[typesize] = b4P->PseudoRapidity();
+      doubletphi[typesize] = b4P->Phi();
+      doublety[typesize] = b4P->Rapidity();
+    }
+
+  //gen info judgement
+
+  if(!REAL)
+    {
+      gen[typesize] = 0;//gen init
+      genIndex[typesize] = -1;//gen init
+      genpt[typesize] = -1;
+      geneta[typesize] = -20;
+      genphi[typesize] = -20;
+      geny[typesize] = -1;
+      int mGenIdxTk1=-1;
+      int mGenIdxTk2=-1;
+      int bGenIdxTk1=-1;
+      int bGenIdxTk2=-1;
+      int bGenIdxMu1=-1;
+      int bGenIdxMu2=-1;
+      
+      
+      float BId,MId,tk1Id,tk2Id;
+      //tk1:positive, tk2:negtive
+      if(BInfo_type[j]==1)
+	{
+	  BId = 521;//B+-
+	  MId = -1;
+	  tk1Id = 321;//K+-
+	  tk2Id = -1;
+	}
+      if(BInfo_type[j]==2)
+	{
+	  BId = 521;//B+-
+	  MId = -1;
+	  tk1Id = 211;//pi+-
+	  tk2Id = -1;
+	}
+      if(BInfo_type[j]==3)
+	{
+	  BId = 511;//B0
+	  MId = 310;//Ks
+	  tk1Id = 211;//pi+
+	  tk2Id = 211;//pi-
+	}
+      if(BInfo_type[j]==4)
+	{
+	  BId = 511;//B0
+	  MId = 313;//K*0
+	  tk1Id = 321;//K+
+	  tk2Id = 211;//pi-
+	}
+      if(BInfo_type[j]==5)
+	{
+	  BId = 511;//B0
+	  MId = 313;//K*0
+	  tk1Id = 211;//pi+
+	  tk2Id = 321;//K-
+	}
+      if(BInfo_type[j]==6)
+	{
+	  BId = 531;//Bs
+	  MId = 333;//phi
+	  tk1Id = 321;//K+
+	  tk2Id = 321;//K-
+	}
+      
+      int twoTks,kStar,flagkstar=0;
+      if(BInfo_type[j]==1 || BInfo_type[j]==2) twoTks=0;
+      else twoTks=1;
+      if(BInfo_type[j]==4 || BInfo_type[j]==5) kStar=1;
+      else kStar=0;
+
+      // tk1
+      if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
+	{
+	  int level =0;
+	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==tk1Id)
+	    {
+	      level = 1;
+	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
+		{
+		  if(!twoTks)//one trk channel
+		    {
+		      mGenIdxTk1=0;
+		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==BId)
+			{
+			  level = 3;
+			  bGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+			}		  
+		    }
+		  else//two trk channel
+		    {
+		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==MId)
+			{
+			  level = 2;
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+			    {
+			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
+				{
+				  level = 3;
+				  bGenIdxTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+				}
+			    }
+			  mGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+			}
+		    }
+		}
+	    }
+	  gen[typesize]=level;
+	}
+      
+      //tk2
+      if(!twoTks)//one trk channel
+	{
+	  gen[typesize]+=30;
+	  mGenIdxTk2=0;
+	  bGenIdxTk2=0;
+	}
+      else//two trk channel
+	{
+	  if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
+	    {
+	      int level =0;
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==tk2Id)
+		{
+		  level = 1;
+		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
+		    {
+		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==MId)
+			{
+			  level = 2;
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
+			    {
+			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
+				{
+				  level = 3;
+				  bGenIdxTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+				}
+			    }
+			  mGenIdxTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
+			}
+		    }
+		}
+	      gen[typesize]+=(level*10);
+	    }
+	}
+
+     
+      //mu1
+      if(MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>-1)
+	{  
+	  int level =0;
+	  if(abs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]])==13) level=1;
+	  if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]>-1)
+	    {
+	      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1)
+		{
+		  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]])==BId)
+		    {
+		      level = 2;
+		      bGenIdxMu1=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
+		      flagkstar++;///////////////////////////////////////////////=1
+		    }
+		} 
+	    }
+	  gen[typesize]+=(level*100);
+	}
+      
+      //mu2
+      if(MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>-1)
+	{  
+	  int level =0;
+	  if(abs(GenInfo_pdgId[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]])==13) level = 1;
+	  if(GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]>-1)
+	    {
+	      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]>-1)
+		{
+		  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]])==BId)
+		    {
+		      level = 2;
+		      bGenIdxMu2=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]];
+		      flagkstar++;///////////////////////////////////////////////////=2
+		    }
+		}
+	    }
+	  gen[typesize]+=(level*1000);
+	}
+      
+      int level=0;
+      if(mGenIdxTk1!=-1 && mGenIdxTk2!=-1)
+	{
+	  if(!twoTks) level=1;
+	  else
+	    {
+	      if(mGenIdxTk1==mGenIdxTk2) level=1;
+	    }
+	}
+      if(bGenIdxMu1!=-1 && bGenIdxMu1==bGenIdxMu2 && bGenIdxMu1==bGenIdxTk1)
+	{
+	  if(!twoTks)
+	    {
+	      level=2;
+	      genIndex[typesize] = bGenIdxMu1;
+	    }
+	  else if(bGenIdxMu1==bGenIdxTk2)
+	    {
+	      level=2;
+	      genIndex[typesize] = bGenIdxMu1;
+	    }
+	}
+      gen[typesize]+=(level*10000);
+
+      //kstar#############################################################################
+      if(kStar)
+	{
+	  //tk1
+	  if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
+	    {
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==tk2Id)
+		{
+		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
+		    {
+		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==MId)
+			{
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+			    {
+			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
+				{
+				  flagkstar++;//////////////////////////////////////////////=3
+				  bGenIdxTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+				}
+			    }
+			  mGenIdxTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+			}
+		    }
+		}
+	    }
+	  
+	  //tk2
+	  if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
+	    {
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==tk1Id)
+		{
+		  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
+		    {
+		      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==MId)
+			{
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
+			    {
+			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
+				{
+				  flagkstar++;////////////////////////////////////////////////////=4
+				  bGenIdxTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+				}
+			    }
+			  mGenIdxTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
+			}
+		    }
+		}
+	    }
+	  if(flagkstar==4)
+	    {
+	      if((bGenIdxMu1!=-1) 
+		 && (bGenIdxMu1==bGenIdxMu2)
+		 && (bGenIdxMu1==bGenIdxTk1)
+		 && (bGenIdxMu1==bGenIdxTk2)
+		 )
+		{
+		  gen[typesize]=41000;
+		}
+	    }
+	}//kstar End#############################################################################
+
+      int tgenIndex=genIndex[typesize];
+      if(gen[typesize]==22233)
+	{
+	  genpt[typesize] = GenInfo_pt[tgenIndex];
+	  geneta[typesize] = GenInfo_eta[tgenIndex];
+	  genphi[typesize] = GenInfo_phi[tgenIndex];
+	  b4P->SetXYZM(GenInfo_pt[tgenIndex]*cos(GenInfo_phi[tgenIndex]),
+		       GenInfo_pt[tgenIndex]*sin(GenInfo_phi[tgenIndex]),
+		       GenInfo_pt[tgenIndex]*sinh(GenInfo_eta[tgenIndex]),
+		       GenInfo_mass[tgenIndex]);
+	  geny[typesize] = b4P->Rapidity();
+	}
+    }
 }
 
-bool IsFromBviaresonance(int myparticlegeninfo,int mypdgparticle,int myresonancegeninfo,int mypdgresonance,
-                         int myBmesongeninfo,int mypdgBmeson,
-                         int pdgparticle,int pdgresonance, int pdgBmeson, int &Bindex){
-                        
-  bool okparticle=false;
-                        
-  if(myparticlegeninfo>-1){  
-	if(mypdgparticle==pdgparticle){
-	  if(myresonancegeninfo>-1){
-	    if(mypdgresonance==pdgresonance){
-	      if(myBmesongeninfo>-1){
-		    if(mypdgBmeson==pdgBmeson){
-		      Bindex=myBmesongeninfo;
-		      okparticle=true;	    
-		    }//if compatible with Bid	  
-		  }//if GenInfo_mo1_mo1>-1
-		}//is resonance==pdg
-	  }//if GenInfo_mo1>-1
-	}//is particle==pdg
-  }//end particlegeninfo 
-  return okparticle;
+int signalGen(int Btype, int j)
+{
+  float BId,MId,tk1Id,tk2Id;
+  int twoTks;
+  //tk1:positive, tk2:negtive
+  if(Btype==1)
+    {
+      BId = 521;//B+-
+      MId = -1;
+      tk1Id = 321;//K+-
+      tk2Id = -1;
+      twoTks = 0;
+    }
+  if(Btype==2)
+    {
+      BId = 521;//B+-
+      MId = -1;
+      tk1Id = 211;//pi+-
+      tk2Id = -1;
+      twoTks = 0;
+    }
+  if(Btype==3)
+    {
+      BId = 511;//B0
+      MId = 310;//Ks
+      tk1Id = 211;//pi+
+      tk2Id = -211;//pi-
+      twoTks = 1;
+    }
+  if(Btype==4)
+    {
+      BId = 511;//B0
+      MId = 313;//K*0
+      tk1Id = 321;//K+
+      tk2Id = -211;//pi-
+      twoTks = 1;
+    }
+  if(Btype==5)
+    {
+      BId = 511;//B0
+      MId = 313;//K*0
+      tk1Id = -321;//pi+
+      tk2Id = 211;//K-
+      twoTks = 1;
+    }
+  if(Btype==6)
+    {
+      BId = 531;//Bs
+      MId = 333;//phi
+      tk1Id = 321;//K+
+      tk2Id = -321;//K-
+      twoTks = 1;
+    }
+
+  int flag=0;
+  if (abs(GenInfo_pdgId[j])==BId&&GenInfo_nDa[j]==2&&GenInfo_da1[j]!=-1&&GenInfo_da2[j]!=-1)
+    {
+      if (abs(GenInfo_pdgId[GenInfo_da1[j]]==443))//jpsi
+	{
+	  if(GenInfo_da1[GenInfo_da1[j]]!=-1&&GenInfo_da2[GenInfo_da1[j]]!=-1)
+	    {
+	      if(abs(GenInfo_pdgId[GenInfo_da1[GenInfo_da1[j]]])==13&&abs(GenInfo_pdgId[GenInfo_da2[GenInfo_da1[j]]])==13)
+		{
+		  if(!twoTks)
+		    {
+		      if(abs(GenInfo_pdgId[GenInfo_da2[j]])==tk1Id) flag++;
+		    }
+		  else
+		    {
+		      if (abs(GenInfo_pdgId[GenInfo_da2[j]])==MId) 
+			{
+			  if(GenInfo_da1[GenInfo_da2[j]]!=-1 && GenInfo_da2[GenInfo_da2[j]]!=-1)
+			    {
+			      if(GenInfo_pdgId[GenInfo_da1[GenInfo_da2[j]]]==tk1Id && GenInfo_pdgId[GenInfo_da2[GenInfo_da2[j]]]==tk2Id) flag++;
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+  return flag;
 }
 
 
-void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBzero.root", bool REAL=0){
+
+void loopNonpromptBzero(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140318_Phi_TriggerMatchingMuon.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Phi_TriggerMatchingMuon_EvtBase_skim.root", bool REAL=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -270,7 +666,8 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
 
   if(REAL) cout<<"--- REAL DATA ---"<<endl;
   else cout<<"--- MC ---"<<endl;
-  
+
+
   infname = infile.c_str();
   outfname = outfile.c_str();
 
@@ -283,22 +680,47 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
      cout <<"HLT tree: "<<hlt->GetEntries()<<endl;
      cout <<"Bfinder tree: "<<root->GetEntries()<<endl;
   }
-
+  
+  //Chain type
+  //TChain* root = new TChain("demo/root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_100_1_dXJ.root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_101_1_kuy.root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_10_1_ZkX.root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_102_1_NyI.root");
+  
   TFile *outf = new TFile(outfname,"recreate");
 
   setBranch(root);
   setHltBranch(hlt);
     
   int ifchannel[7];
-  ifchannel[0] = 4; //jpsi+Kp
+  ifchannel[0] = 1; //jpsi+Kp
+  ifchannel[1] = 1; //jpsi+pi
+  ifchannel[2] = 1; //jpsi+Ks(pi+,pi-)
+  ifchannel[3] = 1; //jpsi+K*(K+,pi-)
+  ifchannel[4] = 1; //jpsi+K*(K-,pi+)
+  ifchannel[5] = 1; //jpsi+phi
+  ifchannel[6] = 1; //jpsi+pi pi <= psi', X(3872), Bs->J/psi f0
   
   TTree* nt0 = new TTree("ntKp","");
   buildBranch(nt0);
+  TTree* nt1 = new TTree("ntpi","");
+  buildBranch(nt1);
+  TTree* nt2 = new TTree("ntKs","");
+  buildBranch(nt2);
+  TTree* nt3 = new TTree("ntKstar","");
+  buildBranch(nt3);
+  TTree* nt5 = new TTree("ntphi","");
+  buildBranch(nt5);
+  TTree* nt6 = new TTree("ntmix","");
+  buildBranch(nt6);  
+  TTree* ntGen = new TTree("ntGen","");
+  buildGenBranch(ntGen);
 
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 200000;
+  //nentries = 10000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
@@ -314,10 +736,11 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
   for (Long64_t i=0; i<nentries;i++) {
     nbytes += root->GetEntry(i);
     flagEvt=0;
-    while (flagEvt==0){
-      hlt->GetEntry(i+offsetHltTree);
-      //cout <<offsetHltTree<<" "<<Bfr_HLT_Event<<" "<<EvtInfo_EvtNo<<endl;
-      if (Bfr_HLT_Event==EvtInfo_EvtNo && Bfr_HLT_Run==EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
+    while (flagEvt==0)
+    {
+       hlt->GetEntry(i+offsetHltTree);
+       //cout <<offsetHltTree<<" "<<Bfr_HLT_Event<<" "<<EvtInfo_EvtNo<<endl;
+       if (Bfr_HLT_Event==EvtInfo_EvtNo && Bfr_HLT_Run==EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
     } 
 
     if (i%10000==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
@@ -325,44 +748,346 @@ void loopNonpromptBplus(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
     int type1size=0,type2size=0,type3size=0,type4size=0,type5size=0,type6size=0,type7size=0;
     float best,best2,temy;
     int bestindex,best2index;
+
     size=0;
     best=-1;
     bestindex=-1;
     best2=10000.;
     best2index=-1;
-
-    for (int j=0;j<BInfo_size;j++){
-   	  if(BInfo_type[j]>7) continue;
-	  if (ifchannel[BInfo_type[j]-1]!=1) continue;
-	  //skim{{{
-	  b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
-	  temy = b4Pout->Rapidity();
-	  if(REAL){
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	//skim{{{
+	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+	temy = b4Pout->Rapidity();
+	if(REAL)
+	  {
 	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
 	  }
-	  else{
+	else
+	  {
 	    if(abs(temy+0.465)>=1.93) continue;
 	  }
-	  if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
-	  if(BInfo_pt[j]<10.) continue;
-	  //}}}
-	  if(BInfo_type[j]==1){
-	    if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.9) continue;
+	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
+	if(BInfo_pt[j]<10.) continue;
+	//}}}
+	if(BInfo_type[j]==1)
+	  {
+	    //if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.9) continue;
 	    fillTree(bP,bVtx,b4P,j,type1size,KAON_MASS,0,REAL);
-	    if(chi2cl[type1size]>best){
-	  	  best = chi2cl[type1size];
-		  bestindex = type1size;
-	    }
+	    if(chi2cl[type1size]>best)
+	      {
+		best = chi2cl[type1size];
+		bestindex = type1size;
+	      }
 	    type1size++;
 	  }
-    }
-    if(size>0){
+      }
+    if(size>0)
+    {
       bestchi2 = bestindex;
       isbestchi2[bestindex] = 1;
     }
     nt0->Fill();
 
+    size=0;
+    best=-1;
+    bestindex=-1;
+    best2=10000.;
+    best2index=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	//skim{{{
+	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+	temy = b4Pout->Rapidity();
+	if(REAL)
+	  {
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	  }
+	else
+	  {
+	    if(abs(temy+0.465)>=1.93) continue;
+	  }
+	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
+	if(BInfo_pt[j]<10.) continue;
+	//}}}
+	if(BInfo_type[j]==2)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type2size,PION_MASS,0,REAL);
+	    if(chi2cl[type2size]>best)
+	      {
+		best = chi2cl[type2size];
+		bestindex = type2size;
+	      }
+	    type2size++;
+	  }
+      }
+    if(size>0)
+      {
+	bestchi2 = bestindex;
+	isbestchi2[bestindex] = 1;
+      }
+    nt1->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    best2=10000.;
+    best2index=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	//skim{{{
+	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+	temy = b4Pout->Rapidity();
+	if(REAL)
+	  {
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	  }
+	else
+	  {
+	    if(abs(temy+0.465)>=1.93) continue;
+	  }
+	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
+	if(BInfo_pt[j]<10.) continue;
+	//}}}
+	if(BInfo_type[j]==3)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type3size,PION_MASS,PION_MASS,REAL);
+	    if(chi2cl[type3size]>best)
+	      {
+		best = chi2cl[type3size];
+		bestindex = type3size;
+	      }
+	    if(abs(tktkmass[type3size]-KSHORT_MASS)<best2)
+	      {
+		best2 = abs(tktkmass[type3size]-KSHORT_MASS);
+		best2index = type3size;
+	      }
+	    type3size++;
+	  }
+      }
+    if(size>0)
+      {
+	bestchi2 = bestindex;
+	isbestchi2[bestindex] = 1;
+	besttktkmass = best2index;
+	isbesttktkmass[best2index] = 1;
+      }
+    nt2->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    best2=10000.;
+    best2index=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	//skim{{{
+	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+	temy = b4Pout->Rapidity();
+	if(REAL)
+	  {
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	  }
+	else
+	  {
+	    if(abs(temy+0.465)>=1.93) continue;
+	  }
+	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
+	if(BInfo_pt[j]<10.) continue;
+	//}}}
+	if(BInfo_type[j]==4 || BInfo_type[j]==5)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type4size,KAON_MASS,PION_MASS,REAL);
+	    if(chi2cl[type4size]>best)
+	      {
+		best = chi2cl[type4size];
+		bestindex = type4size;
+	      }
+	    if(abs(tktkmass[type4size]-KSTAR_MASS)<best2)
+	      {
+		best2 = abs(tktkmass[type4size]-KSTAR_MASS);
+		best2index = type4size;
+	      }
+	    type4size++;
+	  }
+      }
+    if(size>0)
+      {
+	bestchi2 = bestindex;
+	isbestchi2[bestindex] = 1;
+	besttktkmass = best2index;
+	isbesttktkmass[best2index] = 1;
+      }
+    nt3->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    best2=10000.;
+    best2index=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	//skim{{{
+	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+	temy = b4Pout->Rapidity();
+	if(REAL)
+	  {
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	  }
+	else
+	  {
+	    if(abs(temy+0.465)>=1.93) continue;
+	  }
+	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
+	if(BInfo_pt[j]<10.) continue;
+	//}}}
+	if(BInfo_type[j]==6)
+	  {
+	    //if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.7) continue;
+	    //if(TrackInfo_pt[BInfo_rftk2_index[j]]<0.7) continue;
+	    fillTree(bP,bVtx,b4P,j,type6size,KAON_MASS,KAON_MASS,REAL);
+	    if(chi2cl[type6size]>best)
+	      {
+		best = chi2cl[type6size];
+		bestindex = type6size;
+	      }
+	    if(abs(tktkmass[type6size]-PHI_MASS)<best2)
+	      {
+		best2 = abs(tktkmass[type6size]-PHI_MASS);
+		best2index = type6size;
+	      }
+	    type6size++;
+	  }
+      }
+    if(size>0)
+      {
+	bestchi2 = bestindex;
+	isbestchi2[bestindex] = 1;
+	besttktkmass = best2index;
+	isbesttktkmass[best2index] = 1;
+      }
+    nt5->Fill();
+    
+    size=0;
+    best=-1;
+    bestindex=-1;
+    best2=10000.;
+    best2index=-1;
+    for (int j=0;j<BInfo_size;j++) 
+      {
+	if(BInfo_type[j]>7) continue;
+	if (ifchannel[BInfo_type[j]-1]!=1) continue;
+	//skim{{{
+	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
+	temy = b4Pout->Rapidity();
+	if(REAL)
+	  {
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	  }
+	else
+	  {
+	    if(abs(temy+0.465)>=1.93) continue;
+	  }
+	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
+	if(BInfo_pt[j]<10.) continue;
+	//}}}
+	if(BInfo_type[j]==7)
+	  {
+	    fillTree(bP,bVtx,b4P,j,type7size,PION_MASS,PION_MASS,REAL);
+	    if(chi2cl[type7size]>best)
+	      {
+		best = chi2cl[type7size];
+		bestindex = type7size;
+	      }
+	    type7size++;
+	  }
+      }
+    if(size>0)
+      {
+	bestchi2 = bestindex;
+	isbestchi2[bestindex] = 1;
+      }
+    nt6->Fill();
+    
+    if(!REAL)
+      {
+	Gensize = 0;
+	for (int j=0;j<GenInfo_size;j++)
+	  {
+	    bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
+	    flag=0;
+	    for(type=1;type<8;type++)
+	      {
+		if (signalGen(type,j)) {
+                  flag=type;
+		  break;
+                }
+	      }
+	    Genmu1pt[j] = -1;
+	    Genmu1eta[j] = -20;
+	    Genmu1phi[j] = -20;
+	    Genmu1p[j] = -1;
+	    Genmu2pt[j] = -1;
+	    Genmu2eta[j] = -20;
+	    Genmu2phi[j] = -20;
+	    Genmu2p[j] = -1;
+	    Gentk1pt[j] = -1;
+	    Gentk1eta[j] = -20;
+	    Gentk1phi[j] = -20;
+	    Gentk2pt[j] = -1;
+	    Gentk2eta[j] = -20;
+	    Gentk2phi[j] = -20;
+
+            if(flag!=0)
+              {
+                Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1p[j] = Genmu1pt[j]*cosh(Genmu1eta[j]);
+                Genmu2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
+		Genmu2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2p[j] = Genmu2pt[j]*cosh(Genmu2eta[j]);
+		if(flag==1||flag==2)
+		  {
+		    Gentk1pt[j] = GenInfo_pt[GenInfo_da2[j]];
+		    Gentk1eta[j] = GenInfo_eta[GenInfo_da2[j]];
+		    Gentk1phi[j] = GenInfo_phi[GenInfo_da2[j]];
+		  }
+		else
+		  {
+		    Gentk1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da2[j]]];
+		    Gentk2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da2[j]]];
+		    Gentk2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da2[j]]];
+		  }
+              }
+	    Gensize = GenInfo_size;
+	    Geny[j] = bGen.Rapidity();
+	    Geneta[j] = bGen.Eta();
+	    Genphi[j] = bGen.Phi();
+	    Genpt[j] = bGen.Pt();
+	    GenpdgId[j] = GenInfo_pdgId[j];
+	    GenisSignal[j] = flag;
+	  }
+	ntGen->Fill();
+      }
   }
+
   outf->Write();
   outf->Close();
 }
+
+
