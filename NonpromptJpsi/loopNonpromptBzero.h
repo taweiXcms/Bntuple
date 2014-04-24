@@ -26,7 +26,6 @@ float d0Err[MAX_XB];
 float chi2ndf[MAX_XB];
 float dtheta[MAX_XB];
 float lxy[MAX_XB];
-
 float gen[MAX_XB];
 int genIndex[MAX_XB];
 float genpt[MAX_XB];
@@ -37,7 +36,8 @@ float chi2cl[MAX_XB];//b vertex chi2 confidence level
 int isbestchi2[MAX_XB]; 
 int isbesttktkmass[MAX_XB];
 int kstar[MAX_XB]; 
-
+float genBzeroToJpsiK0starKPi[MAX_XB];
+float genBzeroToJpsiK0starPiK[MAX_XB]; 
 float mu1Striplayer[MAX_XB];
 float mu2Striplayer[MAX_XB];
 float mu1Pixellayer[MAX_XB];
@@ -127,6 +127,11 @@ Int_t HLT_PAMu12_v1;
 Int_t HLT_PAMu12_v1_Prescl;
 
 
+bool IsBzeroToJpsiK0starKPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsTrackfromBdirect(int,int,int,int,int,int,int&);
+bool IsFromBviaresonance(int,int,int,int,int,int,int,int,int,int&);
+
+
 void buildBranch(TTree* nt){
   nt->Branch("Run",&Run);
   nt->Branch("Event",&Event);
@@ -152,14 +157,14 @@ void buildBranch(TTree* nt){
   nt->Branch("isbestchi2",isbestchi2, "isbestchi2[size]/I");
   nt->Branch("isbesttktkmass",isbesttktkmass, "isbesttktkmass[size]/I");
   nt->Branch("kstar",kstar, "kstar[size]/I");
-  
+  nt->Branch("genBzeroToJpsiK0starKPi",genBzeroToJpsiK0starKPi, "genBzeroToJpsiK0starKPi[size]/F");
+  nt->Branch("genBzeroToJpsiK0starPiK",genBzeroToJpsiK0starPiK, "genBzeroToJpsiK0starPiK[size]/F");
   nt->Branch("gen",gen, "gen[size]/F");
   nt->Branch("genIndex",genIndex, "genIndex[size]/I");
   nt->Branch("genpt",genpt, "genpt[size]/F");
   nt->Branch("geny",geny, "geny[size]/F");
   nt->Branch("geneta",geneta, "geneta[size]/F");
   nt->Branch("genphi",genphi, "genphi[size]/F");
-
   nt->Branch("mu1Striplayer",mu1Striplayer, "mu1Striplayer[size]/F");
   nt->Branch("mu1Pixellayer",mu1Pixellayer, "mu1Pixellayer[size]/F");
   nt->Branch("mu1Chi2ndf",mu1Chi2ndf, "mu1Chi2ndf[size]/F");
