@@ -148,42 +148,8 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   float tk1px,tk1py,tk1pz,tk1E;
   float tk2px,tk2py,tk2pz,tk2E;
 
-  if(BInfo_type[j]==1 || BInfo_type[j]==2)
-    {
-      b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass1);
-      trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
-      trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
-      trk1PixelHit[typesize] = TrackInfo_pixelhit[BInfo_rftk1_index[j]];
-      trk1StripHit[typesize] = TrackInfo_striphit[BInfo_rftk1_index[j]];
-      trk1Pt[typesize] = TrackInfo_pt[BInfo_rftk1_index[j]];
-      trk1Chi2ndf[typesize] = TrackInfo_chi2[BInfo_rftk1_index[j]]/TrackInfo_ndf[BInfo_rftk1_index[j]];
-      trk1Eta[typesize] = TrackInfo_eta[BInfo_rftk1_index[j]];
-      trk1Phi[typesize] = TrackInfo_phi[BInfo_rftk1_index[j]];
-      trk1Y[typesize] = b4P->Rapidity();
 
-      trk2Dxy[typesize] = -1;
-      trk2D0Err[typesize] = -1;
-      trk2PixelHit[typesize] = -1;
-      trk2StripHit[typesize] = -1;
-      trk2Pt[typesize] = -1;
-      trk2Chi2ndf[typesize] = -1;
-      trk2Eta[typesize] = -20;
-      trk2Phi[typesize] = -20;
-      trk2Y[typesize] = -1;
-
-      tktkmass[typesize] = -1;
-      tktkvProb[typesize] = -1;
-      tktkpt[typesize] = -1;
-      tktketa[typesize] = -20;
-      tktkphi[typesize] = -20;
-      tktky[typesize] = -1;
-      doubletmass[typesize] = -1;
-      doubletpt[typesize] = -1;
-      doubleteta[typesize] = -20;
-      doubletphi[typesize] = -20;
-      doublety[typesize] = -1;
-    }  
-  else if(BInfo_type[j]==5)
+   if(BInfo_type[j]==5)
     {
       b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk2_index[j]],TrackInfo_eta[BInfo_rftk2_index[j]],TrackInfo_phi[BInfo_rftk2_index[j]],track_mass1);
       trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk2_index[j]];
@@ -232,8 +198,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       doubletphi[typesize] = b4P->Phi();
       doublety[typesize] = b4P->Rapidity();
     }
-  else
-    {
+  else if(BInfo_type[j]==4){
       b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass1);
       trk1Dxy[typesize] = TrackInfo_dxyPV[BInfo_rftk1_index[j]];
       trk1D0Err[typesize] = TrackInfo_d0error[BInfo_rftk1_index[j]];
@@ -302,27 +267,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       
       float BId,MId,tk1Id,tk2Id;
       //tk1:positive, tk2:negtive
-      if(BInfo_type[j]==1)
-	{
-	  BId = 521;//B+-
-	  MId = -1;
-	  tk1Id = 321;//K+-
-	  tk2Id = -1;
-	}
-      if(BInfo_type[j]==2)
-	{
-	  BId = 521;//B+-
-	  MId = -1;
-	  tk1Id = 211;//pi+-
-	  tk2Id = -1;
-	}
-      if(BInfo_type[j]==3)
-	{
-	  BId = 511;//B0
-	  MId = 310;//Ks
-	  tk1Id = 211;//pi+
-	  tk2Id = 211;//pi-
-	}
       if(BInfo_type[j]==4)
 	{
 	  BId = 511;//B0
@@ -335,13 +279,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	  BId = 511;//B0
 	  MId = 313;//K*0
 	  tk1Id = 211;//pi+
-	  tk2Id = 321;//K-
-	}
-      if(BInfo_type[j]==6)
-	{
-	  BId = 531;//Bs
-	  MId = 333;//phi
-	  tk1Id = 321;//K+
 	  tk2Id = 321;//K-
 	}
       
@@ -566,91 +503,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	}
     }
 }
-
-int signalGen(int Btype, int j)
-{
-  float BId,MId,tk1Id,tk2Id;
-  int twoTks;
-  //tk1:positive, tk2:negtive
-  if(Btype==1)
-    {
-      BId = 521;//B+-
-      MId = -1;
-      tk1Id = 321;//K+-
-      tk2Id = -1;
-      twoTks = 0;
-    }
-  if(Btype==2)
-    {
-      BId = 521;//B+-
-      MId = -1;
-      tk1Id = 211;//pi+-
-      tk2Id = -1;
-      twoTks = 0;
-    }
-  if(Btype==3)
-    {
-      BId = 511;//B0
-      MId = 310;//Ks
-      tk1Id = 211;//pi+
-      tk2Id = -211;//pi-
-      twoTks = 1;
-    }
-  if(Btype==4)
-    {
-      BId = 511;//B0
-      MId = 313;//K*0
-      tk1Id = 321;//K+
-      tk2Id = -211;//pi-
-      twoTks = 1;
-    }
-  if(Btype==5)
-    {
-      BId = 511;//B0
-      MId = 313;//K*0
-      tk1Id = -321;//pi+
-      tk2Id = 211;//K-
-      twoTks = 1;
-    }
-  if(Btype==6)
-    {
-      BId = 531;//Bs
-      MId = 333;//phi
-      tk1Id = 321;//K+
-      tk2Id = -321;//K-
-      twoTks = 1;
-    }
-
-  int flag=0;
-  if (abs(GenInfo_pdgId[j])==BId&&GenInfo_nDa[j]==2&&GenInfo_da1[j]!=-1&&GenInfo_da2[j]!=-1)
-    {
-      if (abs(GenInfo_pdgId[GenInfo_da1[j]]==443))//jpsi
-	{
-	  if(GenInfo_da1[GenInfo_da1[j]]!=-1&&GenInfo_da2[GenInfo_da1[j]]!=-1)
-	    {
-	      if(abs(GenInfo_pdgId[GenInfo_da1[GenInfo_da1[j]]])==13&&abs(GenInfo_pdgId[GenInfo_da2[GenInfo_da1[j]]])==13)
-		{
-		  if(!twoTks)
-		    {
-		      if(abs(GenInfo_pdgId[GenInfo_da2[j]])==tk1Id) flag++;
-		    }
-		  else
-		    {
-		      if (abs(GenInfo_pdgId[GenInfo_da2[j]])==MId) 
-			{
-			  if(GenInfo_da1[GenInfo_da2[j]]!=-1 && GenInfo_da2[GenInfo_da2[j]]!=-1)
-			    {
-			      if(GenInfo_pdgId[GenInfo_da1[GenInfo_da2[j]]]==tk1Id && GenInfo_pdgId[GenInfo_da2[GenInfo_da2[j]]]==tk2Id) flag++;
-			    }
-			}
-		    }
-		}
-	    }
-	}
-    }
-  return flag;
-}
-
 
 
 void loopNonpromptBzero(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="../../output/myoutputBzero.root", bool REAL=0){
@@ -1018,72 +870,6 @@ void loopNonpromptBzero(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_
 	isbestchi2[bestindex] = 1;
       }
     nt6->Fill();
-    
-    if(!REAL)
-      {
-	Gensize = 0;
-	for (int j=0;j<GenInfo_size;j++)
-	  {
-	    bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
-	    flag=0;
-	    for(type=1;type<8;type++)
-	      {
-		if (signalGen(type,j)) {
-                  flag=type;
-		  break;
-                }
-	      }
-	    Genmu1pt[j] = -1;
-	    Genmu1eta[j] = -20;
-	    Genmu1phi[j] = -20;
-	    Genmu1p[j] = -1;
-	    Genmu2pt[j] = -1;
-	    Genmu2eta[j] = -20;
-	    Genmu2phi[j] = -20;
-	    Genmu2p[j] = -1;
-	    Gentk1pt[j] = -1;
-	    Gentk1eta[j] = -20;
-	    Gentk1phi[j] = -20;
-	    Gentk2pt[j] = -1;
-	    Gentk2eta[j] = -20;
-	    Gentk2phi[j] = -20;
-
-            if(flag!=0)
-              {
-                Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1p[j] = Genmu1pt[j]*cosh(Genmu1eta[j]);
-                Genmu2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
-                Genmu2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
-		Genmu2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da1[j]]];
-                Genmu2p[j] = Genmu2pt[j]*cosh(Genmu2eta[j]);
-		if(flag==1||flag==2)
-		  {
-		    Gentk1pt[j] = GenInfo_pt[GenInfo_da2[j]];
-		    Gentk1eta[j] = GenInfo_eta[GenInfo_da2[j]];
-		    Gentk1phi[j] = GenInfo_phi[GenInfo_da2[j]];
-		  }
-		else
-		  {
-		    Gentk1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da2[j]]];
-		    Gentk1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da2[j]]];
-		    Gentk1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da2[j]]];
-		    Gentk2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da2[j]]];
-		    Gentk2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da2[j]]];
-		    Gentk2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da2[j]]];
-		  }
-              }
-	    Gensize = GenInfo_size;
-	    Geny[j] = bGen.Rapidity();
-	    Geneta[j] = bGen.Eta();
-	    Genphi[j] = bGen.Phi();
-	    Genpt[j] = bGen.Pt();
-	    GenpdgId[j] = GenInfo_pdgId[j];
-	    GenisSignal[j] = flag;
-	  }
-	ntGen->Fill();
-      }
   }
 
   outf->Write();
