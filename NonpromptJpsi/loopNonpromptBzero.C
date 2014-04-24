@@ -198,7 +198,47 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   //gen info judgement
 
   if(!REAL){
+  
+    genBzeroToJpsiK0starKPi[typesize] = 0;//gen init
     
+    int trk1geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
+	int pdgtrk1=abs(GenInfo_pdgId[trk1geninfo]); 
+	int mothertrk1geninfo=GenInfo_mo1[trk1geninfo];
+	int pdgmothertrk1=abs(GenInfo_pdgId[mothertrk1geninfo]);
+	int grandmothertrk1geninfo=GenInfo_mo1[mothertrk1geninfo];
+	int pdggrandmothertrk1=abs(GenInfo_pdgId[grandmothertrk1geninfo]);
+	
+	
+	int trk2geninfo=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
+	int pdgtrk2=abs(GenInfo_pdgId[trk2geninfo]); 
+	int mothertrk2geninfo=GenInfo_mo1[trk2geninfo];
+	int pdgmothertrk2=abs(GenInfo_pdgId[mothertrk2geninfo]);
+	int grandmothertrk2geninfo=GenInfo_mo1[mothertrk2geninfo];
+	int pdggrandmothertrk2=abs(GenInfo_pdgId[grandmothertrk2geninfo]);
+
+    
+    int muon1geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+    int pdgmuon1=abs(GenInfo_pdgId[muon1geninfo]);
+    int mothermuon1geninfo=GenInfo_mo1[muon1geninfo];
+    int pdgmothermuon1=abs(GenInfo_pdgId[mothermuon1geninfo]);
+    int grandmothermuon1geninfo=GenInfo_mo1[mothermuon1geninfo];
+    int pdggrandmothermuon1=abs(GenInfo_pdgId[grandmothermuon1geninfo]);
+
+    int muon2geninfo=MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]];
+    int pdgmuon2=abs(GenInfo_pdgId[muon2geninfo]);
+    int mothermuon2geninfo=GenInfo_mo1[muon2geninfo];
+    int pdgmothermuon2=abs(GenInfo_pdgId[mothermuon2geninfo]);
+    int grandmothermuon2geninfo=GenInfo_mo1[mothermuon2geninfo];
+    int pdggrandmothermuon2=abs(GenInfo_pdgId[grandmothermuon2geninfo]);
+
+    bool isbzerotojpsik0starkpi=IsBzeroToJpsiK0starKPi(trk1geninfo,pdgtrk1,mothertrk1geninfo,pdgmothertrk1,grandmothertrk1geninfo,pdggrandmothertrk1,
+                                    trk2geninfo,pdgtrk2,mothertrk2geninfo,pdgmothertrk2,grandmothertrk2geninfo,pdggrandmothertrk2,
+                                    muon1geninfo,pdgmuon1,mothermuon1geninfo,pdgmothermuon1,grandmothermuon1geninfo,pdggrandmothermuon1,
+                                    muon2geninfo,pdgmuon2,mothermuon2geninfo,pdgmothermuon2,grandmothermuon2geninfo,pdggrandmothermuon2);
+           
+    genBzeroToJpsiK0starKPi[typesize]=(int)(isbzerotojpsik0starkpi);
+     
+    /*
     gen[typesize] = 0;//gen init
     genIndex[typesize] = -1;//gen init
     genpt[typesize] = -1;
@@ -439,7 +479,9 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		       GenInfo_mass[tgenIndex]);
 	  geny[typesize] = b4P->Rapidity();
 	}
-    }
+	*/  	
+	
+  }
 }
 
 
