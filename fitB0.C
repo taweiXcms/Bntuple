@@ -16,7 +16,7 @@ TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_Prompt
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 
 //Bzero_tktkmass
-TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbesttktkmass&&chi2cl>2.49e-02&&(d0/d0Err)>6.24e+00&&cos(dtheta)>6.29e-01&&abs(trk1Dxy/trk1D0Err)>1.63e+00&&abs(tktkmass-0.89594)<1.18e-01"; 
+TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbesttktkmass&&chi2cl>1.14e-01e-01&&(d0/d0Err)>3.53&&cos(dtheta)>6.40e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
 //Bzero_chi2
 //TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&chi2cl>9.15e-02&&(d0/d0Err)>3.56e+00&&cos(dtheta)>-4.04e-01&&abs(trk1Dxy/trk1D0Err)>1.30e+00&&abs(trk2Dxy/trk2D0Err)>5.90e-01&&abs(tktkmass-0.89594)<2.59e-01"; 
 TString seldata_kpi=Form("abs(y+0.465)<1.93&&%s",cut_kpi.Data());
