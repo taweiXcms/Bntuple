@@ -15,7 +15,7 @@ TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_Prompt
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 //Bplus
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& trk1Pt>0.9&&chi2cl>5.22e-03&&(d0/d0Err)>3.70&&cos(dtheta)>-2.19e-01&&abs(trk1Dxy/trk1D0Err)>1.49";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
 //Bplus_chi2
 //TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&chi2cl>9.89e-03&&(d0/d0Err)>1.84&&cos(dtheta)>-8.78e-01&&abs(trk1Dxy/trk1D0Err)>1.97";
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
