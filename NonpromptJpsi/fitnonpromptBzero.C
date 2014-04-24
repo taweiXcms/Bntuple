@@ -15,7 +15,7 @@ TString inputmc="../../output/myoutputBzero.root";
 //TString mysuffix="genBplusToPhiK";
 TString mysuffix="1";
 
-TString cut=Form("(HLT_PAMu3_v1)&&%s",mysuffix.Data());
+TString cut=Form("(HLT_PAMu3_v1)&&%s&&(gen==22233||gen==41000)",mysuffix.Data());
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 
