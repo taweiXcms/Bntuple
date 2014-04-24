@@ -7,13 +7,13 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 
-TString inputdata="../../output/myoutputBplus.root";
-TString inputmc="../../output/myoutputBplus.root";
+TString inputdata="../../output/myoutputBzero.root";
+TString inputmc="../../output/myoutputBzero.root";
 
 //TString mysuffix="genBzero";
 //TString mysuffix="genBsubs";
 //TString mysuffix="genBplusToPhiK";
-TString mysuffix="genB0ToK0star_Pi";
+TString mysuffix="1";
 
 TString cut=Form("(HLT_PAMu3_v1)&&%s",mysuffix.Data());
 
