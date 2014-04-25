@@ -158,7 +158,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   grandmothermuon2geninfo[typesize]=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]];
   pdggrandmothermuon2[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]]);
 
-  
   //track section
   float tk1px,tk1py,tk1pz,tk1E;
   float tk2px,tk2py,tk2pz,tk2E;
@@ -197,6 +196,14 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       doubleteta[typesize] = -20;
       doubletphi[typesize] = -20;
       doublety[typesize] = -1;
+      
+      trk1geninfo[typesize]=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
+      pdgtrk1[typesize]=abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]);
+      mothertrk1geninfo[typesize]=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+      pdgmothertrk1[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]);
+      grandmothertrk1geninfo[typesize]=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+      pdggrandmothertrk1[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]]);
+
     }  
   else if(BInfo_type[j]==5)
     {
@@ -246,6 +253,21 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       doubleteta[typesize] = b4P->PseudoRapidity();
       doubletphi[typesize] = b4P->Phi();
       doublety[typesize] = b4P->Rapidity();
+      
+      trk2geninfo[typesize]=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
+      pdgtrk2[typesize]=abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]);
+      mothertrk2geninfo[typesize]=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+      pdgmothertrk2[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]);
+      grandmothertrk2geninfo[typesize]=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+      pdggrandmothertrk2[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]]);
+  
+      trk1geninfo[typesize]=TrackInfo_geninfo_index[BInfo_rftk2_index[j]];
+      pdgtrk1[typesize]=abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]);
+      mothertrk1geninfo[typesize]=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
+      pdgmothertrk1[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]);
+      grandmothertrk1geninfo[typesize]=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+      pdggrandmothertrk1[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]]);
+
     }
   else
     {
@@ -295,6 +317,21 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       doubleteta[typesize] = b4P->PseudoRapidity();
       doubletphi[typesize] = b4P->Phi();
       doublety[typesize] = b4P->Rapidity();
+      
+      trk1geninfo[typesize]=TrackInfo_geninfo_index[BInfo_rftk1_index[j]];
+      pdgtrk1[typesize]=abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]);
+      mothertrk1geninfo[typesize]=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+      pdgmothertrk1[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]);
+      grandmothertrk1geninfo[typesize]=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+      pdggrandmothertrk1[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]]);
+  
+      trk2geninfo[typesize]=TrackInfo_geninfo_index[BInfo_rftk2_index[j]];
+      pdgtrk2[typesize]=abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]);
+      mothertrk2geninfo[typesize]=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
+      pdgmothertrk2[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]);
+      grandmothertrk2geninfo[typesize]=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+      pdggrandmothertrk2[typesize]=abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]]);
+
     }
 
   //gen info judgement
