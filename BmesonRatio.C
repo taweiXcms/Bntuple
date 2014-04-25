@@ -2,7 +2,7 @@
 void BmesonRatio(){
 
   double Bplus=6.09604*1e-5;
-  double Bzero=5.244e-5s;
+  double Bzero=5.244e-5;
 
   gROOT->SetStyle("Plain");
   gStyle->SetOptTitle(0);

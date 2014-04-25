@@ -118,7 +118,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.4,"Y");
+   h->SetTitleOffset(1.,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
    Bkpi->Draw("same");
    background->Draw("same");   

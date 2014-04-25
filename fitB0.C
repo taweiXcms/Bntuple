@@ -43,8 +43,9 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+\\
-[6]*(4.07099e+01*Gaus(x,5.00666e+00,8.24813e-02)/(sqrt(2*3.14159)*8.24813e-02)+5.48017e+00*Gaus(x,5.31697e+00,8.29803e-02)/(sqrt(2*3.14159)*8.29803e-02)+5.83421e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.34675e+00*(6.324310*Gaus(x,5.116604,0.084628)/(sqrt(2*3.14159)*0.084628)+6.814833*Gaus(x,5.247329,0.044198)/(sqrt(2*3.14159)*0.044198)))");
+   TString iNP="6.71675e+00*Gaus(x,5.30142e+00,8.42680e-02)/(sqrt(2*3.14159)*8.42680e-02)+4.06744e+01*Gaus(x,5.00954e+00,8.11305e-02)/(sqrt(2*3.14159)*8.11305e-02)+5.99974e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.31767e-01*(61.195688*Gaus(x,5.127566,0.087439)/(sqrt(2*3.14159)*0.087439)+58.943919*Gaus(x,5.246471,0.041983)/(sqrt(2*3.14159)*0.041983))";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
+
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_kpi.Data(),ptmin,ptmax));   
 //   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
@@ -97,8 +98,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"\\
-[0]*(4.07099e+01*Gaus(x,5.00666e+00,8.24813e-02)/(sqrt(2*3.14159)*8.24813e-02)+5.48017e+00*Gaus(x,5.31697e+00,8.29803e-02)/(sqrt(2*3.14159)*8.29803e-02)+5.83421e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.34675e+00*(6.324310*Gaus(x,5.116604,0.084628)/(sqrt(2*3.14159)*0.084628)+6.814833*Gaus(x,5.247329,0.044198)/(sqrt(2*3.14159)*0.044198)))");
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
    Bkpi->SetParameter(0,f->GetParameter(6));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
@@ -125,7 +125,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.4,"Y");
+   h->SetTitleOffset(1.,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
 
  //  hBck->Draw("hist same");
