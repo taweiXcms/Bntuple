@@ -1,8 +1,7 @@
 #include "utilities.h"
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching_2.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
-
+TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9&&mass>5.24&&mass<5.31";
 
