@@ -11,17 +11,10 @@ void checkB0(){
   TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
   TString seldata=Form("abs(y+0.465)<1.93&&%s&&mass>5.&&mass<5.3",cut_kpi.Data());
    
-  TH1D *h = new TH1D("h","",50,5,6);
-  nt->Project("h","mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),10.,60.));   
-  h->Draw("e");
+  TH1D *hproject = new TH1D("hproject","",50,5,6);
+  nt->Project("hproject","mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),10.,60.));   
   
-  TCanvas*canvas=new TCanvas("canvas","canvas",800,400);
-  canvas->cd(1);
-    h->Draw();
-    canvas->SaveAs("mycanvas.png");
-
-   /*
-  TH1F*h=new TH1F("h","h",1000,5,6);
+  TH1F*h=new TH1F("h","h",50,5,6);
   Float_t mumumass[4096];
   Float_t y[4096];
   Float_t mass[4096];
@@ -53,17 +46,17 @@ void checkB0(){
   for (Int_t i=0; i<nentries; i++) {
     nt->GetEntry(i);
 
-    bool cut1=(abs(y[0]+0.465)<1.93);
+    bool cut1=(TMath::Abs(y[0]+0.465)<1.93);
     bool cut2=(HLT_PAMu3_v1[0]==1);
     bool cut3=(TMath::Abs(mumumass[0]-3.096916));
     bool cut4=(mass[0]>5.);
     bool cut5=(mass[0]<6.);
-    bool cut6=(isbestchi2[0]==0);
+    bool cut6=(isbestchi2[0]==1);
     bool cut7=(trk1Pt[0]>0.7);
     bool cut8=(trk2Pt[0]>0.7);
     bool cut9=(chi2cl[0]>1.65e-01);
     bool cut10=((d0[0]/d0Err[0])>4.16);
-    bool cut11=(cos(dtheta[0])>7.50e-01);
+    bool cut11=(TMath::Cos(dtheta[0])>7.50e-01);
     bool cut12=(TMath::Abs(tktkmass[0]-0.89594)<2.33e-01);
     
     if(cut1&&cut2&&cut3&&cut4&&cut5&&cut6&&cut7&&cut8&&cut9&&cut10&&cut11&&cut12){
@@ -76,8 +69,8 @@ void checkB0(){
   TCanvas*canvas=new TCanvas("canvas","canvas",800,400);
   canvas->Divide(2,1);
   canvas->cd(1);
+    hproject->Draw();
+    canvas->cd(2);
     h->Draw();
-canvas->cd(2);
-    hproject->Draw("same");
-*/
+
 }//end macro
