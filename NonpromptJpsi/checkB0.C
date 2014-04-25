@@ -9,7 +9,7 @@ void checkB0(){
   TTree *nt = (TTree*)inf->Get("ntKstar");
      
   TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
-  TString seldata=Form("abs(y+0.465)<1.93&&%s&&mass>5.&&mass<5.3",cut_kpi.Data());
+  TString seldata=Form("abs(y+0.465)<1.93&&%s&&mass>5.&&mass<6.&&gen==22233",cut_kpi.Data());
    
   TH1D *hproject = new TH1D("hproject","",50,5,6);
   nt->Project("hproject","mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),10.,60.));   
@@ -27,6 +27,8 @@ void checkB0(){
   Float_t tktkmass[4096];
   Int_t isbestchi2[4096];
   Int_t HLT_PAMu3_v1[4096];
+  Float_t gen[4096];
+  
 
   nt->SetBranchAddress("y",&y);
   nt->SetBranchAddress("HLT_PAMu3_v1",&HLT_PAMu3_v1);
@@ -40,6 +42,7 @@ void checkB0(){
   nt->SetBranchAddress("d0",&d0);
   nt->SetBranchAddress("dtheta",&dtheta);
   nt->SetBranchAddress("tktkmass",&tktkmass);
+  nt->SetBranchAddress("gen",&gen);
 
   Int_t nentries = (Int_t)nt->GetEntries();
 
@@ -58,8 +61,11 @@ void checkB0(){
     bool cut10=((d0[0]/d0Err[0])>4.16);
     bool cut11=(TMath::Cos(dtheta[0])>7.50e-01);
     bool cut12=(TMath::Abs(tktkmass[0]-0.89594)<2.33e-01);
+    bool cut13=(!(gen[0]==22233||gen[0]==41000));
+    bool cut14=((mass[0]>5.)&&(mass[0]<5.2));
     
-    if(cut1&&cut2&&cut3&&cut4&&cut5&&cut6&&cut7&&cut8&&cut9&&cut10&&cut11&&cut12){
+    
+    if(cut1&&cut2&&cut3&&cut4&&cut5&&cut6&&cut7&&cut8&&cut9&&cut10&&cut11&&cut12&&cut13){
 
     h->Fill(mass[0]);
     cout<<y[0]<<endl;
