@@ -18,7 +18,7 @@ TString inputmc="../../output/myoutputBzero.root";
 TString mysuffix="1";
 TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
 TString seldata=Form("abs(y+0.465)<1.93&&%s&&mass>5.&&mass<5.3",cut_kpi.Data());
-
+seldata="1";
 TString selmc="1";
 TString selmcgen="1";
 
@@ -188,5 +188,4 @@ void fitnonpromptBzero(TString infname="",bool doweight = 1)
   hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
   hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
   hPt->Sumw2();
-  hPt->Draw();
-}
+  hPt
