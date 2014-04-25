@@ -178,6 +178,35 @@ void buildBranch(TTree* nt){
   nt->Branch("chi2ndf",chi2ndf, "chi2ndf[size]/F");
   nt->Branch("dtheta",dtheta, "dtheta[size]/F");
   nt->Branch("lxy",lxy, "lxy[size]/F");
+  
+  nt->Branch("trk1geninfo",trk1geninfo, "trk1geninfo[size]/F");
+  nt->Branch("pdgtrk1",pdgtrk1, "pdgtrk1[size]/F");
+  nt->Branch("mothertrk1geninfo",mothertrk1geninfo, "mothertrk1geninfo[size]/F");
+  nt->Branch("pdgmothertrk1",pdgmothertrk1, "pdgmothertrk1[size]/F");
+  nt->Branch("grandmothertrk1geninfo",grandmothertrk1geninfo, "grandmothertrk1geninfo[size]/F");
+  nt->Branch("pdggrandmothertrk1",pdggrandmothertrk1, "pdggrandmothertrk1[size]/F");
+  
+  nt->Branch("trk2geninfo",trk2geninfo, "trk2geninfo[size]/F");
+  nt->Branch("pdgtrk2",pdgtrk2, "pdgtrk2[size]/F");
+  nt->Branch("mothertrk2geninfo",mothertrk2geninfo, "mothertrk2geninfo[size]/F");
+  nt->Branch("pdgmothertrk2",pdgmothertrk2, "pdgmothertrk2[size]/F");
+  nt->Branch("grandmothertrk2geninfo",grandmothertrk2geninfo, "grandmothertrk2geninfo[size]/F");
+  nt->Branch("pdggrandmothertrk2",pdggrandmothertrk2, "pdggrandmothertrk2[size]/F");
+  
+  nt->Branch("muon1geninfo",muon1geninfo, "muon1geninfo[size]/F");
+  nt->Branch("pdgmuon1",pdgmuon1, "pdgmuon1[size]/F");
+  nt->Branch("mothermuon1geninfo",mothermuon1geninfo, "mothermuon1geninfo[size]/F");
+  nt->Branch("pdgmothermuon1",pdgmothermuon1, "pdgmothermuon1[size]/F");
+  nt->Branch("grandmothermuon1geninfo",grandmothermuon1geninfo, "grandmothermuon1geninfo[size]/F");
+  nt->Branch("pdggrandmothermuon1",pdggrandmothermuon1, "pdggrandmothermuon1[size]/F");
+
+  nt->Branch("muon2geninfo",muon2geninfo, "muon2geninfo[size]/F");
+  nt->Branch("pdgmuon2",pdgmuon2, "pdgmuon2[size]/F");
+  nt->Branch("mothermuon2geninfo",mothermuon2geninfo, "mothermuon2geninfo[size]/F");
+  nt->Branch("pdgmothermuon2",pdgmothermuon2, "pdgmothermuon2[size]/F");
+  nt->Branch("grandmothermuon2geninfo",grandmothermuon2geninfo, "grandmothermuon2geninfo[size]/F");
+  nt->Branch("pdggrandmothermuon2",pdggrandmothermuon2, "pdggrandmothermuon2[size]/F");
+
   nt->Branch("chi2cl",chi2cl, "chi2cl[size]/F");
   nt->Branch("isbestchi2",isbestchi2, "isbestchi2[size]/I");
   nt->Branch("isbesttktkmass",isbesttktkmass, "isbesttktkmass[size]/I");
