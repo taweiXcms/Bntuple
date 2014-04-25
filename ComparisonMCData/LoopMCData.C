@@ -1,18 +1,12 @@
 #include "utilities.h"
 
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching_2.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
-
-//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9&&mass>5&&mass<6";
-
-//TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-//TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
-//TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
+TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 TString cut="1";
-TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.&&mass>5.4&&mass<5.5",cut.Data());
-TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60&&mass>5.4&&mass<5.5",cut.Data());
+TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.&&mass>5.5&&mass<5.7",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60&&mass>5.5&&mass<5.7",cut.Data());
 TString selmcsignal=Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
 
 //TString selmcsignal="1";//Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.&&abs(pdgId)==521",cut.Data());
@@ -328,5 +322,6 @@ void LoopMCData(){
   latextrk1D0Err->Draw();
   
   canvas->SaveAs("Plots/canvasBkg.pdf");
+  canvas->SaveAs("Plots/canvasBkg.png");
 
 }
