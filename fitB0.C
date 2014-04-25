@@ -15,10 +15,8 @@ double fixparam2=0.04;
 TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";                                                                           
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 
-//Bzero_tktkmass
-TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbesttktkmass&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
-//Bzero_chi2 
-//TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&chi2cl>9.15e-02&&(d0/d0Err)>3.56e+00&&cos(dtheta)>-4.04e-01&&abs(trk1Dxy/trk1D0Err)>1.30e+00&&abs(trk2Dxy/trk2D0Err)>5.90e-01&&abs(tktkmass-0.89594)<2.59e-01"; 
+TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
+
 TString seldata_kpi=Form("abs(y+0.465)<1.93&&%s",cut_kpi.Data());
 TString seldata_2y_kpi=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
 TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut_kpi.Data());
@@ -45,7 +43,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+\\
+[6]*(4.07099e+01*Gaus(x,5.00666e+00,8.24813e-02)/(sqrt(2*3.14159)*8.24813e-02)+5.48017e+00*Gaus(x,5.31697e+00,8.29803e-02)/(sqrt(2*3.14159)*8.29803e-02)+5.83421e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.34675e+00*(6.324310*Gaus(x,5.116604,0.084628)/(sqrt(2*3.14159)*0.084628)+6.814833*Gaus(x,5.247329,0.044198)/(sqrt(2*3.14159)*0.044198)))");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_kpi.Data(),ptmin,ptmax));   
 //   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
@@ -90,22 +89,20 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    cout <<h->GetEntries()<<endl;
 
    // function for background shape plotting. take the fit result from f
-   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[3]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
-//   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
+   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x");
    background->SetParameter(0,f->GetParameter(3));
    background->SetParameter(1,f->GetParameter(4));
-   background->SetParameter(2,f->GetParameter(5));
-   background->SetParameter(3,f->GetParameter(6));
    background->SetLineColor(4);
    background->SetRange(5,6);
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"\\
+[0]*(4.07099e+01*Gaus(x,5.00666e+00,8.24813e-02)/(sqrt(2*3.14159)*8.24813e-02)+5.48017e+00*Gaus(x,5.31697e+00,8.29803e-02)/(sqrt(2*3.14159)*8.29803e-02)+5.83421e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.34675e+00*(6.324310*Gaus(x,5.116604,0.084628)/(sqrt(2*3.14159)*0.084628)+6.814833*Gaus(x,5.247329,0.044198)/(sqrt(2*3.14159)*0.044198)))");
    Bkpi->SetParameter(0,f->GetParameter(6));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
-   Bkpi->SetRange(5.00,5.45);
+   Bkpi->SetRange(5.00,6.00);
    Bkpi->SetLineStyle(1);
    Bkpi->SetFillStyle(3005);
 

@@ -11,7 +11,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.22*0.22+ (0.6/10.4)*(0.6/10.4));
   Double_t commonErrorN = TMath::Sqrt(0.24*0.24+ (0.6/10.4)*(0.6/10.4));
 */
-/*    
+    
   TString particle="Bzero";
   const int nbins=3;
   Double_t xbins[nbins]={12.5,17.5,40};
@@ -23,8 +23,8 @@
   //Double_t commonErrorN = 0.0555  ;
   Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
   Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
-*/
 
+/*
   TString particle="Bplus";
   const int nbins=5;
   Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
@@ -37,8 +37,8 @@
   
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
-
-/*  
+*/
+ /* 
   TString particle="Bzero";
   const int nbins=3;
   Double_t xbins[nbins]={12.5,17.5,40};
