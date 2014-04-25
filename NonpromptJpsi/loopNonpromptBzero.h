@@ -28,33 +28,33 @@ float dtheta[MAX_XB];
 float lxy[MAX_XB];
 
 
-float trk1geninfo[MAX_XB];
-float pdgtrk1[MAX_XB];
-float mothertrk1geninfo[MAX_XB];
-float pdgmothertrk1[MAX_XB];
-float grandmothertrk1geninfo[MAX_XB];
-float pdggrandmothertrk1[MAX_XB];
+Int_t trk1geninfo[MAX_XB];
+Int_t pdgtrk1[MAX_XB];
+Int_t mothertrk1geninfo[MAX_XB];
+Int_t pdgmothertrk1[MAX_XB];
+Int_t grandmothertrk1geninfo[MAX_XB];
+Int_t pdggrandmothertrk1[MAX_XB];
 
-float trk2geninfo[MAX_XB];
-float pdgtrk2[MAX_XB];
-float mothertrk2geninfo[MAX_XB];
-float pdgmothertrk2[MAX_XB];
-float grandmothertrk2geninfo[MAX_XB];
-float pdggrandmothertrk2[MAX_XB];
+Int_t trk2geninfo[MAX_XB];
+Int_t pdgtrk2[MAX_XB];
+Int_t mothertrk2geninfo[MAX_XB];
+Int_t pdgmothertrk2[MAX_XB];
+Int_t grandmothertrk2geninfo[MAX_XB];
+Int_t pdggrandmothertrk2[MAX_XB];
 
-float muon1geninfo[MAX_XB];
-float pdgmuon1[MAX_XB];
-float mothermuon1geninfo[MAX_XB];
-float pdgmothermuon1[MAX_XB];
-float grandmothermuon1geninfo[MAX_XB];
-float pdggrandmothermuon1[MAX_XB];
+Int_t muon1geninfo[MAX_XB];
+Int_t pdgmuon1[MAX_XB];
+Int_t mothermuon1geninfo[MAX_XB];
+Int_t pdgmothermuon1[MAX_XB];
+Int_t grandmothermuon1geninfo[MAX_XB];
+Int_t pdggrandmothermuon1[MAX_XB];
 
-float muon2geninfo[MAX_XB];
-float pdgmuon2[MAX_XB];
-float mothermuon2geninfo[MAX_XB];
-float pdgmothermuon2[MAX_XB];
-float grandmothermuon2geninfo[MAX_XB];
-float pdggrandmothermuon2[MAX_XB];
+Int_t muon2geninfo[MAX_XB];
+Int_t pdgmuon2[MAX_XB];
+Int_t mothermuon2geninfo[MAX_XB];
+Int_t pdgmothermuon2[MAX_XB];
+Int_t grandmothermuon2geninfo[MAX_XB];
+Int_t pdggrandmothermuon2[MAX_XB];
 
 
 float gen[MAX_XB];
@@ -179,33 +179,33 @@ void buildBranch(TTree* nt){
   nt->Branch("dtheta",dtheta, "dtheta[size]/F");
   nt->Branch("lxy",lxy, "lxy[size]/F");
   
-  nt->Branch("trk1geninfo",trk1geninfo, "trk1geninfo[size]/F");
-  nt->Branch("pdgtrk1",pdgtrk1, "pdgtrk1[size]/F");
-  nt->Branch("mothertrk1geninfo",mothertrk1geninfo, "mothertrk1geninfo[size]/F");
-  nt->Branch("pdgmothertrk1",pdgmothertrk1, "pdgmothertrk1[size]/F");
-  nt->Branch("grandmothertrk1geninfo",grandmothertrk1geninfo, "grandmothertrk1geninfo[size]/F");
-  nt->Branch("pdggrandmothertrk1",pdggrandmothertrk1, "pdggrandmothertrk1[size]/F");
+  nt->Branch("trk1geninfo",trk1geninfo, "trk1geninfo[size]/I");
+  nt->Branch("pdgtrk1",pdgtrk1, "pdgtrk1[size]/I");
+  nt->Branch("mothertrk1geninfo",mothertrk1geninfo, "mothertrk1geninfo[size]/I");
+  nt->Branch("pdgmothertrk1",pdgmothertrk1, "pdgmothertrk1[size]/I");
+  nt->Branch("grandmothertrk1geninfo",grandmothertrk1geninfo, "grandmothertrk1geninfo[size]/I");
+  nt->Branch("pdggrandmothertrk1",pdggrandmothertrk1, "pdggrandmothertrk1[size]/I");
   
-  nt->Branch("trk2geninfo",trk2geninfo, "trk2geninfo[size]/F");
-  nt->Branch("pdgtrk2",pdgtrk2, "pdgtrk2[size]/F");
-  nt->Branch("mothertrk2geninfo",mothertrk2geninfo, "mothertrk2geninfo[size]/F");
-  nt->Branch("pdgmothertrk2",pdgmothertrk2, "pdgmothertrk2[size]/F");
-  nt->Branch("grandmothertrk2geninfo",grandmothertrk2geninfo, "grandmothertrk2geninfo[size]/F");
-  nt->Branch("pdggrandmothertrk2",pdggrandmothertrk2, "pdggrandmothertrk2[size]/F");
+  nt->Branch("trk2geninfo",trk2geninfo, "trk2geninfo[size]/I");
+  nt->Branch("pdgtrk2",pdgtrk2, "pdgtrk2[size]/I");
+  nt->Branch("mothertrk2geninfo",mothertrk2geninfo, "mothertrk2geninfo[size]/I");
+  nt->Branch("pdgmothertrk2",pdgmothertrk2, "pdgmothertrk2[size]/I");
+  nt->Branch("grandmothertrk2geninfo",grandmothertrk2geninfo, "grandmothertrk2geninfo[size]/I");
+  nt->Branch("pdggrandmothertrk2",pdggrandmothertrk2, "pdggrandmothertrk2[size]/I");
   
-  nt->Branch("muon1geninfo",muon1geninfo, "muon1geninfo[size]/F");
-  nt->Branch("pdgmuon1",pdgmuon1, "pdgmuon1[size]/F");
-  nt->Branch("mothermuon1geninfo",mothermuon1geninfo, "mothermuon1geninfo[size]/F");
-  nt->Branch("pdgmothermuon1",pdgmothermuon1, "pdgmothermuon1[size]/F");
-  nt->Branch("grandmothermuon1geninfo",grandmothermuon1geninfo, "grandmothermuon1geninfo[size]/F");
-  nt->Branch("pdggrandmothermuon1",pdggrandmothermuon1, "pdggrandmothermuon1[size]/F");
+  nt->Branch("muon1geninfo",muon1geninfo, "muon1geninfo[size]/I");
+  nt->Branch("pdgmuon1",pdgmuon1, "pdgmuon1[size]/I");
+  nt->Branch("mothermuon1geninfo",mothermuon1geninfo, "mothermuon1geninfo[size]/I");
+  nt->Branch("pdgmothermuon1",pdgmothermuon1, "pdgmothermuon1[size]/I");
+  nt->Branch("grandmothermuon1geninfo",grandmothermuon1geninfo, "grandmothermuon1geninfo[size]/I");
+  nt->Branch("pdggrandmothermuon1",pdggrandmothermuon1, "pdggrandmothermuon1[size]/I");
 
-  nt->Branch("muon2geninfo",muon2geninfo, "muon2geninfo[size]/F");
-  nt->Branch("pdgmuon2",pdgmuon2, "pdgmuon2[size]/F");
-  nt->Branch("mothermuon2geninfo",mothermuon2geninfo, "mothermuon2geninfo[size]/F");
-  nt->Branch("pdgmothermuon2",pdgmothermuon2, "pdgmothermuon2[size]/F");
-  nt->Branch("grandmothermuon2geninfo",grandmothermuon2geninfo, "grandmothermuon2geninfo[size]/F");
-  nt->Branch("pdggrandmothermuon2",pdggrandmothermuon2, "pdggrandmothermuon2[size]/F");
+  nt->Branch("muon2geninfo",muon2geninfo, "muon2geninfo[size]/I");
+  nt->Branch("pdgmuon2",pdgmuon2, "pdgmuon2[size]/I");
+  nt->Branch("mothermuon2geninfo",mothermuon2geninfo, "mothermuon2geninfo[size]/I");
+  nt->Branch("pdgmothermuon2",pdgmothermuon2, "pdgmothermuon2[size]/I");
+  nt->Branch("grandmothermuon2geninfo",grandmothermuon2geninfo, "grandmothermuon2geninfo[size]/I");
+  nt->Branch("pdggrandmothermuon2",pdggrandmothermuon2, "pdggrandmothermuon2[size]/I");
 
   nt->Branch("chi2cl",chi2cl, "chi2cl[size]/F");
   nt->Branch("isbestchi2",isbestchi2, "isbestchi2[size]/I");
