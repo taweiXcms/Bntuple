@@ -4,7 +4,7 @@
 TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
-TString cut="1";
+TString cut="(HLT_PAMu3_v1)";
 TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.&&mass>5.5&&mass<5.7",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60&&mass>5.5&&mass<5.7",cut.Data());
 TString selmcsignal=Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
