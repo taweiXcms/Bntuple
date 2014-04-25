@@ -21,29 +21,7 @@ void LoopMCData(){
   gStyle->SetFrameFillColor(0);
   gStyle->SetOptTitle(0);
   
-  Double_t cutd0d0Err=3.;
-  Double_t cutchi2cl=0.005;
-  Double_t cutcostheta=-0.5;
-  Double_t cuttrk1D0Err=2.;
   
-  TLine *lined0d0Err = new TLine(cutd0d0Err,0.,cutd0d0Err,0.4);
-  lined0d0Err->SetLineStyle(2);
-  lined0d0Err->SetLineWidth(5);
-  
-  TLine *linechi2cl = new TLine(cutchi2cl,0.,cutchi2cl,0.4);
-  linechi2cl->SetLineStyle(2);
-  linechi2cl->SetLineWidth(5);
-  
-  TLine *linecostheta = new TLine(cutcostheta,0.,cutcostheta,0.4);
-  linecostheta->SetLineStyle(2);
-  linecostheta->SetLineWidth(5);
-  
-  TLine *linetrk1D0Err = new TLine(cuttrk1D0Err,0.,cuttrk1D0Err,0.4);
-  linetrk1D0Err->SetLineStyle(2);
-  linetrk1D0Err->SetLineWidth(5);
-
-
-
   TFile *inf = new TFile(inputdata.Data());
   TTree *nt = (TTree*) inf->Get("ntKp");
   
@@ -53,14 +31,7 @@ void LoopMCData(){
   TH1D *hd0d0Err_Data = new TH1D("hd0d0Err_Data","hd0d0Err_Data",100,-.1,200);
   TH1D *hchi2cl_Data = new TH1D("hchi2cl_Data","hchi2cl_Data",100,-.1,1);
   TH1D *hcostheta_Data = new TH1D("hcostheta_Data","hcostheta_Data",200,0,1);
-  TH1D *htrk1D0Err_Data = new TH1D("htrk1D0Err_Data","htrk1D0Err_Data",100,-.1,100);
-  
-  //hd0d0Err_Data->Sumw2();
-  //hchi2cl_Data->Sumw2();
-  //hcostheta_Data->Sumw2();
-  //htrk1D0Err_Data->Sumw2();
-  
-  
+  TH1D *htrk1D0Err_Data = new TH1D("htrk1D0Err_Data","htrk1D0Err_Data",100,-.1,100);  
 
   nt->Project("hd0d0Err_Data","(d0)/d0Err",seldata.Data());  
   nt->Project("hchi2cl_Data","chi2cl",seldata.Data());
@@ -173,7 +144,6 @@ void LoopMCData(){
   latexd0d0Err->SetTextColor(1);
   latexd0d0Err->SetTextFont(42);
   latexd0d0Err->Draw();
-  //lined0d0Err->Draw("same");
   
 
   canvas->cd(2);
@@ -223,7 +193,6 @@ void LoopMCData(){
   latexchi2cl->SetTextColor(1);
   latexchi2cl->SetTextFont(42);
   latexchi2cl->Draw();
-  //linechi2cl->Draw("same");
 
   canvas->cd(3);
   hcostheta_Data->GetXaxis()->SetTitle("Cos(#theta)");
@@ -271,7 +240,6 @@ void LoopMCData(){
   latexcostheta->SetTextColor(1);
   latexcostheta->SetTextFont(42);
   latexcostheta->Draw();
-  //linecostheta->Draw("same");
  
   canvas->cd(4);
   htrk1D0Err_Data->GetXaxis()->SetTitle("|trk1Dxy/trk1D0Err|");
