@@ -59,6 +59,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    f->FixParameter(1,fixparam1);
    f->SetParLimits(11,0,1000);
    f->SetParameter(11,10);
+   f->FixParameter(11,0);
    h->GetEntries();
 
    hMC->Fit(Form("f%d",count),"q","",5,6);

@@ -152,9 +152,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
    c->SaveAs(Form("ResultsBplus_y/BMass-%d.pdf",count));
 
    return mass;
@@ -183,8 +180,8 @@ void fitB_y(TString infname="",bool doweight = 1)
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
-      double yield = f->Integral(-1.93,1.93)/(1.93*2/50);
-      double yieldErr = f->Integral(-1.93,1.93)/(1.93*2/50)*f->GetParError(0)/f->GetParameter(0);
+      double yield = f->Integral(5,6)/0.02;
+      double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
@@ -227,7 +224,7 @@ void fitB_y(TString infname="",bool doweight = 1)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
+  TFile *outf = new TFile("ResultsBplus_y/SigmaBplus.root","recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
