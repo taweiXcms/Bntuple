@@ -203,7 +203,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
       
 	  if(cut0&&cut1&&cut2&&cut3&&cut4&&cut5&&cut6&&cut7&&cut8&&cut9&&cut10&&cut11&&cut12&&cut13&&cut14){
 	    if((trk1geninfo[j]>-1)&&(trk2geninfo[j]>-1)&&(muon1geninfo[j]>-1)&&(muon2geninfo[j]>-1)){
-	      if((pdgtrk1[j]>0)&&(pdgtrk2[j]>0)&&(pdgmuon1[j]>0)&&(pdgmuon2[j]>0)){
+	      if((pdgtrk1[j]>0)&&(pdgtrk2[j]>0)&&(pdgmuon1[j]>0)&&(pdgmuon2[j]>0)){ 
 	      
 	        counter++;
 	        
