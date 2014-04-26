@@ -21,13 +21,13 @@ void loop(){
   cout<<hproject->GetEntries()<<endl;
   TCanvas*canvassecond=new TCanvas("canvassecond","canvassecond",800,400);
   hproject->Draw();
-  canvassecond->SaveAs("canvassecond2.png");
+  canvassecond->SaveAs("Plots/canvasBzeroProject.png");
 
 }
 
 void checkB0(){
 
-  TFile *inf = new TFile("../../output/myoutputBzero.root");
+  TFile *inf = new TFile("/net/hisrv0001/home/yenjie/scratch/gianTemp/myoutputBzero.root");
   TTree *nt = (TTree*)inf->Get("ntKstar");
 
   TH1F*myhisto=new TH1F("myhisto","myhisto",50,5,6);
@@ -302,6 +302,7 @@ void checkB0(){
   hBplustoJPsiKPi->Draw("e");
   canvassecond->cd(6);
   hBstoJPsiKPi->Draw("e");
+  canvassecond->SaveAs("Plots/CanvasComponentBzero.png");
 
 
 }
