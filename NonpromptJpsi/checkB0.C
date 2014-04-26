@@ -34,6 +34,7 @@ void checkB0(){
   TH1F*hBstoJPsiPhi=new TH1F("hBstoJPsiPhi","hBstoJPsiPhi",50,5,6);
   TH1F*hBplustoJPsiK1plus=new TH1F("hBplustoJPsiK1plus","hBplustoJPsiK1plus",50,5,6);
   TH1F*hBzerotoJPsiK10=new TH1F("hBzerotoJPsiK10","hBzerotoJPsiK10",50,5,6);
+  TH1F*hBzerotoJPsiKstar20=new TH1F("hBzerotoJPsiKstar20","hBzerotoJPsiKstar20",50,5,6);
 
   Float_t pt[NUM_BX];
   Float_t mumumass[NUM_BX];
@@ -181,6 +182,15 @@ void checkB0(){
     }
     }
     
+    if((pdggrandmothertrk1[0]==511)&&(pdggrandmothertrk2[0]==511)&&(pdggrandmothermuon1[0]==511)&&(pdggrandmothermuon2[0]==511)){
+    if((pdgmothertrk1[0]==315)&&(pdgmothertrk2[0]==315)&&(pdgmothermuon1[0]==443)&&(pdgmothermuon2[0]==443)){
+    if ((grandmothertrk1geninfo[0]==grandmothertrk2geninfo[0])&&(grandmothertrk1geninfo[0]==grandmothermuon1geninfo[0])&&(grandmothermuon1geninfo[0]==grandmothermuon2geninfo[0])){
+
+    hBzerotoJPsiKstar20->Fill(mass[0]);
+    }
+    }
+    }
+    
     if((pdggrandmothertrk1[0]==pdggrandmothertrk2[0])&&(pdggrandmothermuon1[0]==pdggrandmothermuon2[0])&&(pdggrandmothermuon1[0]==pdggrandmothertrk1[0])){
    
     cout<<"--------------------------"<<endl;
@@ -207,8 +217,8 @@ void checkB0(){
    hBplustoJPsiK1plus->Draw();
    canvassecond->cd(4);
    hBzerotoJPsiK10->Draw();
-   canvassecond->cd(5);
-   myhisto->Draw();
+   canvassecond->cd(4);
+   hBzerotoJPsiKstar20->Draw();
   
   
 
