@@ -58,6 +58,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    f->SetParLimits(2,0.01,0.05);
    f->SetParLimits(8,0.01,0.1);
    f->SetParLimits(7,0,1);
+   f->SetParLimits(6,0,1000);
+
    f->SetParameter(0,setparam0);
    f->SetParameter(1,setparam1);
    f->SetParameter(2,setparam2);

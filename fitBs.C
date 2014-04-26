@@ -42,7 +42,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+ [3]+[4]*x+[5]*x*x + [11]*Gaus(x,5.36800e+00,5.77122e-02)/(sqrt(2*3.14159)*abs(5.77122e-02))");
+   TString iNP="Gaus(x,5.36800e+00,5.77122e-02)/(sqrt(2*3.14159)*abs(5.77122e-02))";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+ [3]+[4]*x+[5]*x*x + [11]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
@@ -95,7 +96,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*Gaus(x,5.36800e+00,5.77122e-02)/(sqrt(2*3.14159)*abs(5.77122e-02))");
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
    Bkpi->SetParameter(0,f->GetParameter(11));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);

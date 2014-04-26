@@ -38,8 +38,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+\\
-[5]*(4.18604e+01*Gaus(x,4.97611e+00,8.81611e-02)/(sqrt(2*3.14159)*8.81611e-02) + 6.72820e+00*Gaus(x,5.10752e+00,2.66663e-02)/(sqrt(2*3.14159)*2.66663e-02) + 1.93889e+00*Gaus(x,5.33740e+00,3.52905e-02)/(sqrt(2*3.14159)*3.52905e-02))");
+   TString iNP="4.18604e+01*Gaus(x,4.97611e+00,8.81611e-02)/(sqrt(2*3.14159)*8.81611e-02) + 6.72820e+00*Gaus(x,5.10752e+00,2.66663e-02)/(sqrt(2*3.14159)*2.66663e-02) + 1.93889e+00*Gaus(x,5.33740e+00,3.52905e-02)/(sqrt(2*3.14159)*3.52905e-02)";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
@@ -48,6 +48,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    f->SetParLimits(2,0.01,0.05);
    f->SetParLimits(8,0.01,0.05);
    f->SetParLimits(7,0,1);
+   f->SetParLimits(5,0,1000);
+
    f->SetParameter(0,setparam0);
    f->SetParameter(1,setparam1);
    f->SetParameter(2,setparam2);
@@ -90,7 +92,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*(4.18604e+01*Gaus(x,4.97611e+00,8.81611e-02)/(sqrt(2*3.14159)*8.81611e-02) + 6.72820e+00*Gaus(x,5.10752e+00,2.66663e-02)/(sqrt(2*3.14159)*2.66663e-02) + 1.93889e+00*Gaus(x,5.33740e+00,3.52905e-02)/(sqrt(2*3.14159)*3.52905e-02))");
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
    Bkpi->SetParameter(0,f->GetParameter(5));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
