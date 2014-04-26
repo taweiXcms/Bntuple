@@ -30,7 +30,7 @@ void checkB0(){
   TFile *inf = new TFile("/net/hisrv0001/home/yenjie/scratch/gianTemp/myoutputBzero.root");
   TTree *nt = (TTree*)inf->Get("ntKstar");
 
-  TH1F*myhisto=new TH1F("myhisto","myhisto",50,5,6);
+  TH1F*hTotalNonPrompt=new TH1F("hTotalNonPrompt","hTotalNonPrompt",50,5,6);
   TH1F*hBstoJPsiPhi=new TH1F("hBstoJPsiPhi","hBstoJPsiPhi",50,5,6);
   TH1F*hBplustoJPsiK1plus=new TH1F("hBplustoJPsiK1plus","hBplustoJPsiK1plus",50,5,6);
   TH1F*hBzerotoJPsiK10=new TH1F("hBzerotoJPsiK10","hBzerotoJPsiK10",50,5,6);
@@ -189,7 +189,7 @@ void checkB0(){
 	      
 	        counter++;
 	        
-	        myhisto->Fill(mass[j]);
+	        hTotalNonPrompt->Fill(mass[j]);
 		  
 	        if((pdggrandmothertrk1[j]==531)&&(pdggrandmothertrk2[j]==531)&&(pdggrandmothermuon1[j]==531)&&(pdggrandmothermuon2[j]==531)){
               if ((grandmothertrk1geninfo[j]==grandmothertrk2geninfo[j])&&(grandmothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
@@ -287,7 +287,7 @@ void checkB0(){
   TCanvas*canvassecond=new TCanvas("canvassecond","canvassecond",800,400);
   canvassecond->Divide(3,2);
   canvassecond->cd(1);
-  myhisto->Draw("e");
+  hTotalNonPrompt->Draw("e");
   canvassecond->cd(2);
   hBstoJPsiPhi->Draw("e");
   canvassecond->cd(3);
@@ -303,6 +303,21 @@ void checkB0(){
   canvassecond->cd(6);
   hBstoJPsiKPi->Draw("e");
   canvassecond->SaveAs("Plots/CanvasComponentBzero.png");
+  
+  TFile*fileoutput=new TFile("Plots/PlotoutputBzero.root","recreate");
+  fileoutput->cd();
+  hTotalNonPrompt->Write();
+  hBstoJPsiPhi->Write();
+  hBzerotoJPsiK10->Write();
+  hBzerotoJPsiKstar20->Write();
+  hBzerotoJPsiKPi->Write();
+  hBplustoJPsiKPi->Write();
+  hBstoJPsiKPi->Write();
+  fileoutput->Close();
+  delete fileoutput;
+  
+  
+  
 
 
 }
