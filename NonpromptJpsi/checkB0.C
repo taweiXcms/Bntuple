@@ -43,6 +43,18 @@ void checkB0(){
   
   TH1F*hBplustoJPsiKPi=new TH1F("hBplustoJPsiKPi","hBplustoJPsiKPi",50,5,6);
   TH1F*hBstoJPsiKPi=new TH1F("hBstoJPsiKPi","hBstoJPsiKPi",50,5,6);
+  TH1F*hBzerotoJPsiKstarplusPion=new TH1F("hBzerotoJPsiKstarplusPion","hBzerotoJPsiKstarplusPion",50,5,6);
+  
+    /*
+
+  pdgtrk1=211, pdgmothertrk1=323, pdggrandmothertrk1=511
+pdgtrk2=211, pdgmothertrk2=511, pdggrandmothertrk2=513
+pdgmuon1=13, pdgmothermuon1=443, pdggrandmothermuon1=511
+pdgmuon2=13, pdgmothermuon2=443, pdggrandmothermuon2=511
+grandmothertrk1geninfo=63, grandmothertrk2geninfo=21, grandmothermuon1geninfo=63, grandmothermuon2geninfo=63
+mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2geninfo=90
+  
+  */
 
 
 
@@ -154,6 +166,7 @@ void checkB0(){
   int countercase6=0;
   int countercase7=0;
   int countercase8=0;
+  int countercase9=0;
   int countercaseno=0;
 
 
@@ -175,7 +188,7 @@ void checkB0(){
 	  bool cut10=((d0[j]/d0Err[j])>4.16);
   	  bool cut11=(cos(dtheta[j])>(7.50*0.1));
 	  bool cut12=abs(tktkmass[j]-0.89594)<(2.33*0.1);
-	  bool cut13=((mass[j]>5.)&&(mass[j]<5.99));
+	  bool cut13=((mass[j]>5.)&&(mass[j]<5.15));
 	  bool cut14=(!((gen[j]==22233)||(gen[j]==41000)));
       
       bool case1=false;
@@ -186,6 +199,7 @@ void checkB0(){
       bool case6=false;
       bool case7=false;
       bool case8=false;
+      bool case9=false;
       
 	  if(cut0&&cut1&&cut2&&cut3&&cut4&&cut5&&cut6&&cut7&&cut8&&cut9&&cut10&&cut11&&cut12&&cut13&&cut14){
 	    if((trk1geninfo[j]>-1)&&(trk2geninfo[j]>-1)&&(muon1geninfo[j]>-1)&&(muon2geninfo[j]>-1)){
@@ -260,7 +274,23 @@ void checkB0(){
               }
             }
             
-           if((case2==false)&&(case3==false)&&(case4==false)&&(case5==false)&&(case6==false)&&(case6==false)&&(case7==false)&&(case8==false)){
+            if((pdgmothertrk1[j]==323)&&(pdggrandmothertrk1[j]==511)&&(pdgmothertrk2[j]==511)&&(pdggrandmothermuon1[j]==511)&&(pdggrandmothermuon2[j]==511)){
+              if ((grandmothertrk1geninfo[j]==mothertrk2geninfo[j])&&(mothertrk2geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
+                hBzerotoJPsiKstarplusPion->Fill(mass[j]);
+                case9=true;
+                countercase9++;
+              }
+            }
+            
+            if((pdgmothertrk2[j]==323)&&(pdggrandmothertrk2[j]==511)&&(pdgmothertrk1[j]==511)&&(pdggrandmothermuon1[j]==511)&&(pdggrandmothermuon2[j]==511)){
+              if ((grandmothertrk2geninfo[j]==mothertrk1geninfo[j])&&(mothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
+                hBzerotoJPsiKstarplusPion->Fill(mass[j]);
+                case9=true;
+                countercase9++;
+              }
+            }
+            
+           if((case2==false)&&(case3==false)&&(case4==false)&&(case5==false)&&(case6==false)&&(case6==false)&&(case7==false)&&(case8==false)&&(case8==false)&&(case9==false)){
              countercaseno++;
              cout<<"--------------------------"<<endl;
              cout<<"pdgtrk1="<<pdgtrk1[j]<<", pdgmothertrk1="<<pdgmothertrk1[j]<<", pdggrandmothertrk1="<<pdggrandmothertrk1[j]<<endl;
@@ -277,14 +307,18 @@ void checkB0(){
     }
   }
   cout<<counter<<endl;
-  cout<<countercase2<<endl;
-  cout<<countercase3<<endl;
-  cout<<countercase4<<endl;
-  cout<<countercase5<<endl;
-  cout<<countercase6<<endl;
+  cout<<"countercase2"<<countercase2<<endl;
+  cout<<"countercase3"<<countercase3<<endl;
+  cout<<"countercase4"<<countercase4<<endl; 
+  cout<<"countercase5"<<countercase5<<endl; 
+  cout<<"countercase6"<<countercase6<<endl; 
+  cout<<"countercase7"<<countercase7<<endl; 
+  cout<<"countercase8"<<countercase8<<endl; 
+  cout<<"countercase9"<<countercase9<<endl; 
+
+
   cout<<countercaseno<<endl;
-  
-  cout<<countercase2+countercase3+countercase4+countercase5+countercase6+countercase7+countercase8<<endl;
+  cout<<countercase2+countercase3+countercase4+countercase5+countercase6+countercase7+countercase8+countercase9<<endl;
 
   
   
