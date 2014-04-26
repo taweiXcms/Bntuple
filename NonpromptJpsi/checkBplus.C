@@ -379,7 +379,7 @@ void DrawAll(){
   legendBplustoJPsiPi->SetFillStyle(0);
   legendBplustoJPsiPi->SetBorderSize(0);
   legendBplustoJPsiPi->SetTextFont(42);
-  legendBplustoJPsiPi->SetTextSize(0.04);
+  legendBplustoJPsiPi->SetTextSize(0.05);
   
   TLegendEntry *entBplustoJPsiPi=legendBplustoJPsiPi->AddEntry(hBplustoJPsiPi,"B^{+} #rightarrow JPsi+Pi","P");
   hBplustoJPsiPi->SetLineColor(2);
@@ -390,7 +390,7 @@ void DrawAll(){
   hBplustoJPsiPi->SetMarkerStyle(21);
   entBplustoJPsiPi->SetLineWidth(1);
   hBplustoJPsiPi->SetLineWidth(1);
-  entBplustoJPsiPi->SetTextSize(0.04);
+  entBplustoJPsiPi->SetTextSize(0.05);
   hempty->Draw();
   hBplustoJPsiPi->Draw("esame");
   legendBplustoJPsiPi->Draw();
@@ -403,7 +403,7 @@ void DrawAll(){
   legendBplustoJPsiKmany->SetFillStyle(0);
   legendBplustoJPsiKmany->SetBorderSize(0);
   legendBplustoJPsiKmany->SetTextFont(42);
-  legendBplustoJPsiKmany->SetTextSize(0.04);
+  legendBplustoJPsiKmany->SetTextSize(0.05);
  
   TLegendEntry *entBplustoJPsiKmany=legendBplustoJPsiKmany->AddEntry(legendBplustoJPsiKmany,"B^{+} #rightarrow JPsi+ various K","P");
   hBplustoJPsiKmany->SetLineColor(4);
@@ -413,7 +413,7 @@ void DrawAll(){
   hBplustoJPsiKmany->SetMarkerStyle(21);
   entBplustoJPsiKmany->SetLineWidth(1);
   hBplustoJPsiKmany->SetLineWidth(1);
-  entBplustoJPsiKmany->SetTextSize(0.04);
+  entBplustoJPsiKmany->SetTextSize(0.05);
   hempty->Draw();
   hBplustoJPsiKmany->Draw("esame");
   legendBplustoJPsiKmany->Draw();
@@ -426,7 +426,7 @@ void DrawAll(){
   legendBzerotoJPsiKmany->SetFillStyle(0);
   legendBzerotoJPsiKmany->SetBorderSize(0);
   legendBzerotoJPsiKmany->SetTextFont(42);
-  legendBzerotoJPsiKmany->SetTextSize(0.04);
+  legendBzerotoJPsiKmany->SetTextSize(0.05);
 
   TLegendEntry *entBzerotoJPsiKmany=legendBzerotoJPsiKmany->AddEntry(hBzerotoJPsiKmany,"B^{0} #rightarrow JPsi+ various K","P");
   hBzerotoJPsiKmany->SetLineColor(12);
@@ -436,7 +436,7 @@ void DrawAll(){
   hBzerotoJPsiKmany->SetMarkerStyle(21);
   entBzerotoJPsiKmany->SetLineWidth(1);
   hBzerotoJPsiKmany->SetLineWidth(1);
-  entBzerotoJPsiKmany->SetTextSize(0.04);
+  entBzerotoJPsiKmany->SetTextSize(0.05);
   hempty->Draw();
   hBzerotoJPsiKmany->Draw("esame");
   legendBzerotoJPsiKmany->Draw();
