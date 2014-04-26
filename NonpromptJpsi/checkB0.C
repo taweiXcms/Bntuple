@@ -9,7 +9,7 @@
 
 void loop(){
 
-  TFile *inf = new TFile("../../output/myoutputBzero.root");
+  TFile *inf = new TFile("/net/hisrv0001/home/yenjie/scratch/gianTemp/myoutputBzero.root");
   TTree *nt = (TTree*)inf->Get("ntKstar");
 
   TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01";
@@ -34,7 +34,6 @@ void checkB0(){
   TH1F*hBstoJPsiPhi=new TH1F("hBstoJPsiPhi","hBstoJPsiPhi",50,5,6);
   TH1F*hBplustoJPsiK1plus=new TH1F("hBplustoJPsiK1plus","hBplustoJPsiK1plus",50,5,6);
   TH1F*hBzerotoJPsiK10=new TH1F("hBzerotoJPsiK10","hBzerotoJPsiK10",50,5,6);
-  TH1F*hBzerotoJPsiKstar20=new TH1F("hBzerotoJPsiKstar20","hBzerotoJPsiKstar20",50,5,6);
   TH1F*hBzerotoJPsiKstar20=new TH1F("hBzerotoJPsiKstar20","hBzerotoJPsiKstar20",50,5,6);
   TH1F*hBzerotoJPsiKPi=new TH1F("hBzerotoJPsiKPi","hBzerotoJPsiKPi",50,5,6);
   
