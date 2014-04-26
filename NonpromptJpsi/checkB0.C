@@ -188,7 +188,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
 	  bool cut10=((d0[j]/d0Err[j])>4.16);
   	  bool cut11=(cos(dtheta[j])>(7.50*0.1));
 	  bool cut12=abs(tktkmass[j]-0.89594)<(2.33*0.1);
-	  bool cut13=((mass[j]>5.)&&(mass[j]<5.15));
+	  bool cut13=((mass[j]>5.)&&(mass[j]<6.));
 	  bool cut14=(!((gen[j]==22233)||(gen[j]==41000)));
       
       bool case1=false;
@@ -352,6 +352,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
   hBzerotoJPsiKPi->Write();
   hBplustoJPsiKPi->Write();
   hBstoJPsiKPi->Write();
+  hBzerotoJPsiKstarplusPion->Write();
   fileoutput->Close();
   delete fileoutput;
   
@@ -373,12 +374,13 @@ void Draw(){
   TH1F*hBzerotoJPsiKPi=(TH1F*)fileoutput->Get("hBzerotoJPsiKPi");
   TH1F*hBplustoJPsiKPi=(TH1F*)fileoutput->Get("hBplustoJPsiKPi");
   TH1F*hBstoJPsiKPi=(TH1F*)fileoutput->Get("hBstoJPsiKPi");
+  TH1F*hBzerotoJPsiKstarplusPion=(TH1F*)fileoutput->Get("hBzerotoJPsiKstarplusPion");
   
   hBstoJPsiKPi->Draw();
 
   TCanvas *canvas=new TCanvas("canvas","canvas",600,600);
   canvas->cd();
-  TH2F* hempty=new TH2F("hempty","",10,5.,6,10.,0,250);  
+  TH2F* hempty=new TH2F("hempty","",10,5.,6,10.,0,180);  
   hempty->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
   hempty->GetYaxis()->SetTitle("Entries");
   hempty->GetXaxis()->SetTitleOffset(1.);
@@ -498,6 +500,20 @@ void Draw(){
   hBstoJPsiKPi->SetLineWidth(1);
   entBstoJPsiKPi->SetTextSize(0.03);
   hBstoJPsiKPi->Draw("esame");
+  canvas->Update();
+  legend->Draw();
+  
+  
+  TLegendEntry *entBzerotoJPsiKstarplusPion=legend->AddEntry(hBzerotoJPsiKstarplusPion,"B^{0} #rightarrow JPsi+K*+ Pi","P");
+  hBzerotoJPsiKstarplusPion->SetLineColor(9);
+  hBzerotoJPsiKstarplusPion->SetMarkerColor(9);
+  entBzerotoJPsiKstarplusPion->SetTextColor(9);
+  entBzerotoJPsiKstarplusPion->SetLineColor(9);
+  hBzerotoJPsiKstarplusPion->SetMarkerStyle(21);
+  entBzerotoJPsiKstarplusPion->SetLineWidth(1);
+  hBzerotoJPsiKstarplusPion->SetLineWidth(1);
+  entBzerotoJPsiKstarplusPion->SetTextSize(0.03);
+  hBzerotoJPsiKstarplusPion->Draw("esame");
   canvas->Update();
   legend->Draw();
   
