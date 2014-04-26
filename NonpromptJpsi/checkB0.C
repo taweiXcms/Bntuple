@@ -340,6 +340,7 @@ void Draw(){
   TH1F*hBplustoJPsiKPi=(TH1F*)fileoutput->Get("hBplustoJPsiKPi");
   TH1F*hBstoJPsiKPi=(TH1F*)fileoutput->Get("hBstoJPsiKPi");
   
+  hBstoJPsiKPi->Draw();
 
   TCanvas *canvas=new TCanvas("canvas","canvas",600,600);
   canvas->cd();
@@ -391,7 +392,7 @@ void Draw(){
   entBstoJPsiPhi->SetTextSize(0.03);
   hBstoJPsiPhi->Draw("esame");
   canvas->Update();
-      
+ 
   TLegendEntry *entBzerotoJPsiK10=legend->AddEntry(hBzerotoJPsiK10,"B^{0} #rightarrow JPsi+K10","P");
   hBzerotoJPsiK10->SetLineColor(4);
   hBzerotoJPsiK10->SetMarkerColor(4);
@@ -404,18 +405,17 @@ void Draw(){
   hBzerotoJPsiK10->Draw("esame");
   canvas->Update();
 
-  TLegendEntry *entBplustoJPsiK1plus=legend->AddEntry(hBplustoJPsiK1plus,"B^{0} #rightarrow JPsi+K_{10}","P");
-  hBplustoJPsiK1plus->SetLineColor(5);
-  hBplustoJPsiK1plus->SetMarkerColor(5);
-  entBplustoJPsiK1plus->SetTextColor(5);
-  entBplustoJPsiK1plus->SetLineColor(5);
+  TLegendEntry *entBplustoJPsiK1plus=legend->AddEntry(hBplustoJPsiK1plus,"B^{+} #rightarrow JPsi+K1plus","P");
+  hBplustoJPsiK1plus->SetLineColor(12);
+  hBplustoJPsiK1plus->SetMarkerColor(12);
+  entBplustoJPsiK1plus->SetTextColor(12);
+  entBplustoJPsiK1plus->SetLineColor(12);
   hBplustoJPsiK1plus->SetMarkerStyle(21);
   entBplustoJPsiK1plus->SetLineWidth(1);
   hBplustoJPsiK1plus->SetLineWidth(1);
   entBplustoJPsiK1plus->SetTextSize(0.03);
   hBplustoJPsiK1plus->Draw("esame");
   canvas->Update();
-
 
   TLegendEntry *entBzerotoJPsiKstar20=legend->AddEntry(hBzerotoJPsiKstar20,"B^{0} #rightarrow JPsi+K*20","P");
   hBzerotoJPsiKstar20->SetLineColor(6);
@@ -428,6 +428,7 @@ void Draw(){
   entBzerotoJPsiKstar20->SetTextSize(0.03);
   hBzerotoJPsiKstar20->Draw("esame");
   canvas->Update();
+  
 
   TLegendEntry *entBzerotoJPsiKPi=legend->AddEntry(hBzerotoJPsiKPi,"B^{0} #rightarrow JPsi+K Pi","P");
   hBzerotoJPsiKPi->SetLineColor(7);
@@ -452,19 +453,20 @@ void Draw(){
   entBplustoJPsiKPi->SetTextSize(0.03);
   hBplustoJPsiKPi->Draw("esame");
   canvas->Update();
-  
 
   TLegendEntry *entBstoJPsiKPi=legend->AddEntry(hBstoJPsiKPi,"B_{s} #rightarrow JPsi+K Pi","P");
-  hBstoJPsiKPi->SetLineColor(10);
-  hBstoJPsiKPi->SetMarkerColor(10);
-  entBstoJPsiKPi->SetTextColor(10);
-  entBstoJPsiKPi->SetLineColor(10);
+  hBstoJPsiKPi->SetLineColor(9);
+  hBstoJPsiKPi->SetMarkerColor(9);
+  entBstoJPsiKPi->SetTextColor(9);
+  entBstoJPsiKPi->SetLineColor(9);
   hBstoJPsiKPi->SetMarkerStyle(21);
   entBstoJPsiKPi->SetLineWidth(1);
   hBstoJPsiKPi->SetLineWidth(1);
   entBstoJPsiKPi->SetTextSize(0.03);
   hBstoJPsiKPi->Draw("esame");
   canvas->Update();
+  legend->Draw();
   
+  canvas->SaveAs("Plots/canvasSummaryBzero.png");
 
 }
