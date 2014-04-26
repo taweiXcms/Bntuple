@@ -13,7 +13,7 @@
 
 void loop(){
 
-  TFile *inf = new TFile("../../output/myoutputBzero.root");
+  TFile *inf = new TFile("/net/hisrv0001/home/yenjie/scratch/gianTemp/myoutputBzero.root");
   TTree *nt = (TTree*)inf->Get("ntKp");
   
   TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
@@ -30,7 +30,7 @@ void loop(){
 
 void checkBplus(){
 
-  TFile *inf = new TFile("../../output/myoutputBzero.root");
+  TFile *inf = new TFile("/net/hisrv0001/home/yenjie/scratch/gianTemp/myoutputBzero.root");
   TTree *nt = (TTree*)inf->Get("ntKp");
 
   TH1F*hTotalNonPrompt=new TH1F("hTotalNonPrompt","hTotalNonPrompt",50,5,6);
@@ -263,7 +263,7 @@ void Draw(){
 
   TCanvas *canvas=new TCanvas("canvas","canvas",600,600);
   canvas->cd();
-  TH2F* hempty=new TH2F("hempty","",10,5.,6,10.,0,180);  
+  TH2F* hempty=new TH2F("hempty","",10,5.,6,10.,0,400);  
   hempty->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
   hempty->GetYaxis()->SetTitle("Entries");
   hempty->GetXaxis()->SetTitleOffset(1.);
