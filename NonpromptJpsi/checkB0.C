@@ -4,6 +4,10 @@
 #include "TMath.h"
 #include "TCanvas.h"
 #include "TH1F.h"
+#include "TH2F.h"
+#include "TLegend.h"
+#include "TLegendEntry.h"
+
 
 #define NUM_BX 9000
 
@@ -309,6 +313,7 @@ void checkB0(){
   hTotalNonPrompt->Write();
   hBstoJPsiPhi->Write();
   hBzerotoJPsiK10->Write();
+  hBplustoJPsiK1plus->Write();
   hBzerotoJPsiKstar20->Write();
   hBzerotoJPsiKPi->Write();
   hBplustoJPsiKPi->Write();
@@ -316,8 +321,149 @@ void checkB0(){
   fileoutput->Close();
   delete fileoutput;
   
+
+}
+
+
+void Draw(){
+
+
+
+  TFile*fileoutput=new TFile("Plots/PlotoutputBzero.root");
   
+  TH1F*hTotalNonPrompt=(TH1F*)fileoutput->Get("hTotalNonPrompt");
+  TH1F*hBstoJPsiPhi=(TH1F*)fileoutput->Get("hBstoJPsiPhi");
+  TH1F*hBzerotoJPsiK10=(TH1F*)fileoutput->Get("hBzerotoJPsiK10");
+  //TH1F*hBplustoJPsiK1plus=(TH1F*)fileoutput->Get("hBplustoJPsiK1plus");
+  TH1F*hBzerotoJPsiKstar20=(TH1F*)fileoutput->Get("hBzerotoJPsiKstar20");
+  TH1F*hBzerotoJPsiKPi=(TH1F*)fileoutput->Get("hBzerotoJPsiKPi");
+  TH1F*hBplustoJPsiKPi=(TH1F*)fileoutput->Get("hBplustoJPsiKPi");
+  TH1F*hBstoJPsiKPi=(TH1F*)fileoutput->Get("hBstoJPsiKPi");
+  
+  
+  TCanvas *canvas=new TCanvas("canvas","canvas",600,600);
+  canvas->cd();
+  TH2F* hempty=new TH2F("hempty","",10,5.,6,10.,0,250);  
+  hempty->GetXaxis()->SetTitle("Mass (GeV/c^{2})");
+  hempty->GetYaxis()->SetTitle("Entries");
+  hempty->GetXaxis()->SetTitleOffset(1.);
+  hempty->GetYaxis()->SetTitleOffset(1.);
+  hempty->GetXaxis()->SetTitleSize(0.04);
+  hempty->GetYaxis()->SetTitleSize(0.04);
+  hempty->GetXaxis()->SetTitleFont(42);
+  hempty->GetYaxis()->SetTitleFont(42);
+  hempty->GetXaxis()->SetLabelFont(42);
+  hempty->GetYaxis()->SetLabelFont(42);
+  hempty->GetXaxis()->SetLabelSize(0.035);
+  hempty->GetYaxis()->SetLabelSize(0.035);  
+  hempty->SetMinimum(0.);
+  hempty->SetMaximum(400);
+  hempty->Draw();
+  
+  TLegend *legend=new TLegend(0.1795302,0.6377119,0.25,0.8728814,"");
+  legend->SetBorderSize(0);
+  legend->SetFillStyle(0);
+  legend->SetBorderSize(0);
+  legend->SetTextFont(42);
+  legend->SetTextSize(0.045);
+  
+  TLegendEntry *entTotalNonPrompt=legend->AddEntry(hTotalNonPrompt,"Total non prompt","P");
+  hTotalNonPrompt->SetLineColor(1);
+  hTotalNonPrompt->SetMarkerColor(1);
+  entTotalNonPrompt->SetTextColor(1);
+  entTotalNonPrompt->SetLineColor(1);
+  hTotalNonPrompt->SetMarkerStyle(21);
+  entTotalNonPrompt->SetLineWidth(1);
+  hTotalNonPrompt->SetLineWidth(1);
+  entTotalNonPrompt->SetTextSize(0.03);
+  hTotalNonPrompt->Draw("esame");
+  canvas->Update();
+  legend->Draw();
+
+  TLegendEntry *entBstoJPsiPhi=legend->AddEntry(hBstoJPsiPhi,"B_{s} #rightarrow JPsi+Phi","P");
+  hBstoJPsiPhi->SetLineColor(2);
+  hBstoJPsiPhi->SetMarkerColor(2);
+  entBstoJPsiPhi->SetTextColor(2);
+  entBstoJPsiPhi->SetLineColor(2);
+  hBstoJPsiPhi->SetMarkerStyle(21);
+  entBstoJPsiPhi->SetLineWidth(1);
+  hBstoJPsiPhi->SetLineWidth(1);
+  entBstoJPsiPhi->SetTextSize(0.03);
+  hBstoJPsiPhi->Draw("esame");
+  canvas->Update();
+  
+  TLegendEntry *entBzerotoJPsiK10=legend->AddEntry(hBzerotoJPsiK10,"B^{0} #rightarrow JPsi+K10","P");
+  hBzerotoJPsiK10->SetLineColor(4);
+  hBzerotoJPsiK10->SetMarkerColor(4);
+  entBzerotoJPsiK10->SetTextColor(4);
+  entBzerotoJPsiK10->SetLineColor(4);
+  hBzerotoJPsiK10->SetMarkerStyle(21);
+  entBzerotoJPsiK10->SetLineWidth(1);
+  hBzerotoJPsiK10->SetLineWidth(1);
+  entBzerotoJPsiK10->SetTextSize(0.03);
+  hBzerotoJPsiK10->Draw("esame");
+  canvas->Update();
+  
+  TLegendEntry *entBplustoJPsiK1plus=legend->AddEntry(hBplustoJPsiK1plus,"B^{0} #rightarrow JPsi+K_{10}","P");
+  hBplustoJPsiK1plus->SetLineColor(5);
+  hBplustoJPsiK1plus->SetMarkerColor(5);
+  entBplustoJPsiK1plus->SetTextColor(5);
+  entBplustoJPsiK1plus->SetLineColor(5);
+  hBplustoJPsiK1plus->SetMarkerStyle(21);
+  entBplustoJPsiK1plus->SetLineWidth(1);
+  hBplustoJPsiK1plus->SetLineWidth(1);
+  entBplustoJPsiK1plus->SetTextSize(0.03);
+  hBplustoJPsiK1plus->Draw("esame");
+  canvas->Update();
+
+  
+  TLegendEntry *entBzerotoJPsiKstar20=legend->AddEntry(hBzerotoJPsiKstar20,"B^{0} #rightarrow JPsi+K*20","P");
+  hBzerotoJPsiKstar20->SetLineColor(6);
+  hBzerotoJPsiKstar20->SetMarkerColor(6);
+  entBzerotoJPsiKstar20->SetTextColor(6);
+  entBzerotoJPsiKstar20->SetLineColor(6);
+  hBzerotoJPsiKstar20->SetMarkerStyle(21);
+  entBzerotoJPsiKstar20->SetLineWidth(1);
+  hBzerotoJPsiKstar20->SetLineWidth(1);
+  entBzerotoJPsiKstar20->SetTextSize(0.03);
+  hBzerotoJPsiKstar20->Draw("esame");
+  canvas->Update();
+  
+  TLegendEntry *entBzerotoJPsiKPi=legend->AddEntry(hBzerotoJPsiKPi,"B^{0} #rightarrow JPsi+K Pi","P");
+  hBzerotoJPsiKPi->SetLineColor(7);
+  hBzerotoJPsiKPi->SetMarkerColor(7);
+  entBzerotoJPsiKPi->SetTextColor(7);
+  entBzerotoJPsiKPi->SetLineColor(7);
+  hBzerotoJPsiKPi->SetMarkerStyle(21);
+  entBzerotoJPsiKPi->SetLineWidth(1);
+  hBzerotoJPsiKPi->SetLineWidth(1);
+  entBzerotoJPsiKPi->SetTextSize(0.03);
+  hBzerotoJPsiKPi->Draw("esame");
+  canvas->Update();
+
+  TLegendEntry *entBplustoJPsiKPi=legend->AddEntry(hBplustoJPsiKPi,"B^{+} #rightarrow JPsi+K Pi","P");
+  hBplustoJPsiKPi->SetLineColor(8);
+  hBplustoJPsiKPi->SetMarkerColor(8);
+  entBplustoJPsiKPi->SetTextColor(8);
+  entBplustoJPsiKPi->SetLineColor(8);
+  hBplustoJPsiKPi->SetMarkerStyle(21);
+  entBplustoJPsiKPi->SetLineWidth(1);
+  hBplustoJPsiKPi->SetLineWidth(1);
+  entBplustoJPsiKPi->SetTextSize(0.03);
+  hBplustoJPsiKPi->Draw("esame");
+  canvas->Update();
   
 
+  TLegendEntry *entBstoJPsiKPi=legend->AddEntry(hBstoJPsiKPi,"B_{s} #rightarrow JPsi+K Pi","P");
+  hBstoJPsiKPi->SetLineColor(10);
+  hBstoJPsiKPi->SetMarkerColor(10);
+  entBstoJPsiKPi->SetTextColor(10);
+  entBstoJPsiKPi->SetLineColor(10);
+  hBstoJPsiKPi->SetMarkerStyle(21);
+  entBstoJPsiKPi->SetLineWidth(1);
+  hBstoJPsiKPi->SetLineWidth(1);
+  entBstoJPsiKPi->SetTextSize(0.03);
+  hBstoJPsiKPi->Draw("esame");
+  canvas->Update();
 
 }
