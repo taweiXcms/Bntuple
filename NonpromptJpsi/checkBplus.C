@@ -35,6 +35,21 @@ void checkBplus(){
 
   TH1F*hTotalNonPrompt=new TH1F("hTotalNonPrompt","hTotalNonPrompt",50,5,6);
   TH1F*hBplustoJPsiPi=new TH1F("hBplustoJPsiPi","hBplustoJPsiPi",50,5,6);
+  TH1F*hBplustoJPsiKmany=new TH1F("hBplustoJPsiKmany","hBplustoJPsiKmany",50,5,6);
+  TH1F*hBzerotoJPsiKmany=new TH1F("hBzerotoJPsiKmany","hBzerotoJPsiKmany",50,5,6);  
+  TH1F*hJPsiRandom=new TH1F("hJPsiRandom","hJPsiRandom",50,5,6);  
+  
+  /*
+  --------------------------
+pdgtrk1=321, pdgmothertrk1=323, pdggrandmothertrk1=521
+pdgmuon1=13, pdgmothermuon1=443, pdggrandmothermuon1=521
+pdgmuon2=13, pdgmothermuon2=443, pdggrandmothermuon2=521
+grandmothertrk1geninfo=45, grandmothermuon1geninfo=45, grandmothermuon2geninfo=45
+mothertrk1geninfo=71, mothermuon1geninfo=70, mothermuon2geninfo=70
+--------------------------
+
+  
+  */
   
 
   Float_t pt[NUM_BX];
@@ -60,13 +75,6 @@ void checkBplus(){
   Int_t pdgmothertrk1[NUM_BX];
   Int_t grandmothertrk1geninfo[NUM_BX];
   Int_t pdggrandmothertrk1[NUM_BX];
-
-  Int_t trk2geninfo[NUM_BX];
-  Int_t pdgtrk2[NUM_BX];
-  Int_t mothertrk2geninfo[NUM_BX];
-  Int_t pdgmothertrk2[NUM_BX];
-  Int_t grandmothertrk2geninfo[NUM_BX];
-  Int_t pdggrandmothertrk2[NUM_BX];
 
   Int_t muon1geninfo[NUM_BX];
   Int_t pdgmuon1[NUM_BX];
@@ -102,34 +110,30 @@ void checkBplus(){
   nt->SetBranchAddress("pt",pt);
 
   nt->SetBranchAddress("pdgtrk1",pdgtrk1);
-  nt->SetBranchAddress("pdgtrk2",pdgtrk2);
   nt->SetBranchAddress("pdgmuon1",pdgmuon1);
   nt->SetBranchAddress("pdgmuon2",pdgmuon2);
   
   nt->SetBranchAddress("pdgmothertrk1",pdgmothertrk1);
-  nt->SetBranchAddress("pdgmothertrk2",pdgmothertrk2);
   nt->SetBranchAddress("pdgmothermuon1",pdgmothermuon1);
   nt->SetBranchAddress("pdgmothermuon2",pdgmothermuon2);
   
   nt->SetBranchAddress("pdggrandmothertrk1",pdggrandmothertrk1);
-  nt->SetBranchAddress("pdggrandmothertrk2",pdggrandmothertrk2);
   nt->SetBranchAddress("pdggrandmothermuon1",pdggrandmothermuon1);
   nt->SetBranchAddress("pdggrandmothermuon2",pdggrandmothermuon2);
   
   nt->SetBranchAddress("trk1geninfo",trk1geninfo);
-  nt->SetBranchAddress("trk2geninfo",trk2geninfo);
   nt->SetBranchAddress("muon1geninfo",muon1geninfo);
   nt->SetBranchAddress("muon2geninfo",muon2geninfo);
   
   nt->SetBranchAddress("grandmothertrk1geninfo",grandmothertrk1geninfo);
-  nt->SetBranchAddress("grandmothertrk2geninfo",grandmothertrk2geninfo);
   nt->SetBranchAddress("grandmothermuon1geninfo",grandmothermuon1geninfo);
   nt->SetBranchAddress("grandmothermuon2geninfo",grandmothermuon2geninfo);
   
+  
   nt->SetBranchAddress("mothermuon1geninfo",mothermuon1geninfo);
-  nt->SetBranchAddress("mothermuon2geninfo",mothermuon2geninfo);
   nt->SetBranchAddress("mothertrk1geninfo",mothertrk1geninfo);
-  nt->SetBranchAddress("mothertrk2geninfo",mothertrk2geninfo);
+  nt->SetBranchAddress("mothermuon2geninfo",mothermuon2geninfo);
+
   
 
   Int_t nentries = (Int_t)nt->GetEntries();
@@ -138,6 +142,9 @@ void checkBplus(){
   int counter=0;
   int countercase2=0;
   int countercase3=0;
+  int countercase4=0;
+  int countercase5=0;
+  int countercase6=0;
   int countercaseno=0;
 
 
@@ -146,6 +153,7 @@ void checkBplus(){
     nt->GetEntry(i);
 
     for(j=0;j<size;j++){
+
       
       bool cut0=abs(y[j]+0.465)<1.93;
    	  bool cut1=((pt[j]>10.)&&(pt[j]<60.));
@@ -163,16 +171,16 @@ void checkBplus(){
       
       bool case2=false;
       bool case3=false;
-      
-	  if(cut0&&cut1&&cut2&&cut3&&cut4&&cut5&&cut6&&cut7&&cut8&&cut9&&cut10&&cut11){
+      bool case4=false;
+	  if(cut0&&cut1&&cut2&&cut3&&cut4&&cut5&&cut6&&cut7&&cut8&&cut9&&cut10&&cut11&&cut12){
    	    if((trk1geninfo[j]>-1)&&(muon1geninfo[j]>-1)&&(muon2geninfo[j]>-1)){
-	      if((pdgtrk1[j]>0)&&(pdgtrk2[j]>0)&&(pdgmuon1[j]>0)&&(pdgmuon2[j]>0)){
+	      if((pdgtrk1[j]>0)&&(pdgmuon1[j]>0)&&(pdgmuon2[j]>0)){
 	      
 	        counter++;	        
 	        
 	        hTotalNonPrompt->Fill(mass[j]);
 		  
-	        if((pdgtrk1[j]==211)&&(pdggrandmothertrk1[j]==521)&&(pdggrandmothermuon1[j]==531)&&(pdggrandmothermuon2[j]==531)){
+	        if((pdgtrk1[j]==211)&&(pdgmothertrk1[j]==521)&&(pdggrandmothermuon1[j]==521)&&(pdggrandmothermuon2[j]==521)){
               if ((mothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
                 hBplustoJPsiPi->Fill(mass[j]);
                 case2=true;
@@ -180,15 +188,30 @@ void checkBplus(){
               }
             } 
             
-           if((case2==false)){
+            if(((pdgmothertrk1[j]==323)||(pdgmothertrk1[j]==313)||(pdgmothertrk1[j]==315)||(pdgmothertrk1[j]==325))&&(pdggrandmothertrk1[j]==511)&&(pdggrandmothermuon1[j]==511)&&(pdggrandmothermuon2[j]==511)){
+              if ((grandmothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
+                hBzerotoJPsiKmany->Fill(mass[j]);
+                case3=true;
+                countercase3++;
+              }
+            } 
+            
+            if(((pdgmothertrk1[j]==323)||(pdgmothertrk1[j]==313)||(pdgmothertrk1[j]==315)||(pdgmothertrk1[j]==325))&&(pdggrandmothertrk1[j]==521)&&(pdggrandmothermuon1[j]==521)&&(pdggrandmothermuon2[j]==521)){
+              if ((grandmothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
+                hBplustoJPsiKmany->Fill(mass[j]);
+                case4=true;
+                countercase4++;
+              }
+            } 
+        
+           if((case2==false)&&(case3==false)&&(case4==false)){
              countercaseno++;
              cout<<"--------------------------"<<endl;
              cout<<"pdgtrk1="<<pdgtrk1[j]<<", pdgmothertrk1="<<pdgmothertrk1[j]<<", pdggrandmothertrk1="<<pdggrandmothertrk1[j]<<endl;
-             cout<<"pdgtrk2="<<pdgtrk2[j]<<", pdgmothertrk2="<<pdgmothertrk2[j]<<", pdggrandmothertrk2="<<pdggrandmothertrk2[j]<<endl;
              cout<<"pdgmuon1="<<pdgmuon1[j]<<", pdgmothermuon1="<<pdgmothermuon1[j]<<", pdggrandmothermuon1="<<pdggrandmothermuon1[j]<<endl;
              cout<<"pdgmuon2="<<pdgmuon2[j]<<", pdgmothermuon2="<<pdgmothermuon2[j]<<", pdggrandmothermuon2="<<pdggrandmothermuon2[j]<<endl;
-             cout<<"grandmothertrk1geninfo="<<grandmothertrk1geninfo[j]<<", grandmothertrk2geninfo="<<grandmothertrk2geninfo[j]<<", grandmothermuon1geninfo="<<grandmothermuon1geninfo[j]<<", grandmothermuon2geninfo="<<grandmothermuon2geninfo[j]<<endl;
-             cout<<"mothertrk1geninfo="<<mothertrk1geninfo[j]<<", mothertrk2geninfo="<<mothertrk2geninfo[j]<<", mothermuon1geninfo="<<mothermuon1geninfo[j]<<", mothermuon2geninfo="<<mothermuon2geninfo[j]<<endl;
+             cout<<"grandmothertrk1geninfo="<<grandmothertrk1geninfo[j]<<", grandmothermuon1geninfo="<<grandmothermuon1geninfo[j]<<", grandmothermuon2geninfo="<<grandmothermuon2geninfo[j]<<endl;
+             cout<<"mothertrk1geninfo="<<mothertrk1geninfo[j]<<", mothermuon1geninfo="<<mothermuon1geninfo[j]<<", mothermuon2geninfo="<<mothermuon2geninfo[j]<<endl;
 
            }
           }
@@ -197,9 +220,6 @@ void checkBplus(){
     }
   }
   cout<<counter<<endl;
-  cout<<"countercase2"<<countercase2<<endl;
-
-  cout<<countercase2<<endl;
 
   
   
@@ -207,12 +227,22 @@ void checkBplus(){
   canvassecond->Divide(3,2);
   canvassecond->cd(1);
   hTotalNonPrompt->Draw("e");
+  canvassecond->cd(2);
+  hBplustoJPsiPi->Draw("e");
+  canvassecond->cd(3);
+  hBplustoJPsiKmany->Draw("e");
+  canvassecond->cd(4);
+  hBzerotoJPsiKmany->Draw("e");
+
+ 
   canvassecond->SaveAs("Plots/CanvasComponentBzero.png");
   
-  TFile*fileoutput=new TFile("Plots/PlotoutputBzero.root","recreate");
+  TFile*fileoutput=new TFile("Plots/PlotoutputBplus.root","recreate");
   fileoutput->cd();
   hTotalNonPrompt->Write();
   hBplustoJPsiPi->Write();
+  hBplustoJPsiKmany->Write();
+  hBzerotoJPsiKmany->Write();
   fileoutput->Close();
   delete fileoutput;
   
@@ -224,10 +254,12 @@ void Draw(){
 
 
 
-  TFile*fileoutput=new TFile("Plots/PlotoutputBzero.root");
+  TFile*fileoutput=new TFile("Plots/PlotoutputBplus.root");
   
   TH1F*hTotalNonPrompt=(TH1F*)fileoutput->Get("hTotalNonPrompt");
   TH1F*hBplustoJPsiPi=(TH1F*)fileoutput->Get("hBplustoJPsiPi");
+  TH1F*hBplustoJPsiKmany=(TH1F*)fileoutput->Get("hBplustoJPsiKmany");
+  TH1F*hBzerotoJPsiKmany=(TH1F*)fileoutput->Get("hBzerotoJPsiKmany");
 
   TCanvas *canvas=new TCanvas("canvas","canvas",600,600);
   canvas->cd();
@@ -268,16 +300,40 @@ void Draw(){
   canvas->Update();
   legend->Draw();
 
-  TLegendEntry *entBplusstoJPsiPi=legend->AddEntry(hBplustoJPsiPi,"B_{s} #rightarrow JPsi+Phi","P");
+  TLegendEntry *entBplustoJPsiPi=legend->AddEntry(hBplustoJPsiPi,"B^{+} #rightarrow JPsi+Pi","P");
   hBplustoJPsiPi->SetLineColor(2);
   hBplustoJPsiPi->SetMarkerColor(2);
-  entBplusstoJPsiPi->SetTextColor(2);
-  entBplusstoJPsiPi->SetLineColor(2);
+  entBplustoJPsiPi->SetTextColor(2);
+  entBplustoJPsiPi->SetLineColor(2);
   hBplustoJPsiPi->SetMarkerStyle(21);
-  entBplusstoJPsiPi->SetLineWidth(1);
+  entBplustoJPsiPi->SetLineWidth(1);
   hBplustoJPsiPi->SetLineWidth(1);
-  entBplusstoJPsiPi->SetTextSize(0.03);
+  entBplustoJPsiPi->SetTextSize(0.03);
   hBplustoJPsiPi->Draw("esame");
+  canvas->Update();
+  
+  TLegendEntry *entBplustoJPsiKmany=legend->AddEntry(hBplustoJPsiKmany,"B^{+} #rightarrow JPsi+ various K","P");
+  hBplustoJPsiKmany->SetLineColor(3);
+  hBplustoJPsiKmany->SetMarkerColor(3);
+  entBplustoJPsiKmany->SetTextColor(3);
+  entBplustoJPsiKmany->SetLineColor(3);
+  hBplustoJPsiKmany->SetMarkerStyle(21);
+  entBplustoJPsiKmany->SetLineWidth(1);
+  hBplustoJPsiKmany->SetLineWidth(1);
+  entBplustoJPsiKmany->SetTextSize(0.03);
+  hBplustoJPsiKmany->Draw("esame");
+  canvas->Update();
+  
+  TLegendEntry *entBzerotoJPsiKmany=legend->AddEntry(hBzerotoJPsiKmany,"B^{0} #rightarrow JPsi+ various K","P");
+  hBzerotoJPsiKmany->SetLineColor(4);
+  hBzerotoJPsiKmany->SetMarkerColor(4);
+  entBzerotoJPsiKmany->SetTextColor(4);
+  entBzerotoJPsiKmany->SetLineColor(4);
+  hBzerotoJPsiKmany->SetMarkerStyle(21);
+  entBzerotoJPsiKmany->SetLineWidth(1);
+  hBzerotoJPsiKmany->SetLineWidth(1);
+  entBzerotoJPsiKmany->SetTextSize(0.03);
+  hBzerotoJPsiKmany->Draw("esame");
   canvas->Update();
  
   canvas->SaveAs("Plots/canvasSummaryBplus.png");
