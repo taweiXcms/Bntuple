@@ -26,37 +26,6 @@ float d0Err[MAX_XB];
 float chi2ndf[MAX_XB];
 float dtheta[MAX_XB];
 float lxy[MAX_XB];
-
-
-Int_t trk1geninfo[MAX_XB];
-Int_t pdgtrk1[MAX_XB];
-Int_t mothertrk1geninfo[MAX_XB];
-Int_t pdgmothertrk1[MAX_XB];
-Int_t grandmothertrk1geninfo[MAX_XB];
-Int_t pdggrandmothertrk1[MAX_XB];
-
-Int_t trk2geninfo[MAX_XB];
-Int_t pdgtrk2[MAX_XB];
-Int_t mothertrk2geninfo[MAX_XB];
-Int_t pdgmothertrk2[MAX_XB];
-Int_t grandmothertrk2geninfo[MAX_XB];
-Int_t pdggrandmothertrk2[MAX_XB];
-
-Int_t muon1geninfo[MAX_XB];
-Int_t pdgmuon1[MAX_XB];
-Int_t mothermuon1geninfo[MAX_XB];
-Int_t pdgmothermuon1[MAX_XB];
-Int_t grandmothermuon1geninfo[MAX_XB];
-Int_t pdggrandmothermuon1[MAX_XB];
-
-Int_t muon2geninfo[MAX_XB];
-Int_t pdgmuon2[MAX_XB];
-Int_t mothermuon2geninfo[MAX_XB];
-Int_t pdgmothermuon2[MAX_XB];
-Int_t grandmothermuon2geninfo[MAX_XB];
-Int_t pdggrandmothermuon2[MAX_XB];
-
-
 float gen[MAX_XB];
 int genIndex[MAX_XB];
 float genpt[MAX_XB];
@@ -67,7 +36,10 @@ float chi2cl[MAX_XB];//b vertex chi2 confidence level
 int isbestchi2[MAX_XB]; 
 int isbesttktkmass[MAX_XB];
 int kstar[MAX_XB]; 
-
+float genBzeroToJpsiK0starKPi[MAX_XB];
+float genBzeroToJpsiK0starPiK[MAX_XB]; 
+float genBplusToJpsiKX[MAX_XB]; 
+float genBplusToJpsiKstarX[MAX_XB]; 
 float mu1Striplayer[MAX_XB];
 float mu2Striplayer[MAX_XB];
 float mu1Pixellayer[MAX_XB];
@@ -157,6 +129,17 @@ Int_t HLT_PAMu12_v1;
 Int_t HLT_PAMu12_v1_Prescl;
 
 
+bool IsBplusToJpsiKX(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBplusToJpsiKstarX(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+
+bool IsBzeroToJpsiK0starPiK(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+bool IsBzeroToJpsiK0starKPi(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
+
+bool IsTrackfromBdirect(int,int,int,int,int,int,int&);
+bool IsFromBviaresonance(int,int,int,int,int,int,int,int,int,int&);
+
+
+
 void buildBranch(TTree* nt){
   nt->Branch("Run",&Run);
   nt->Branch("Event",&Event);
@@ -178,47 +161,20 @@ void buildBranch(TTree* nt){
   nt->Branch("chi2ndf",chi2ndf, "chi2ndf[size]/F");
   nt->Branch("dtheta",dtheta, "dtheta[size]/F");
   nt->Branch("lxy",lxy, "lxy[size]/F");
-  
-  nt->Branch("trk1geninfo",trk1geninfo, "trk1geninfo[size]/I");
-  nt->Branch("pdgtrk1",pdgtrk1, "pdgtrk1[size]/I");
-  nt->Branch("mothertrk1geninfo",mothertrk1geninfo, "mothertrk1geninfo[size]/I");
-  nt->Branch("pdgmothertrk1",pdgmothertrk1, "pdgmothertrk1[size]/I");
-  nt->Branch("grandmothertrk1geninfo",grandmothertrk1geninfo, "grandmothertrk1geninfo[size]/I");
-  nt->Branch("pdggrandmothertrk1",pdggrandmothertrk1, "pdggrandmothertrk1[size]/I");
-  
-  nt->Branch("trk2geninfo",trk2geninfo, "trk2geninfo[size]/I");
-  nt->Branch("pdgtrk2",pdgtrk2, "pdgtrk2[size]/I");
-  nt->Branch("mothertrk2geninfo",mothertrk2geninfo, "mothertrk2geninfo[size]/I");
-  nt->Branch("pdgmothertrk2",pdgmothertrk2, "pdgmothertrk2[size]/I");
-  nt->Branch("grandmothertrk2geninfo",grandmothertrk2geninfo, "grandmothertrk2geninfo[size]/I");
-  nt->Branch("pdggrandmothertrk2",pdggrandmothertrk2, "pdggrandmothertrk2[size]/I");
-  
-  nt->Branch("muon1geninfo",muon1geninfo, "muon1geninfo[size]/I");
-  nt->Branch("pdgmuon1",pdgmuon1, "pdgmuon1[size]/I");
-  nt->Branch("mothermuon1geninfo",mothermuon1geninfo, "mothermuon1geninfo[size]/I");
-  nt->Branch("pdgmothermuon1",pdgmothermuon1, "pdgmothermuon1[size]/I");
-  nt->Branch("grandmothermuon1geninfo",grandmothermuon1geninfo, "grandmothermuon1geninfo[size]/I");
-  nt->Branch("pdggrandmothermuon1",pdggrandmothermuon1, "pdggrandmothermuon1[size]/I");
-
-  nt->Branch("muon2geninfo",muon2geninfo, "muon2geninfo[size]/I");
-  nt->Branch("pdgmuon2",pdgmuon2, "pdgmuon2[size]/I");
-  nt->Branch("mothermuon2geninfo",mothermuon2geninfo, "mothermuon2geninfo[size]/I");
-  nt->Branch("pdgmothermuon2",pdgmothermuon2, "pdgmothermuon2[size]/I");
-  nt->Branch("grandmothermuon2geninfo",grandmothermuon2geninfo, "grandmothermuon2geninfo[size]/I");
-  nt->Branch("pdggrandmothermuon2",pdggrandmothermuon2, "pdggrandmothermuon2[size]/I");
-
   nt->Branch("chi2cl",chi2cl, "chi2cl[size]/F");
   nt->Branch("isbestchi2",isbestchi2, "isbestchi2[size]/I");
   nt->Branch("isbesttktkmass",isbesttktkmass, "isbesttktkmass[size]/I");
   nt->Branch("kstar",kstar, "kstar[size]/I");
-  
+  nt->Branch("genBzeroToJpsiK0starKPi",genBzeroToJpsiK0starKPi, "genBzeroToJpsiK0starKPi[size]/F");
+  nt->Branch("genBzeroToJpsiK0starPiK",genBzeroToJpsiK0starPiK, "genBzeroToJpsiK0starPiK[size]/F");
+  nt->Branch("genBplusToJpsiKX",genBplusToJpsiKX, "genBplusToJpsiKX[size]/F");
+  nt->Branch("genBplusToJpsiKstarX",genBplusToJpsiKstarX, "genBplusToJpsiKstarX[size]/F");
   nt->Branch("gen",gen, "gen[size]/F");
   nt->Branch("genIndex",genIndex, "genIndex[size]/I");
   nt->Branch("genpt",genpt, "genpt[size]/F");
   nt->Branch("geny",geny, "geny[size]/F");
   nt->Branch("geneta",geneta, "geneta[size]/F");
   nt->Branch("genphi",genphi, "genphi[size]/F");
-
   nt->Branch("mu1Striplayer",mu1Striplayer, "mu1Striplayer[size]/F");
   nt->Branch("mu1Pixellayer",mu1Pixellayer, "mu1Pixellayer[size]/F");
   nt->Branch("mu1Chi2ndf",mu1Chi2ndf, "mu1Chi2ndf[size]/F");

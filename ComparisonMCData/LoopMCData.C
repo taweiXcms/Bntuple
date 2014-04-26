@@ -1,18 +1,12 @@
 #include "utilities.h"
 
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching_2.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140318_Kp_TriggerMatchingMuon.root";
+TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
-//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9&&mass>5&&mass<6";
-
-//TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-//TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
-//TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-
-TString cut="1";
-TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.&&mass>5.4&&mass<5.5",cut.Data());
-TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60&&mass>5.4&&mass<5.5",cut.Data());
+TString cut="(HLT_PAMu3_v1)";
+TString seldata=Form("abs(y+0.465)<1.93&&%s&&pt>10.&&pt<60.&&mass>5.5&&mass<5.7",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&%s&&gen!=22233&&pt>10.&&pt<60&&mass>5.5&&mass<5.7",cut.Data());
 TString selmcsignal=Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.",cut.Data());
 
 //TString selmcsignal="1";//Form("abs(y+0.465)<1.93&&%s&&gen==22233&&pt>10.&&pt<60.&&abs(pdgId)==521",cut.Data());
@@ -27,29 +21,7 @@ void LoopMCData(){
   gStyle->SetFrameFillColor(0);
   gStyle->SetOptTitle(0);
   
-  Double_t cutd0d0Err=3.;
-  Double_t cutchi2cl=0.005;
-  Double_t cutcostheta=-0.5;
-  Double_t cuttrk1D0Err=2.;
   
-  TLine *lined0d0Err = new TLine(cutd0d0Err,0.,cutd0d0Err,0.4);
-  lined0d0Err->SetLineStyle(2);
-  lined0d0Err->SetLineWidth(5);
-  
-  TLine *linechi2cl = new TLine(cutchi2cl,0.,cutchi2cl,0.4);
-  linechi2cl->SetLineStyle(2);
-  linechi2cl->SetLineWidth(5);
-  
-  TLine *linecostheta = new TLine(cutcostheta,0.,cutcostheta,0.4);
-  linecostheta->SetLineStyle(2);
-  linecostheta->SetLineWidth(5);
-  
-  TLine *linetrk1D0Err = new TLine(cuttrk1D0Err,0.,cuttrk1D0Err,0.4);
-  linetrk1D0Err->SetLineStyle(2);
-  linetrk1D0Err->SetLineWidth(5);
-
-
-
   TFile *inf = new TFile(inputdata.Data());
   TTree *nt = (TTree*) inf->Get("ntKp");
   
@@ -59,14 +31,7 @@ void LoopMCData(){
   TH1D *hd0d0Err_Data = new TH1D("hd0d0Err_Data","hd0d0Err_Data",100,-.1,200);
   TH1D *hchi2cl_Data = new TH1D("hchi2cl_Data","hchi2cl_Data",100,-.1,1);
   TH1D *hcostheta_Data = new TH1D("hcostheta_Data","hcostheta_Data",200,0,1);
-  TH1D *htrk1D0Err_Data = new TH1D("htrk1D0Err_Data","htrk1D0Err_Data",100,-.1,100);
-  
-  //hd0d0Err_Data->Sumw2();
-  //hchi2cl_Data->Sumw2();
-  //hcostheta_Data->Sumw2();
-  //htrk1D0Err_Data->Sumw2();
-  
-  
+  TH1D *htrk1D0Err_Data = new TH1D("htrk1D0Err_Data","htrk1D0Err_Data",100,-.1,100);  
 
   nt->Project("hd0d0Err_Data","(d0)/d0Err",seldata.Data());  
   nt->Project("hchi2cl_Data","chi2cl",seldata.Data());
@@ -179,7 +144,6 @@ void LoopMCData(){
   latexd0d0Err->SetTextColor(1);
   latexd0d0Err->SetTextFont(42);
   latexd0d0Err->Draw();
-  //lined0d0Err->Draw("same");
   
 
   canvas->cd(2);
@@ -229,7 +193,6 @@ void LoopMCData(){
   latexchi2cl->SetTextColor(1);
   latexchi2cl->SetTextFont(42);
   latexchi2cl->Draw();
-  //linechi2cl->Draw("same");
 
   canvas->cd(3);
   hcostheta_Data->GetXaxis()->SetTitle("Cos(#theta)");
@@ -277,7 +240,6 @@ void LoopMCData(){
   latexcostheta->SetTextColor(1);
   latexcostheta->SetTextFont(42);
   latexcostheta->Draw();
-  //linecostheta->Draw("same");
  
   canvas->cd(4);
   htrk1D0Err_Data->GetXaxis()->SetTitle("|trk1Dxy/trk1D0Err|");
@@ -328,5 +290,6 @@ void LoopMCData(){
   latextrk1D0Err->Draw();
   
   canvas->SaveAs("Plots/canvasBkg.pdf");
+  canvas->SaveAs("Plots/canvasBkg.png");
 
 }
