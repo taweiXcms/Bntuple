@@ -8,12 +8,8 @@ double setparam3=0.03;
 double fixparam1=5.279;
 int variationoption=1;
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching.root";
-//TString inputdata="../InputsFits/nt_mc_Kp.root";
-//TString inputdata="../InputsFits/nt_mc_Kp.root";
-//TString inputdata="nt_nonPrompt_Jpsi.root";
-//TString inputdata="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
+TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
 TString cut,seldata,selmc,selmcgen;
