@@ -6,8 +6,8 @@ double setparam1=5.28;
 double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
-int variationoption=1;
-
+int variationoption=4;
+ 
 TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
@@ -250,7 +250,7 @@ void SystStudy(){
       valuemax=0.3;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41f&&cos(dtheta)>%f",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>%f",cutvalue);
 
     }
     
@@ -259,7 +259,7 @@ void SystStudy(){
       valuemax=1.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41f&&cos(dtheta)>3.46e-01",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
 
     }
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
