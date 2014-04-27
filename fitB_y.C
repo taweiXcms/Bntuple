@@ -40,7 +40,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    // Fit function
    TString iNP="4.18604e+01*Gaus(x,4.97611e+00,8.81611e-02)/(sqrt(2*3.14159)*8.81611e-02) + 6.72820e+00*Gaus(x,5.10752e+00,2.66663e-02)/(sqrt(2*3.14159)*2.66663e-02) + 1.93889e+00*Gaus(x,5.33740e+00,3.52905e-02)/(sqrt(2*3.14159)*3.52905e-02)";
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
-   nt->Project(Form("h%d",count),"mass",Form("%s&& (((y+0.465)>%f&&(y+0.465)<%f&&Run>=210498&&Run<=211256) || ((y-0.465)>%f&&(y-0.465)<%f&&Run>=211313&&Run<=211631))",seldata_2y.Data(),ptmin,ptmax));   
+   nt->Project(Form("h%d",count),"mass",Form("%s&& (((y+0.465)>%f&&(y+0.465)<%f&&Run>=210498&&Run<=211256) || ((y-0.465)>%f&&(y-0.465)<%f&&Run>=211313&&Run<=211631))",seldata_2y.Data(),ptmin,ptmax,ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&(y+0.465)>%f&&(y+0.465)<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
    h->Draw();
