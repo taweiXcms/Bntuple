@@ -36,29 +36,14 @@ void checkB0(){
 
   TH1F*hTotalNonPrompt=new TH1F("hTotalNonPrompt","hTotalNonPrompt",50,5,6);
   TH1F*hBstoJPsiPhi=new TH1F("hBstoJPsiPhi","hBstoJPsiPhi",50,5,6);
-  TH1F*hBplustoJPsiK1plus=new TH1F("hBplustoJPsiK1plus","hBplustoJPsiK1plus",50,5,6);
-  TH1F*hBzerotoJPsiK10=new TH1F("hBzerotoJPsiK10","hBzerotoJPsiK10",50,5,6);
-  TH1F*hBzerotoJPsiKstar20=new TH1F("hBzerotoJPsiKstar20","hBzerotoJPsiKstar20",50,5,6);
   TH1F*hBzerotoJPsiKPi=new TH1F("hBzerotoJPsiKPi","hBzerotoJPsiKPi",50,5,6);
-  
+  TH1F*hBplustoJPsiK1270_plus=new TH1F("hBplustoJPsiK1270_plus","hBplustoJPsiK1270_plus",50,5,6);
+  TH1F*hBzerotoJPsiK1270_zero=new TH1F("hBzerotoJPsiK1270_zero","hBzerotoJPsiK1270_zero",50,5,6);
+  TH1F*hBzerotoJPsiKstar2_1430_0=new TH1F("hBzerotoJPsiKstar2_1430_0","hBzerotoJPsiKstar2_1430_0",50,5,6);
   TH1F*hBplustoJPsiKPi=new TH1F("hBplustoJPsiKPi","hBplustoJPsiKPi",50,5,6);
   TH1F*hBstoJPsiTrackTrack=new TH1F("hBstoJPsiTrackTrack","hBstoJPsiTrackTrack",50,5,6);
-  TH1F*hBzerotoJPsiKstarplusPion=new TH1F("hBzerotoJPsiKstarplusPion","hBzerotoJPsiKstarplusPion",50,5,6);
+  TH1F*hBzerotoJPsiK892_plusPion=new TH1F("hBzerotoJPsiK892_plusPion","hBzerotoJPsiK892_plusPion",50,5,6);
   
-    /*
-
-  pdgtrk1=211, pdgmothertrk1=323, pdggrandmothertrk1=511
-pdgtrk2=211, pdgmothertrk2=511, pdggrandmothertrk2=513
-pdgmuon1=13, pdgmothermuon1=443, pdggrandmothermuon1=511
-pdgmuon2=13, pdgmothermuon2=443, pdggrandmothermuon2=511
-grandmothertrk1geninfo=63, grandmothertrk2geninfo=21, grandmothermuon1geninfo=63, grandmothermuon2geninfo=63
-mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2geninfo=90
-  
-  */
-
-
-
-
   Float_t pt[NUM_BX];
   Float_t mumumass[NUM_BX];
   Float_t y[NUM_BX];
@@ -220,7 +205,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
             if((pdggrandmothertrk1[j]==521)&&(pdggrandmothertrk2[j]==521)&&(pdggrandmothermuon1[j]==521)&&(pdggrandmothermuon2[j]==521)){
               if((pdgmothertrk1[j]==10323)&&(pdgmothertrk2[j]==10323)&&(pdgmothermuon1[j]==443)&&(pdgmothermuon2[j]==443)){
                 if ((grandmothertrk1geninfo[j]==grandmothertrk2geninfo[j])&&(grandmothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
-                  hBplustoJPsiK1plus->Fill(mass[j]);
+                  hBplustoJPsiK1270_plus->Fill(mass[j]);
                   case3=true;
                   countercase3++;
                 }
@@ -234,7 +219,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
               if((pdgmothertrk1[j]==10313)&&(pdgmothertrk2[j]==10313)&&(pdgmothermuon1[j]==443)&&(pdgmothermuon2[j]==443)){
                 if((grandmothertrk1geninfo[j]==grandmothertrk2geninfo[j])&&(grandmothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
                   case4=true;
-                  hBzerotoJPsiK10->Fill(mass[j]);
+                  hBzerotoJPsiK1270_zero->Fill(mass[j]);
                   countercase4++;
                 }
               }
@@ -243,7 +228,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
             if((pdggrandmothertrk1[j]==511)&&(pdggrandmothertrk2[j]==511)&&(pdggrandmothermuon1[j]==511)&&(pdggrandmothermuon2[j]==511)){
               if((pdgmothertrk1[j]==315)&&(pdgmothertrk2[j]==315)&&(pdgmothermuon1[j]==443)&&(pdgmothermuon2[j]==443)){
                 if ((grandmothertrk1geninfo[j]==grandmothertrk2geninfo[j])&&(grandmothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
-                  hBzerotoJPsiKstar20->Fill(mass[j]);
+                  hBzerotoJPsiKstar2_1430_0->Fill(mass[j]);
                   case5=true;
                   countercase5++;
                   
@@ -276,7 +261,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
             
             if((pdgmothertrk1[j]==323)&&(pdggrandmothertrk1[j]==511)&&(pdgmothertrk2[j]==511)&&(pdggrandmothermuon1[j]==511)&&(pdggrandmothermuon2[j]==511)){
               if ((grandmothertrk1geninfo[j]==mothertrk2geninfo[j])&&(mothertrk2geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
-                hBzerotoJPsiKstarplusPion->Fill(mass[j]);
+                hBzerotoJPsiK892_plusPion->Fill(mass[j]);
                 case9=true;
                 countercase9++;
               }
@@ -284,7 +269,7 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
             
             if((pdgmothertrk2[j]==323)&&(pdggrandmothertrk2[j]==511)&&(pdgmothertrk1[j]==511)&&(pdggrandmothermuon1[j]==511)&&(pdggrandmothermuon2[j]==511)){
               if ((grandmothertrk2geninfo[j]==mothertrk1geninfo[j])&&(mothertrk1geninfo[j]==grandmothermuon1geninfo[j])&&(grandmothermuon1geninfo[j]==grandmothermuon2geninfo[j])){
-                hBzerotoJPsiKstarplusPion->Fill(mass[j]);
+                hBzerotoJPsiK892_plusPion->Fill(mass[j]);
                 case9=true;
                 countercase9++;
               }
@@ -329,11 +314,11 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
   canvassecond->cd(2);
   hBstoJPsiPhi->Draw("e");
   canvassecond->cd(3);
-  hBplustoJPsiK1plus->Draw("e");
+  hBplustoJPsiK1270_plus->Draw("e");
   canvassecond->cd(4);
-  hBzerotoJPsiK10->Draw("e");
+  hBzerotoJPsiK1270_zero->Draw("e");
   canvassecond->cd(4);
-  hBzerotoJPsiKstar20->Draw("e");
+  hBzerotoJPsiKstar2_1430_0->Draw("e");
   canvassecond->cd(5);
   hBzerotoJPsiKPi->Draw("e");
   canvassecond->cd(5);
@@ -346,13 +331,13 @@ mothertrk1geninfo=91, mothertrk2geninfo=63, mothermuon1geninfo=90, mothermuon2ge
   fileoutput->cd();
   hTotalNonPrompt->Write();
   hBstoJPsiPhi->Write();
-  hBzerotoJPsiK10->Write();
-  hBplustoJPsiK1plus->Write();
-  hBzerotoJPsiKstar20->Write();
+  hBzerotoJPsiK1270_zero->Write();
+  hBplustoJPsiK1270_plus->Write();
+  hBzerotoJPsiKstar2_1430_0->Write();
   hBzerotoJPsiKPi->Write();
   hBplustoJPsiKPi->Write();
   hBstoJPsiTrackTrack->Write();
-  hBzerotoJPsiKstarplusPion->Write();
+  hBzerotoJPsiK892_plusPion->Write();
   fileoutput->Close();
   delete fileoutput;
   
@@ -368,13 +353,13 @@ void Draw(){
   
   TH1F*hTotalNonPrompt=(TH1F*)fileoutput->Get("hTotalNonPrompt");
   TH1F*hBstoJPsiPhi=(TH1F*)fileoutput->Get("hBstoJPsiPhi");
-  TH1F*hBzerotoJPsiK10=(TH1F*)fileoutput->Get("hBzerotoJPsiK10");
-  TH1F*hBplustoJPsiK1plus=(TH1F*)fileoutput->Get("hBplustoJPsiK1plus");
-  TH1F*hBzerotoJPsiKstar20=(TH1F*)fileoutput->Get("hBzerotoJPsiKstar20");
+  TH1F*hBzerotoJPsiK1270_zero=(TH1F*)fileoutput->Get("hBzerotoJPsiK1270_zero");
+  TH1F*hBplustoJPsiK1270_plus=(TH1F*)fileoutput->Get("hBplustoJPsiK1270_plus");
+  TH1F*hBzerotoJPsiKstar2_1430_0=(TH1F*)fileoutput->Get("hBzerotoJPsiKstar2_1430_0");
   TH1F*hBzerotoJPsiKPi=(TH1F*)fileoutput->Get("hBzerotoJPsiKPi");
   TH1F*hBplustoJPsiKPi=(TH1F*)fileoutput->Get("hBplustoJPsiKPi");
   TH1F*hBstoJPsiTrackTrack=(TH1F*)fileoutput->Get("hBstoJPsiTrackTrack");
-  TH1F*hBzerotoJPsiKstarplusPion=(TH1F*)fileoutput->Get("hBzerotoJPsiKstarplusPion");
+  TH1F*hBzerotoJPsiK892_plusPion=(TH1F*)fileoutput->Get("hBzerotoJPsiK892_plusPion");
   
   hBstoJPsiTrackTrack->Draw();
 
@@ -429,40 +414,40 @@ void Draw(){
   hBstoJPsiPhi->Draw("esame");
   canvas->Update();
  
-  TLegendEntry *entBzerotoJPsiK10=legend->AddEntry(hBzerotoJPsiK10,"B^{0} #rightarrow JPsi+K10","P");
-  hBzerotoJPsiK10->SetLineColor(4);
-  hBzerotoJPsiK10->SetMarkerColor(4);
+  TLegendEntry *entBzerotoJPsiK10=legend->AddEntry(hBzerotoJPsiK1270_zero,"B^{0} #rightarrow JPsi+K10","P");
+  hBzerotoJPsiK1270_zero->SetLineColor(4);
+  hBzerotoJPsiK1270_zero->SetMarkerColor(4);
   entBzerotoJPsiK10->SetTextColor(4);
   entBzerotoJPsiK10->SetLineColor(4);
-  hBzerotoJPsiK10->SetMarkerStyle(21);
+  hBzerotoJPsiK1270_zero->SetMarkerStyle(21);
   entBzerotoJPsiK10->SetLineWidth(1);
-  hBzerotoJPsiK10->SetLineWidth(1);
+  hBzerotoJPsiK1270_zero->SetLineWidth(1);
   entBzerotoJPsiK10->SetTextSize(0.03);
-  hBzerotoJPsiK10->Draw("esame");
+  hBzerotoJPsiK1270_zero->Draw("esame");
   canvas->Update();
 
-  TLegendEntry *entBplustoJPsiK1plus=legend->AddEntry(hBplustoJPsiK1plus,"B^{+} #rightarrow JPsi+K1plus","P");
-  hBplustoJPsiK1plus->SetLineColor(12);
-  hBplustoJPsiK1plus->SetMarkerColor(12);
+  TLegendEntry *entBplustoJPsiK1plus=legend->AddEntry(hBplustoJPsiK1270_plus,"B^{+} #rightarrow JPsi+K1plus","P");
+  hBplustoJPsiK1270_plus->SetLineColor(12);
+  hBplustoJPsiK1270_plus->SetMarkerColor(12);
   entBplustoJPsiK1plus->SetTextColor(12);
   entBplustoJPsiK1plus->SetLineColor(12);
-  hBplustoJPsiK1plus->SetMarkerStyle(21);
+  hBplustoJPsiK1270_plus->SetMarkerStyle(21);
   entBplustoJPsiK1plus->SetLineWidth(1);
-  hBplustoJPsiK1plus->SetLineWidth(1);
+  hBplustoJPsiK1270_plus->SetLineWidth(1);
   entBplustoJPsiK1plus->SetTextSize(0.03);
-  hBplustoJPsiK1plus->Draw("esame");
+  hBplustoJPsiK1270_plus->Draw("esame");
   canvas->Update();
 
-  TLegendEntry *entBzerotoJPsiKstar20=legend->AddEntry(hBzerotoJPsiKstar20,"B^{0} #rightarrow JPsi+K*20","P");
-  hBzerotoJPsiKstar20->SetLineColor(6);
-  hBzerotoJPsiKstar20->SetMarkerColor(6);
+  TLegendEntry *entBzerotoJPsiKstar20=legend->AddEntry(hBzerotoJPsiKstar2_1430_0,"B^{0} #rightarrow JPsi+K*20","P");
+  hBzerotoJPsiKstar2_1430_0->SetLineColor(6);
+  hBzerotoJPsiKstar2_1430_0->SetMarkerColor(6);
   entBzerotoJPsiKstar20->SetTextColor(6);
   entBzerotoJPsiKstar20->SetLineColor(6);
-  hBzerotoJPsiKstar20->SetMarkerStyle(21);
+  hBzerotoJPsiKstar2_1430_0->SetMarkerStyle(21);
   entBzerotoJPsiKstar20->SetLineWidth(1);
-  hBzerotoJPsiKstar20->SetLineWidth(1);
+  hBzerotoJPsiKstar2_1430_0->SetLineWidth(1);
   entBzerotoJPsiKstar20->SetTextSize(0.03);
-  hBzerotoJPsiKstar20->Draw("esame");
+  hBzerotoJPsiKstar2_1430_0->Draw("esame");
   canvas->Update();
   
 
@@ -504,16 +489,16 @@ void Draw(){
   legend->Draw();
   
   
-  TLegendEntry *entBzerotoJPsiKstarplusPion=legend->AddEntry(hBzerotoJPsiKstarplusPion,"B^{0} #rightarrow JPsi+K*+ Pi","P");
-  hBzerotoJPsiKstarplusPion->SetLineColor(9);
-  hBzerotoJPsiKstarplusPion->SetMarkerColor(9);
+  TLegendEntry *entBzerotoJPsiKstarplusPion=legend->AddEntry(hBzerotoJPsiK892_plusPion,"B^{0} #rightarrow JPsi+K*+ Pi","P");
+  hBzerotoJPsiK892_plusPion->SetLineColor(9);
+  hBzerotoJPsiK892_plusPion->SetMarkerColor(9);
   entBzerotoJPsiKstarplusPion->SetTextColor(9);
   entBzerotoJPsiKstarplusPion->SetLineColor(9);
-  hBzerotoJPsiKstarplusPion->SetMarkerStyle(21);
+  hBzerotoJPsiK892_plusPion->SetMarkerStyle(21);
   entBzerotoJPsiKstarplusPion->SetLineWidth(1);
-  hBzerotoJPsiKstarplusPion->SetLineWidth(1);
+  hBzerotoJPsiK892_plusPion->SetLineWidth(1);
   entBzerotoJPsiKstarplusPion->SetTextSize(0.03);
-  hBzerotoJPsiKstarplusPion->Draw("esame");
+  hBzerotoJPsiK892_plusPion->Draw("esame");
   canvas->Update();
   legend->Draw();
   
@@ -531,13 +516,13 @@ void DrawAll(){
   
   TH1F*hTotalNonPrompt=(TH1F*)fileoutput->Get("hTotalNonPrompt");
   TH1F*hBstoJPsiPhi=(TH1F*)fileoutput->Get("hBstoJPsiPhi");
-  TH1F*hBzerotoJPsiK10=(TH1F*)fileoutput->Get("hBzerotoJPsiK10");
-  TH1F*hBplustoJPsiK1plus=(TH1F*)fileoutput->Get("hBplustoJPsiK1plus");
-  TH1F*hBzerotoJPsiKstar20=(TH1F*)fileoutput->Get("hBzerotoJPsiKstar20");
+  TH1F*hBzerotoJPsiK1270_zero=(TH1F*)fileoutput->Get("hBzerotoJPsiK1270_zero");
+  TH1F*hBplustoJPsiK1270_plus=(TH1F*)fileoutput->Get("hBplustoJPsiK1270_plus");
+  TH1F*hBzerotoJPsiKstar2_1430_0=(TH1F*)fileoutput->Get("hBzerotoJPsiKstar2_1430_0");
   TH1F*hBzerotoJPsiKPi=(TH1F*)fileoutput->Get("hBzerotoJPsiKPi");
   TH1F*hBplustoJPsiKPi=(TH1F*)fileoutput->Get("hBplustoJPsiKPi");
   TH1F*hBstoJPsiTrackTrack=(TH1F*)fileoutput->Get("hBstoJPsiTrackTrack");
-  TH1F*hBzerotoJPsiKstarplusPion=(TH1F*)fileoutput->Get("hBzerotoJPsiKstarplusPion");
+  TH1F*hBzerotoJPsiK892_plusPion=(TH1F*)fileoutput->Get("hBzerotoJPsiK892_plusPion");
   
   hBstoJPsiTrackTrack->Draw();
 
@@ -582,77 +567,8 @@ void DrawAll(){
   hBstoJPsiPhi->Draw("esame");
   legendBstoJPsiPhi->Draw();
   canvas->Update();
-   
+  
   canvas->cd(2);
-  
-  TLegend *legendBzerotoJPsiK10=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
-  legendBzerotoJPsiK10->SetBorderSize(0);
-  legendBzerotoJPsiK10->SetFillStyle(0);
-  legendBzerotoJPsiK10->SetBorderSize(0);
-  legendBzerotoJPsiK10->SetTextFont(42);
-  legendBzerotoJPsiK10->SetTextSize(0.085);
- 
-  TLegendEntry *entBzerotoJPsiK10=legendBzerotoJPsiK10->AddEntry(legendBzerotoJPsiK10,"B^{0} #rightarrow JPsi+K10","P");
-  hBzerotoJPsiK10->SetLineColor(4);
-  hBzerotoJPsiK10->SetMarkerColor(4);
-  entBzerotoJPsiK10->SetTextColor(4);
-  entBzerotoJPsiK10->SetLineColor(4);
-  hBzerotoJPsiK10->SetMarkerStyle(21);
-  entBzerotoJPsiK10->SetLineWidth(1);
-  hBzerotoJPsiK10->SetLineWidth(1);
-  entBzerotoJPsiK10->SetTextSize(0.085);
-  hempty->Draw();
-  hBzerotoJPsiK10->Draw("esame");
-  legendBzerotoJPsiK10->Draw();
-  canvas->Update();
-  
-  canvas->cd(3);
-  
-  TLegend *legendBplustoJPsiK1plus=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
-  legendBplustoJPsiK1plus->SetBorderSize(0);
-  legendBplustoJPsiK1plus->SetFillStyle(0);
-  legendBplustoJPsiK1plus->SetBorderSize(0);
-  legendBplustoJPsiK1plus->SetTextFont(42);
-  legendBplustoJPsiK1plus->SetTextSize(0.085);
-
-  TLegendEntry *entBplustoJPsiK1plus=legendBplustoJPsiK1plus->AddEntry(hBplustoJPsiK1plus,"B^{+} #rightarrow JPsi+K1plus","P");
-  hBplustoJPsiK1plus->SetLineColor(12);
-  hBplustoJPsiK1plus->SetMarkerColor(12);
-  entBplustoJPsiK1plus->SetTextColor(12);
-  entBplustoJPsiK1plus->SetLineColor(12);
-  hBplustoJPsiK1plus->SetMarkerStyle(21);
-  entBplustoJPsiK1plus->SetLineWidth(1);
-  hBplustoJPsiK1plus->SetLineWidth(1);
-  entBplustoJPsiK1plus->SetTextSize(0.085);
-  hempty->Draw();
-  hBplustoJPsiK1plus->Draw("esame");
-  legendBplustoJPsiK1plus->Draw();
-  canvas->Update();
-  
-  canvas->cd(4);
-  
-  TLegend *legendBzerotoJPsiKstar20=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
-  legendBzerotoJPsiKstar20->SetBorderSize(0);
-  legendBzerotoJPsiKstar20->SetFillStyle(0);
-  legendBzerotoJPsiKstar20->SetBorderSize(0);
-  legendBzerotoJPsiKstar20->SetTextFont(42);
-  legendBzerotoJPsiKstar20->SetTextSize(0.085);
-
-  TLegendEntry *entBzerotoJPsiKstar20=legendBzerotoJPsiKstar20->AddEntry(hBzerotoJPsiKstar20,"B^{0} #rightarrow JPsi+K*20","P");
-  hBzerotoJPsiKstar20->SetLineColor(6);
-  hBzerotoJPsiKstar20->SetMarkerColor(6);
-  entBzerotoJPsiKstar20->SetTextColor(6);
-  entBzerotoJPsiKstar20->SetLineColor(6);
-  hBzerotoJPsiKstar20->SetMarkerStyle(21);
-  entBzerotoJPsiKstar20->SetLineWidth(1);
-  hBzerotoJPsiKstar20->SetLineWidth(1);
-  entBzerotoJPsiKstar20->SetTextSize(0.085);
-  hempty->Draw();
-  hBzerotoJPsiKstar20->Draw("esame");
-  legendBzerotoJPsiKstar20->Draw();
-  canvas->Update();
-  
-  canvas->cd(5);
   
   TLegend *legendBzerotoJPsiKPi=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
   legendBzerotoJPsiKPi->SetBorderSize(0);
@@ -676,6 +592,78 @@ void DrawAll(){
   legendBzerotoJPsiKPi->Draw();
   canvas->Update();
 
+   
+  canvas->cd(3);
+  
+  TLegend *legendBplustoJPsiK1plus=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
+  legendBplustoJPsiK1plus->SetBorderSize(0);
+  legendBplustoJPsiK1plus->SetFillStyle(0);
+  legendBplustoJPsiK1plus->SetBorderSize(0);
+  legendBplustoJPsiK1plus->SetTextFont(42);
+  legendBplustoJPsiK1plus->SetTextSize(0.085);
+
+  TLegendEntry *entBplustoJPsiK1plus=legendBplustoJPsiK1plus->AddEntry(hBplustoJPsiK1270_plus,"B^{+} #rightarrow JPsi+K1plus","P");
+  hBplustoJPsiK1270_plus->SetLineColor(12);
+  hBplustoJPsiK1270_plus->SetMarkerColor(12);
+  entBplustoJPsiK1plus->SetTextColor(12);
+  entBplustoJPsiK1plus->SetLineColor(12);
+  hBplustoJPsiK1270_plus->SetMarkerStyle(21);
+  entBplustoJPsiK1plus->SetLineWidth(1);
+  hBplustoJPsiK1270_plus->SetLineWidth(1);
+  entBplustoJPsiK1plus->SetTextSize(0.085);
+  hempty->Draw();
+  hBplustoJPsiK1270_plus->Draw("esame");
+  legendBplustoJPsiK1plus->Draw();
+  canvas->Update();
+  
+  canvas->cd(4);
+  
+  TLegend *legendBzerotoJPsiKstar20=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
+  legendBzerotoJPsiKstar20->SetBorderSize(0);
+  legendBzerotoJPsiKstar20->SetFillStyle(0);
+  legendBzerotoJPsiKstar20->SetBorderSize(0);
+  legendBzerotoJPsiKstar20->SetTextFont(42);
+  legendBzerotoJPsiKstar20->SetTextSize(0.085);
+
+  TLegendEntry *entBzerotoJPsiKstar20=legendBzerotoJPsiKstar20->AddEntry(hBzerotoJPsiKstar2_1430_0,"B^{0} #rightarrow JPsi+K*20","P");
+  hBzerotoJPsiKstar2_1430_0->SetLineColor(6);
+  hBzerotoJPsiKstar2_1430_0->SetMarkerColor(6);
+  entBzerotoJPsiKstar20->SetTextColor(6);
+  entBzerotoJPsiKstar20->SetLineColor(6);
+  hBzerotoJPsiKstar2_1430_0->SetMarkerStyle(21);
+  entBzerotoJPsiKstar20->SetLineWidth(1);
+  hBzerotoJPsiKstar2_1430_0->SetLineWidth(1);
+  entBzerotoJPsiKstar20->SetTextSize(0.085);
+  hempty->Draw();
+  hBzerotoJPsiKstar2_1430_0->Draw("esame");
+  legendBzerotoJPsiKstar20->Draw();
+  canvas->Update();
+  
+  canvas->cd(5);
+  
+  TLegend *legendBzerotoJPsiK10=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
+  legendBzerotoJPsiK10->SetBorderSize(0);
+  legendBzerotoJPsiK10->SetFillStyle(0);
+  legendBzerotoJPsiK10->SetBorderSize(0);
+  legendBzerotoJPsiK10->SetTextFont(42);
+  legendBzerotoJPsiK10->SetTextSize(0.085);
+ 
+  TLegendEntry *entBzerotoJPsiK10=legendBzerotoJPsiK10->AddEntry(legendBzerotoJPsiK10,"B^{0} #rightarrow JPsi+K10","P");
+  hBzerotoJPsiK1270_zero->SetLineColor(4);
+  hBzerotoJPsiK1270_zero->SetMarkerColor(4);
+  entBzerotoJPsiK10->SetTextColor(4);
+  entBzerotoJPsiK10->SetLineColor(4);
+  hBzerotoJPsiK1270_zero->SetMarkerStyle(21);
+  entBzerotoJPsiK10->SetLineWidth(1);
+  hBzerotoJPsiK1270_zero->SetLineWidth(1);
+  entBzerotoJPsiK10->SetTextSize(0.085);
+  hempty->Draw();
+  hBzerotoJPsiK1270_zero->Draw("esame");
+  legendBzerotoJPsiK10->Draw();
+  canvas->Update();
+  
+ 
+ 
   canvas->cd(6);
   
   TLegend *legendBplustoJPsiKPi=new TLegend(0.595302,0.6377119,0.25,0.8728814,"");
@@ -732,18 +720,18 @@ void DrawAll(){
   legendBzerotoJPsiKstarplusPion->SetTextFont(42);
   legendBzerotoJPsiKstarplusPion->SetTextSize(0.085);
   
-  TLegendEntry *entBzerotoJPsiKstarplusPion=legendBzerotoJPsiKstarplusPion->AddEntry(hBzerotoJPsiKstarplusPion,"B^{0} #rightarrow JPsi+K*+ Pi","P");
-  hBzerotoJPsiKstarplusPion->SetLineColor(9);
-  hBzerotoJPsiKstarplusPion->SetMarkerColor(9);
+  TLegendEntry *entBzerotoJPsiKstarplusPion=legendBzerotoJPsiKstarplusPion->AddEntry(hBzerotoJPsiK892_plusPion,"B^{0} #rightarrow JPsi+K*+ Pi","P");
+  hBzerotoJPsiK892_plusPion->SetLineColor(9);
+  hBzerotoJPsiK892_plusPion->SetMarkerColor(9);
   entBzerotoJPsiKstarplusPion->SetTextColor(9);
   entBzerotoJPsiKstarplusPion->SetLineColor(9);
-  hBzerotoJPsiKstarplusPion->SetMarkerStyle(21);
+  hBzerotoJPsiK892_plusPion->SetMarkerStyle(21);
   entBzerotoJPsiKstarplusPion->SetLineWidth(1);
-  hBzerotoJPsiKstarplusPion->SetLineWidth(1);
+  hBzerotoJPsiK892_plusPion->SetLineWidth(1);
   entBzerotoJPsiKstarplusPion->SetTextSize(0.085);
-  hBzerotoJPsiKstarplusPion->Draw("esame");
+  hBzerotoJPsiK892_plusPion->Draw("esame");
   hempty->Draw();
-  hBzerotoJPsiKstarplusPion->Draw("esame");
+  hBzerotoJPsiK892_plusPion->Draw("esame");
   legendBzerotoJPsiKstarplusPion->Draw();
   canvas->Update();
   
