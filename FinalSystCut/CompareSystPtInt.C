@@ -2,9 +2,9 @@ void CompareSystPtInt(){
 
   const int nBins=10;
 
-  int idcut=1; double ptBins[nBins+1]={0.,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1};
+  //int idcut=1; double ptBins[nBins+1]={0.,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1};
   //int idcut=2; double ptBins[nBins+1]={2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.2,4.4};
-  //int idcut=3; double ptBins[nBins+1]={-0.3,-0.24,-0.18,-0.12,-0.06,0.,0.06,0.12,0.18,0.24,0.3};
+  int idcut=3; double ptBins[nBins+1]={-0.3,-0.24,-0.18,-0.12,-0.06,0.,0.06,0.12,0.18,0.24,0.3};
   //int idcut=4; double ptBins[nBins+1]={0.8,0.82,0.84,0.86,0.88,0.9,0.92,0.94,0.96,0.98,1.0};
    
   gROOT->SetStyle("Plain");	
