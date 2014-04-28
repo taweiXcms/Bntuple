@@ -11,16 +11,15 @@ double fixparam1=5.37;
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Phi_TriggerMatchingMuon_EvtBase_skim.root";          
 
-//TString cut="(HLT_PAMu3_v1)&&chi2cl>0.135&&(d0)/d0Err>3.24&&dtheta<2.03&&TMath::Abs((trk1Dxy/trk1D0Err))>0.792&&TMath::Abs(trk2Dxy/trk2D0Err)>0.742&&TMath::Abs(tktkmass-1.020)<1.02e-02";
-//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>3.8e-02 && (d0/d0Err)>3.2e+00 && cos(dtheta)>7.4e-01 && abs(trk2Dxy/trk2D0Err)>1.3e+00 && abs(tktkmass-1.01944)<1.5e-02&&mass>5&&mass<6";
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>2.7e-02&&(d0/d0Err)>2.8&&cos(dtheta)>-0.8&&abs(tktkmass-1.01944)<0.014&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7";                           
+//Bs tkpt chi2
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
 TString selmcgen="abs(y+0.465)<1.93&&isSignal>0";
 
 TString weight = "27.493+pt*(-0.218769)";
@@ -43,7 +42,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*x*x");
+   TString iNP="Gaus(x,5.36800e+00,5.77122e-02)/(sqrt(2*3.14159)*abs(5.77122e-02))";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+ [3]+[4]*x+[5]*x*x + [11]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
@@ -57,6 +57,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    f->SetParameter(2,setparam2);
    f->SetParameter(8,setparam3);
    f->FixParameter(1,fixparam1);
+   f->SetParLimits(11,0,1000);
+   f->SetParameter(11,10);
+   f->FixParameter(11,0);
    h->GetEntries();
 
    hMC->Fit(Form("f%d",count),"q","",5,6);
@@ -85,7 +88,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
 
    // function for background shape plotting. take the fit result from f
    TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*x*x");
-//   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
    background->SetParameter(0,f->GetParameter(3));
    background->SetParameter(1,f->GetParameter(4));
    background->SetParameter(2,f->GetParameter(5));
@@ -95,11 +97,12 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
-   Bkpi->SetParameter(0,f->GetParameter(5));
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
+   Bkpi->SetParameter(0,f->GetParameter(11));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
-   Bkpi->SetRange(5.00,5.28);
+//   Bkpi->SetRange(5.00,5.28);
+   Bkpi->SetRange(5.00,6.00);
    Bkpi->SetLineStyle(1);
    Bkpi->SetFillStyle(3004);
 
@@ -122,9 +125,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.4,"Y");
+   h->SetTitleOffset(1.,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
-//   Bkpi->Draw("same");
+   Bkpi->Draw("same");
    background->Draw("same");   
    mass->SetRange(5,6);
    mass->Draw("same");

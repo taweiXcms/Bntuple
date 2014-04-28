@@ -34,6 +34,9 @@
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TVectorFfwd.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TVectorDfwd.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TFitResultPtr.h
+./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TH2.h
+./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixFBasefwd.h
+./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixDBasefwd.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TF1.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TFormula.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TBits.h
@@ -84,8 +87,6 @@
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixF.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixT.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixTBase.h
-./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixFBasefwd.h
-./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixDBasefwd.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixTUtils.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixFfwd.h
 ./eff_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMatrixFUtils.h

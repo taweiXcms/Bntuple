@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <TH1.h>
+#include <TH2.h>
 #include <TF1.h>
 #include <TCut.h>
 #include <TFile.h>
@@ -33,23 +34,23 @@ int MCflag = 3;
 
 void eff(){
   if(MCflag==1){
-    inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140416_Kp_TriggerMatchingMuon_EvtBase_skim.root";
-    cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.0068&&(d0)/d0Err>3.3&&cos(dtheta)>-0.51&&mass>5&&mass<6&&trk1Pt>0.9";
+    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+    cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
     selmc=Form("abs(y+0.465)<1.93&&gen==22233&&pt>10&&pt<60&&%s",cut.Data());
     foutname = "fout_kp.root";
     ntname="ntKp";
   }
   if(MCflag==2){
-    inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140416_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
-    cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.069&&(d0)/d0Err>3.2&&cos(dtheta)>-0.7&&abs(tktkmass-0.89591)<0.13&&mass>5&&mass<6&&isbesttktkmass";
+    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+    cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01";
 //    selmc=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&pt>10&&pt<60&&%s",cut_kpi.Data());
     selmc=Form("abs(y+0.465)<1.93&&gen==22233&&pt>10&&pt<60&&%s",cut.Data());
     foutname = "fout_kstar.root";
     ntname="ntKstar";
   }
   if(MCflag==3){
-    inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140416_Phi_TriggerMatchingMuon_EvtBase_skim.root";
-    cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>2.7e-02&&(d0/d0Err)>2.8&&cos(dtheta)>-0.8&&abs(tktkmass-1.01944)<0.014&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7";
+    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140424_Phi_TriggerMatchingMuon_EvtBase_skim.root";
+    cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
     selmc=Form("abs(y+0.465)<1.93&&gen==22233&&pt>10&&pt<60&&%s",cut.Data());
     foutname = "fout_phi.root";
     ntname="ntphi";
@@ -68,6 +69,9 @@ void eff(){
   TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
   TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", nEtaBins,yBins);
 
+//  TH2F* sct_pt_y = new TH2F("sct_pt_y","",nEtaBins, yBins, nBins, ptBins);
+  TH2F* sct_pt_y = new TH2F("sct_pt_y","",50,-2.395, 1.465, 50, 10, 60);
+
   reco_bsig_pt->SetMinimum(0);
   reco_bsig_y->SetMinimum(0);
   gen_bsig_pt->SetMinimum(0);
@@ -77,6 +81,26 @@ void eff(){
 //  nevents_total = 10000;
   ntMC->Project("reco_bsig_pt","pt",selmc.Data(),"",nevents_total);
   ntMC->Project("reco_bsig_y","y",selmc.Data(),"",nevents_total);
+  ntMC->Project("sct_pt_y","pt:y",selmc.Data(),"",nevents_total);
+
+  TCanvas*c3 = new TCanvas("c3", "", 200, 10, 1000, 800);
+  c3->cd();
+  sct_pt_y->GetXaxis()->SetTitle("pt[GeV]");                      
+  sct_pt_y->GetYaxis()->SetTitle("y_{Lab}"); 
+  sct_pt_y->GetYaxis()->CenterTitle(); 
+  sct_pt_y->Draw("COL Z");
+  if(MCflag == 1){
+      sct_pt_y->SetTitle("Reco Can. K+ channel");                                                                                                                                                    
+      c3->SaveAs("fig_eff/kp_sct.pdf");
+  }
+  if(MCflag == 2){
+      sct_pt_y->SetTitle("Reco Can. K* channel");
+      c3->SaveAs("fig_eff/kstar_sct.pdf");
+  }
+  if(MCflag == 3){
+      sct_pt_y->SetTitle("Reco Can.  #phi channel");
+      c3->SaveAs("fig_eff/phi_sct.pdf");
+  }
   
   Int_t size;
   Float_t y[MAX_GEN];
@@ -161,7 +185,7 @@ void eff(){
       }
     }
   }
-
+/*
   ////PLOTTING////
   TEfficiency *reco_gen_eff_pt = new TEfficiency(*reco_bsig_pt, *gen_bsig_pt);
   TEfficiency *reco_gen_eff_y = new TEfficiency(*reco_bsig_y, *gen_bsig_y);
@@ -228,5 +252,6 @@ void eff(){
       c1->SaveAs("fig_eff/phi_pt_eff.pdf");
       c2->SaveAs("fig_eff/phi_y_eff.pdf");
   }
+*/
   ////PLOTING////
 }

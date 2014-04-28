@@ -7,13 +7,10 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 int variationoption=4;
+ 
+TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
-TString inputdata="/d00/bmeson/data/nt_20140309_PAMuon_HIRun2013_PromptRecoAndRereco_v1_MuonMatching.root";
-//TString inputdata="../InputsFits/nt_mc_Kp.root";
-//TString inputdata="../InputsFits/nt_mc_Kp.root";
-//TString inputdata="nt_nonPrompt_Jpsi.root";
-//TString inputdata="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
-TString inputmc="/d00/bmeson/MC/nt_BoostedMC_20140303_kp.root";
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
 TString cut,seldata,selmc,selmcgen;
@@ -33,7 +30,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])+(1-[7])*Gaus(x,[1],[8]))+[3]+[4]*x+[5]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
+   TString iNP="4.18604e+01*Gaus(x,4.97611e+00,8.81611e-02)/(sqrt(2*3.14159)*8.81611e-02) + 6.72820e+00*Gaus(x,5.10752e+00,2.66663e-02)/(sqrt(2*3.14159)*2.66663e-02) + 1.93889e+00*Gaus(x,5.33740e+00,3.52905e-02)/(sqrt(2*3.14159)*3.52905e-02)";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
@@ -85,7 +83,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
    Bkpi->SetParameter(0,f->GetParameter(5));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
@@ -94,7 +92,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    Bkpi->SetFillStyle(3004);
 
    // function for signal shape plotting. take the fit result from f
-   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])+(1-[3])*Gaus(x,[1],[4]))");
+   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
    mass->SetParError(0,f->GetParError(0));
    mass->SetParError(1,f->GetParError(1));
@@ -146,7 +144,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
+   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
 
    return mass;
 }
@@ -161,8 +159,8 @@ void fitB(int stepcut)
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
   TTree *ntMC = (TTree*)infMC->Get("ntKp");
     
-  const int nBins = 5;
-  double ptBins[nBins+1] = {10,15,20,25,30,60};
+  const int nBins = 1;
+  double ptBins[nBins+1] = {10,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
@@ -232,37 +230,36 @@ void SystStudy(){
     
     if(variationoption==1){
       valuemin=0.0;
-      valuemax=0.3;
+      valuemax=0.1;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cout<<"AAAA"<<cutvalue<<endl;
-      cut=Form("(HLT_PAMu3_v1)&&chi2cl>%f&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9",cutvalue);
-
+      //1.32e-02
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvalue);
     } 
     if(variationoption==2){
-      valuemin=3.3-2.0;
-      valuemax=3.3+2.0;
+      valuemin=3.4-1.0;
+      valuemax=3.4+1.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&chi2cl>0.0054&&(d0)/d0Err>%f&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&cos(dtheta)>-3.46e-01",cutvalue);
 
     }
     
     if(variationoption==3){
-      valuemin=0.5;
-      valuemax=1.0;
+      valuemin=-0.3;
+      valuemax=0.3;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>%f&&TMath::Abs((trk1Dxy)/trk1D0Err)>1.9",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>%f",cutvalue);
 
     }
     
     if(variationoption==4){
-      valuemin=1.9-1.;
-      valuemax=1.9+1.;
+      valuemin=0.8;
+      valuemax=1.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&chi2cl>0.0054&&(d0)/d0Err>3.3&&cos(dtheta)>-0.53&&TMath::Abs((trk1Dxy)/trk1D0Err)>%f",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
 
     }
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());

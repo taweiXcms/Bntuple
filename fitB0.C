@@ -12,14 +12,14 @@ double fixparam2=0.04;
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 
-//TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.15&&(d0)/d0Err>8.1&&cos(dtheta)>-0.44&&TMath::Abs((trk2Dxy)/trk2D0Err)>0.81&&abs(tktkmass-0.89591)<0.14&&mass>5&&mass<6";
-TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&chi2cl>0.069&&(d0)/d0Err>3.2&&cos(dtheta)>-0.7&&abs(tktkmass-0.89591)<0.13&&mass>5&&mass<6&&isbesttktkmass";                                  
+TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
+
 TString seldata_kpi=Form("abs(y+0.465)<1.93&&%s",cut_kpi.Data());
 TString seldata_2y_kpi=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
-TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut_kpi.Data());
+TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&%s",cut_kpi.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
 
 TString weight = "27.493+pt*(-0.218769)";
@@ -39,17 +39,17 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
-   TH1D *h2 = new TH1D(Form("h2%d",count),"",50,5,6);
 //   TH1D *hBck = new TH1D(Form("hBck%d",count),"",50,5,6);
    
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
-   TH1D *hMC2 = new TH1D(Form("hMC2%d",count),"",50,5,6);
    // Fit function
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
+   TString iNP="6.71675e+00*Gaus(x,5.30142e+00,8.42680e-02)/(sqrt(2*3.14159)*8.42680e-02)+4.06744e+01*Gaus(x,5.00954e+00,8.11305e-02)/(sqrt(2*3.14159)*8.11305e-02)+5.99974e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.31767e-01*(61.195688*Gaus(x,5.127566,0.087439)/(sqrt(2*3.14159)*0.087439)+58.943919*Gaus(x,5.246471,0.041983)/(sqrt(2*3.14159)*0.041983))";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
+
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_kpi.Data(),ptmin,ptmax));   
-//   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
-//   nt2->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
+//   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==23333||gen==41000)",seldata.Data(),ptmin,ptmax));   
+//   nt2->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==23333||gen==41000)",seldata.Data(),ptmin,ptmax));   
 
 //   cout <<"nsig = "<<hBck->GetEntries();
    clean0(h);
@@ -58,6 +58,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    f->SetParLimits(2,0.01,0.05);
    f->SetParLimits(8,0.01,0.1);
    f->SetParLimits(7,0,1);
+   f->SetParLimits(6,0,1000);
+
    f->SetParameter(0,setparam0);
    f->SetParameter(1,setparam1);
    f->SetParameter(2,setparam2);
@@ -90,22 +92,19 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    cout <<h->GetEntries()<<endl;
 
    // function for background shape plotting. take the fit result from f
-   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[3]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
-//   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
+   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x");
    background->SetParameter(0,f->GetParameter(3));
    background->SetParameter(1,f->GetParameter(4));
-   background->SetParameter(2,f->GetParameter(5));
-   background->SetParameter(3,f->GetParameter(6));
    background->SetLineColor(4);
    background->SetRange(5,6);
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*(38.42*Gaus(x,5.25,0.03473)+15.04*Gaus(x,5.25,0.1121)+104.3*Gaus(x,5.026,0.0935))");
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
    Bkpi->SetParameter(0,f->GetParameter(6));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
-   Bkpi->SetRange(5.00,5.45);
+   Bkpi->SetRange(5.00,6.00);
    Bkpi->SetLineStyle(1);
    Bkpi->SetFillStyle(3005);
 
@@ -128,7 +127,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.4,"Y");
+   h->SetTitleOffset(1.,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
 
  //  hBck->Draw("hist same");
@@ -214,9 +213,9 @@ void fitB0(TString infname="",bool doweight = 1)
   hPt->Draw();
   
 
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_kpi.Data())&&"(gen==22233||gen==41000)"));
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_kpi.Data())&&"(gen==23333||gen==41000)"));
 
-  nt->Project("hRecoTruth","pt",TCut(seldata_kpi.Data())&&"(gen==22233||gen==41000)");
+  nt->Project("hRecoTruth","pt",TCut(seldata_kpi.Data())&&"(gen==23333||gen==41000)");
   ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
   divideBinWidth(hRecoTruth);
   
