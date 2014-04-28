@@ -188,7 +188,7 @@ void BmesonRatio(){
   
   TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
    hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-   hempty->GetYaxis()->SetTitle("Ratio cross sections B^{+}/B^{0}");
+   hempty->GetYaxis()->SetTitle("Ratio corrected yield B^{+}/B^{0}");
   
   hempty->GetXaxis()->SetTitleOffset(1.1);
   hempty->GetYaxis()->SetTitleOffset(1.3);

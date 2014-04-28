@@ -57,7 +57,8 @@ void NuclearModificationY(){
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
-  TFile*filepPb=new TFile(Form("Results%sY/Sigma%s.root",particle.Data(),particle.Data()));
+//  TFile*filepPb=new TFile(Form("Results%sY/Sigma%s.root",particle.Data(),particle.Data()));
+  TFile*filepPb=new TFile(Form("Results%s_y/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   
   Double_t yRefPP[nbins];                        //value y reference
@@ -223,7 +224,8 @@ void NuclearModificationY(){
 
   
   
-  canvasSigma->SaveAs(Form("Results%sY/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
+//  canvasSigma->SaveAs(Form("Results%sY/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
+  canvasSigma->SaveAs(Form("Results%s_y/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
@@ -271,7 +273,7 @@ void NuclearModificationY(){
   legendRpA->SetTextFont(42);
   legendRpA->SetTextSize(0.04);
 
-  TH2F* hempty=new TH2F("hempty","",4,-2,2,10.,0.,2.5);  
+  TH2F* hempty=new TH2F("hempty","",4,-2,2,10.,0.,3.5);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R_{pA} (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R_{pA} (B^{0})");
@@ -286,7 +288,7 @@ void NuclearModificationY(){
   hempty->GetYaxis()->SetLabelFont(42);
   hempty->GetXaxis()->SetLabelSize(0.04);
   hempty->GetYaxis()->SetLabelSize(0.04);  
-  hempty->SetMaximum(2);
+  hempty->SetMaximum(3);
   hempty->SetMinimum(0.);
   hempty->Draw();
   
@@ -356,9 +358,11 @@ void NuclearModificationY(){
   tlatex2->Draw();
 
 //  l->Draw();  
-  canvasRpA->SaveAs(Form("Results%sY/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+//  canvasRpA->SaveAs(Form("Results%sY/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+  canvasRpA->SaveAs(Form("Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
   
-  TFile *fout=new TFile(Form("Results%sY/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
+//  TFile *fout=new TFile(Form("Results%sY/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
+  TFile *fout=new TFile(Form("Results%s_y/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
   fout->cd();
   gSigmasyst->SetName("gSigmasyst");
   gSigmasyst->Write();

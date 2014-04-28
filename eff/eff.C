@@ -70,7 +70,7 @@ void eff(){
   TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", nEtaBins,yBins);
 
 //  TH2F* sct_pt_y = new TH2F("sct_pt_y","",nEtaBins, yBins, nBins, ptBins);
-  TH2F* sct_pt_y = new TH2F("sct_pt_y","",100,-2.395, 1.465, 100, 10, 60);
+  TH2F* sct_pt_y = new TH2F("sct_pt_y","",50,-2.395, 1.465, 50, 10, 60);
 
   reco_bsig_pt->SetMinimum(0);
   reco_bsig_y->SetMinimum(0);
@@ -82,10 +82,25 @@ void eff(){
   ntMC->Project("reco_bsig_pt","pt",selmc.Data(),"",nevents_total);
   ntMC->Project("reco_bsig_y","y",selmc.Data(),"",nevents_total);
   ntMC->Project("sct_pt_y","pt:y",selmc.Data(),"",nevents_total);
-TCanvas*c3 = new TCanvas("c3", "", 200, 10, 1000, 800);
-c3->cd();
-//sct_pt_y->Fill(0.,20.);
-sct_pt_y->Draw("COL Z");
+
+  TCanvas*c3 = new TCanvas("c3", "", 200, 10, 1000, 800);
+  c3->cd();
+  sct_pt_y->GetXaxis()->SetTitle("pt[GeV]");                      
+  sct_pt_y->GetYaxis()->SetTitle("y_{Lab}"); 
+  sct_pt_y->GetYaxis()->CenterTitle(); 
+  sct_pt_y->Draw("COL Z");
+  if(MCflag == 1){
+      sct_pt_y->SetTitle("Reco Can. K+ channel");                                                                                                                                                    
+      c3->SaveAs("fig_eff/kp_sct.pdf");
+  }
+  if(MCflag == 2){
+      sct_pt_y->SetTitle("Reco Can. K* channel");
+      c3->SaveAs("fig_eff/kstar_sct.pdf");
+  }
+  if(MCflag == 3){
+      sct_pt_y->SetTitle("Reco Can.  #phi channel");
+      c3->SaveAs("fig_eff/phi_sct.pdf");
+  }
   
   Int_t size;
   Float_t y[MAX_GEN];
