@@ -12,14 +12,14 @@ double fixparam2=0.04;
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";                                                                           
-TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 
 TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
 
 TString seldata_kpi=Form("abs(y+0.465)<1.93&&%s",cut_kpi.Data());
 TString seldata_2y_kpi=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
-TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&%s",cut_kpi.Data());
+TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&%s",cut_kpi.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
 
 TString weight = "27.493+pt*(-0.218769)";
@@ -48,8 +48,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
 
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_kpi.Data(),ptmin,ptmax));   
-//   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
-//   nt2->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==22233||gen==41000)",seldata.Data(),ptmin,ptmax));   
+//   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==23333||gen==41000)",seldata.Data(),ptmin,ptmax));   
+//   nt2->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==23333||gen==41000)",seldata.Data(),ptmin,ptmax));   
 
 //   cout <<"nsig = "<<hBck->GetEntries();
    clean0(h);
@@ -213,9 +213,9 @@ void fitB0(TString infname="",bool doweight = 1)
   hPt->Draw();
   
 
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_kpi.Data())&&"(gen==22233||gen==41000)"));
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_kpi.Data())&&"(gen==23333||gen==41000)"));
 
-  nt->Project("hRecoTruth","pt",TCut(seldata_kpi.Data())&&"(gen==22233||gen==41000)");
+  nt->Project("hRecoTruth","pt",TCut(seldata_kpi.Data())&&"(gen==23333||gen==41000)");
   ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
   divideBinWidth(hRecoTruth);
   
