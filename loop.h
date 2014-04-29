@@ -37,6 +37,8 @@ float chi2cl[MAX_XB];//b vertex chi2 confidence level
 int isbestchi2[MAX_XB]; 
 int isbesttktkmass[MAX_XB];
 int kstar[MAX_XB]; 
+//int isnonprompt[MAX_XB];
+//int isprompt[MAX_XB];
 
 float mu1Striplayer[MAX_XB];
 float mu2Striplayer[MAX_XB];
@@ -152,6 +154,8 @@ void buildBranch(TTree* nt){
   nt->Branch("isbestchi2",isbestchi2, "isbestchi2[size]/I");
   nt->Branch("isbesttktkmass",isbesttktkmass, "isbesttktkmass[size]/I");
   nt->Branch("kstar",kstar, "kstar[size]/I");
+  //  nt->Branch("isprompt",isprompt, "isprompt[size]/I");
+  //nt->Branch("isnonprompt",isnonprompt, "isnonprompt[size]/I");
   
   nt->Branch("gen",gen, "gen[size]/F");
   nt->Branch("genIndex",genIndex, "genIndex[size]/I");

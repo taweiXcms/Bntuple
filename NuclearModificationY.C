@@ -39,8 +39,8 @@ Double_t xbins[nbins]={-1.465,-0.5,0.5,1.465};
 Double_t exl[nbins]={0.465,0.5,0.5,0.465};
 //Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};////////////////////////////////////////////////
 //Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};/////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotHigh[nbins]={0,0,0,0};////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotLow[nbins]={0,0,0,0};/////////////////////////////////////////////////
+Double_t yPercSigmapPbSystTotHigh[nbins]={0.128,0.104,0.09,0.099};////////////////////////////////////////////////
+Double_t yPercSigmapPbSystTotLow[nbins]={0.128,0.104,0.09,0.099};//////////////////////
 
 Double_t commonErrorP = 0.0555 ;
 Double_t commonErrorN = 0.0555  ;
@@ -143,7 +143,7 @@ void NuclearModificationY(){
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","",4,-2,2,10.,1e+7,1e10.);  
+  TH2F* hempty=new TH2F("hempty","",4,-2.5,2.5,10.,1e+7,1e10.);  
   hempty->GetXaxis()->SetTitle("y_{MC}");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dy (B^{+}) (pb)");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dy (B^{0}) (pb)");
@@ -273,7 +273,7 @@ void NuclearModificationY(){
   legendRpA->SetTextFont(42);
   legendRpA->SetTextSize(0.04);
 
-  TH2F* hempty=new TH2F("hempty","",4,-2,2,10.,0.,3.5);  
+  TH2F* hempty=new TH2F("hempty","",4,-2.7,2.7,10.,0.,3.5);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R_{pA} (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R_{pA} (B^{0})");
@@ -312,7 +312,7 @@ void NuclearModificationY(){
   gRpAsyst->Draw("2same");
   
 
-  TBox *b = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  TBox *b = new TBox(-2.5,1-commonErrorN,-2.1,1+commonErrorP);
   b->SetLineColor(1);
   b->SetFillColor(kGray);
   b->Draw();
