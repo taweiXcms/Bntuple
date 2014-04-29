@@ -20,7 +20,7 @@ TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbes
 
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString seldata_2y=Form("((Run<=1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-TString selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
+TString selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
 TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
 
 TString weight = "(27.493+pt*(-0.218769))";
@@ -41,14 +41,14 @@ logy=0)
 {
 //abs(mass-5.279)<0.04&&
 
-    TFile *infData = new TFile("/data/bmeson/data/nt_20140421_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root");
+    TFile *infData = new TFile("/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root");
     TTree *tData = (TTree*) infData->Get("ntKp");
 
-    TFile *infMC = new TFile("/data/bmeson/MC/nt_BoostedMC_20140423_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root");///data/bmeson/MC/nt_BoostedMC_20140412_Kp_TriggerMatchingMuon_CandBase_skim.root");
+    TFile *infMC = new TFile("/export/d00/scratch/jwang/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root");///data/bmeson/MC/nt_BoostedMC_20140412_Kp_TriggerMatchingMuon_CandBase_skim.root");
     TTree *tMC = (TTree*) infMC->Get("ntKp");
  
 //    TFile *infP = new TFile("/data/bmeson/MC/nt_BoostedMC_20140404_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV_skim.root");
-    TFile *infP = new TFile("nt_BoostedMC_20140426_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root");
+    TFile *infP = new TFile("/export/d00/scratch/jwang/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root");
 
     TTree *tP = (TTree*) infP->Get("ntKp");
 
@@ -69,9 +69,9 @@ logy=0)
     double normMC = 583./3544.;  // based on # of B+ candidate
     
     tData->Draw(Form("%s>>hData",var),seldata_2y && massCut);    
-//    tMC->Draw("d0/d0Err>>hMC",seldata_2y && massCut && TCut("gen==22233"));    
+//    tMC->Draw("d0/d0Err>>hMC",seldata_2y && massCut && TCut("gen==23333"));    
     tMC->Draw(Form("%s>>hMC",var),(seldata_2y && massCut));    
-    tMC->Draw(Form("%s>>hMCBck",var),(seldata_2y && massCut && TCut("gen!=22233")));    
+    tMC->Draw(Form("%s>>hMCBck",var),(seldata_2y && massCut && TCut("gen!=23333")));    
     tP->Draw(Form("%s>>hP",var),(seldata_2y));    
     hData->Sumw2();
 
