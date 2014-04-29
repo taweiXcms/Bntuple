@@ -6,10 +6,12 @@ double setparam1=5.28;
 double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
-int variationoption=4;
+int variationoption=1;
  
 TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+
+TString weight = "(27.493+pt*(-0.218769))";
 
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
@@ -162,7 +164,8 @@ void fitB(int stepcut)
   const int nBins = 1;
   double ptBins[nBins+1] = {10,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
-  TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
+  TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
+  TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
 
@@ -181,12 +184,12 @@ void fitB(int stepcut)
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt",TCut(selmc.Data())&&"gen==22233");
-  nt->Project("hRecoTruth","pt",TCut(seldata.Data())&&"gen==22233");
-  ntGen->Project("hPtGen","pt",selmcgen.Data());
-  divideBinWidth(hRecoTruth);
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
+  nt->Project("hPtRecoTruth","pt",TCut(seldata.Data())&&"gen==23333");
+  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
+  divideBinWidth(hPtRecoTruth);
   
-  hRecoTruth->Draw("same hist");
+  hPtRecoTruth->Draw("same hist");
   divideBinWidth(hPtMC);
   divideBinWidth(hPtGen);
   
@@ -262,11 +265,12 @@ void SystStudy(){
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
 
     }
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      selmc=Form("abs(y+0.465)<1.93&&gen==22233&&%s",cut.Data());
+    
+      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
+      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
       void fitB(int);  
       fitB(i);    
-      
+       
    } 
 }
