@@ -8,8 +8,8 @@ double setparam3=0.03;
 double fixparam1=5.279;
 int variationoption=4;
  
-TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
@@ -267,7 +267,6 @@ void SystStudy(){
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       void fitB(int);  
       fitB(i);    
-
-
+      
    } 
 }
