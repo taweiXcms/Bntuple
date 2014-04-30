@@ -37,7 +37,7 @@ double norm(TH1D* h,double low,double high)
 }
 
 void dataMC(char * var="d0/d0Err",char *title="d0/#sigma(d0)",char *fileTitle="d0d0err",int nBin=20,double BinL=0,double BinH=200,bool
-logy=0)
+logy=1)
 {
 //abs(mass-5.279)<0.04&&
 
