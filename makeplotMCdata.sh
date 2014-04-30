@@ -11,7 +11,7 @@ time root -b > an.log 2>&1 <<EOI
 EOI
 
 time root -b > an.log 2>&1 <<EOI
-.x dataMC.C+("cos(dtheta)","cos(#Delta#theta)","cosdthetaoptimal",20,-1,1,0)
+.x dataMC.C+("cos(dtheta)","cos(#Delta#theta)","cosdthetaoptimal",20,0.9,1,0)
 .q
 EOI
 
