@@ -1,4 +1,4 @@
-
+rm figure/DataMC-*optimal*
 
 time root -b > an.log 2>&1 <<EOI
 .x dataMC.C+("d0/d0Err","d0/#sigma(d0)","d0D0erroptimal",40,0,200,1)
