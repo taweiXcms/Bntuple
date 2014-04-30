@@ -30,28 +30,28 @@ TString cut;
 TString selmc;
 TString foutname;
 TString ntname;
-int MCflag = 3;
+int MCflag = 1;
 
 void eff(){
   if(MCflag==1){
-    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
     cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
-    selmc=Form("abs(y+0.465)<1.93&&gen==22233&&pt>10&&pt<60&&%s",cut.Data());
+    selmc=Form("abs(y+0.465)<1.93&&gen==23333&&pt>10&&pt<60&&%s",cut.Data());
     foutname = "fout_kp.root";
     ntname="ntKp";
   }
   if(MCflag==2){
-    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
     cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01";
-//    selmc=Form("abs(y+0.465)<1.93&&(gen==22233||gen==41000)&&pt>10&&pt<60&&%s",cut_kpi.Data());
-    selmc=Form("abs(y+0.465)<1.93&&gen==22233&&pt>10&&pt<60&&%s",cut.Data());
+//    selmc=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&pt>10&&pt<60&&%s",cut_kpi.Data());
+    selmc=Form("abs(y+0.465)<1.93&&gen==23333&&pt>10&&pt<60&&%s",cut.Data());
     foutname = "fout_kstar.root";
     ntname="ntKstar";
   }
   if(MCflag==3){
-    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140424_Phi_TriggerMatchingMuon_EvtBase_skim.root";
+    inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Phi_TriggerMatchingMuon_EvtBase_skim.root";
     cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
-    selmc=Form("abs(y+0.465)<1.93&&gen==22233&&pt>10&&pt<60&&%s",cut.Data());
+    selmc=Form("abs(y+0.465)<1.93&&gen==23333&&pt>10&&pt<60&&%s",cut.Data());
     foutname = "fout_phi.root";
     ntname="ntphi";
   }
@@ -185,7 +185,7 @@ void eff(){
       }
     }
   }
-/*
+
   ////PLOTTING////
   TEfficiency *reco_gen_eff_pt = new TEfficiency(*reco_bsig_pt, *gen_bsig_pt);
   TEfficiency *reco_gen_eff_y = new TEfficiency(*reco_bsig_y, *gen_bsig_y);
@@ -252,6 +252,6 @@ void eff(){
       c1->SaveAs("fig_eff/phi_pt_eff.pdf");
       c2->SaveAs("fig_eff/phi_y_eff.pdf");
   }
-*/
+
   ////PLOTING////
 }
