@@ -6,7 +6,7 @@ double setparam1=5.28;
 double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
-int variationoption=1;
+int variationoption=4;
  
 TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
@@ -258,17 +258,17 @@ void SystStudy(){
     }
     
     if(variationoption==4){
-      valuemin=0.8;
+      valuemin=0.6;
       valuemax=1.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
 
     }
-    
+      
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+      seldata=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
       void fitB(int);  
       fitB(i);    
        
