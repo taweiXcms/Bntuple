@@ -117,6 +117,14 @@ logy=1)
 
     c->SaveAs(Form("figure/DataMC-%s.pdf",fileTitle));
     c->SaveAs(Form("figure/DataMC-%s.C",fileTitle));
+    TFile*fout=new TFile(Form("figure/DataMC-%s.C",fileTitle),"recreate");
+    fout->cd();
+    hData->Write();
+    hMC->Write();
+    hP->Write();
+    hMCBck->Write();
+    fout->Close();
+    delete fout;
     
 }
 
