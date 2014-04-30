@@ -1,5 +1,5 @@
 time root -b > an.log 2>&1 <<EOI
-.x dataMC.C+("d0/d0Err","d0/#sigma(d0)","d0D0loose",40,0,200,1)
+.x dataMC.C+("d0/d0Err","d0/#sigma(d0)","d0D0errloose",40,0,200,1)
 .q
 EOI
 
