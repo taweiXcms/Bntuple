@@ -6,12 +6,12 @@ time root -b > an.log 2>&1 <<EOI
 EOI
 
 time root -b > an.log 2>&1 <<EOI
-.x dataMC.C+("chi2cl","Vertex #chi^{2} Probability","ProbChi2bestchi",20,0,1)
+.x dataMC.C+("chi2cl","Vertex #chi^{2} Probability","ProbChi2bestchi",20,0,0)
 .q
 EOI
 
 time root -b > an.log 2>&1 <<EOI
-.x dataMC.C+("cos(dtheta)","cos(#Delta#theta)","cosdthetabestchi",20,-1,1)
+.x dataMC.C+("cos(dtheta)","cos(#Delta#theta)","cosdthetabestchi",20,-1,0)
 .q
 EOI
 
