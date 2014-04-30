@@ -15,9 +15,9 @@ TString inputdata="/export/d00/scratch/jwang/nt_20140418_PAMuon_HIRun2013_Prompt
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140418_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 //tk pt, chi2
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
-//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&pt>10";
-
+//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9";
+  
 TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
 TString seldata_2y=Form("((Run<=1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
 TString selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
@@ -117,7 +117,7 @@ logy=1)
 
     c->SaveAs(Form("figure/DataMC-%s.pdf",fileTitle));
     c->SaveAs(Form("figure/DataMC-%s.C",fileTitle));
-    TFile*fout=new TFile(Form("figure/DataMC-%s.C",fileTitle),"recreate");
+    TFile*fout=new TFile(Form("figure/DataMC-%s.root",fileTitle),"recreate");
     fout->cd();
     hData->Write();
     hMC->Write();
