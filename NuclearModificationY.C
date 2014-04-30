@@ -275,9 +275,9 @@ void NuclearModificationY(){
 
   TH2F* hempty=new TH2F("hempty","",4,-2.7,2.7,10.,0.,3.5);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
-  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R_{pA} (B^{+})");
-  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R_{pA} (B^{0})");
-  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R_{pA} (B_{s})");
+  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{+})");
+  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
+  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B_{s})");
   hempty->GetXaxis()->SetTitleOffset(1.1);
   hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
@@ -317,7 +317,7 @@ void NuclearModificationY(){
   b->SetFillColor(kGray);
   b->Draw();
 
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R_{pA} stat unc","P");
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}  stat unc","P");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);

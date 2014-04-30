@@ -37,18 +37,17 @@
 */
 
 
-  TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.109,0.112,0.112,0.122,0.127};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.109,0.112,0.112,0.122,0.127};
-  //Double_t commonErrorP = 0.0445 ;
-  //Double_t commonErrorN = 0.0445  ;
+  TString particle="Bzero";
+  const int nbins=3;
+  Double_t xbins[nbins]={12.5,17.5,40};
+  Double_t exl[nbins]={2.5,2.5,20};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.334,0.162,0.212};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.334,0.162,0.212};
   
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
-
+  //Double_t commonErrorP = 0.0555 ;
+  //Double_t commonErrorN = 0.0555  ;
+  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
+  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
 
 void NuclearModification(){
 
@@ -281,9 +280,9 @@ void NuclearModification(){
 
   TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R_{pA} (B^{+})");
-  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R_{pA} (B^{0})");
-  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R_{pA} (B_{s})");
+  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA} (B^{+})");
+  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
+  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B_{s})");
   hempty->GetXaxis()->SetTitleOffset(1.1);
   hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
@@ -323,7 +322,7 @@ void NuclearModification(){
   b->SetFillColor(kGray);
   b->Draw();
 
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R_{pA} stat unc","P");
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}  stat unc","P");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
