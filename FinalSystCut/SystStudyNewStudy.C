@@ -146,14 +146,18 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
+   c->SaveAs(Form("ResultsBplusNewStudy/BMass-%d.pdf",count));
 
    return mass;
 }
 
-void fitB(int stepcut)
+void fitB(int stepcut,bool isData)
 {
-  TString infname=inputdata.Data();
+  TString infname=inputmc.Data();
+  
+  if(isData)infname=inputdata.Data();
+  //if(!isData)infname=inputmc.Data();
+  
   TFile *inf = new TFile(infname.Data());
   TTree *nt = (TTree*) inf->Get("ntKp");
 
@@ -213,7 +217,7 @@ void fitB(int stepcut)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d.root",variationoption,stepcut),"recreate");
+  TFile *outf = new TFile(Form("ResultsBplusNewStudy/SigmaBplusCutId%d_Step%d_IsData%d.root",variationoption,stepcut,isData),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
@@ -224,7 +228,7 @@ void fitB(int stepcut)
   delete outf;
 }
 
-void SystStudy(){
+void SystStudyNewStudy(){
 
   Int_t steps=10;
   Double_t valuemin,valuemax,stepvalue,cutvalue;
@@ -258,8 +262,8 @@ void SystStudy(){
     }
     
     if(variationoption==4){
-      valuemin=0.6;
-      valuemax=1.0;
+      valuemin=0.7;
+      valuemax=1.1;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
@@ -269,8 +273,9 @@ void SystStudy(){
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       seldata=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-      void fitB(int);  
-      fitB(i);    
+      void fitB(int,bool);  
+      fitB(i,false);     
+      fitB(i,true);    
        
    } 
 }
