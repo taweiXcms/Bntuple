@@ -24,7 +24,7 @@ void clean0(TH1D *h){
   }
 }
 
-TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){   
+TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData){   
    //cout<<cut.Data()<<endl;
    static int count=0;
    count++;
@@ -126,7 +126,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    double yield = mass->Integral(5,6)/0.02;
    double yieldErr = mass->Integral(5,6)/0.02*mass->GetParError(0)/mass->GetParameter(0);
 
-
+    
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
    leg->AddEntry(h,"CMS Preliminary","");
@@ -146,14 +146,19 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
+   c->SaveAs(Form("ResultsBplus/BMass-%d_isData%d.pdf",count,myisData));
 
    return mass;
 }
 
-void fitB(int stepcut)
+void fitB(int stepcut,bool isData)
 {
-  TString infname=inputdata.Data();
+  TString infname;
+  if(isData)infname=inputdata.Data();
+  if(!isData)infname=inputmc.Data();
+  
+  if(!isData)seldata_2y=seldata;
+  
   TFile *inf = new TFile(infname.Data());
   TTree *nt = (TTree*) inf->Get("ntKp");
 
@@ -171,7 +176,7 @@ void fitB(int stepcut)
 
   for (int i=0;i<nBins;i++)
     {
-      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
+      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1],isData);
       double yield = f->Integral(5,6)/0.02;
       double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
@@ -213,7 +218,7 @@ void fitB(int stepcut)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d.root",variationoption,stepcut),"recreate");
+  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData.root",variationoption,stepcut,isData),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
@@ -272,8 +277,9 @@ void SystStudy(){
       //seldata=cut;
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
       seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-      void fitB(int);  
-      fitB(i);    
+      void fitB(int,bool);  
+      fitB(i,true);      
+      fitB(i,false);  
        
    } 
 }
