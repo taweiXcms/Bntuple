@@ -241,7 +241,7 @@ void SystStudy(int variationoption=4){
     
     if(variationoption==1){
       valuemin=0.0;  
-      valuemax=0.1;
+      valuemax=0.4;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
       //1.32e-02
