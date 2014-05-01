@@ -1,12 +1,22 @@
-void CompareSystPtInt(){
+void CompareSystPtInt(int idcut=4){
 
   const int nBins=10;
 
   //int idcut=1; double ptBins[nBins+1]={0.,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1};
   //int idcut=2; double ptBins[nBins+1]={2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.2,4.4};
   //int idcut=3; double ptBins[nBins+1]={-0.5,-0.4,-0.3,-0.2,-0.1,0.,0.1,0.2,0.3,0.4,0.5};
-  int idcut=4; double ptBins[nBins+1]={0.6,0.64,0.68,0.72,0.76,0.8,0.84,0.88,0.92,0.96,1.0};
-   
+  //int idcut=4; double ptBins[nBins+1]={0.6,0.64,0.68,0.72,0.76,0.8,0.84,0.88,0.92,0.96,1.0};
+  
+
+  
+  double ptBins[nBins+1];
+  
+  if(idcut==1){ ptBins[0]=0.; ptBins[1]=0.01; ptBins[2]=0.02; ptBins[3]=0.03; ptBins[4]=0.04; ptBins[5]=0.05; ptBins[6]=0.06; ptBins[7]=0.07; ptBins[8]=0.08; ptBins[9]=0.09; ptBins[10]=0.1;}
+  if(idcut==2){ ptBins[0]=2.4; ptBins[1]=2.6; ptBins[2]=2.8; ptBins[3]=3.0; ptBins[4]=3.2; ptBins[5]=3.4; ptBins[6]=3.6; ptBins[7]=3.8; ptBins[8]=4.0; ptBins[9]=4.2; ptBins[10]=4.4;}
+  if(idcut==3){ ptBins[0]=-0.5; ptBins[1]=-0.4; ptBins[2]=-0.3; ptBins[3]=-0.2; ptBins[4]=-0.1; ptBins[5]=0.; ptBins[6]=0.1; ptBins[7]=0.2; ptBins[8]=0.3; ptBins[9]=0.4; ptBins[10]=0.5;}
+  if(idcut==4){ ptBins[0]=0.6; ptBins[1]=0.64; ptBins[2]=0.68; ptBins[3]=0.72; ptBins[4]=0.76; ptBins[5]=0.80; ptBins[6]=0.84; ptBins[7]=0.88; ptBins[8]=0.92; ptBins[9]=0.96; ptBins[10]=1.0;}
+  
+
   gROOT->SetStyle("Plain");	
   gStyle->SetOptStat(0);
   gStyle->SetOptStat(0000);
