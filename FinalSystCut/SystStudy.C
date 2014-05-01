@@ -145,7 +145,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBplus/BMass-isData%d_myvar%d_Step%d.pdf",count,myisData,myvaropt));
+   c->SaveAs(Form("ResultsBplus/BMass-isData%d_myvar%d_Step%d.pdf",myisData,myvaropt,count));
 
    return mass;
 }
