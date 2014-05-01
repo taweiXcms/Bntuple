@@ -15,7 +15,7 @@ TString weight = "(27.493+pt*(-0.218769))";
 
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
-TString cut,seldata,selmc,selmcgen;
+TString cut,seldata,seldata_2y,selmc,selmcgen;
 
 
 void clean0(TH1D *h){
@@ -34,7 +34,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    // Fit function
    TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
-   nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
+   nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
    h->Draw();
@@ -268,7 +268,10 @@ void SystStudy(){
       
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
+      //seldata=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
+      //seldata=cut;
+      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
       void fitB(int);  
       fitB(i);    
        
