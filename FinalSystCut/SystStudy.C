@@ -26,7 +26,10 @@ void clean0(TH1D *h){
 TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvaropt){   
    //cout<<cut.Data()<<endl;
    static int count=0;
-   count++;
+   static int countMC=0;
+   if(myisData)count++;
+   if(!myisData)countMC++;
+   
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
@@ -145,7 +148,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,count-1,myisData));
+   if(myisData) c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,count-1,myisData));
+   if(!myisData) c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,countMC-1,myisData));
    
    return mass;
 }
@@ -262,8 +266,8 @@ void SystStudy(int variationoption=4){
     }
     
     if(variationoption==4){
-      valuemin=0.6;
-      valuemax=1.0;
+      valuemin=0.9;
+      valuemax=1.2;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
@@ -278,6 +282,7 @@ void SystStudy(int variationoption=4){
       seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
       void fitB(int,bool,int);  
       fitB(i,true,variationoption);      
-      fitB(i,false,variationoption);  
+      fitB(i,false,variationoption);   
        
    } 
+}
