@@ -215,9 +215,9 @@ void fitB(int stepcut,bool isData,int myvariationoption)
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
-  hPtSigma->Draw();
+  hPtSigma->Draw(); 
   
-  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData%d.root",stepcut,myvariationoption,isData),"recreate");
+  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData%d.root",myvariationoption,stepcut,isData),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
