@@ -6,7 +6,6 @@ double setparam1=5.28;
 double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
-int variationoption=4;
  
 TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
@@ -24,7 +23,7 @@ void clean0(TH1D *h){
   }
 }
 
-TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData){   
+TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvaropt){   
    //cout<<cut.Data()<<endl;
    static int count=0;
    count++;
@@ -146,12 +145,12 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData){
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d_isData%d.pdf",count,myisData));
+   c->SaveAs(Form("ResultsBplus/BMass-isData%d_myvar%d_Step%d.pdf",count,myisData,myvaropt));
 
    return mass;
 }
 
-void fitB(int stepcut,bool isData)
+void fitB(int stepcut,bool isData,int myvariationoption)
 {
   TString infname;
   if(isData)infname=inputdata.Data();
@@ -176,7 +175,7 @@ void fitB(int stepcut,bool isData)
 
   for (int i=0;i<nBins;i++)
     {
-      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1],isData);
+      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1],isData,myvariationoption);
       double yield = f->Integral(5,6)/0.02;
       double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
@@ -218,7 +217,7 @@ void fitB(int stepcut,bool isData)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData.root",variationoption,stepcut,isData),"recreate");
+  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData%d.root",stepcut,myvariationoption,isData),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
@@ -229,7 +228,7 @@ void fitB(int stepcut,bool isData)
   delete outf;
 }
 
-void SystStudy(){
+void SystStudy(int variationoption=4){
 
   Int_t steps=10;
   Double_t valuemin,valuemax,stepvalue,cutvalue;
@@ -277,9 +276,9 @@ void SystStudy(){
       //seldata=cut;
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
       seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-      void fitB(int,bool);  
-      fitB(i,true);      
-      fitB(i,false);  
+      void fitB(int,bool,int);  
+      fitB(i,true,variationoption);      
+      fitB(i,false,variationoption);  
        
    } 
 }
