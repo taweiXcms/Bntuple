@@ -4,7 +4,7 @@ void CompareSystPtInt(){
 
   //int idcut=1; double ptBins[nBins+1]={0.,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1};
   //int idcut=2; double ptBins[nBins+1]={2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0,4.2,4.4};
-  //int idcut=3; double ptBins[nBins+1]={-0.3,-0.24,-0.18,-0.12,-0.06,0.,0.06,0.12,0.18,0.24,0.3};
+  //int idcut=3; double ptBins[nBins+1]={-0.5,-0.4,-0.3,-0.2,-0.1,0.,0.1,0.2,0.3,0.4,0.5};
   int idcut=4; double ptBins[nBins+1]={0.6,0.64,0.68,0.72,0.76,0.8,0.84,0.88,0.92,0.96,1.0};
    
   gROOT->SetStyle("Plain");	
@@ -15,16 +15,16 @@ void CompareSystPtInt(){
   gStyle->SetFrameFillColor(0);
   gStyle->SetOptTitle(0);
 
-  TFile*file0=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step0.root",idcut));
-  TFile*file1=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step1.root",idcut));
-  TFile*file2=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step2.root",idcut));
-  TFile*file3=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step3.root",idcut));
-  TFile*file4=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step4.root",idcut));
-  TFile*file5=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step5.root",idcut));
-  TFile*file6=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step6.root",idcut));
-  TFile*file7=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step7.root",idcut));
-  TFile*file8=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step8.root",idcut));
-  TFile*file9=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step9.root",idcut));
+  TFile*file0=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step0_isData1.root",idcut));
+  TFile*file1=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step1_isData1.root",idcut));
+  TFile*file2=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step2_isData1.root",idcut));
+  TFile*file3=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step3_isData1.root",idcut));
+  TFile*file4=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step4_isData1.root",idcut));
+  TFile*file5=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step5_isData1.root",idcut));
+  TFile*file6=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step6_isData1.root",idcut));
+  TFile*file7=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step7_isData1.root",idcut));
+  TFile*file8=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step8_isData1.root",idcut));
+  TFile*file9=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step9_isData1.root",idcut));
   
   
  TH1F*hSigmaBis0=(TH1F*)file0->Get("hPtSigma");
@@ -108,7 +108,7 @@ void CompareSystPtInt(){
   tlatexPt0->SetTextFont(42);
   tlatexPt0->SetTextSize(0.06);
   tlatexPt0->Draw();  
-  canvasVscut->SaveAs(Form("canvasVscutId%d.pdf",idcut));
+  canvasVscut->SaveAs(Form("Plots/canvasVscutId%d.pdf",idcut));
   
   
 }
