@@ -219,7 +219,7 @@ void fitB(int stepcut,bool isData,int myvariationoption)
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
-  hPtSigma->Draw();
+  hPtSigma->Draw(); 
   
   TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData%d.root",myvariationoption,stepcut,isData),"recreate");
   outf->cd();
@@ -240,19 +240,19 @@ void SystStudy(int variationoption=4){
   for (int i=0;i<steps;i++){
     
     if(variationoption==1){
-      valuemin=0.0;
+      valuemin=0.0;  
       valuemax=0.1;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
       //1.32e-02
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvalue);
     } 
     if(variationoption==2){
       valuemin=3.4-1.0;
       valuemax=3.4+1.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&cos(dtheta)>-3.46e-01",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&cos(dtheta)>-3.46e-01",cutvalue);
 
     }
     
@@ -261,16 +261,16 @@ void SystStudy(int variationoption=4){
       valuemax=0.3;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>%f",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>%f",cutvalue);
 
     }
     
     if(variationoption==4){
-      valuemin=0.9;
-      valuemax=1.2;
+      valuemin=0.6;
+      valuemax=1.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvalue);
 
     }
       
