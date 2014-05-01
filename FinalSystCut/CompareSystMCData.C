@@ -180,7 +180,7 @@ void CompareSystMCData(int idcut=4){
   leg->SetBorderSize(0);
   leg->SetFillStyle(0);
   leg->Draw();
-  canvasVscut->SaveAs(Form("Plots/canvasVscutId%d.pdf",idcut));
+  canvasVscut->SaveAs(Form("Plots/canvasMCDataVscutId%d.pdf",idcut));
 
   
 }
