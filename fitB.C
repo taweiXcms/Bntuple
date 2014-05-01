@@ -7,7 +7,7 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 
-//svmit2
+//svmithi2
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
