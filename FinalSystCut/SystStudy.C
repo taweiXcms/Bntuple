@@ -145,8 +145,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   c->SaveAs(Form("ResultsBplus/BMass-isData%d_myvar%d_Step%d.pdf",myisData,myvaropt,count));
-
+   c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,count-1,myisData));
+   
    return mass;
 }
 
@@ -215,7 +215,7 @@ void fitB(int stepcut,bool isData,int myvariationoption)
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
-  hPtSigma->Draw(); 
+  hPtSigma->Draw();
   
   TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData%d.root",myvariationoption,stepcut,isData),"recreate");
   outf->cd();
@@ -281,4 +281,3 @@ void SystStudy(int variationoption=4){
       fitB(i,false,variationoption);  
        
    } 
-}
