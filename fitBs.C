@@ -191,8 +191,8 @@ void fitBs(TString infname="",bool doweight = 1)
    for (int i=0;i<nBins;i++)
    {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
-      double yield = f->Integral(5,6)/0.02;
-      double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
+      double yield = f->Integral(5,6)/0.04;
+      double yieldErr = f->Integral(5,6)/0.04*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
    }  
