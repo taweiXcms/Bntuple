@@ -137,7 +137,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    mass->SetFillColor(2);
    f->Draw("same");
 
-   double yield = mass->Integral(5,6)/0.0430;
+   double yield = mass->Integral(5,6)/0.040;
    double yieldErr = mass->Integral(5,6)/0.04*mass->GetParError(0)/mass->GetParameter(0);
 
 
