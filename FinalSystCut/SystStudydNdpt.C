@@ -236,15 +236,15 @@ void fitB(int stepcut,bool isData,int myvariationoption)
   delete outf;
 }
 
-void SystStudydNdpt(int variationoption=1){
-
-  const int nBins=8;
+void SystStudydNdpt(int variationoption=1,const int nBins=8){
   double ptBins[nBins+1];
 
   if(variationoption==1){ ptBins[0]=0.; ptBins[1]=0.125; ptBins[2]=0.250; ptBins[3]=0.375; ptBins[4]=0.500; ptBins[4]=0.625; ptBins[4]=0.750; ptBins[4]=0.875; ptBins[4]=1.;}
   if(variationoption==2){ ptBins[0]=5.; ptBins[1]=7.5; ptBins[2]=10.; ptBins[3]=15.; ptBins[4]=20.; ptBins[5]=30.;   ptBins[6]=40.;  ptBins[7]=50.;  ptBins[8]=100.;    }
   if(variationoption==3){ ptBins[0]=0.9995; ptBins[1]=0.9996; ptBins[2]=0.9997; ptBins[3]=0.9998; ptBins[4]=0.99985; ptBins[5]=0.9999; ptBins[6]=0.99995; ptBins[7]=0.999975; ptBins[8]=1.;}
   if(variationoption==4){ ptBins[0]=0.5; ptBins[1]=2.; ptBins[2]=3.; ptBins[3]=4.; ptBins[4]=5.; ptBins[5]=10.; ptBins[6]=15.; ptBins[7]=20.; ptBins[8]=50.;  }
+  if(variationoption==5){ ptBins[0]=10.; ptBins[1]=15.; ptBins[2]=20.; ptBins[3]=25.; ptBins[4]=30.; ptBins[5]=60.;}
+  if(variationoption==6){ ptBins[0]=-1.93-0.465; ptBins[1]=-1.0-0.465; ptBins[2]=-0.465; ptBins[3]=1.0-0.465; ptBins[4]=1.93-0.465;}
 
 
   Double_t valuemin,valuemax,stepvalue,cutvaluelow,cutvalueup;
@@ -276,7 +276,21 @@ void SystStudydNdpt(int variationoption=1){
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>%f&&trk1Pt<%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvaluelow,cutvalueup);
 
     }
-      
+    
+    if(variationoption==5){
+    
+      cutvaluelow=ptBins[i];
+      cutvalueup=ptBins[i+1];
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01&&pt>%f&&pt<%f&&isbestchi2",cutvaluelow,cutvalueup);
+
+    }
+    
+    if(variationoption==6){
+    
+      cutvaluelow=ptBins[i];
+      cutvalueup=ptBins[i+1];
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01&&y>%f&&y<%f&&isbestchi2",cutvaluelow,cutvalueup);
+    }
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       //seldata=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
