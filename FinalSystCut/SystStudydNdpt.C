@@ -7,8 +7,12 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
  
-TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+//TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+//TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+
+TString inputdata="/Users/ginnocen/Desktop/InputsFiles/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/Users/ginnocen/Desktop/InputsFiles/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+
 
 TString weight = "(27.493+pt*(-0.218769))";
 
@@ -148,8 +152,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   if(myisData) c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,count-1,myisData));
-   if(!myisData) c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,countMC-1,myisData));
+   if(myisData) c->SaveAs(Form("ResultsBplus/CutId%d/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,myvaropt,count-1,myisData));
+   if(!myisData) c->SaveAs(Form("ResultsBplus/CutId%d/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,myvaropt,countMC-1,myisData));
    
    return mass;
 }
@@ -221,7 +225,7 @@ void fitB(int stepcut,bool isData,int myvariationoption)
 
   hPtSigma->Draw(); 
   
-  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData%d.root",myvariationoption,stepcut,isData),"recreate");
+  TFile *outf = new TFile(Form("ResultsBplus/CutId%d/SigmaBplusCutId%d_Step%d_isData%d.root",myvariationoption,myvariationoption,stepcut,isData),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
@@ -232,49 +236,43 @@ void fitB(int stepcut,bool isData,int myvariationoption)
   delete outf;
 }
 
-void SystStudydNdpt(int variationoption=4){
+void SystStudydNdpt(int variationoption=1){
 
-  Int_t steps=10;
+  const int nBins=8;
+  double ptBins[nBins+1];
+
+  if(variationoption==1){ ptBins[0]=0.; ptBins[1]=0.125; ptBins[2]=0.250; ptBins[3]=0.375; ptBins[4]=0.500; ptBins[4]=0.625; ptBins[4]=0.750; ptBins[4]=0.875; ptBins[4]=1.;}
+  if(variationoption==2){ ptBins[0]=5.; ptBins[1]=7.5; ptBins[2]=10.; ptBins[3]=15.; ptBins[4]=20.; ptBins[5]=30.;   ptBins[6]=40.;  ptBins[7]=50.;  ptBins[8]=100.;    }
+  if(variationoption==3){ ptBins[0]=0.9995; ptBins[1]=0.9996; ptBins[2]=0.9997; ptBins[3]=0.9998; ptBins[4]=0.99985; ptBins[5]=0.9999; ptBins[6]=0.99995; ptBins[7]=0.999975; ptBins[8]=1.;}
+  if(variationoption==4){ ptBins[0]=0.5; ptBins[1]=2.; ptBins[2]=3.; ptBins[3]=4.; ptBins[4]=5.; ptBins[5]=10.; ptBins[6]=15.; ptBins[7]=20.; ptBins[8]=50.;  }
+
+
   Double_t valuemin,valuemax,stepvalue,cutvaluelow,cutvalueup;
     
-  for (int i=0;i<steps;i++){
+  for (int i=0;i<nBins;i++){
     
     if(variationoption==1){
-      valuemin=0.0;  
-      valuemax=1.0;
-      stepvalue=(valuemax-valuemin)/(double)(steps);
-      cutvaluelow=valuemin+i*stepvalue;
-      cutvalueup=valuemin+(i+1)*stepvalue;
-      
-      //1.32e-02
+      cutvaluelow=ptBins[i];
+      cutvalueup=ptBins[i+1];
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>%f&&chi2cl<%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvaluelow,cutvalueup);
     } 
     if(variationoption==2){
-      valuemin=0.;
-      valuemax=5.;
-      stepvalue=(valuemax-valuemin)/(double)(steps);
-      cutvaluelow=valuemin+i*stepvalue;
-      cutvalueup=valuemin+(i+1)*stepvalue;
+      cutvaluelow=ptBins[i];
+      cutvalueup=ptBins[i+1];
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&(d0/d0Err)<%f&&cos(dtheta)>-3.46e-01",cutvaluelow,cutvalueup);
 
     }
     
     if(variationoption==3){
-      valuemin=-1.; 
-      valuemax=1.;
-      stepvalue=(valuemax-valuemin)/(double)(steps);
-      cutvaluelow=valuemin+i*stepvalue;
-      cutvalueup=valuemin+(i+1)*stepvalue;
+      cutvaluelow=ptBins[i];
+      cutvalueup=ptBins[i+1];
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>%f&&cos(dtheta)<%f",cutvaluelow,cutvalueup);
 
     }
     
     if(variationoption==4){
-      valuemin=0.;
-      valuemax=1.0;
-      stepvalue=(valuemax-valuemin)/(double)(steps);
-      cutvaluelow=valuemin+i*stepvalue;
-      cutvalueup=valuemin+(i+1)*stepvalue;
+      cutvaluelow=ptBins[i];
+      cutvalueup=ptBins[i+1];
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>%f&&trk1Pt<%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvaluelow,cutvalueup);
 
     }
