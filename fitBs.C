@@ -2,17 +2,17 @@
 
 double luminosity=34*1e-3;
 double setparam0=100.;
-double setparam1=5.37;
+double setparam1=5.367;
 double setparam2=0.02;
 double setparam3=0.03;
-double fixparam1=5.37;
+double fixparam1=5.367;
 
 //svmit02
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Phi_TriggerMatchingMuon_EvtBase_skim.root";          
+TString inputdata="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140427_Phi_TriggerMatchingMuon_EvtBase_skim.root";          
 
 //Bs tkpt chi2
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
@@ -39,11 +39,11 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
-   TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
-   TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
+   TH1D *h = new TH1D(Form("h%d",count),"",24,5.03,5.99);
+   TH1D *hMC = new TH1D(Form("hMC%d",count),"",24,5.03,5.99);
    // Fit function
    TString iNP="Gaus(x,5.36800e+00,5.77122e-02)/(sqrt(2*3.14159)*abs(5.77122e-02))";
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+ [3]+[4]*x+[5]*x*x + [11]*("+iNP+")");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2]*(1+[9]))/(sqrt(2*3.14159)*[2]*(1+[9]))+(1-[7])*Gaus(x,[1],[8]*(1+[9]))/(sqrt(2*3.14159)*[8]*(1+[9])))+ [3]+[4]*x+[5]*x*x + [11]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
    clean0(h);
@@ -60,6 +60,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    f->SetParLimits(11,0,1000);
    f->SetParameter(11,10);
    f->FixParameter(11,0);
+   f->FixParameter(9,0);
    h->GetEntries();
 
    hMC->Fit(Form("f%d",count),"q","",5,6);
@@ -122,7 +123,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    h->SetStats(0);
    h->Draw("e");
    h->SetXTitle("M_{B} (GeV/c^{2})");
-   h->SetYTitle("Entries / (20 MeV/c^{2})");
+   h->SetYTitle("Entries / (40 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
    h->SetTitleOffset(1.,"Y");
@@ -136,8 +137,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    mass->SetFillColor(2);
    f->Draw("same");
 
-   double yield = mass->Integral(5,6)/0.02;
-   double yieldErr = mass->Integral(5,6)/0.02*mass->GetParError(0)/mass->GetParameter(0);
+   double yield = mass->Integral(5,6)/0.0430;
+   double yieldErr = mass->Integral(5,6)/0.04*mass->GetParError(0)/mass->GetParameter(0);
 
 
    // Draw the legend:)   
