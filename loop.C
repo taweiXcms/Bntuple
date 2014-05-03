@@ -684,7 +684,7 @@ int signalGen(int Btype, int j)
 
 
 //void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="/export/d00/scratch/jwang/jpsi.root", bool REAL=0){
-void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140426_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", bool REAL=1){
+void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140426_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", bool REAL=1,bool PbpMC=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -798,7 +798,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	  }
 	else
 	  {
-	    if(abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -840,7 +841,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	  }
 	else
 	  {
-	    if(abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -881,7 +883,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	  }
 	else
 	  {
-	    if(abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -929,7 +932,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	  }
 	else
 	  {
-	    if(abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -980,7 +984,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	  }
 	else
 	  {
-	    if(abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -1033,7 +1038,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	  }
 	else
 	  {
-	    if(abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
 	  }
 	//}}}
 	if(BInfo_type[j]==7)
@@ -1053,7 +1059,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	isbestchi2[bestindex] = 1;
       }
     nt6->Fill();
-    /*    
+
     if(!REAL)
       {
 	Gensize = 0;
@@ -1120,7 +1126,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	ntGen->Fill();
     
 	}
-    */ 
+
   }
 
   outf->Write();
