@@ -31,6 +31,8 @@ TString selmc;
 TString foutname;
 TString ntname;
 int MCflag = 1;
+TString fig_folder = "fig_eff";
+//TString fig_folder = "fig_eff_fine";
 
 void eff(){
   if(MCflag==1){
@@ -64,10 +66,14 @@ void eff(){
   double ptBins[nBins+1] = {5,10,15,20,25,30,60};
   const int nEtaBins = 4;
   double yBins[nEtaBins+1] = {-2.395, -1.47, -0.47, 0.53, 1.465};
-  TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
-  TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", nEtaBins,yBins);
-  TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
-  TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", nEtaBins,yBins);
+//  TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
+//  TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", nEtaBins,yBins);
+//  TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
+//  TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", nEtaBins,yBins);
+  TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
+  TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", 50, yBins[0], yBins[nEtaBins]);
+  TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
+  TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", 50, yBins[0], yBins[nEtaBins]);
 
 //  TH2F* sct_pt_y = new TH2F("sct_pt_y","",nEtaBins, yBins, nBins, ptBins);
   TH2F* sct_pt_y = new TH2F("sct_pt_y","",50,-2.395, 1.465, 50, 10, 60);
@@ -85,23 +91,23 @@ void eff(){
 
   TCanvas*c3 = new TCanvas("c3", "", 200, 10, 1000, 800);
   c3->cd();
-  sct_pt_y->GetXaxis()->SetTitle("pt[GeV]");                      
-  sct_pt_y->GetYaxis()->SetTitle("y_{Lab}"); 
+  sct_pt_y->GetYaxis()->SetTitle("pt[GeV]");                      
+  sct_pt_y->GetXaxis()->SetTitle("y_{Lab}"); 
   sct_pt_y->GetYaxis()->CenterTitle(); 
   sct_pt_y->Draw("COL Z");
   if(MCflag == 1){
       sct_pt_y->SetTitle("Reco Can. K+ channel");                                                                                                                                                    
-      c3->SaveAs("fig_eff/kp_sct.pdf");
+      c3->SaveAs(fig_folder+"/kp_sct.pdf");
   }
   if(MCflag == 2){
       sct_pt_y->SetTitle("Reco Can. K* channel");
-      c3->SaveAs("fig_eff/kstar_sct.pdf");
+      c3->SaveAs(fig_folder+"/kstar_sct.pdf");
   }
   if(MCflag == 3){
       sct_pt_y->SetTitle("Reco Can.  #phi channel");
-      c3->SaveAs("fig_eff/phi_sct.pdf");
+      c3->SaveAs(fig_folder+"/phi_sct.pdf");
   }
-  
+ return;
   Int_t size;
   Float_t y[MAX_GEN];
   Float_t eta[MAX_GEN];
@@ -241,16 +247,16 @@ void eff(){
   fout->Write();
   fout->Close();
   if(MCflag == 1){
-      c1->SaveAs("fig_eff/kp_pt_eff.pdf");
-      c2->SaveAs("fig_eff/kp_y_eff.pdf");
+      c1->SaveAs(fig_folder+"/kp_pt_eff.pdf");
+      c2->SaveAs(fig_folder+"/kp_y_eff.pdf");
   }
   if(MCflag == 2){
-      c1->SaveAs("fig_eff/kstar_pt_eff.pdf");
-      c2->SaveAs("fig_eff/kstar_y_eff.pdf");
+      c1->SaveAs(fig_folder+"/kstar_pt_eff.pdf");
+      c2->SaveAs(fig_folder+"/kstar_y_eff.pdf");
   }
   if(MCflag == 3){
-      c1->SaveAs("fig_eff/phi_pt_eff.pdf");
-      c2->SaveAs("fig_eff/phi_y_eff.pdf");
+      c1->SaveAs(fig_folder+"/phi_pt_eff.pdf");
+      c2->SaveAs(fig_folder+"/phi_y_eff.pdf");
   }
 
   ////PLOTING////
