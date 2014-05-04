@@ -25,16 +25,16 @@ void CompareSystPtInt(int idcut=4){
   gStyle->SetFrameFillColor(0);
   gStyle->SetOptTitle(0);
 
-  TFile*file0=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step0_isData1.root",idcut));
-  TFile*file1=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step1_isData1.root",idcut));
-  TFile*file2=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step2_isData1.root",idcut));
-  TFile*file3=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step3_isData1.root",idcut));
-  TFile*file4=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step4_isData1.root",idcut));
-  TFile*file5=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step5_isData1.root",idcut));
-  TFile*file6=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step6_isData1.root",idcut));
-  TFile*file7=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step7_isData1.root",idcut));
-  TFile*file8=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step8_isData1.root",idcut));
-  TFile*file9=new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step9_isData1.root",idcut));
+  TFile*file0=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step0_isData1.root",idcut));
+  TFile*file1=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step1_isData1.root",idcut));
+  TFile*file2=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step2_isData1.root",idcut));
+  TFile*file3=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step3_isData1.root",idcut));
+  TFile*file4=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step4_isData1.root",idcut));
+  TFile*file5=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step5_isData1.root",idcut));
+  TFile*file6=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step6_isData1.root",idcut));
+  TFile*file7=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step7_isData1.root",idcut));
+  TFile*file8=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step8_isData1.root",idcut));
+  TFile*file9=new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step9_isData1.root",idcut));
   
   
  TH1F*hSigmaBis0=(TH1F*)file0->Get("hPtSigma");
