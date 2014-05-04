@@ -236,16 +236,22 @@ void fitB(int stepcut,bool isData,int myvariationoption)
   delete outf;
 }
 
-void SystStudydNdpt(int variationoption=1,const int nBins=8){
+void SystStudydNdpt(int variationoption=1,const int nBins=5){
   double ptBins[nBins+1];
-
+/*
   if(variationoption==1){ ptBins[0]=0.; ptBins[1]=0.125; ptBins[2]=0.250; ptBins[3]=0.375; ptBins[4]=0.500; ptBins[5]=0.625; ptBins[6]=0.750; ptBins[7]=0.875; ptBins[8]=1.;}
   if(variationoption==2){ ptBins[0]=5.; ptBins[1]=7.5; ptBins[2]=10.; ptBins[3]=15.; ptBins[4]=20.; ptBins[5]=30.;   ptBins[6]=40.;  ptBins[7]=50.;  ptBins[8]=100.;    }
   if(variationoption==3){ ptBins[0]=0.9995; ptBins[1]=0.9996; ptBins[2]=0.9997; ptBins[3]=0.9998; ptBins[4]=0.99985; ptBins[5]=0.9999; ptBins[6]=0.99995; ptBins[7]=0.999975; ptBins[8]=1.;}
   if(variationoption==4){ ptBins[0]=0.5; ptBins[1]=2.; ptBins[2]=3.; ptBins[3]=4.; ptBins[4]=5.; ptBins[5]=10.; ptBins[6]=15.; ptBins[7]=20.; ptBins[8]=50.;  }
   if(variationoption==5){ ptBins[0]=10.; ptBins[1]=15.; ptBins[2]=20.; ptBins[3]=25.; ptBins[4]=30.; ptBins[5]=60.;}
   if(variationoption==6){ ptBins[0]=-1.93; ptBins[1]=-1; ptBins[2]=0; ptBins[3]=1.0; ptBins[4]=1.93;}
-
+*/
+  if(variationoption==1){ ptBins[0]=1.32e-02; ptBins[1]=0.2; ptBins[2]=0.4; ptBins[3]=0.6; ptBins[4]=0.8; ptBins[5]=1.;}
+  if(variationoption==2){ ptBins[0]=3.41; ptBins[1]=6.; ptBins[2]=10.; ptBins[3]=20.; ptBins[4]=30.; ptBins[5]=50.;}
+  if(variationoption==3){ ptBins[0]=0.9995; ptBins[1]=0.9997; ptBins[2]=0.9998; ptBins[3]=0.9999; ptBins[4]=0.99995; ptBins[5]=1.0;}
+  if(variationoption==4){ ptBins[0]=0.7; ptBins[1]=2.; ptBins[2]=4.; ptBins[3]=6.; ptBins[4]=10.; ptBins[5]=20.;}
+  if(variationoption==5){ ptBins[0]=10.; ptBins[1]=15.; ptBins[2]=20.; ptBins[3]=25.; ptBins[4]=30.; ptBins[5]=60.;}
+  if(variationoption==6){ ptBins[0]=-1.93; ptBins[1]=-1; ptBins[2]=0; ptBins[3]=1.0; ptBins[4]=1.93;}
 
   Double_t valuemin,valuemax,stepvalue,cutvaluelow,cutvalueup;
     
@@ -254,7 +260,7 @@ void SystStudydNdpt(int variationoption=1,const int nBins=8){
     if(variationoption==1){
       cutvaluelow=ptBins[i];
       cutvalueup=ptBins[i+1];
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>%f&&chi2cl<%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvaluelow,cutvalueup);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>%f&&chi2cl<%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvaluelow,cutvalueup);
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
@@ -265,7 +271,7 @@ void SystStudydNdpt(int variationoption=1,const int nBins=8){
     if(variationoption==2){
       cutvaluelow=ptBins[i];
       cutvalueup=ptBins[i+1];
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&(d0/d0Err)<%f&&cos(dtheta)>-3.46e-01",cutvaluelow,cutvalueup);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&(d0/d0Err)<%f&&cos(dtheta)>-3.46e-01",cutvaluelow,cutvalueup);
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
@@ -276,7 +282,7 @@ void SystStudydNdpt(int variationoption=1,const int nBins=8){
     if(variationoption==3){
       cutvaluelow=ptBins[i];
       cutvalueup=ptBins[i+1];
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>%f&&cos(dtheta)<%f",cutvaluelow,cutvalueup);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>%f&&cos(dtheta)<%f",cutvaluelow,cutvalueup);
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
@@ -287,7 +293,7 @@ void SystStudydNdpt(int variationoption=1,const int nBins=8){
     if(variationoption==4){
       cutvaluelow=ptBins[i];
       cutvalueup=ptBins[i+1];
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>%f&&trk1Pt<%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvaluelow,cutvalueup);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>%f&&trk1Pt<%f&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01",cutvaluelow,cutvalueup);
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
@@ -299,7 +305,7 @@ void SystStudydNdpt(int variationoption=1,const int nBins=8){
     
       cutvaluelow=ptBins[i];
       cutvalueup=ptBins[i+1];
-      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01&&pt>%f&&pt<%f&&isbestchi2",cutvaluelow,cutvalueup);
+      cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01&&pt>%f&&pt<%f",cutvaluelow,cutvalueup);
       selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
       selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
       seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
@@ -311,7 +317,7 @@ void SystStudydNdpt(int variationoption=1,const int nBins=8){
     
       cutvaluelow=ptBins[i];
       cutvalueup=ptBins[i+1];
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01&&isbestchi2";
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>3.46e-01";
       selmc=Form("((y+0.465)>%f&&(y+0.465)<%f)&&gen==23333&&%s",cutvaluelow,cutvalueup,cut.Data());
       selmcgen=Form("((y+0.465)>%f&&(y+0.465)<%f)&&abs(pdgId)==521&&isSignal==1",cutvaluelow,cutvalueup);
       seldata=Form("((y+0.465)>%f&&(y+0.465)<%f)&&%s",cutvaluelow,cutvalueup,cut.Data());
