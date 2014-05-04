@@ -86,9 +86,14 @@ void CompareSystPtInt(int idcut=2){
   if (idcut==1 || idcut==3) hPtAll->Scale(1/hPtAll->GetBinContent(1)); 
   
  
-  if (idcut==2 || idcut==4) {
+  if (idcut==2) {
   hPtAll->Scale(1/hPtAll->GetBinContent(5)); 
   }
+  
+    if (idcut==4) {
+  hPtAll->Scale(1/hPtAll->GetBinContent(8)); 
+  }
+
 
   TCanvas *canvasVscut=new TCanvas("canvasVscut","canvasVscut",500,500);
   canvasVscut->cd();  
