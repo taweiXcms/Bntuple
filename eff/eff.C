@@ -66,14 +66,14 @@ void eff(){
   double ptBins[nBins+1] = {5,10,15,20,25,30,60};
   const int nEtaBins = 4;
   double yBins[nEtaBins+1] = {-2.395, -1.47, -0.47, 0.53, 1.465};
-//  TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
-//  TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", nEtaBins,yBins);
-//  TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
-//  TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", nEtaBins,yBins);
-  TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
-  TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", 50, yBins[0], yBins[nEtaBins]);
-  TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
-  TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", 50, yBins[0], yBins[nEtaBins]);
+  TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
+  TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", nEtaBins,yBins);
+  TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
+  TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", nEtaBins,yBins);
+//  TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
+//  TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", 50, yBins[0], yBins[nEtaBins]);
+//  TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
+//  TH1F* gen_bsig_y = new TH1F("gen_bsig_y", "", 50, yBins[0], yBins[nEtaBins]);
 
 //  TH2F* sct_pt_y = new TH2F("sct_pt_y","",nEtaBins, yBins, nBins, ptBins);
   TH2F* sct_pt_y = new TH2F("sct_pt_y","",50,-2.395, 1.465, 50, 10, 60);

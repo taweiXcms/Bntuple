@@ -10,10 +10,11 @@ double fixparam1=5.279;
 //svmit2
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+//TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
 TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
-TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
+TString inputmc="/net/hisrv0001/home/yenjie/slocal/tmp/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
 //tk pt, chi2
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
