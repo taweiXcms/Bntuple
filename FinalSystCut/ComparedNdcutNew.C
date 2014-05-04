@@ -2,10 +2,10 @@ void ComparedNdcutNew(int variationoption=1){
   
   void ComparedNdcutNewInternal(int ,const int);
   
-  if(variationoption==1) ComparedNdcutNewInternal(1,8);
-  if(variationoption==2) ComparedNdcutNewInternal(2,8);
-  if(variationoption==3) ComparedNdcutNewInternal(3,8);
-  if(variationoption==4) ComparedNdcutNewInternal(4,8);
+  if(variationoption==1) ComparedNdcutNewInternal(1,5);
+  if(variationoption==2) ComparedNdcutNewInternal(2,5);
+  if(variationoption==3) ComparedNdcutNewInternal(3,5);
+  if(variationoption==4) ComparedNdcutNewInternal(4,5);
   if(variationoption==5) ComparedNdcutNewInternal(5,5);
   if(variationoption==6) ComparedNdcutNewInternal(6,4);
   
@@ -24,18 +24,19 @@ void ComparedNdcutNewInternal(int variationoption=6,const int nBins=4){
 
   double ptBins[nBins+1];
   
-  if(variationoption==1){ ptBins[0]=0.; ptBins[1]=0.125; ptBins[2]=0.250; ptBins[3]=0.375; ptBins[4]=0.500; ptBins[5]=0.625; ptBins[6]=0.750; ptBins[7]=0.875; ptBins[8]=1.;}
-  if(variationoption==2){ ptBins[0]=5.; ptBins[1]=7.5; ptBins[2]=10.; ptBins[3]=15.; ptBins[4]=20.; ptBins[5]=30.;   ptBins[6]=40.;  ptBins[7]=50.;  ptBins[8]=100.;    }
-  if(variationoption==3){ ptBins[0]=0.9995; ptBins[1]=0.9996; ptBins[2]=0.9997; ptBins[3]=0.9998; ptBins[4]=0.99985; ptBins[5]=0.9999; ptBins[6]=0.99995; ptBins[7]=0.999975; ptBins[8]=1.;}
-  if(variationoption==4){ ptBins[0]=0.5; ptBins[1]=2.; ptBins[2]=3.; ptBins[3]=4.; ptBins[4]=5.; ptBins[5]=10.; ptBins[6]=15.; ptBins[7]=20.; ptBins[8]=50.;  }
+  if(variationoption==1){ ptBins[0]=1.32e-02; ptBins[1]=0.2; ptBins[2]=0.4; ptBins[3]=0.6; ptBins[4]=0.8; ptBins[5]=1.;}
+  if(variationoption==2){ ptBins[0]=3.41; ptBins[1]=6.; ptBins[2]=10.; ptBins[3]=20.; ptBins[4]=30.; ptBins[5]=50.;}
+  if(variationoption==3){ ptBins[0]=0.9995; ptBins[1]=0.9997; ptBins[2]=0.9998; ptBins[3]=0.9999; ptBins[4]=0.99995; ptBins[5]=1.0;}
+  if(variationoption==4){ ptBins[0]=0.7; ptBins[1]=2.; ptBins[2]=4.; ptBins[3]=6.; ptBins[4]=10.; ptBins[5]=20.;}
   if(variationoption==5){ ptBins[0]=10.; ptBins[1]=15.; ptBins[2]=20.; ptBins[3]=25.; ptBins[4]=30.; ptBins[5]=60.;}
-  if(variationoption==6){ ptBins[0]=-1.93-0.465; ptBins[1]=-1.0-0.465; ptBins[2]=-0.465; ptBins[3]=1.0-0.465; ptBins[4]=1.93-0.465;}
+  if(variationoption==6){ ptBins[0]=-1.93; ptBins[1]=-1; ptBins[2]=0; ptBins[3]=1.0; ptBins[4]=1.93;}
 
   TH1D *hPtAll_Data = new TH1D("hPtAll_Data","",nBins,ptBins);  
   TH1D *hPtAll_MC = new TH1D("hPtAll_MC","",nBins,ptBins);  
 
 
-  if(variationoption==1 || variationoption==2 || variationoption==3 || variationoption==4 ){
+  //if(variationoption==1 || variationoption==2 || variationoption==3 || variationoption==4 ){
+  if(0){
   
     double binsize1=ptBins[1]-ptBins[0];
     double binsize2=ptBins[2]-ptBins[1];
@@ -140,7 +141,7 @@ void ComparedNdcutNewInternal(int variationoption=6,const int nBins=4){
       
   }
 
-  if(variationoption==5){
+  if(variationoption==1 || variationoption==2 || variationoption==3 || variationoption==4 || variationoption==5){
   
     double binsize1=ptBins[1]-ptBins[0];
     double binsize2=ptBins[2]-ptBins[1];
@@ -304,7 +305,10 @@ void ComparedNdcutNewInternal(int variationoption=6,const int nBins=4){
     hPtAll_Data->GetXaxis()->SetTitle("chi2cl");
     hPtAll_Data->GetYaxis()->SetTitle("dN^{yield}/d(chi2cl)");
     hPtAll_DataOverMC->GetXaxis()->SetTitle("chi2cl");
-    hPtAll_DataOverMC->GetYaxis()->SetTitle("dN^{yield}/d(chi2cl) Data/MC");    
+    hPtAll_DataOverMC->GetYaxis()->SetTitle("dN^{yield}/d(chi2cl) Data/MC");   
+    hPtAll_Data->SetMinimum(0);
+    hPtAll_Data->SetMaximum(0.5);
+ 
   }
    
   if(variationoption==2) {
@@ -329,6 +333,8 @@ void ComparedNdcutNewInternal(int variationoption=6,const int nBins=4){
     
     hPtAll_Data->GetXaxis()->SetRangeUser(0.,20.);
     hPtAll_DataOverMC->GetXaxis()->SetRangeUser(0.,20.);
+    hPtAll_Data->SetMaximum(0.5);
+
   }
    
   if(variationoption==5) {
