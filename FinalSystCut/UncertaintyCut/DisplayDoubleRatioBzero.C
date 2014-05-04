@@ -37,7 +37,9 @@ void DisplayDoubleRatioBzero(){
   double relerryield_MC_resmass_Cut=hPtYield_MC_resmass_Cut->GetBinError(1)/hPtYield_MC_resmass_Cut->GetBinContent(1);
   double relerryield_MC_resmass_NoCut=hPtYield_MC_resmass_NoCut->GetBinError(1)/hPtYield_MC_resmass_NoCut->GetBinContent(1);
   double dratioresmass=(yield_Data_resmass_Cut/yield_Data_resmass_NoCut)/(yield_MC_resmass_Cut/yield_MC_resmass_NoCut);
-  double errdratioresmass=(relerryield_Data_resmass_Cut+relerryield_Data_resmass_NoCut+relerryield_MC_resmass_Cut+relerryield_MC_resmass_NoCut)*dratioresmass;
+  double errdratioresmass=relerryield_Data_resmass_Cut*relerryield_Data_resmass_Cut+relerryield_Data_resmass_NoCut*relerryield_Data_resmass_NoCut;
+  errdratioresmass=errdratioresmass+relerryield_MC_resmass_Cut*relerryield_MC_resmass_Cut+relerryield_MC_resmass_NoCut*relerryield_MC_resmass_NoCut;
+  errdratioresmass=dratioresmass*TMath::Sqrt(errdratioresmass);
 
  
   double yield_Data_chi2cl_Cut=hPtYield_Data_chi2cl_Cut->GetBinContent(1);
@@ -49,7 +51,9 @@ void DisplayDoubleRatioBzero(){
   double relerryield_MC_chi2cl_Cut=hPtYield_MC_chi2cl_Cut->GetBinError(1)/hPtYield_MC_chi2cl_Cut->GetBinContent(1);
   double relerryield_MC_chi2cl_NoCut=hPtYield_MC_chi2cl_NoCut->GetBinError(1)/hPtYield_MC_chi2cl_NoCut->GetBinContent(1);
   double dratiochi2cl=(yield_Data_chi2cl_Cut/yield_Data_chi2cl_NoCut)/(yield_MC_chi2cl_Cut/yield_MC_chi2cl_NoCut);
-  double errdratiochi2cl=(relerryield_Data_chi2cl_Cut+relerryield_Data_chi2cl_NoCut+relerryield_MC_chi2cl_Cut+relerryield_MC_chi2cl_NoCut)*dratiochi2cl;
+  double errdratiochi2cl=relerryield_Data_chi2cl_Cut*relerryield_Data_chi2cl_Cut+relerryield_Data_chi2cl_NoCut*relerryield_Data_chi2cl_NoCut;
+  errdratiochi2cl=errdratiochi2cl+relerryield_MC_chi2cl_Cut*relerryield_MC_chi2cl_Cut+relerryield_MC_chi2cl_NoCut*relerryield_MC_chi2cl_NoCut;
+  errdratiochi2cl=dratiochi2cl*TMath::Sqrt(errdratiochi2cl);
 
   double yield_Data_costheta_Cut=hPtYield_Data_costheta_Cut->GetBinContent(1);
   double yield_Data_costheta_NoCut=hPtYield_Data_costheta_NoCut->GetBinContent(1);
@@ -60,7 +64,9 @@ void DisplayDoubleRatioBzero(){
   double relerryield_MC_costheta_Cut=hPtYield_MC_costheta_Cut->GetBinError(1)/hPtYield_MC_costheta_Cut->GetBinContent(1);
   double relerryield_MC_costheta_NoCut=hPtYield_MC_costheta_NoCut->GetBinError(1)/hPtYield_MC_costheta_NoCut->GetBinContent(1);
   double dratiocostheta=(yield_Data_costheta_Cut/yield_Data_costheta_NoCut)/(yield_MC_costheta_Cut/yield_MC_costheta_NoCut);
-  double errdratiocostheta=(relerryield_Data_costheta_Cut+relerryield_Data_costheta_NoCut+relerryield_MC_costheta_Cut+relerryield_MC_costheta_NoCut)*dratiocostheta;
+  double errdratiocostheta=relerryield_Data_costheta_Cut*relerryield_Data_costheta_Cut+relerryield_Data_costheta_NoCut*relerryield_Data_costheta_NoCut;
+  errdratiocostheta=errdratiocostheta+relerryield_MC_costheta_Cut*relerryield_MC_costheta_Cut+relerryield_MC_costheta_NoCut*relerryield_MC_costheta_NoCut;
+  errdratiocostheta=dratiocostheta*TMath::Sqrt(errdratiocostheta);
   
   /*
   cout<<"yield_Data_costheta_NoCut"<<yield_Data_costheta_NoCut*50.<<endl;
