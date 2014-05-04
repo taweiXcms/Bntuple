@@ -75,7 +75,6 @@ void DisplayDoubleRatioBzero(){
 
 */
 
-
   cout<<"double ratio resmass"<<dratioresmass<<" with stat error +- "<<errdratioresmass<<endl;
   cout<<"double ratio chi2cl"<<dratiochi2cl<<" with stat error +- "<<errdratiochi2cl<<endl;
   cout<<"double ratio costheta"<<dratiocostheta<<" with stat error +- "<<errdratiocostheta<<endl;
