@@ -12,8 +12,8 @@ double fixparam1=5.279;
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
 TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
-
+//TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
 //tk pt, chi2
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
@@ -42,7 +42,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&& (((y+0.465)>%f&&(y+0.465)<%f&&Run>=210498&&Run<=211256) || ((y-0.465)>%f&&(y-0.465)<%f&&Run>=211313&&Run<=211631))",seldata_2y.Data(),ptmin,ptmax,ptmin,ptmax));   
-   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&(y+0.465)>%f&&(y+0.465)<%f",seldata.Data(),ptmin,ptmax));   
+   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&((Run<=1&&(y+0.465)>%f&&(y+0.465)<%f)||(Run>1&&(y-0.465)>%f&&(y-0.465)<%f))",seldata.Data(),ptmin,ptmax,ptmin,ptmax));   
    clean0(h);
    h->Draw();
    f->SetParLimits(4,-1000,0);
@@ -176,7 +176,9 @@ void fitB_y(TString infname="",bool doweight = 1)
   TH1D *hPtRecoTruth2 = new TH1D("hPtRecoTruth2","",nBins,ptBins);
   TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
+  TH1D *hPtMC2 = new TH1D("hPtMC2","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
+  TH1D *hPtGen2 = new TH1D("hPtGen2","",nBins,ptBins);
 
   for (int i=0;i<nBins;i++)
     {
@@ -193,17 +195,29 @@ void fitB_y(TString infname="",bool doweight = 1)
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","(y+0.465)",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
+  ntMC->Project("hPtMC","(y+0.465)",TCut(weight)*(TCut(selmc.Data())&&"gen==23333&&Run<=1"));
+  ntMC->Project("hPtMC2","(y-0.465)",TCut(weight)*(TCut(selmc.Data())&&"gen==23333&&Run>1"));
   nt->Project("hPtRecoTruth","(y+0.465)",TCut(seldata.Data())&&"(Run>=210498&&Run<=211256)");
   nt->Project("hPtRecoTruth2","(y-0.465)",TCut(seldata.Data())&&"(Run>=211313&&Run<=211631)");
-  ntGen->Project("hPtGen","(y+0.465)",TCut(weight)*(TCut(selmcgen.Data())));
+  ntGen->Project("hPtGen","(y+0.465)",TCut(weight)*(TCut(selmcgen.Data()))&&"Run<=1");
+  ntGen->Project("hPtGen2","(y-0.465)",TCut(weight)*(TCut(selmcgen.Data()))&&"Run>1");
+
   divideBinWidth(hPtRecoTruth);
-  
+  divideBinWidth(hPtRecoTruth2);
+  hPtRecoTruth->Add(hPtRecoTruth2);
   hPtRecoTruth->Draw("same hist");
+
   divideBinWidth(hPtMC);
+  divideBinWidth(hPtMC2);  
   divideBinWidth(hPtGen);
-  
+  divideBinWidth(hPtGen2);
+
   hPtMC->Sumw2();
+  hPtMC2->Sumw2();
+
+  hPtMC->Add(hPtMC2);
+  hPtGen->Add(hPtGen2);
+
   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
   hPtMC->Sumw2();
   hEff->Divide(hPtGen);
