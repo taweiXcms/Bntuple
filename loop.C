@@ -17,12 +17,12 @@
 #define PHI_MASS    1.019455
 #define JPSI_MASS   3.096916
 
-void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, float track_mass1, float track_mass2, int REAL)
+void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, float track_mass1, float track_mass2, int REAL, int PbpMC)
 {
 
   //Event Info
   Event = EvtInfo_EvtNo;
-  Run = EvtInfo_RunNo;
+  Run = EvtInfo_RunNo+10*PbpMC;
   size = typesize+1;
   besttktkmass = 0;
   bestchi2 = 0;
@@ -684,7 +684,8 @@ int signalGen(int Btype, int j)
 
 
 //void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="/export/d00/scratch/jwang/jpsi.root", bool REAL=0){
-void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140426_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", bool REAL=1,bool PbpMC=0){
+void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", string
+outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140426_Hijing_PPb502_MinimumBias_HIJINGemb_JPsiWithFSR_5TeV.root", bool REAL=1,bool PbpMC=0,int nEntries=0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -696,8 +697,11 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
   const char* outfname;
 
   if(REAL) cout<<"--- REAL DATA ---"<<endl;
-  else cout<<"--- MC ---"<<endl;
-
+  else {
+     cout<<"--- MC ---"<<endl;
+     if(PbpMC) cout<<"--- Pbp ---"<<endl;
+     else cout<<"--- Pbp ---"<<endl;
+  }
 
   infname = infile.c_str();
   outfname = outfile.c_str();
@@ -764,6 +768,8 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 
   int testevent=0,testcand=0;
   
+  if (nEntries!=0) nentries=nEntries;
+
   for (Long64_t i=0; i<nentries;i++) {
     nbytes += root->GetEntry(i);
     flagEvt=0;
@@ -807,7 +813,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	if(BInfo_type[j]==1)
 	  {
 	    //if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.9) continue;
-	    fillTree(bP,bVtx,b4P,j,type1size,KAON_MASS,0,REAL);
+	    fillTree(bP,bVtx,b4P,j,type1size,KAON_MASS,0,REAL,PbpMC);
 	    if(chi2cl[type1size]>best&&trk1Pt[type1size]>0.9&&HLT_PAMu3_v1&&abs(mumumass[type1size]-3.096916)<0.15&&chi2cl[type1size]>1.32e-02&&(d0[type1size]/d0Err[type1size])>3.41&&cos(dtheta[type1size])>-3.46e-01)
 	      {
 		best = chi2cl[type1size];
@@ -849,7 +855,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	//}}}
 	if(BInfo_type[j]==2)
 	  {
-	    fillTree(bP,bVtx,b4P,j,type2size,PION_MASS,0,REAL);
+	    fillTree(bP,bVtx,b4P,j,type2size,PION_MASS,0,REAL,PbpMC);
 	    if(chi2cl[type2size]>best)
 	      {
 		best = chi2cl[type2size];
@@ -891,7 +897,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	//}}}
 	if(BInfo_type[j]==3)
 	  {
-	    fillTree(bP,bVtx,b4P,j,type3size,PION_MASS,PION_MASS,REAL);
+	    fillTree(bP,bVtx,b4P,j,type3size,PION_MASS,PION_MASS,REAL,PbpMC);
 	    if(chi2cl[type3size]>best)
 	      {
 		best = chi2cl[type3size];
@@ -940,7 +946,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	//}}}
 	if(BInfo_type[j]==4 || BInfo_type[j]==5)
 	  {
-	    fillTree(bP,bVtx,b4P,j,type4size,KAON_MASS,PION_MASS,REAL);
+	    fillTree(bP,bVtx,b4P,j,type4size,KAON_MASS,PION_MASS,REAL,PbpMC);
 	    if(chi2cl[type4size]>best&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>1.65e-01&&(d0[type4size]/d0Err[type4size])>4.16&&cos(dtheta[type4size])>7.50e-01&&abs(tktkmass[type4size]-0.89594)<2.33e-01)
 	      {
 		best = chi2cl[type4size];
@@ -994,7 +1000,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	  {
 	    //if(TrackInfo_pt[BInfo_rftk1_index[j]]<0.7) continue;
 	    //if(TrackInfo_pt[BInfo_rftk2_index[j]]<0.7) continue;
-	    fillTree(bP,bVtx,b4P,j,type6size,KAON_MASS,KAON_MASS,REAL);
+	    fillTree(bP,bVtx,b4P,j,type6size,KAON_MASS,KAON_MASS,REAL,PbpMC);
 	    if(chi2cl[type6size]>best&&(HLT_PAMu3_v1)&&abs(mumumass[type6size]-3.096916)<0.15&&trk1Pt[type6size]>0.7&&trk2Pt[type6size]>0.7&&chi2cl[type6size]>3.71e-02&&(d0[type6size]/d0Err[type6size])>3.37&&cos(dtheta[type6size])>2.60e-01&&abs(tktkmass[type6size]-1.019455)<1.55e-02)
 	      {
 		best = chi2cl[type6size];
@@ -1044,7 +1050,7 @@ void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140331_Hi
 	//}}}
 	if(BInfo_type[j]==7)
 	  {
-	    fillTree(bP,bVtx,b4P,j,type7size,PION_MASS,PION_MASS,REAL);
+	    fillTree(bP,bVtx,b4P,j,type7size,PION_MASS,PION_MASS,REAL,PbpMC);
 	    if(chi2cl[type7size]>best)
 	      {
 		best = chi2cl[type7size];
