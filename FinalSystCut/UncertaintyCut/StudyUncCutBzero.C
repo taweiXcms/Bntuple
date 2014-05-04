@@ -3,17 +3,17 @@
 double luminosity=34.8*1e-3;
 double setparam0=100.;
 double setparam1=5.28;
-double setparam2=0.05;
-double setparam3=0.03;
+double setparam2=0.03;
 double fixparam1=5.279;
+double setparam3=0.03;
+double fixparam2=0.04;
  
 
 TString inputdata="/Users/ginnocen/Desktop/InputsFiles/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/Users/ginnocen/Desktop/InputsFiles/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputmc="/Users/ginnocen/Desktop/InputsFiles/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 
 
 TString weight = "(27.493+pt*(-0.218769))";
-
 
 //TString cut="chi2cl>0.01&&(d0)/d0Err>3.4&&dtheta<2.98&&TMath::Abs((trk1Dxy)/trk1D0Err)>2.4";
 TString cut,seldata,seldatabis,seldata_2y,selmc,selmcgen;
@@ -36,24 +36,27 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
-   TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
+   TString iNP="6.71675e+00*Gaus(x,5.30142e+00,8.42680e-02)/(sqrt(2*3.14159)*8.42680e-02)+4.06744e+01*Gaus(x,5.00954e+00,8.11305e-02)/(sqrt(2*3.14159)*8.11305e-02)+5.99974e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.31767e-01*(61.195688*Gaus(x,5.127566,0.087439)/(sqrt(2*3.14159)*0.087439)+58.943919*Gaus(x,5.246471,0.041983)/(sqrt(2*3.14159)*0.041983))";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata.Data(),ptmin,ptmax));   
+   
    clean0(h);
    h->Draw();
    f->SetParLimits(4,-1000,0);
    f->SetParLimits(2,0.01,0.05);
-   f->SetParLimits(8,0.01,0.05);
+   f->SetParLimits(8,0.01,0.1);
    f->SetParLimits(7,0,1);
+   f->SetParLimits(6,0,1000);
+
    f->SetParameter(0,setparam0);
    f->SetParameter(1,setparam1);
    f->SetParameter(2,setparam2);
    f->SetParameter(8,setparam3);
    f->FixParameter(1,fixparam1);
    h->GetEntries();
-
-   hMC->Fit(Form("f%d",count),"q","",5,6);
+   
+hMC->Fit(Form("f%d",count),"q","",5,6);
    hMC->Fit(Form("f%d",count),"q","",5,6);
    f->ReleaseParameter(1);
    hMC->Fit(Form("f%d",count),"L q","",5,6);
@@ -79,23 +82,20 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
 
    // function for background shape plotting. take the fit result from f
    TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x");
-//   TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x+[2]*(1.24e2*Gaus(x,5.107,0.02987)+1.886e2*Gaus(x,5.0116,5.546e-2))");
    background->SetParameter(0,f->GetParameter(3));
    background->SetParameter(1,f->GetParameter(4));
-   background->SetParameter(2,f->GetParameter(5));
-   background->SetParameter(3,f->GetParameter(6));
    background->SetLineColor(4);
    background->SetRange(5,6);
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
    TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
-   Bkpi->SetParameter(0,f->GetParameter(5));
+   Bkpi->SetParameter(0,f->GetParameter(6));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
-   Bkpi->SetRange(5.00,5.28);
+   Bkpi->SetRange(5.00,6.00);
    Bkpi->SetLineStyle(1);
-   Bkpi->SetFillStyle(3004);
+   Bkpi->SetFillStyle(3005);
 
    // function for signal shape plotting. take the fit result from f
    TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
@@ -107,7 +107,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
    mass->SetParError(8,f->GetParError(8));
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
-
+   
+   
 //   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
    h->SetMarkerStyle(24);
    h->SetStats(0);
@@ -148,15 +149,15 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("Results/BMass-%d.C",count));
-   //c->SaveAs(Form("Results/BMass-%d.gif",count));
-   if(myisData) c->SaveAs(Form("Results/CutId%d/Bplus-Id%d_Step%d_isData%d.pdf",myvaropt,myvaropt,count-1,myisData));
-   if(!myisData) c->SaveAs(Form("Results/CutId%d/Bplus-Id%d_Step%d_isData%d.pdf",myvaropt,myvaropt,countMC-1,myisData));
+   //c->SaveAs(Form("ResultsBzero/BMass-%d.C",count));
+   //c->SaveAs(Form("ResultsBzero/BMass-%d.gif",count));
+   if(myisData) c->SaveAs(Form("ResultsBzero/CutId%d/BMasszero-Id%d_Step%d_isData%d.pdf",myvaropt,myvaropt,count-1,myisData));
+   if(!myisData) c->SaveAs(Form("ResultsBzero/CutId%d/BMasszero-Id%d_Step%d_isData%d.pdf",myvaropt,myvaropt,countMC-1,myisData));
    
    return mass;
 }
 
-void fitB(bool isData,int myvariationoption)
+void fitB0(bool isData,int myvariationoption)
 {
   TString infname;
   if(isData)infname=inputdata.Data();
@@ -165,11 +166,11 @@ void fitB(bool isData,int myvariationoption)
   if(!isData)seldata_2y=seldata;
   
   TFile *inf = new TFile(infname.Data());
-  TTree *nt = (TTree*) inf->Get("ntKp");
+  TTree *nt = (TTree*) inf->Get("ntKstar");
 
   TFile *infMC = new TFile(inputmc.Data());
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
-  TTree *ntMC = (TTree*)infMC->Get("ntKp");
+  TTree *ntMC = (TTree*)infMC->Get("ntKstar");
     
   const int nBins = 1;
   double ptBins[nBins+1] = {10,60};
@@ -189,13 +190,13 @@ void fitB(bool isData,int myvariationoption)
     }  
   
   TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
+  hPt->SetXTitle("B^{0} p_{T} (GeV/c)");
+  hPt->SetYTitle("Uncorrected B^{0} dN/dp_{T}");
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
-  nt->Project("hPtRecoTruth","pt",TCut(seldata.Data())&&"gen==23333");
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"(gen==23333||gen==41000)"));
+  nt->Project("hPtRecoTruth","pt",TCut(seldata.Data())&&"(gen==23333||gen==41000)");
   ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
   divideBinWidth(hPtRecoTruth);
   
@@ -211,19 +212,19 @@ void fitB(bool isData,int myvariationoption)
   TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
   hPtCor->Divide(hEff);
   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
+  hPtCor->SetYTitle("Corrected B^{0} dN/dp_{T}");
   hPtCor->Draw();
   hPtGen->Draw("same hist");
 
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
   hPtSigma->Scale(1./(2*luminosity));
-  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
+  hPtSigma->SetYTitle("d#sigma (B^{0})/dp_{T}");
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
   hPtSigma->Draw(); 
   
-  TFile *outf = new TFile(Form("Results/CutId%d/SigmaBplusCutId%d_isData%d.root",myvariationoption,myvariationoption,isData),"recreate");
+  TFile *outf = new TFile(Form("ResultsBzero/CutId%d/SigmaBzeroCutId%d_isData%d.root",myvariationoption,myvariationoption,isData),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
@@ -234,81 +235,44 @@ void fitB(bool isData,int myvariationoption)
   delete outf;
 }
 
-void StudyUncCut(int variationoption=1){
+void StudyUncCutBzero(int variationoption=1){
+//TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
 
   Double_t valuemin,valuemax,stepvalue,cutvaluelow,cutvalueup;
-    
-     if(variationoption==1){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.8&&(d0/d0Err)>0.&&cos(dtheta)>0.999";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    } 
-    
-    if(variationoption==2){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.8&&(d0/d0Err)>3.41&&cos(dtheta)>0.999";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    } 
-    
-    if(variationoption==3){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.&&chi2cl>0.8&&(d0/d0Err)>3.41&&cos(dtheta)>0.999";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    } 
-    
-    if(variationoption==4){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.8&&(d0/d0Err)>3.41&&cos(dtheta)>0.999";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    } 
-    if(variationoption==5){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    }
-    if(variationoption==6){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    } 
-    if(variationoption==7){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-1.";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    } 
-    if(variationoption==8){
-      //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>0.7&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
-      selmc=Form("abs(y+0.465)<1.93&&gen==23333&&%s",cut.Data());
-      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==521&&isSignal==1";
-      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-      seldata_2y=Form("((Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-    } 
 
-            
+     if(variationoption==1){
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>7.&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
+      selmc=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&%s",cut.Data());
+      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
+      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+      seldata_2y=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
+    }
+    
+     if(variationoption==2){
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>7.&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<200000."; 
+      selmc=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&%s",cut.Data());
+      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
+      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+      seldata_2y=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
+    }
+     //abs(tktkmass-0.89594)<2.33e-01
+     if(variationoption==3){
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>0.&&(d0/d0Err)>7.&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
+      selmc=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&%s",cut.Data());
+      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
+      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+      seldata_2y=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
+    }
+     if(variationoption==4){
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>7.&&cos(dtheta)>-1.&&abs(tktkmass-0.89594)<2.33e-01"; 
+      selmc=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&%s",cut.Data());
+      selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
+      seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
+      seldata_2y=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
+    }
+
       void fitB(bool,int);  
-      fitB(true,variationoption);      
-      fitB(false,variationoption);   
+      fitB0(true,variationoption);      
+      fitB0(false,variationoption);   
        
 }
