@@ -12,15 +12,15 @@ double fixparam2=0.04;
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kstar__TriggerMatchingMuon_EvtBase_skim.root";
 
 TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
 
-TString seldata_kpi=Form("abs(y+0.465)<1.93&&%s",cut_kpi.Data());
-TString seldata_2y_kpi=Form("((Run==1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
-TString selmc_kpi=Form("abs(y+0.465)<1.93&&(gen==23333||gen==41000)&&%s",cut_kpi.Data());
-TString selmcgen="abs(y+0.465)<1.93&&abs(pdgId)==511&&isSignal!=0";
+TString seldata_2y_kpi=Form("((Run>1&&Run<12&&abs(y-0.465)<1.93)||(Run<=1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
+TString selmc_kpi=Form("((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&(gen==23333||gen==41000)&&%s",cut_kpi.Data());
+TString selmcgen="((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&abs(pdgId)==511&&isSignal!=0";
 
 TString weight = "27.493+pt*(-0.218769)";
 
@@ -39,7 +39,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
-//   TH1D *hBck = new TH1D(Form("hBck%d",count),"",50,5,6);
+//   TH1D *hBck = new TH1D(Form("hBck%d",count),"",40,5,6);
    
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
    // Fit function
@@ -47,7 +47,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
 
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
-   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_kpi.Data(),ptmin,ptmax));   
+   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
 //   nt->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==23333||gen==41000)",seldata.Data(),ptmin,ptmax));   
 //   nt2->Project(Form("hBck%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&(gen==23333||gen==41000)",seldata.Data(),ptmin,ptmax));   
 
@@ -65,6 +65,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    f->SetParameter(2,setparam2);
    f->SetParameter(8,setparam3);
    f->FixParameter(1,fixparam1);
+   f->FixParameter(6,0);
    h->GetEntries();
 
    hMC->Fit(Form("f%d",count),"q","",5,6);
@@ -79,6 +80,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    f->FixParameter(2,f->GetParameter(2));
    f->FixParameter(7,f->GetParameter(7));
    f->FixParameter(8,f->GetParameter(8));
+   f->ReleaseParameter(6);
    
    h->Fit(Form("f%d",count),"q","",5,6);
    h->Fit(Form("f%d",count),"q","",5,6);
@@ -143,8 +145,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
 
    cout <<"fit result:"<<f->GetParameter(0)*2.5<<" "<<f->Integral(5,6)/h->GetBinWidth(1)<<endl;
 
-   double yield = mass->Integral(5,6)/0.02;
-   double yieldErr = mass->Integral(5,6)/0.02*mass->GetParError(0)/mass->GetParameter(0);
+   double yield = mass->Integral(5,6)/0.025;
+   double yieldErr = mass->Integral(5,6)/0.025*mass->GetParError(0)/mass->GetParameter(0);
    
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
@@ -183,6 +185,7 @@ void fitB0(TString infname="",bool doweight = 1)
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
   TTree *ntMC = (TTree*)infMC->Get("ntKstar");
 
+  ntGen->AddFriend(ntMC);
   //nt->SetAlias("LD",LDalias.Data());
   //nt2->SetAlias("LD",LDalias.Data());
 
@@ -196,7 +199,6 @@ void fitB0(TString infname="",bool doweight = 1)
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
-
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
@@ -213,9 +215,9 @@ void fitB0(TString infname="",bool doweight = 1)
   hPt->Draw();
   
 
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_kpi.Data())&&"(gen==23333||gen==41000)"));
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)"));
 
-  nt->Project("hRecoTruth","pt",TCut(seldata_kpi.Data())&&"(gen==23333||gen==41000)");
+  nt->Project("hRecoTruth","pt",TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)");
   ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
   divideBinWidth(hRecoTruth);
   
