@@ -19,8 +19,8 @@ TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBa
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
 TString seldata_2y=Form("((Run>1&&Run<12&&abs(y-0.465)<1.93)||(Run<=1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-TString selmc=Form("((Run<=1&&abs(y-0.465)<1.93)||(Run>1&&abs(y+0.465)<1.93))&&gen==23333&&%s",cut.Data());
-TString selmcgen="((Run<=1&&abs(y-0.465)<1.93)||(Run>1&&abs(y+0.465)<1.93))&&abs(pdgId)==521&&isSignal==1";
+TString selmc=Form("((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&gen==23333&&%s",cut.Data());
+TString selmcgen="((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&abs(pdgId)==521&&isSignal==1";
 
 TString weight = "(27.493+pt*(-0.218769))";
 
