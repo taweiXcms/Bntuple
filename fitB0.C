@@ -12,9 +12,12 @@ double fixparam2=0.04;
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
-TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kstar__TriggerMatchingMuon_EvtBase_skim.root";
+
+//TString inputdata="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+//TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kstar__TriggerMatchingMuon_EvtBase_skim.root";
+
+TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="~yenjie/scratch/tmp/nt_MixMC_20140503_Kstar__TriggerMatchingMuon_EvtBase_skim.root";
 
 TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>1.65e-01&&(d0/d0Err)>4.16&&cos(dtheta)>7.50e-01&&abs(tktkmass-0.89594)<2.33e-01"; 
 
@@ -38,10 +41,10 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
-   TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
+   TH1D *h = new TH1D(Form("h%d",count),"",30,5.03,5.93);
 //   TH1D *hBck = new TH1D(Form("hBck%d",count),"",40,5,6);
    
-   TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
+   TH1D *hMC = new TH1D(Form("hMC%d",count),"",30,5.03,5.93);
    // Fit function
    TString iNP="6.71675e+00*Gaus(x,5.30142e+00,8.42680e-02)/(sqrt(2*3.14159)*8.42680e-02)+4.06744e+01*Gaus(x,5.00954e+00,8.11305e-02)/(sqrt(2*3.14159)*8.11305e-02)+5.99974e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.31767e-01*(61.195688*Gaus(x,5.127566,0.087439)/(sqrt(2*3.14159)*0.087439)+58.943919*Gaus(x,5.246471,0.041983)/(sqrt(2*3.14159)*0.041983))";
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
@@ -145,8 +148,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
 
    cout <<"fit result:"<<f->GetParameter(0)*2.5<<" "<<f->Integral(5,6)/h->GetBinWidth(1)<<endl;
 
-   double yield = mass->Integral(5,6)/0.025;
-   double yieldErr = mass->Integral(5,6)/0.025*mass->GetParError(0)/mass->GetParameter(0);
+   double yield = mass->Integral(5,6)/0.03;
+   double yieldErr = mass->Integral(5,6)/0.03*mass->GetParError(0)/mass->GetParameter(0);
    
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
@@ -202,10 +205,10 @@ void fitB0(TString infname="",bool doweight = 1)
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
-      double yield = f->Integral(5,6)/0.02;
-      double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
+      double yield = f->Integral(5,6)/0.03;
+      double yieldErr = f->Integral(5,6)/0.03*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
-      hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
+      hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i])); 
     }  
   
   TCanvas *c=  new TCanvas("cResult","",600,600);
