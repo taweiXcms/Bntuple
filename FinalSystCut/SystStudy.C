@@ -248,8 +248,8 @@ void SystStudy(int variationoption=4){
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvalue);
     } 
     if(variationoption==2){
-      valuemin=3.4-1.0;
-      valuemax=3.4+1.0;
+      valuemin=3.4-2.0;
+      valuemax=3.4+2.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&cos(dtheta)>-3.46e-01",cutvalue);
