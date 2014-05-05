@@ -93,24 +93,24 @@ void BmesonRatio(){
   
   //****************************   SYST UNCERTAINTY ****************************  
   
-  Double_t systAcc_Bplus=0.03;
+  Double_t systAcc_Bplus=0.1;
   Double_t systHadronTrack_Bplus=0.039;
-  Double_t systCutEff_Bplus=0.05;
+  Double_t systCutEff_Bplus=0.09;
   Double_t systptres_Bplus=0.06;
   Double_t systpifeeddown_Bplus=0.05;
-  Double_t systTrigger_Bplus=0.016;
+  Double_t systTrigger_Bplus=0.036;
   Double_t systMuonEff_Bplus=0.032;
   Double_t systInnerEff_Bplus=0.018;
-  Double_t systPDF_Bplus=0.064;
+  Double_t systPDF_Bplus=0.089;
   
   Double_t systAcc_Bzero=0.027;
   Double_t systHadronTrack_Bzero=0.078;
-  Double_t systCutEff_Bzero=0.05;
+  Double_t systCutEff_Bzero=0.09;
   Double_t systptres_Bzero=0.06;
-  Double_t systTrigger_Bzero=0.016;
+  Double_t systTrigger_Bzero=0.036;
   Double_t systMuonEff_Bzero=0.032;
   Double_t systInnerEff_Bzero=0.018;
-  Double_t systPDF_Bzero=0.1;
+  Double_t systPDF_Bzero=0.134;
 
 
   Double_t systAccRatio=TMath::Sqrt(systAcc_Bzero*systAcc_Bzero+systAcc_Bplus*systAcc_Bplus);
@@ -178,7 +178,7 @@ void BmesonRatio(){
   canvasRatio->SetFrameBorderMode(0);
   canvasRatio->SetFrameBorderMode(0);
   
-  TLegend *legend=new TLegend(0.3145161,0.75,0.5604839,0.85,"");
+  TLegend *legend=new TLegend(0.5342742,0.6680761,0.7802419,0.769556,"");
   legend->SetBorderSize(0);
   legend->SetLineColor(0);
   legend->SetFillColor(0);
@@ -186,7 +186,7 @@ void BmesonRatio(){
   legend->SetTextFont(42);
   legend->SetTextSize(0.05);
   
-  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
+  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,3.);  
    hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
    hempty->GetYaxis()->SetTitle("Ratio corrected yield B^{+}/B^{0}");
   
@@ -200,7 +200,7 @@ void BmesonRatio(){
   hempty->GetYaxis()->SetLabelFont(42);
   hempty->GetXaxis()->SetLabelSize(0.04);
   hempty->GetYaxis()->SetLabelSize(0.04);  
-  hempty->SetMaximum(2);
+  hempty->SetMaximum(3);
   hempty->SetMinimum(0.);
 
   
@@ -257,10 +257,26 @@ void BmesonRatio(){
   
   
   
+  double Bplusintegrated=(value10_15Bplus*5+value15_20Bplus*5+value20_60Bplus*40)/50.;
+  double errvalue10_60Bplus=TMath::Sqrt((errvalue10_15Bplus*5)*(errvalue10_15Bplus*5)+(errvalue15_20Bplus*5)*(errvalue15_20Bplus*5)+(errvalue20_60Bplus*40)*(errvalue20_60Bplus*40));
+  errvalue10_60Bplus=errvalue10_60Bplus/50.;
   
   
+  double Bzerointegrated=(value10_15Bzero*5+value15_20Bzero*5+value20_60Bzero*40)/50.;
+  double errvalue10_60Bzero=TMath::Sqrt((errvalue10_15Bzero*5)*(errvalue10_15Bzero*5)+(errvalue15_20Bzero*5)*(errvalue15_20Bzero*5)+(errvalue20_60Bzero*40)*(errvalue20_60Bzero*40));
+  errvalue10_60Bzero=errvalue10_60Bzero/50.;
+
   
+
+  double ratioBplusBzero10_60=Bplusintegrated/Bzerointegrated;
+  double err_ratioBplusBzero10_60=(errvalue10_60Bplus/Bplusintegrated)*(errvalue10_60Bplus/Bplusintegrated);
+  err_ratioBplusBzero10_60=err_ratioBplusBzero10_60+(errvalue10_60Bzero/Bzerointegrated)*(errvalue10_60Bzero/Bzerointegrated);
+  err_ratioBplusBzero10_60=TMath::Sqrt(err_ratioBplusBzero10_60);
+  err_ratioBplusBzero10_60=err_ratioBplusBzero10_60*ratioBplusBzero10_60;
   
-  
+  double systerroronintegratedratio=ratioBplusBzero10_60*systTot;
+    
+  cout<<"ratio with stat and syst uncertainty"<<ratioBplusBzero10_60<<"+-"<<err_ratioBplusBzero10_60<<"+-"<<systerroronintegratedratio<<endl;
+
   
 }
