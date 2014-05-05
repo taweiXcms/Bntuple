@@ -7,8 +7,8 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
  
-TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/Users/ginnocen/Desktop/InputsFiles/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputmc="/Users/ginnocen/Desktop/InputsFiles/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 
 TString weight = "(27.493+pt*(-0.218769))";
 
@@ -148,8 +148,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax,bool myisData,int myvar
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   if(myisData) c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,count-1,myisData));
-   if(!myisData) c->SaveAs(Form("ResultsBplus/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,countMC-1,myisData));
+   if(myisData) c->SaveAs(Form("ResultsBplusYieldvsCut/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,count-1,myisData));
+   if(!myisData) c->SaveAs(Form("ResultsBplusYieldvsCut/BMass-Id%d_Step%d_isData%d.pdf",myvaropt,countMC-1,myisData));
    
    return mass;
 }
@@ -221,7 +221,7 @@ void fitB(int stepcut,bool isData,int myvariationoption)
 
   hPtSigma->Draw(); 
   
-  TFile *outf = new TFile(Form("ResultsBplus/SigmaBplusCutId%d_Step%d_isData%d.root",myvariationoption,stepcut,isData),"recreate");
+  TFile *outf = new TFile(Form("ResultsBplusYieldvsCut/SigmaBplusCutId%d_Step%d_isData%d.root",myvariationoption,stepcut,isData),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
@@ -248,8 +248,8 @@ void SystStudy(int variationoption=4){
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>%f&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01",cutvalue);
     } 
     if(variationoption==2){
-      valuemin=3.4-1.0;
-      valuemax=3.4+1.0;
+      valuemin=3.4-2.0;
+      valuemax=3.4+2.0;
       stepvalue=(valuemax-valuemin)/(double)(steps);
       cutvalue=valuemin+i*stepvalue;
       cut=Form("(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>%f&&cos(dtheta)>-3.46e-01",cutvalue);
