@@ -3,13 +3,14 @@
   const int nbins=1;
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
-    Double_t yPercSigmapPbSystTotHigh[nbins]={0.111};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.111};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.111};
 
   //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
   //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
-  Double_t commonErrorP = TMath::Sqrt(0.22*0.22+ (0.6/10.4)*(0.6/10.4));
-  Double_t commonErrorN = TMath::Sqrt(0.24*0.24+ (0.6/10.4)*(0.6/10.4));
+  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
+  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
+  Double_t FFsysterror=0.6/10.4;
 
   TString particle="Bzero";
   const int nbins=3;
@@ -18,10 +19,11 @@
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.334,0.162,0.212};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.334,0.162,0.212};
   
-  //Double_t commonErrorP = 0.0555 ;
-  //Double_t commonErrorN = 0.0555  ;
-  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
-  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
+  //Double_t commonErrorP = 0.0555;
+  //Double_t commonErrorN = 0.0555;
+  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555);
+  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555);
+  Double_t FFsysterror=0.7/40.2;
 
   TString particle="Bplus";
   const int nbins=5;
@@ -31,9 +33,9 @@
   Double_t yPercSigmapPbSystTotLow[nbins]={0.109,0.112,0.112,0.122,0.127};
   //Double_t commonErrorP = 0.0445 ;
   //Double_t commonErrorN = 0.0445  ;
-  
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
+  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
+  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
+  Double_t FFsysterror=0.7/40.2;
 */
 
 
@@ -44,10 +46,11 @@
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.334,0.162,0.212};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.334,0.162,0.212};
   
-  //Double_t commonErrorP = 0.0555 ;
-  //Double_t commonErrorN = 0.0555  ;
-  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
-  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
+  //Double_t commonErrorP = 0.0555;
+  //Double_t commonErrorN = 0.0555;
+  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555);
+  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555);
+  Double_t FFsysterror=0.7/40.2;
 
 void NuclearModification(){
 
@@ -99,6 +102,9 @@ void NuclearModification(){
     yPPsystFONLLlow[i]=gaeBplusReference->GetEYlow()[i];
     yPercPPsystFONLLhigh[i]=yPPsystFONLLhigh[i]/yRefPP[i];
     yPercPPsystFONLLlow[i]=yPPsystFONLLlow[i]/yRefPP[i];
+    yPercPPsystFONLLhigh[i]=TMath::Sqrt(yPercPPsystFONLLhigh[i]*yPercPPsystFONLLhigh[i]+FFsysterror*FFsysterror);
+    yPercPPsystFONLLlow[i]=TMath::Sqrt(yPercPPsystFONLLlow[i]*yPercPPsystFONLLlow[i]+FFsysterror*FFsysterror);
+    
   }
   
   for(Int_t i=0;i<nbins;i++) {
