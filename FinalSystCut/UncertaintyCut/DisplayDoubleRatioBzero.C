@@ -1,4 +1,7 @@
 void DisplayDoubleRatioBzero(){
+
+  double DoubleRatioError(double,double,double,double,double&,double&,double&,double&);
+
   
   TFile*file_Data_resmass_NoCut=new TFile("ResultsBzero/CutId2/SigmaBzeroCutId2_isData1.root");
   TFile*file_Data_resmass_Cut=new TFile("ResultsBzero/CutId1/SigmaBzeroCutId1_isData1.root");
@@ -49,6 +52,32 @@ void DisplayDoubleRatioBzero(){
   TH1F*hPtYield_MC_D0err_Cut=(TH1F*)file_MC_D0err_Cut->Get("hPt");
   TH1F*hPtYield_MC_Trkpt_NoCut=(TH1F*)file_MC_Trkpt_NoCut->Get("hPt");
   TH1F*hPtYield_MC_Trkpt_Cut=(TH1F*)file_MC_Trkpt_Cut->Get("hPt");
+  
+  
+  hPtYield_Data_D0err_NoCut->Scale(50);
+  hPtYield_Data_D0err_Cut->Scale(50);
+  hPtYield_Data_Trkpt_NoCut->Scale(50);
+  hPtYield_Data_Trkpt_Cut->Scale(50);
+  hPtYield_Data_chi2cl_NoCut->Scale(50);
+  hPtYield_Data_chi2cl_Cut->Scale(50);
+  hPtYield_Data_costheta_NoCut->Scale(50);
+  hPtYield_Data_costheta_Cut->Scale(50);
+  hPtYield_Data_resmass_NoCut->Scale(50);
+  hPtYield_Data_resmass_Cut->Scale(50);
+  
+  hPtYield_MC_D0err_NoCut->Scale(50);
+  hPtYield_MC_D0err_Cut->Scale(50);
+  hPtYield_MC_Trkpt_NoCut->Scale(50);
+  hPtYield_MC_Trkpt_Cut->Scale(50);
+  hPtYield_MC_chi2cl_NoCut->Scale(50);
+  hPtYield_MC_chi2cl_Cut->Scale(50);
+  hPtYield_MC_costheta_NoCut->Scale(50);
+  hPtYield_MC_costheta_Cut->Scale(50);
+  hPtYield_MC_resmass_NoCut->Scale(50);
+  hPtYield_MC_resmass_Cut->Scale(50);
+
+
+  
  
 
   double yield_Data_resmass_Cut=hPtYield_Data_resmass_Cut->GetBinContent(1);
@@ -122,26 +151,83 @@ void DisplayDoubleRatioBzero(){
   errdratioTrkpt=dratioTrkpt*TMath::Sqrt(errdratioTrkpt);
 
 
+ //__________________________________
   
-  /*
-  cout<<"yield_Data_costheta_NoCut"<<yield_Data_costheta_NoCut*50.<<endl;
-  cout<<"yield_Data_chi2cl_NoCut"<<yield_Data_chi2cl_NoCut*50.<<endl;
-  cout<<"yield_Data_resmass_NoCut"<<yield_Data_resmass_NoCut*50.<<endl;
-  cout<<"yield_Data_Cut"<<yield_Data_resmass_Cut*50.<<endl;
-
-  cout<<"yield_MC_costheta_NoCut"<<yield_MC_costheta_NoCut*50.<<endl;
-  cout<<"yield_MC_chi2cl_NoCut"<<yield_MC_chi2cl_NoCut*50.<<endl;
-  cout<<"yield_MC_resmass_NoCut"<<yield_MC_resmass_NoCut*50.<<endl;
-  cout<<"yield_MC_Cut"<<yield_MC_resmass_Cut*50.<<endl;
-
-*/
-
-  cout<<"double ratio resmass"<<dratioresmass<<" with stat error +- "<<errdratioresmass<<endl;
-  cout<<"double ratio chi2cl"<<dratiochi2cl<<" with stat error +- "<<errdratiochi2cl<<endl;
-  cout<<"double ratio costheta"<<dratiocostheta<<" with stat error +- "<<errdratiocostheta<<endl;
-  cout<<"double ratio D0err"<<dratioD0err<<" with stat error +- "<<errdratioD0err<<endl;
-  cout<<"double ratio Trkpt"<<dratioTrkpt<<" with stat error +- "<<errdratioTrkpt<<endl;
-
+  double myeffdataD0err,myerreffdataD0err,myeffmcD0err,myerreffmcD0err;
+  double errdratioD0errBINObis=DoubleRatioError(yield_Data_D0err_Cut,yield_Data_D0err_NoCut,yield_MC_D0err_Cut,yield_MC_D0err_NoCut,myeffdataD0err,myerreffdataD0err,myeffmcD0err,myerreffmcD0err);
+  
+  cout<<"******* D0err *******"<<endl;
+  cout<<"eff Data with error = "<<myeffdataD0err<<" +- "<<myerreffdataD0err<<endl;
+  cout<<"eff MC with error = "<<myeffmcD0err<<" +- "<<myerreffmcD0err<<endl;
+  cout<<"double ratio with bin error = "<<dratioD0err<<" +- "<<errdratioD0errBINObis<<endl;
+  
+   //__________________________________
+  
+  double myeffdatacostheta,myerreffdatacostheta,myeffmccostheta,myerreffmccostheta;
+  double errdratiocosthetaBINObis=DoubleRatioError(yield_Data_costheta_Cut,yield_Data_costheta_NoCut,yield_MC_costheta_Cut,yield_MC_costheta_NoCut,myeffdatacostheta,myerreffdatacostheta,myeffmccostheta,myerreffmccostheta);
+  
+  cout<<"******* costheta *******"<<endl;
+  cout<<"eff Data with error = "<<myeffdatacostheta<<" +- "<<myerreffdatacostheta<<endl;
+  cout<<"eff MC with error = "<<myeffmccostheta<<" +- "<<myerreffmccostheta<<endl;
+  cout<<"double ratio with bin error = "<<dratiocostheta<<" +- "<<errdratiocosthetaBINObis<<endl;
+  
+   //__________________________________
+  
+  double myeffdatachi2cl,myerreffdatachi2cl,myeffmcchi2cl,myerreffmcchi2cl;
+  double errdratiochi2clBINObis=DoubleRatioError(yield_Data_chi2cl_Cut,yield_Data_chi2cl_NoCut,yield_MC_chi2cl_Cut,yield_MC_chi2cl_NoCut,myeffdatachi2cl,myerreffdatachi2cl,myeffmcchi2cl,myerreffmcchi2cl);
+  
+  cout<<"******* chi2cl *******"<<endl;
+  cout<<"eff Data with error = "<<myeffdatachi2cl<<" +- "<<myerreffdatachi2cl<<endl;
+  cout<<"eff MC with error = "<<myeffmcchi2cl<<" +- "<<myerreffmcchi2cl<<endl;
+  cout<<"double ratio with bin error = "<<dratiochi2cl<<" +- "<<errdratiochi2clBINObis<<endl;
+  
+   //__________________________________
+  
+  double myeffdataTrkpt,myerreffdataTrkpt,myeffmcTrkpt,myerreffmcTrkpt;
+  double errdratioTrkptBINObis=DoubleRatioError(yield_Data_Trkpt_Cut,yield_Data_Trkpt_NoCut,yield_MC_Trkpt_Cut,yield_MC_Trkpt_NoCut,myeffdataTrkpt,myerreffdataTrkpt,myeffmcTrkpt,myerreffmcTrkpt);
+  
+  cout<<"******* Trkpt *******"<<endl;
+  cout<<"eff Data with error = "<<myeffdataTrkpt<<" +- "<<myerreffdataTrkpt<<endl;
+  cout<<"eff MC with error = "<<myeffmcTrkpt<<" +- "<<myerreffmcTrkpt<<endl;
+  cout<<"double ratio with bin error = "<<dratioTrkpt<<" +- "<<errdratioTrkptBINObis<<endl;
+  
+  //__________________________________
+  
+  double myeffdataresmass,myerreffdataresmass,myeffmcresmass,myerreffmcresmass;
+  double errdratioresmassBINObis=DoubleRatioError(yield_Data_resmass_Cut,yield_Data_resmass_NoCut,yield_MC_resmass_Cut,yield_MC_resmass_NoCut,myeffdataresmass,myerreffdataresmass,myeffmcresmass,myerreffmcresmass);
+  
+  cout<<"******* resmass *******"<<endl;
+  cout<<"eff Data with error = "<<myeffdataresmass<<" +- "<<myerreffdataresmass<<endl;
+  cout<<"eff MC with error = "<<myeffmcresmass<<" +- "<<myerreffmcresmass<<endl;
+  cout<<"double ratio with bin error = "<<dratioresmass<<" +- "<<errdratioresmassBINObis<<endl;
+  
 
   
+}
+
+
+
+
+double DoubleRatioError(double NumData=-1,double DenData=-1,double NumMC=-1,double DenMC=-1,double& effdata, double& erreffdata, double& effmc, double& erreffmc){
+
+double EffMC,EffData,ErrEffMC,ErrEffData,RelErrEffMC,RelErrEffData;
+double doubleratioDataMC,errdoubleratioDataMC;
+
+EffMC=NumMC/DenMC;
+EffData=NumData/DenData;
+doubleratioDataMC=EffData/EffMC;
+
+ErrEffMC=TMath::Sqrt(EffMC*(1-EffMC)/DenMC);
+ErrEffData=TMath::Sqrt(EffData*(1-EffData)/DenData);
+
+RelErrEffMC=ErrEffMC/EffMC;
+RelErrEffData=ErrEffData/EffData;
+
+
+errdoubleratioDataMC=TMath::Sqrt(RelErrEffMC*RelErrEffMC+RelErrEffData*RelErrEffData)*doubleratioDataMC;
+effdata=EffData;
+effmc=EffMC;
+erreffdata=ErrEffData;
+erreffmc=ErrEffMC;
+return errdoubleratioDataMC;
 }
