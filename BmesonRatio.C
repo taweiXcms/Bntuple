@@ -93,31 +93,31 @@ void BmesonRatio(){
   
   //****************************   SYST UNCERTAINTY ****************************  
   
-  Double_t systAcc_Bplus=0.1;
+  Double_t systAcc_Bplus=0.001;
   Double_t systHadronTrack_Bplus=0.039;
+  Double_t systBestSelection_Bplus=0.032;
   Double_t systCutEff_Bplus=0.09;
-  Double_t systptres_Bplus=0.06;
-  Double_t systpifeeddown_Bplus=0.05;
-  Double_t systTrigger_Bplus=0.036;
-  Double_t systMuonEff_Bplus=0.032;
-  Double_t systInnerEff_Bplus=0.018;
+  Double_t systptres_Bplus=0.006;
+  Double_t systTrigger_Bplus=0.069;
+  Double_t systMuonEff_Bplus=0.007;
+  Double_t systInnerEff_Bplus=0.036;
   Double_t systPDF_Bplus=0.089;
   
-  Double_t systAcc_Bzero=0.027;
+  Double_t systAcc_Bzero=0.007;
   Double_t systHadronTrack_Bzero=0.078;
-  Double_t systCutEff_Bzero=0.09;
-  Double_t systptres_Bzero=0.06;
-  Double_t systTrigger_Bzero=0.036;
-  Double_t systMuonEff_Bzero=0.032;
-  Double_t systInnerEff_Bzero=0.018;
+  Double_t systBestSelection_Bzero=0.031;
+  Double_t systCutEff_Bzero=0.135;
+  Double_t systptres_Bzero=0.006;
+  Double_t systTrigger_Bzero=0.089;
+  Double_t systMuonEff_Bzero=0.006;
+  Double_t systInnerEff_Bzero=0.04;
   Double_t systPDF_Bzero=0.134;
-
 
   Double_t systAccRatio=TMath::Sqrt(systAcc_Bzero*systAcc_Bzero+systAcc_Bplus*systAcc_Bplus);
   Double_t systHadronTrack=systHadronTrack_Bzero-systHadronTrack_Bplus;
   Double_t systCutEff=TMath::Sqrt(systCutEff_Bplus*systCutEff_Bplus+systCutEff_Bzero*systCutEff_Bzero);
   Double_t systptres=systptres_Bplus-systptres_Bzero;
-  Double_t systpifeeddown=systpifeeddown_Bplus;
+  Double_t systpifeeddown=0.;
   Double_t systTrigger=systTrigger_Bplus-systTrigger_Bzero;
   Double_t systMuonEff=systMuonEff_Bplus-systMuonEff_Bzero;
   Double_t systInnerEff_Bplus=systInnerEff_Bplus-systInnerEff_Bzero;
