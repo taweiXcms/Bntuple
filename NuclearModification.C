@@ -11,6 +11,8 @@
   Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
   Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
   Double_t FFsysterror=0.6/10.4;
+  Double_t tagandprobcorrection[nbins]={1.074*1.045*1.021};
+
 
   TString particle="Bzero";
   const int nbins=3;
@@ -24,6 +26,9 @@
   Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555);
   Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555);
   Double_t FFsysterror=0.7/40.2;
+  Double_t tagandprobcorrection[nbins]={1.088*1.053*1.026,1.048*1.033*1.014,1.029*1.022*1.006};
+
+
 
 
   TString particle="Bplus";
@@ -37,6 +42,8 @@
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t FFsysterror=0.7/40.2;
+  Double_t tagandprobcorrection[nbins]={1.084*1.049*1.021,1.047*1.032*1.014,1.031*1.023*1.011,1.026*1.02*1.008,1.025*1.016*1.009};
+
 */
 
   TString particle="Bplus";
@@ -50,6 +57,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t FFsysterror=0.7/40.2;
+  Double_t tagandprobcorrection[nbins]={1.084*1.049*1.021,1.047*1.032*1.014,1.031*1.023*1.011,1.026*1.02*1.008,1.025*1.016*1.009};
 
 
 void NuclearModification(){
@@ -64,7 +72,11 @@ void NuclearModification(){
   
   TFile*filepPb=new TFile(Form("Results%s/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
+  for (int i=1;i<nbins;i++){
+    hSigmapPbStat->SetBinContent(i,tagandprobcorrection[i]*hSigmapPbStat->GetBinContent(i));
+    hSigmapPbStat->SetBinError(i,tagandprobcorrection[i]*hSigmapPbStat->GetBinError(i));
   
+  } 
   Double_t yRefPP[nbins];                        //value y reference
   Double_t xRefPP[nbins];                        //value x reference
   Double_t yPPsystFONLLhigh[nbins];              //y err syst FONLL high
