@@ -3,30 +3,30 @@
   const int nbins=1;
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.184};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.184};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.196};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.196};
 
   //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
   //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
   Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
   Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
   Double_t FFsysterror=0.6/10.4;
-  Double_t tagandprobcorrection[nbins]={1.074*1.045*1.021};
+  Double_t tagandprobcorrection[nbins]={1.0987611};
 
 
   TString particle="Bzero";
   const int nbins=3;
   Double_t xbins[nbins]={12.5,17.5,40};
   Double_t exl[nbins]={2.5,2.5,20};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.23,0.214,0.21};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.23,0.214,0.21};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.234,0.216,0.211};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.234,0.216,0.211};
   
   //Double_t commonErrorP = 0.0555;
   //Double_t commonErrorN = 0.0555;
   Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555);
   Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.088*1.053*1.026,1.048*1.033*1.014,1.029*1.022*1.006};
+  Double_t tagandprobcorrection[nbins]={1.1158767,1.0674278,1.0453282};
 
 
 
@@ -35,29 +35,32 @@
   const int nbins=5;
   Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.157,0.143,0.140,0.139,0.138};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.157,0.143,0.140,0.139,0.138};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.169,0.149,0.143,0.141,0.140};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.169,0.149,0.143,0.141,0.140};
   //Double_t commonErrorP = 0.0445 ;  
   //Double_t commonErrorN = 0.0445  ;
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.084*1.049*1.021,1.047*1.032*1.014,1.031*1.023*1.011,1.026*1.02*1.008,1.025*1.016*1.009};
+  Double_t tagandprobcorrection[nbins]={1.1132366,1.0653769,1.0431112,1.0381478,1.0320274};
 
 */
 
-  TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.157,0.143,0.140,0.139,0.138};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.157,0.143,0.140,0.139,0.138};
-  //Double_t commonErrorP = 0.0445 ;  
-  //Double_t commonErrorN = 0.0445  ;
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
+  TString particle="Bzero";
+  const int nbins=3;
+  Double_t xbins[nbins]={12.5,17.5,40};
+  Double_t exl[nbins]={2.5,2.5,20};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.234,0.216,0.211};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.234,0.216,0.211};
+  
+  //Double_t commonErrorP = 0.0555;
+  //Double_t commonErrorN = 0.0555;
+  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555);
+  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.084*1.049*1.021,1.047*1.032*1.014,1.031*1.023*1.011,1.026*1.02*1.008,1.025*1.016*1.009};
+  Double_t tagandprobcorrection[nbins]={1.1158767,1.0674278,1.0453282};
+
+
 
 
 void NuclearModification(){
