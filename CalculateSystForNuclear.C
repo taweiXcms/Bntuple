@@ -42,6 +42,8 @@ Double_t tandprobe[nbins]={0.};
 
 */
 
+
+
 const int nbins=1;
 Double_t acceptance[nbins]={0.4};
 Double_t hadron[nbins]={7.8};
@@ -54,7 +56,6 @@ Double_t innertrk[nbins]={2.1};
 Double_t PDF[nbins]={7.5};
 Double_t total[nbins]={0.};
 Double_t tandprobe[nbins]={0.};
-
 
 
 void CalculateSystForNuclear(){
@@ -79,7 +80,7 @@ void CalculateSystForNuclear(){
   cout<<"Total Systematics"<<endl;
   cout<<"{";
   for (int i=0;i<nbins;i++) {
-    printf("%.1f",total[i]);
+    printf("%.3f",0.01*total[i]);
     //cout<<total[i];
     if(i!=(nbins-1)) cout<<",";
   }
