@@ -1,19 +1,12 @@
 #include <iostream>                                                                                                                                                                                         
 #include <utility>
-#include <TRandom.h>
-#include <TRandom3.h>
-#include <TH1D.h>
-#include <TH1F.h>
-#include <TCut.h>
-#include <TH2F.h>
+#include <TH1.h>
+#include <TH2.h>
 #include <TFile.h>
 #include <TTree.h>
-#include <TCanvas.h>
-#include <TF1.h>
-#include <TMath.h>
-#include <TLegend.h>
-#include <TLatex.h>
 #include <TNtuple.h>
+#include <TCanvas.h>
+#include <TLegend.h>
 #include <TLorentzVector.h>
 #define MAX_XB 8192
 #define MAX_GEN 4096 
@@ -26,6 +19,32 @@
 #define PHI_MASS    1.019455
 #define JPSI_MASS   3.096916
 #define PSI2S_MASS  3.686109
+/////=======Customize options
+//Use POG Trg
+bool UsePOGTrgEff = 1;
+
+//Use POG ID
+bool UsePOGIDEff = 0;
+
+//Specify eff., Trg=Mu trigger, ID=Mu ID, Trk=Mu tracking
+TString _eff_ = "Trg";
+//TString _eff_ = "ID";
+//TString _eff_ = "Trk";
+
+//Specify channel, 0=B+, 1=B0, 2=Bs
+int _type=0;
+//int _type=1;
+//int _type=2;
+
+//Specify B meson pt bin
+const int nBins = 5;
+double ptBins[nBins+1] = {10,15,20,25,30,60};
+//const int nBins = 3;
+//double ptBins[nBins+1] = {10,15,20,60};
+//const int nBins = 1;
+//double ptBins[nBins+1] = {10,60};
+/////=======
+
 //TString inputdata_kp="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 //TString inputdata_kstar="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kstar_TriggerMatchingMuon_EvtBase_skim.root";
 //TString inputdata_phi="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Phi_TriggerMatchingMuon_EvtBase_skim.root";
@@ -33,26 +52,10 @@ TString inputdata_kp="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Kp_Trigger
 TString inputdata_kstar="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Kstar_TriggerMatchingMuon.root";
 TString inputdata_phi="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Phi_TriggerMatchingMuon.root";
 
-//Specify eff., Trg=Mu trigger, ID=Mu ID, Trk=Mu tracking
-//TString _eff_ = "Trg";
-//TString _eff_ = "ID";
-TString _eff_ = "Trk";
-
-//Specify channel, 0=B+, 1=B0, 2=Bs
-//int _type=0;
-//int _type=1;
-int _type=2;
-
-//Specify py bin
-//const int nBins = 5;
-//double ptBins[nBins+1] = {10,15,20,25,30,60};
-//const int nBins = 3;
-//double ptBins[nBins+1] = {10,15,20,60};
-const int nBins = 1;
-double ptBins[nBins+1] = {10,60};
-
-TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA.root");
-TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3.root");
+TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA_new1.root");
+TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new1.root");
+//TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA.root");
+//TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3.root");
 TH1F* DataEtaBin1 = (TH1F*)infDataEff->Get("hMu"+_eff_+"etabin1");
 TH1F* DataEtaBin2 = (TH1F*)infDataEff->Get("hMu"+_eff_+"etabin2");
 TH1F* DataEtaBin3 = (TH1F*)infDataEff->Get("hMu"+_eff_+"etabin3");
@@ -61,6 +64,8 @@ TH1F* MCEtaBin2 = (TH1F*)infMCEff->Get("hMu"+_eff_+"etabin2");
 TH1F* MCEtaBin3 = (TH1F*)infMCEff->Get("hMu"+_eff_+"etabin3");
 
 float GetEff(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin);
+float GetPOGTrgEff(float pt, float eta, float eta2,  bool isData);
+float GetPOGIDEff(float pt, float eta, bool isData);
 void ConvertEff(){
   TFile *inf;
   TTree *nt;
@@ -173,12 +178,28 @@ void ConvertEff(){
 //      if(_type==2) if(!((HLT_PAMu3_v1)&&abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.7&&trk2Pt[c]>0.7&& chi2cl[c]>3.71e-02&&(d0[c]/d0Err[c])>3.37&&cos(dtheta[c])>2.60e-01&&abs(tktkmass[c]-1.019455)<1.55e-02 &&gen[c]==23333)) continue;
       if(isSignal[c]<1) continue;
       if(pt[c]<10 || pt[c]>60 || fabs(y[c]+0.465)>1.93) continue;
+      //Acc
+      if(fabs(mu1eta[c]) < 1.3) {if(mu1pt[c] < 3.3) continue;}
+      else if(fabs(mu1eta[c]) > 1.3 && fabs(mu1eta[c]) < 2.2) {if(mu1pt[c] < 2.9) continue;}
+      else if(fabs(mu1eta[c]) > 2.2 && fabs(mu1eta[c]) < 2.4) {if(mu1pt[c] < 0.8) continue;}
+      else {continue;}
+      if(fabs(mu2eta[c]) < 1.3) {if(mu2pt[c] < 3.3) continue;}
+      else if(fabs(mu2eta[c]) > 1.3 && fabs(mu2eta[c]) < 2.2) {if(mu2pt[c] < 2.9) continue;}
+      else if(fabs(mu2eta[c]) > 2.2 && fabs(mu2eta[c]) < 2.4) {if(mu2pt[c] < 0.8) continue;}
+      else {continue;}
+
       int _etabin = -1;
       int _ptbin = -1;
       float mu1eff_data = GetEff(mu1pt[c], mu1eta[c], true, _eff_, _ptbin, _etabin);
       float mu2eff_data = GetEff(mu2pt[c], mu2eta[c], true, _eff_, _ptbin, _etabin);
       float mu1eff_mc = GetEff(mu1pt[c], mu1eta[c], false,  _eff_, _ptbin, _etabin);
       float mu2eff_mc = GetEff(mu2pt[c], mu2eta[c], false,  _eff_, _ptbin, _etabin);
+      if(_eff_=="ID" && UsePOGIDEff){
+        mu1eff_data = GetPOGIDEff(mu1pt[c], mu1eta[c], true);
+        mu2eff_data = GetPOGIDEff(mu2pt[c], mu2eta[c], true);
+        mu1eff_mc = GetPOGIDEff(mu1pt[c], mu1eta[c], false);
+        mu2eff_mc = GetPOGIDEff(mu2pt[c], mu2eta[c], false);
+      }
       tot_++;
       if(mu1eff_data<0 || mu2eff_data<0||mu1eff_mc<0||mu2eff_mc<0) continue;
       if(pt[c]<10 || pt[c]>60) continue;
@@ -187,6 +208,18 @@ void ConvertEff(){
       if(_eff_=="Trg"){
         evtEff_data = mu1eff_data + mu2eff_data - mu1eff_data*mu2eff_data;
         evtEff_mc = mu1eff_mc + mu2eff_mc - mu1eff_mc*mu2eff_mc;
+        if(UsePOGTrgEff) {
+          if(mu1pt[c]>mu2pt[c]) {
+            evtEff_data = GetPOGTrgEff(mu1pt[c], mu1eta[c], mu2eta[c], true);
+            evtEff_mc = GetPOGTrgEff(mu1pt[c], mu1eta[c], mu2eta[c], false);
+          }
+          if(mu2pt[c]>mu1pt[c]) {
+            evtEff_data = GetPOGTrgEff(mu2pt[c], mu2eta[c], mu1eta[c], true);
+            evtEff_mc = GetPOGTrgEff(mu2pt[c], mu2eta[c], mu1eta[c], false);
+          }
+          if(evtEff_data==-1 || evtEff_mc==-1) continue;
+			//cout<<evtEff_mc<<" //  "<<evtEff_mc-evtEff_data<<endl;
+        }
       }
       else{
         evtEff_data = mu1eff_data*mu2eff_data;
@@ -194,8 +227,8 @@ void ConvertEff(){
         //evtEff_data = mu1eff_data;
         //evtEff_mc = mu1eff_mc;
       }
-//      cout<<"-----  "<<mu1pt[c]<<"  /  "<<mu1eta[c]<<endl;
-//      cout<<mu1eff_data-mu1eff_mc<<"   /   "<<mu1eff_data<<"  /  "<<mu1eff_mc<<endl;
+      //cout<<"-----  "<<mu1pt[c]<<"  /  "<<mu1eta[c]<<endl;
+      //cout<<mu1eff_data-mu1eff_mc<<"   /   "<<mu1eff_data<<"  /  "<<mu1eff_mc<<endl;
       //cout<<evtEff_data-evtEff_mc<<endl;
       for(int _b=0; _b<nBins; _b++){
         if(pt[c] > ptBins[_b] && pt[c] < ptBins[_b+1]){
@@ -242,18 +275,24 @@ void ConvertEff(){
   //return;
 
   if(_type==0) {
-    if(_eff_=="Trg")c1->SaveAs("bp_trg.pdf");
-    if(_eff_=="ID")c1->SaveAs("bp_id.pdf");
+    if(_eff_=="Trg" && !UsePOGTrgEff)c1->SaveAs("bp_trg.pdf");
+    if(_eff_=="Trg" && UsePOGTrgEff)c1->SaveAs("bp_POG_trg.pdf");
+    if(_eff_=="ID" && !UsePOGIDEff)c1->SaveAs("bp_id.pdf");
+    if(_eff_=="ID" && UsePOGIDEff)c1->SaveAs("bp_POG_id.pdf");
     if(_eff_=="Trk")c1->SaveAs("bp_trk.pdf");
   }
   if(_type==1) {
-    if(_eff_=="Trg")c1->SaveAs("b0_trg.pdf");
-    if(_eff_=="ID")c1->SaveAs("b0_id.pdf");
+    if(_eff_=="Trg" && !UsePOGTrgEff)c1->SaveAs("b0_trg.pdf");
+    if(_eff_=="Trg" && UsePOGTrgEff)c1->SaveAs("b0_POG_trg.pdf");
+    if(_eff_=="ID" && !UsePOGIDEff)c1->SaveAs("b0_id.pdf");
+    if(_eff_=="ID" && UsePOGIDEff)c1->SaveAs("b0_POG_id.pdf");
     if(_eff_=="Trk")c1->SaveAs("b0_trk.pdf");
   }
   if(_type==2) {
-    if(_eff_=="Trg")c1->SaveAs("bs_trg.pdf");
-    if(_eff_=="ID")c1->SaveAs("bs_id.pdf");
+    if(_eff_=="Trg" && !UsePOGTrgEff)c1->SaveAs("bs_trg.pdf");
+    if(_eff_=="Trg" && UsePOGTrgEff)c1->SaveAs("bs_POG_trg.pdf");
+    if(_eff_=="ID" && !UsePOGIDEff)c1->SaveAs("bs_id.pdf");
+    if(_eff_=="ID" && UsePOGIDEff)c1->SaveAs("bs_POG_id.pdf");
     if(_eff_=="Trk")c1->SaveAs("bs_trk.pdf");
   }
 }//Main
@@ -261,7 +300,11 @@ void ConvertEff(){
 float GetEff(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin){
   //cout<<pt<<"/"<<eta<<endl;
 //special condition
-if(_eff_type =="ID"){ 
+//if(_eff_type =="ID"){ 
+//  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
+//}
+if(_eff_type =="Trk"){ 
+  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
   if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 }
 //
@@ -329,6 +372,68 @@ if(_eff_type =="ID"){
       }
     }
   }
-
+  return -1;
+}
+//Mu17Mu8 dR<0.3
+float GetPOGTrgEff(float pt, float eta, float eta2,  bool isData){
+//page18
+  if(isData){
+    if(pt>0 && pt<10){
+      if(fabs(eta)>1.2 && fabs(eta)<2.4) if(fabs(eta2)>1.2 && fabs(eta2)<2.4) return 0.736;
+      if(fabs(eta)>1.2 && fabs(eta)<2.4) if(fabs(eta2)>0 && fabs(eta2)<1.2) return 0.830;
+      if(fabs(eta)>0 && fabs(eta)<1.2) if(fabs(eta2)>1.2 && fabs(eta2)<2.4) return 0.833;
+      if(fabs(eta)>0 && fabs(eta)<1.2) if(fabs(eta2)>0 && fabs(eta2)<1.2) return 0.840;
+    }
+    if(pt>10 && pt<20){
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>2.1 && fabs(eta2)<2.4) return 0.780;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>1.2 && fabs(eta2)<2.1) return 0.790;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>0.9 && fabs(eta2)<1.2) return 0.807;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.862;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) if(fabs(eta2)>1.2 && fabs(eta2)<2.1) return 0.776;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) if(fabs(eta2)>0.9 && fabs(eta2)<1.2) return 0.805;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.846;
+      if(fabs(eta)>0.9 && fabs(eta)<1.2) if(fabs(eta2)>0.9 && fabs(eta2)<1.2) return 0.833;
+      if(fabs(eta)>0.9 && fabs(eta)<1.2) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.863;
+      if(fabs(eta)>0 && fabs(eta)<0.9) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.914;
+    }
+  }
+//page24
+  if(!isData){
+    if(pt>0 && pt<10){
+      if(fabs(eta)>1.2 && fabs(eta)<2.4) if(fabs(eta2)>1.2 && fabs(eta2)<2.4) return 0.835;
+      if(fabs(eta)>1.2 && fabs(eta)<2.4) if(fabs(eta2)>0 && fabs(eta2)<1.2) return 0.875;
+      if(fabs(eta)>0 && fabs(eta)<1.2) if(fabs(eta2)>1.2 && fabs(eta2)<2.4) return 0.884;
+      if(fabs(eta)>0 && fabs(eta)<1.2) if(fabs(eta2)>0 && fabs(eta2)<1.2) return 0.923;
+    }
+    if(pt>10 && pt<20){
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>2.1 && fabs(eta2)<2.4) return 0.828;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>1.2 && fabs(eta2)<2.1) return 0.844;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>0.9 && fabs(eta2)<1.2) return 0.864;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.886;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) if(fabs(eta2)>1.2 && fabs(eta2)<2.1) return 0.858;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) if(fabs(eta2)>0.9 && fabs(eta2)<1.2) return 0.878;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.900;
+      if(fabs(eta)>0.9 && fabs(eta)<1.2) if(fabs(eta2)>0.9 && fabs(eta2)<1.2) return 0.898;
+      if(fabs(eta)>0.9 && fabs(eta)<1.2) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.921;
+      if(fabs(eta)>0 && fabs(eta)<0.9) if(fabs(eta2)>0 && fabs(eta2)<0.9) return 0.944;
+    }
+  }
+  return -1;
+}
+float GetPOGIDEff(float pt, float eta, bool isData){
+  if(pt>20){
+    if(isData){
+      if(fabs(eta)>0 && fabs(eta)<0.9) return 0.9436;
+      if(fabs(eta)>0.9 && fabs(eta)<1.2) return 0.9472;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) return 0.9683;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) return 0.9036;
+    }
+    if(!isData){
+      if(fabs(eta)>0 && fabs(eta)<0.9) return 0.9579;
+      if(fabs(eta)>0.9 && fabs(eta)<1.2) return 0.9541;
+      if(fabs(eta)>1.2 && fabs(eta)<2.1) return 0.9703;
+      if(fabs(eta)>2.1 && fabs(eta)<2.4) return 0.8717;
+    }
+  }
   return -1;
 }

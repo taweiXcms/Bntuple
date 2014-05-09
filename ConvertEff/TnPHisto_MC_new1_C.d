@@ -1,0 +1,50 @@
+
+# DO NOT DELETE
+
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TFile.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TDirectoryFile.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TDirectory.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TNamed.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TObject.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/Rtypes.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/RConfig.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/RVersion.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/DllImport.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/Rtypeinfo.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/snprintf.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/strlcpy.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TGenericClassInfo.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TSchemaHelper.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TStorage.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TVersionCheck.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/Riosfwd.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TBuffer.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TString.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TMathBase.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TList.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TSeqCollection.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TCollection.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TIterator.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TDatime.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TUUID.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TUrl.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TMap.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/THashTable.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TH1.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TAxis.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TAttAxis.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TArrayD.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TArray.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TAttLine.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TAttFill.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TAttMarker.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TArrayC.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TArrayS.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TArrayI.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TArrayF.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/Foption.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TVectorFfwd.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TVectorDfwd.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/TFitResultPtr.h
+./TnPHisto_MC_new1_C.so: /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/cintdictversion.h /afs/cern.ch/cms/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/include/RVersion.h
+TnPHisto_MC_new1_C__ROOTBUILDVERSION= 5.32/00
