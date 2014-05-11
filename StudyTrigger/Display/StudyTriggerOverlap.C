@@ -133,11 +133,11 @@ void StudyTriggerOverlap(){
       }
     }
   }
-  cout<<"Invariant mass range 5<mass<6"<<endl;
-  cout<<"% of candidate selected by single ="<<(double)(NCandidateSingle_All)/(double)(NCandidate_All)<<endl;
-  cout<<"% of candidate selected by double ="<<(double)(NCandidateDouble_All)/(double)(NCandidate_All)<<endl;
+  //cout<<"Invariant mass range 5<mass<6"<<endl;
+  //cout<<"% of candidate selected by single ="<<(double)(NCandidateSingle_All)/(double)(NCandidate_All)<<endl;
+  //cout<<"% of candidate selected by double ="<<(double)(NCandidateDouble_All)/(double)(NCandidate_All)<<endl;
   cout<<"% of candidate selected by single and double ="<<(double)(NCandidateSingleAndDouble_All)/(double)(NCandidate_All)<<endl;
-  cout<<"% of candidate selected by single and not by double ="<<(double)(NCandidateSingleAndNotDouble_All)/(double)(NCandidate_All)<<endl;
-  cout<<"% of candidate selected by double and not by single ="<<(double)(NCandidateNotSingleAndDouble_All)/(double)(NCandidate_All)<<endl;
+  cout<<"% of candidate selected by single ONLY ="<<(double)(NCandidateSingleAndNotDouble_All)/(double)(NCandidate_All)<<endl;
+  cout<<"% of candidate selected by double ONLY ="<<(double)(NCandidateNotSingleAndDouble_All)/(double)(NCandidate_All)<<endl;
   
 }
