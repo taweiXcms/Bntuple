@@ -35,26 +35,11 @@ TString inputdata="/data/bmeson/data/nt_20140510_PAMuon_HIRun2013_PromptrecoAndR
 //double ptBins[nBins+1]={10,15,20,25,30,60};
 
 int NCandidate_All=0;
-int NCandidate_SignRegion=0;
-int NCandidate_SideBand=0;
-
 int NCandidateSingle_All=0;
 int NCandidateDouble_All=0;
 int NCandidateSingleAndDouble_All=0;
 int NCandidateSingleAndNotDouble_All=0;
 int NCandidateNotSingleAndDouble_All=0;
-
-int NCandidateSingle_SignRegion=0;
-int NCandidateDouble_SignRegion=0;
-int NCandidateSingleAndDouble_SignRegion=0;
-int NCandidateSingleAndNotDouble_SignRegion=0;
-int NCandidateNotSingleAndDouble_SignRegion=0;
-
-int NCandidateSingle_SideBand=0;
-int NCandidateDouble_SideBand=0;
-int NCandidateSingleAndDouble_SideBand=0;
-int NCandidateSingleAndNotDouble_SideBand=0;
-int NCandidateNotSingleAndDouble_SideBand=0;
 
 void StudyTriggerOverlap(){
 
@@ -126,7 +111,7 @@ void StudyTriggerOverlap(){
   nt->SetBranchAddress("mu2eta",mu2eta);
   
   int nevents_total = nt->GetEntries();    
-  //nevents_total=1000000; 
+  nevents_total=1000000; 
   for(int entry=0; entry<nevents_total; entry++){
     if((entry%10000)==0) printf("Loading event #%d of %d.\n",entry,nevents_total);
     nt->GetEntry(entry);
@@ -145,28 +130,6 @@ void StudyTriggerOverlap(){
           if(!HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateNotSingleAndDouble_All++;
 
         }
-        
-        if((abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.9&& chi2cl[c]>1.32e-02&&(d0[c]/d0Err[c])>3.41&&cos(dtheta[c])>-3.46e-01) && (mass[c]>5.2 && mass[c]<5.4)){
-          NCandidate_SignRegion++;
-          
-          if(HLT_PAMu3_v1[c]) NCandidateSingle_SignRegion++;
-          if(HLT_PAL1DoubleMuOpen_v1[c]) NCandidateDouble_SignRegion++;
-          if(HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndDouble_SignRegion++;
-          if(HLT_PAMu3_v1[c] && !HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndNotDouble_SignRegion++;
-          if(!HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateNotSingleAndDouble_SignRegion++;
-
-        }
-        
-        if((abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.9&& chi2cl[c]>1.32e-02&&(d0[c]/d0Err[c])>3.41&&cos(dtheta[c])>-3.46e-01) && (mass[c]<5.2 || mass[c]>5.4)){
-          NCandidate_SideBand++;
-          
-          if(HLT_PAMu3_v1[c]) NCandidateSingle_SideBand++;
-          if(HLT_PAL1DoubleMuOpen_v1[c]) NCandidateDouble_SideBand++;
-          if(HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndDouble_SideBand++;
-          if(HLT_PAMu3_v1[c] && !HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndNotDouble_SideBand++;
-          if(!HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateNotSingleAndDouble_SideBand++;
-
-        }
       }
     }
   }
@@ -177,18 +140,4 @@ void StudyTriggerOverlap(){
   cout<<"% of candidate selected by single and not by double ="<<(double)(NCandidateSingleAndNotDouble_All)/(double)(NCandidate_All)<<endl;
   cout<<"% of candidate selected by double and not by single ="<<(double)(NCandidateNotSingleAndDouble_All)/(double)(NCandidate_All)<<endl;
   
-  cout<<"Invariant mass range 5.2<mass<5.4"<<endl;
-  cout<<"% of candidate selected by single ="<<(double)(NCandidateSingle_SignRegion)/(double)(NCandidate_SignRegion)<<endl;
-  cout<<"% of candidate selected by double ="<<(double)(NCandidateDouble_SignRegion)/(double)(NCandidate_SignRegion)<<endl;
-  cout<<"% of candidate selected by single and double ="<<(double)(NCandidateSingleAndDouble_SignRegion)/(double)(NCandidate_SignRegion)<<endl;
-  cout<<"% of candidate selected by single and not by double ="<<(double)(NCandidateSingleAndNotDouble_SignRegion)/(double)(NCandidate_SignRegion)<<endl;
-  cout<<"% of candidate selected by double and not by single ="<<(double)(NCandidateNotSingleAndDouble_SignRegion)/(double)(NCandidate_SignRegion)<<endl;
-
-  cout<<"Invariant mass range mass<5.2 or mass>5.4"<<endl;
-  cout<<"% of candidate selected by single ="<<(double)(NCandidateSingle_SideBand)/(double)(NCandidate_SideBand)<<endl;
-  cout<<"% of candidate selected by double ="<<(double)(NCandidateDouble_SideBand)/(double)(NCandidate_SideBand)<<endl;
-  cout<<"% of candidate selected by single and double ="<<(double)(NCandidateSingleAndDouble_SideBand)/(double)(NCandidate_SideBand)<<endl;
-  cout<<"% of candidate selected by single and not by double ="<<(double)(NCandidateSingleAndNotDouble_SideBand)/(double)(NCandidate_SideBand)<<endl;
-  cout<<"% of candidate selected by double and not by single ="<<(double)(NCandidateNotSingleAndDouble_SideBand)/(double)(NCandidate_SideBand)<<endl;
-
 }
