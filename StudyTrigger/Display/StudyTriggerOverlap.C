@@ -32,7 +32,7 @@ TString inputdata="/data/bmeson/data/nt_20140510_PAMuon_HIRun2013_PromptrecoAndR
 
 /*
 const int nBins=5;
-double ptBins[nBins+1]={10,60,61,62,63,64};
+double ptBins[nBins+1]={10,15,20,25,30,60};
 
 int NCandidate_All[nBins]={0,0,0,0,0};
 int NCandidateSingle_All[nBins]={0,0,0,0,0};
@@ -40,6 +40,28 @@ int NCandidateDouble_All[nBins]={0,0,0,0,0};
 int NCandidateSingleAndDouble_All[nBins]={0,0,0,0,0};
 int NCandidateSingleAndNotDouble_All[nBins]={0,0,0,0,0};
 int NCandidateNotSingleAndDouble_All[nBins]={0,0,0,0,0};
+
+const int nBins=3;
+double ptBins[nBins+1]={10,15,20,60};
+
+int NCandidate_All[nBins]={0,0,0};
+int NCandidateSingle_All[nBins]={0,0,0};
+int NCandidateDouble_All[nBins]={0,0,0};
+int NCandidateSingleAndDouble_All[nBins]={0,0,0};
+int NCandidateSingleAndNotDouble_All[nBins]={0,0,0};
+int NCandidateNotSingleAndDouble_All[nBins]={0,0,0};
+
+const int nBins=1;
+double ptBins[nBins+1]={10,60};
+
+int NCandidate_All[nBins]={0};
+int NCandidateSingle_All[nBins]={0};
+int NCandidateDouble_All[nBins]={0};
+int NCandidateSingleAndDouble_All[nBins]={0};
+int NCandidateSingleAndNotDouble_All[nBins]={0};
+int NCandidateNotSingleAndDouble_All[nBins]={0};
+
+
 
 */
 
