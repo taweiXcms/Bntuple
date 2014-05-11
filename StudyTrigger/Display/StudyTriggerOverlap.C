@@ -31,15 +31,15 @@
 TString inputdata="/data/bmeson/data/nt_20140510_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 
 
-//const int nBins=5;
-//double ptBins[nBins+1]={10,15,20,25,30,60};
+const int nBins=5;
+double ptBins[nBins+1]={10,15,20,25,30,60};
 
-int NCandidate_All=0;
-int NCandidateSingle_All=0;
-int NCandidateDouble_All=0;
-int NCandidateSingleAndDouble_All=0;
-int NCandidateSingleAndNotDouble_All=0;
-int NCandidateNotSingleAndDouble_All=0;
+int NCandidate_All[nBins]={0,0,0,0,0};
+int NCandidateSingle_All[nBins]={0,0,0,0,0};
+int NCandidateDouble_All[nBins]={0,0,0,0,0};
+int NCandidateSingleAndDouble_All[nBins]={0,0,0,0,0};
+int NCandidateSingleAndNotDouble_All[nBins]={0,0,0,0,0};
+int NCandidateNotSingleAndDouble_All[nBins]={0,0,0,0,0};
 
 void StudyTriggerOverlap(){
 
@@ -118,26 +118,24 @@ void StudyTriggerOverlap(){
 
     for(int c=0; c<size; c++){
                  
-      if(pt[c]>10. && pt[c]<15.){
+      if(pt[c]>ptBins[0] && pt[c]<ptBins[1]){
           
         if((abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.9&& chi2cl[c]>1.32e-02&&(d0[c]/d0Err[c])>3.41&&cos(dtheta[c])>-3.46e-01)){
-          NCandidate_All++;
+          NCandidate_All[0]++;
           
-          if(HLT_PAMu3_v1[c]) NCandidateSingle_All++;
+          if(HLT_PAMu3_v1[c]) NCandidateSingle_All[0]++;
           if(HLT_PAL1DoubleMuOpen_v1[c]) NCandidateDouble_All++;
-          if(HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndDouble_All++;
-          if(HLT_PAMu3_v1[c] && !HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndNotDouble_All++;
-          if(!HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateNotSingleAndDouble_All++;
+          if(HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndDouble_All[0]++;
+          if(HLT_PAMu3_v1[c] && !HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndNotDouble_All[0]++;
+          if(!HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateNotSingleAndDouble_All[0]++;
 
         }
       }
     }
   }
-  //cout<<"Invariant mass range 5<mass<6"<<endl;
-  //cout<<"% of candidate selected by single ="<<(double)(NCandidateSingle_All)/(double)(NCandidate_All)<<endl;
-  //cout<<"% of candidate selected by double ="<<(double)(NCandidateDouble_All)/(double)(NCandidate_All)<<endl;
-  cout<<"% of candidate selected by single and double ="<<(double)(NCandidateSingleAndDouble_All)/(double)(NCandidate_All)<<endl;
-  cout<<"% of candidate selected by single ONLY ="<<(double)(NCandidateSingleAndNotDouble_All)/(double)(NCandidate_All)<<endl;
-  cout<<"% of candidate selected by double ONLY ="<<(double)(NCandidateNotSingleAndDouble_All)/(double)(NCandidate_All)<<endl;
+
+  cout<<"% of candidate selected by single and double ="<<(double)(NCandidateSingleAndDouble_All[0])/(double)(NCandidate_All[0])<<endl;
+  cout<<"% of candidate selected by single ONLY ="<<(double)(NCandidateSingleAndNotDouble_All[0])/(double)(NCandidate_All[0])<<endl;
+  cout<<"% of candidate selected by double ONLY ="<<(double)(NCandidateNotSingleAndDouble_All[0])/(double)(NCandidate_All[0])<<endl;
   
 }
