@@ -30,9 +30,9 @@
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140510_Kp_TriggerMatchingMuon.root";
 TString inputdata="/data/bmeson/data/nt_20140510_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 
-
+/*
 const int nBins=5;
-double ptBins[nBins+1]={10,15,20,25,30,60};
+double ptBins[nBins+1]={10,60,61,62,63,64};
 
 int NCandidate_All[nBins]={0,0,0,0,0};
 int NCandidateSingle_All[nBins]={0,0,0,0,0};
@@ -41,10 +41,28 @@ int NCandidateSingleAndDouble_All[nBins]={0,0,0,0,0};
 int NCandidateSingleAndNotDouble_All[nBins]={0,0,0,0,0};
 int NCandidateNotSingleAndDouble_All[nBins]={0,0,0,0,0};
 
-void StudyTriggerOverlap(){
+*/
 
+const int nBins=1;
+double ptBins[nBins+1]={10,60};
+
+int NCandidate_All[nBins]={0};
+int NCandidateSingle_All[nBins]={0};
+int NCandidateDouble_All[nBins]={0};
+int NCandidateSingleAndDouble_All[nBins]={0};
+int NCandidateSingleAndNotDouble_All[nBins]={0};
+int NCandidateNotSingleAndDouble_All[nBins]={0};
+
+void StudyTriggerOverlap(bool isBoption=2){
+  
+  TString suffix;
+  if(isBoption==0) suffix="ntKp";
+  if(isBoption==1) suffix="ntKstar";
+  if(isBoption==2) suffix="ntphi";
+  
+  
   TFile *inf = new TFile(inputdata.Data());
-  TTree *nt = (TTree*) inf->Get("ntKp");
+  TTree *nt = (TTree*) inf->Get(suffix.Data());
 
   int size;                                                                                                                                                                                               
   float y[MAX_GEN];
@@ -111,31 +129,39 @@ void StudyTriggerOverlap(){
   nt->SetBranchAddress("mu2eta",mu2eta);
   
   int nevents_total = nt->GetEntries();    
-  nevents_total=1000000; 
+  nevents_total=10000000; 
   for(int entry=0; entry<nevents_total; entry++){
     if((entry%10000)==0) printf("Loading event #%d of %d.\n",entry,nevents_total);
     nt->GetEntry(entry);
 
     for(int c=0; c<size; c++){
-                 
-      if(pt[c]>ptBins[0] && pt[c]<ptBins[1]){
-          
-        if((abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.9&& chi2cl[c]>1.32e-02&&(d0[c]/d0Err[c])>3.41&&cos(dtheta[c])>-3.46e-01)){
-          NCandidate_All[0]++;
-          
-          if(HLT_PAMu3_v1[c]) NCandidateSingle_All[0]++;
-          if(HLT_PAL1DoubleMuOpen_v1[c]) NCandidateDouble_All++;
-          if(HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndDouble_All[0]++;
-          if(HLT_PAMu3_v1[c] && !HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndNotDouble_All[0]++;
-          if(!HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateNotSingleAndDouble_All[0]++;
+    
+    bool isBpluscut=(abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.9&& chi2cl[c]>1.32e-02&&(d0[c]/d0Err[c])>3.41&&cos(dtheta[c])>-3.46e-01);
+    bool isBzerocut=(abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.7&& trk2Pt[c]>0.7& chi2cl[c]>1.65e-01&&(d0[c]/d0Err[c])>4.16&&cos(dtheta[c])>7.50e-01&&abs(tktkmass[c]-0.89594)<2.33e-01); 
+    bool isBscut=(abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.7&& trk2Pt[c]>0.7& chi2cl[c]>3.71e-02&&(d0[c]/d0Err[c])>4.16&&cos(dtheta[c])>2.60e-01&&abs(tktkmass[c]-1.019455)<1.55e-02); 
 
+      if((isBpluscut&&(isBoption==0))||(isBzerocut&&(isBoption==1))||(isBscut&&(isBoption==2))){
+        for (int myptbin=0; myptbin<nBins; myptbin++){
+        
+          if(pt[c]>ptBins[myptbin] && pt[c]<ptBins[myptbin+1]){
+      
+            NCandidate_All[myptbin]++;
+          
+            if(HLT_PAMu3_v1[c]) NCandidateSingle_All[myptbin]++;
+            if(HLT_PAL1DoubleMuOpen_v1[c]) NCandidateDouble_All++;
+            if(HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndDouble_All[myptbin]++;
+            if(HLT_PAMu3_v1[c] && !HLT_PAL1DoubleMuOpen_v1[c]) NCandidateSingleAndNotDouble_All[myptbin]++;
+            if(!HLT_PAMu3_v1[c] && HLT_PAL1DoubleMuOpen_v1[c]) NCandidateNotSingleAndDouble_All[myptbin]++;
+          }
         }
       }
     }
   }
-
-  cout<<"% of candidate selected by single and double ="<<(double)(NCandidateSingleAndDouble_All[0])/(double)(NCandidate_All[0])<<endl;
-  cout<<"% of candidate selected by single ONLY ="<<(double)(NCandidateSingleAndNotDouble_All[0])/(double)(NCandidate_All[0])<<endl;
-  cout<<"% of candidate selected by double ONLY ="<<(double)(NCandidateNotSingleAndDouble_All[0])/(double)(NCandidate_All[0])<<endl;
+  for (int myp=0;myp<nBins;myp++){
+    cout<<"my pt bin "<<myp<<endl;
+    cout<<"% of candidate selected by single and double ="<<(double)(NCandidateSingleAndDouble_All[myp])/(double)(NCandidate_All[myp])<<endl;
+    cout<<"% of candidate selected by single ONLY ="<<(double)(NCandidateSingleAndNotDouble_All[myp])/(double)(NCandidate_All[myp])<<endl;
+    cout<<"% of candidate selected by double ONLY ="<<(double)(NCandidateNotSingleAndDouble_All[myp])/(double)(NCandidate_All[myp])<<endl;
+  }
   
 }
