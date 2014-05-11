@@ -166,8 +166,8 @@ void CompareTrigger(){
   canvasCorrected->cd(1);  
   hRatioDoubleOverSingle_Bplus->GetXaxis()->SetTitle("B^{+} p_{T}");
   hRatioDoubleOverSingle_Bplus->GetYaxis()->SetTitle("DoubleMuOpen / SingleMu3 B^{+}");
-  hRatioDoubleOverSingle_Bplus->GetXaxis()->SetTitleOffset(.88);
-  hRatioDoubleOverSingle_Bplus->GetYaxis()->SetTitleOffset(1.04);
+  hRatioDoubleOverSingle_Bplus->GetXaxis()->SetTitleOffset(1.0);
+  hRatioDoubleOverSingle_Bplus->GetYaxis()->SetTitleOffset(1.05);
   hRatioDoubleOverSingle_Bplus->GetXaxis()->SetTitleSize(0.045);
   hRatioDoubleOverSingle_Bplus->GetYaxis()->SetTitleSize(0.045);
   hRatioDoubleOverSingle_Bplus->GetXaxis()->SetTitleFont(42);
@@ -208,8 +208,8 @@ void CompareTrigger(){
   canvasCorrected->cd(2);  
   hRatioDoubleOverSingle_Bzero->GetXaxis()->SetTitle("B^{0} p_{T}");
   hRatioDoubleOverSingle_Bzero->GetYaxis()->SetTitle("DoubleMuOpen / SingleMu3 B^{0}");
-  hRatioDoubleOverSingle_Bzero->GetXaxis()->SetTitleOffset(.88);
-  hRatioDoubleOverSingle_Bzero->GetYaxis()->SetTitleOffset(1.04);
+  hRatioDoubleOverSingle_Bzero->GetXaxis()->SetTitleOffset(1.0);
+  hRatioDoubleOverSingle_Bzero->GetYaxis()->SetTitleOffset(1.05);
   hRatioDoubleOverSingle_Bzero->GetXaxis()->SetTitleSize(0.045);
   hRatioDoubleOverSingle_Bzero->GetYaxis()->SetTitleSize(0.045);
   hRatioDoubleOverSingle_Bzero->GetXaxis()->SetTitleFont(42);
@@ -251,8 +251,8 @@ void CompareTrigger(){
   canvasCorrected->cd(3);  
   hRatioDoubleOverSingle_Bs->GetXaxis()->SetTitle("B_{s} p_{T}");
   hRatioDoubleOverSingle_Bs->GetYaxis()->SetTitle("DoubleMuOpen / SingleMu3 B_{s}");
-  hRatioDoubleOverSingle_Bs->GetXaxis()->SetTitleOffset(.88);
-  hRatioDoubleOverSingle_Bs->GetYaxis()->SetTitleOffset(1.04);
+  hRatioDoubleOverSingle_Bs->GetXaxis()->SetTitleOffset(1.0);
+  hRatioDoubleOverSingle_Bs->GetYaxis()->SetTitleOffset(0.9);
   hRatioDoubleOverSingle_Bs->GetXaxis()->SetTitleSize(0.045);
   hRatioDoubleOverSingle_Bs->GetYaxis()->SetTitleSize(0.045);
   hRatioDoubleOverSingle_Bs->GetXaxis()->SetTitleFont(42);
