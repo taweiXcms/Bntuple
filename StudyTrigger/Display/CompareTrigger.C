@@ -1,5 +1,10 @@
 void CompareTrigger(){
 
+  double myrelerrratioyield_Bplus[5]={0.073,0.097,0.144,0.197,0.175};
+  double myrelerrratioyield_Bzero[3]={0.127,0.173,0.150};
+  double myrelerrratioyield_Bs[1]={0.168};
+
+
   double DoubleRatioError(double,double);
 
 
@@ -56,23 +61,20 @@ void CompareTrigger(){
 
     corryieldnew_Bplus=hNewTrigger_Bplus->GetBinContent(i);
     corryieldold_Bplus=hOldTrigger_Bplus->GetBinContent(i);
+    
     yieldnew_Bplus=hYieldNewTrigger_Bplus->GetBinContent(i);
     yieldold_Bplus=hYieldOldTrigger_Bplus->GetBinContent(i);
+    
     ratiocorryield_Bplus=corryieldnew_Bplus/corryieldold_Bplus;
     ratioyield_Bplus=yieldnew_Bplus/yieldold_Bplus;
-    
-    //cout<<"yieldnew_Bplus"<<yieldnew_Bplus*ptBinswidth[i-1]<<"yieldold_Bplus"<<yieldold_Bplus*ptBinswidth[i-1]<<endl;
-    
+        
     hRatioDoubleOverSingle_Bplus->SetBinContent(i,ratiocorryield_Bplus);
-    errratioyield_Bplus=DoubleRatioError(yieldnew_Bplus*ptBinswidth[i-1],yieldold_Bplus*ptBinswidth[i-1]);
-    if(i==4) errratioyield_Bplus=ratioyield_Bplus*0.05;
-    relerrratioyield_Bplus=errratioyield_Bplus/ratioyield_Bplus;
-    errratiocorryield_Bplus=relerrratioyield_Bplus*ratiocorryield_Bplus;
-    hRatioDoubleOverSingle_Bplus->SetBinContent(i,ratiocorryield_Bplus);
-    hRatioDoubleOverSingle_Bplus->SetBinError(i,errratiocorryield_Bplus);
-    
     hRatioYieldDoubleOverSingle_Bplus->SetBinContent(i,ratioyield_Bplus);
-    hRatioYieldDoubleOverSingle_Bplus->SetBinError(i,errratioyield_Bplus);
+    
+    errratioyield_Bplus=myrelerrratioyield_Bplus[i-1]*ratioyield_Bplus;
+    errratiocorryield_Bplus=myrelerrratioyield_Bplus[i-1]*ratiocorryield_Bplus;
+    hRatioYieldDoubleOverSingle_Bplus->SetBinError(i,errratioyield_Bplus);    
+    hRatioDoubleOverSingle_Bplus->SetBinError(i,errratiocorryield_Bplus);
       
   }
 
@@ -100,23 +102,20 @@ void CompareTrigger(){
 
     corryieldnew_Bzero=hNewTrigger_Bzero->GetBinContent(i);
     corryieldold_Bzero=hOldTrigger_Bzero->GetBinContent(i);
+    
     yieldnew_Bzero=hYieldNewTrigger_Bzero->GetBinContent(i);
     yieldold_Bzero=hYieldOldTrigger_Bzero->GetBinContent(i);
+    
     ratiocorryield_Bzero=corryieldnew_Bzero/corryieldold_Bzero;
     ratioyield_Bzero=yieldnew_Bzero/yieldold_Bzero;
-    
-    //cout<<"yieldnew_Bzero"<<yieldnew_Bzero*ptBinswidth[i-1]<<"yieldold_Bzero"<<yieldold_Bzero*ptBinswidth[i-1]<<endl;
-    
+        
     hRatioDoubleOverSingle_Bzero->SetBinContent(i,ratiocorryield_Bzero);
-    errratioyield_Bzero=DoubleRatioError(yieldnew_Bzero*ptBinswidth[i-1],yieldold_Bzero*ptBinswidth[i-1]);
-    relerrratioyield_Bzero=errratioyield_Bzero/ratioyield_Bzero;
-    errratiocorryield_Bzero=relerrratioyield_Bzero*ratiocorryield_Bzero;
-    hRatioDoubleOverSingle_Bzero->SetBinContent(i,ratiocorryield_Bzero);
-    hRatioDoubleOverSingle_Bzero->SetBinError(i,errratiocorryield_Bzero);
     hRatioYieldDoubleOverSingle_Bzero->SetBinContent(i,ratioyield_Bzero);
-    hRatioYieldDoubleOverSingle_Bzero->SetBinError(i,errratioyield_Bzero);
-
     
+    errratioyield_Bzero=myrelerrratioyield_Bzero[i-1]*ratioyield_Bzero;
+    errratiocorryield_Bzero=myrelerrratioyield_Bzero[i-1]*ratiocorryield_Bzero;
+    hRatioYieldDoubleOverSingle_Bzero->SetBinError(i,errratioyield_Bzero);    
+    hRatioDoubleOverSingle_Bzero->SetBinError(i,errratiocorryield_Bzero);
       
   }
   
@@ -142,23 +141,20 @@ void CompareTrigger(){
 
     corryieldnew_Bs=hNewTrigger_Bs->GetBinContent(i);
     corryieldold_Bs=hOldTrigger_Bs->GetBinContent(i);
+    
     yieldnew_Bs=hYieldNewTrigger_Bs->GetBinContent(i);
     yieldold_Bs=hYieldOldTrigger_Bs->GetBinContent(i);
+    
     ratiocorryield_Bs=corryieldnew_Bs/corryieldold_Bs;
     ratioyield_Bs=yieldnew_Bs/yieldold_Bs;
-    
-    //cout<<"yieldnew_Bs"<<yieldnew_Bs*ptBinswidth[i-1]<<"yieldold_Bs"<<yieldold_Bs*ptBinswidth[i-1]<<endl;
-    
+        
     hRatioDoubleOverSingle_Bs->SetBinContent(i,ratiocorryield_Bs);
-    errratioyield_Bs=DoubleRatioError(yieldnew_Bs*ptBinswidth[i-1],yieldold_Bs*ptBinswidth[i-1]);
-    relerrratioyield_Bs=errratioyield_Bs/ratioyield_Bs;
-    errratiocorryield_Bs=relerrratioyield_Bs*ratiocorryield_Bs;
-    hRatioDoubleOverSingle_Bs->SetBinContent(i,ratiocorryield_Bs);
+    hRatioYieldDoubleOverSingle_Bs->SetBinContent(i,ratioyield_Bs);
+    
+    errratioyield_Bs=myrelerrratioyield_Bs[i-1]*ratioyield_Bs;
+    errratiocorryield_Bs=myrelerrratioyield_Bs[i-1]*ratiocorryield_Bs;
+    hRatioYieldDoubleOverSingle_Bs->SetBinError(i,errratioyield_Bs);    
     hRatioDoubleOverSingle_Bs->SetBinError(i,errratiocorryield_Bs);
-    hRatioYieldDoubleOverSingle_Bs->SetBinContent(i,ratioyield_Bzero);
-    hRatioYieldDoubleOverSingle_Bs->SetBinError(i,errratioyield_Bzero);
-
-    
       
   }
 
@@ -198,7 +194,7 @@ void CompareTrigger(){
   hRatioYieldDoubleOverSingle_Bplus->SetMarkerSize(1);
   hRatioYieldDoubleOverSingle_Bplus->Draw("pesame");
   
-  TLegend *leg_Bplus = new TLegend(0.297315,0.6173362,0.8590604,0.7463002,NULL,"brNDC");
+  TLegend *leg_Bplus = new TLegend(0.2295951,0.7284292,0.7899737,0.8570061,NULL,"brNDC");
   leg_Bplus->AddEntry(hRatioYieldDoubleOverSingle_Bplus,"Yields uncorrected","pl");
   leg_Bplus->AddEntry(hRatioDoubleOverSingle_Bplus,"dN/dp_{T} fully corrected","pl");
   leg_Bplus->SetBorderSize(0);
@@ -240,7 +236,7 @@ void CompareTrigger(){
   hRatioYieldDoubleOverSingle_Bzero->SetMarkerSize(1);
   hRatioYieldDoubleOverSingle_Bzero->Draw("pesame");
   
-  TLegend *leg_Bzero = new TLegend(0.297315,0.6173362,0.8590604,0.7463002,NULL,"brNDC");
+  TLegend *leg_Bzero = new TLegend(0.2295951,0.7284292,0.7899737,0.8570061,NULL,"brNDC");
   leg_Bzero->AddEntry(hRatioYieldDoubleOverSingle_Bzero,"Yields uncorrected","pl");
   leg_Bzero->AddEntry(hRatioDoubleOverSingle_Bzero,"dN/dp_{T} fully corrected","pl");
   leg_Bzero->SetBorderSize(0);
@@ -283,7 +279,7 @@ void CompareTrigger(){
   hRatioYieldDoubleOverSingle_Bs->SetMarkerSize(1);
   hRatioYieldDoubleOverSingle_Bs->Draw("pesame");
   
-  TLegend *leg_Bs = new TLegend(0.297315,0.6173362,0.8590604,0.7463002,NULL,"brNDC");
+  TLegend *leg_Bs = new TLegend(0.2295951,0.7284292,0.7899737,0.8570061,NULL,"brNDC");
   leg_Bs->AddEntry(hRatioYieldDoubleOverSingle_Bs,"Yields uncorrected","pl");
   leg_Bs->AddEntry(hRatioDoubleOverSingle_Bs,"dN/dp_{T} fully corrected","pl");
   leg_Bs->SetBorderSize(0);
