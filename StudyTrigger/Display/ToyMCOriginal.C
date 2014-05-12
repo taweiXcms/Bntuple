@@ -68,7 +68,7 @@ void Check(double Nsingle=322,double & mean,double & sigma){
 
   double eff1=0.18;   // 1,0       
   double eff2=0.77;   // 1,1       
-  double eff3=0.04;   // 0,1       
+  //double eff3=0.04;   // 0,1       
 
   //int N=100;
   TRandom3 a;
@@ -93,8 +93,6 @@ void Check(double Nsingle=322,double & mean,double & sigma){
   sigma=h->GetRMS();
     
 }
-
-
 
 double DoubleRatioError(double ratio=-1,double Den=-1){
 
