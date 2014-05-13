@@ -1,4 +1,5 @@
 #include "utilities.h"
+#include "TLegendEntry.h"
 
 double luminosity=34.8*1e-3;
 double setparam0=100.;
@@ -10,13 +11,12 @@ double fixparam1=5.279;
 //svmit2
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kp_TriggerMatchingMuon_EvtBase_skim.root";
-//TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
 TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
 TString inputmc="/net/hisrv0001/home/yenjie/slocal/tmp/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
 //tk pt, chi2
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01";
 
 TString seldata=Form("pt>10&&pt<60&&%s",cut.Data());
 TString seldata_2y=Form("pt>10&&pt<60&&%s",cut.Data());
@@ -24,6 +24,17 @@ TString selmc=Form("pt>10&&pt<60&&gen==23333&&%s",cut.Data());
 TString selmcgen="pt>10&&pt<60&&abs(pdgId)==521&&isSignal==1";
 
 TString weight = "(27.493+pt*(-0.218769))";
+
+TString particle="Bplus";
+const int nbins=2;
+Double_t xbins[nbins]={0.5,1.465};
+Double_t exl[nbins]={0.5,0.465};
+
+//Double_t yPercSigmapPbSystTotHigh[4]={0.163,0.145,0.126,0.130};
+//Double_t yPercSigmapPbSystTotLow[4]={0.163,0.145,0.126,0.130};
+
+Double_t commonErrorP = 0.0555 ;
+Double_t commonErrorN = 0.0555  ;
 
 void clean0(TH1D *h){
   for (int i=1;i<=h->GetNbinsX();i++){
@@ -169,6 +180,8 @@ void fitB_y(TString infname="",bool doweight = 1)
   TFile *infMC = new TFile(inputmc.Data());
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
   TTree *ntMC = (TTree*)infMC->Get("ntKp");
+
+  ntGen->AddFriend(ntMC);
     
   const int nBins = 4;
   double ptBins[nBins+1] = {-1.93,-1.0,0,1.0,1.93};
@@ -196,17 +209,21 @@ void fitB_y(TString infname="",bool doweight = 1)
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","(y+0.465)",TCut(weight)*(TCut(selmc.Data())&&"gen==23333&&Run<=1"));
-  ntMC->Project("hPtMC2","(y-0.465)",TCut(weight)*(TCut(selmc.Data())&&"gen==23333&&Run>1"));
-  nt->Project("hPtRecoTruth","(y+0.465)",TCut(seldata.Data())&&"(Run>=210498&&Run<=211256)");
-  nt->Project("hPtRecoTruth2","(y-0.465)",TCut(seldata.Data())&&"(Run>=211313&&Run<=211631)");
-  ntGen->Project("hPtGen","(y+0.465)",TCut(weight)*(TCut(selmcgen.Data()))&&"Run<=1");
-  ntGen->Project("hPtGen2","(y-0.465)",TCut(weight)*(TCut(selmcgen.Data()))&&"Run>1");
+  ntMC->Project("hPtMC","(y+0.465)",TCut(weight)*(TCut(Form("%s&&gen==23333&&Run<=1",selmc.Data()))));
+  cout<<hPtMC->GetEntries()<<endl;
+  ntMC->Project("hPtMC2","(y-0.465)",TCut(weight)*(TCut(Form("%s&&gen==23333&&Run>1",selmc.Data()))));
+  cout<<hPtMC2->GetEntries()<<endl;
+  nt->Project("hPtRecoTruth","(y+0.465)",TCut(Form("%s&&Run>=210498&&Run<=211256",seldata.Data())));
+  nt->Project("hPtRecoTruth2","(y-0.465)",TCut(Form("%s&&(Run>=211313&&Run<=211631)",seldata.Data())));
+  ntGen->Project("hPtGen","(y+0.465)",TCut(weight)*(TCut(Form("%s&&Run<=1",selmcgen.Data()))));
+  cout<<hPtGen->GetEntries()<<endl;
+  ntGen->Project("hPtGen2","(y-0.465)",TCut(weight)*(TCut(Form("%s&&Run>1",selmcgen.Data()))));
+  cout<<hPtGen2->GetEntries()<<endl;
 
   divideBinWidth(hPtRecoTruth);
   divideBinWidth(hPtRecoTruth2);
   hPtRecoTruth->Add(hPtRecoTruth2);
-  hPtRecoTruth->Draw("same hist");
+  //hPtRecoTruth->Draw("same hist");
 
   divideBinWidth(hPtMC);
   divideBinWidth(hPtMC2);  
@@ -230,6 +247,163 @@ void fitB_y(TString infname="",bool doweight = 1)
   hPtCor->Draw();
   hPtGen->Draw("same hist");
 
+
+  Double_t yPercSigmapPbStat[nbins];             //y err stat pPb
+
+  Double_t yRpA[nbins];                          //value y RpA
+  Double_t yRpAStat[nbins];                      //y err stat RpA
+
+  Double_t ySigmapPbSystTotHigh[nbins];              //y percentuale err syst pPb TOT
+  Double_t ySigmapPbSystTotLow[nbins];              //y percentuale err syst pPb TOT
+
+  Double_t yPercRpPbSystTotHigh[nbins];          //y percentuale err syst RpPb TOT
+  Double_t yPercRpPbSystTotLow[nbins];          //y percentuale err syst RpPb TOT
+
+  Double_t yRpPbSystTotHigh[nbins];              //y percentuale err syst RpPb TOT
+  Double_t yRpPbSystTotLow[nbins];              //y percentuale err syst RpPb TOT
+
+  double absl[3] = {0,1.0,1.93};
+
+  TH1D* rFB = new TH1D("rFB","",nBins,absl);
+  TH1D* rFB2 = new TH1D("rFB2","",nBins,absl);
+  double statf[2],statb[2];
+  double sysf[2]={0.142,0.165};
+  for(int k=0;k<2;k++)
+    {
+      rFB->SetBinContent(k+1,hPtCor->GetBinContent(k+1));
+      rFB->SetBinError(k+1,hPtCor->GetBinError(k+1));
+      //statf[k] = hPtCor->GetBinError(k+1)/hPtCor->GetBinContent(k+1);
+      rFB2->SetBinContent(k+1,hPtCor->GetBinContent(4-k));
+      rFB2->SetBinError(k+1,hPtCor->GetBinError(4-k));
+      //statb[k] = hPtCor->GetBinError(4-k)/hPtCor->GetBinContent(4-k);
+    }
+  rFB->Sumw2();
+  rFB2->Sumw2();
+  rFB->Divide(rFB2);
+
+  for(Int_t i=0;i<nbins;i++) {
+    yRpA[i]=rFB->GetBinContent(2-i);
+    yRpAStat[i]=rFB->GetBinError(2-i);
+    yRpPbSystTotHigh[i]=sysf[i];
+    yRpPbSystTotLow[i]=sysf[i];
+  }
+
+  TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
+  gRpAstat->SetTitle("RpA stat uncertainty from pPb");
+  gRpAstat->SetMarkerColor(1);
+  gRpAstat->SetLineColor(1);
+  gRpAstat->SetLineWidth(2);
+  gRpAstat->SetMarkerStyle(22);
+  gRpAstat->SetMarkerColor(1);
+
+  TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
+  gRpAsyst->SetTitle("RpA syst uncertainty from pPb");
+  gRpAsyst->SetMarkerColor(4);
+  gRpAsyst->SetLineColor(4);
+  gRpAsyst->SetLineWidth(2);
+  gRpAsyst->SetMarkerStyle(21);
+  gRpAsyst->SetMarkerColor(4);
+
+
+  TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",500,500);
+
+  canvasRpA->Range(-1.989924,-0.2917772,25.49622,2.212202);
+  canvasRpA->SetFillColor(0);
+  canvasRpA->SetBorderMode(0);
+  canvasRpA->SetBorderSize(2);
+  canvasRpA->SetLeftMargin(0.1451613);
+  canvasRpA->SetRightMargin(0.05443548);
+  canvasRpA->SetTopMargin(0.08474576);
+  canvasRpA->SetBottomMargin(0.1165254);
+  canvasRpA->SetFrameBorderMode(0);
+  canvasRpA->SetFrameBorderMode(0);
+
+  TLegend *legendRpA=new TLegend(0.3145161,0.5804503,0.5604839,0.770252,"");
+  legendRpA->SetBorderSize(0);
+  legendRpA->SetLineColor(0);
+  legendRpA->SetFillColor(0);
+  legendRpA->SetFillStyle(1001);
+  legendRpA->SetTextFont(42);
+  legendRpA->SetTextSize(0.04);
+
+  TH2F* hempty2=new TH2F("hempty2","",4,-0.7,2.7,10.,0.,3.5);
+  hempty2->GetXaxis()->SetTitle("y_{CM}");
+  if(particle=="Bplus") hempty2->GetYaxis()->SetTitle("R_{FB}  (B^{+})");
+  if(particle=="Bzero") hempty2->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
+  if(particle=="Bs") hempty2->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B_{s})");
+  hempty2->GetXaxis()->SetTitleOffset(1.1);
+  hempty2->GetYaxis()->SetTitleOffset(1.3);
+  hempty2->GetXaxis()->SetTitleSize(0.045);
+  hempty2->GetYaxis()->SetTitleSize(0.045);
+  hempty2->GetXaxis()->SetTitleFont(42);
+  hempty2->GetYaxis()->SetTitleFont(42);
+  hempty2->GetXaxis()->SetLabelFont(42);
+  hempty2->GetYaxis()->SetLabelFont(42);
+  hempty2->GetXaxis()->SetLabelSize(0.04);
+  hempty2->GetYaxis()->SetLabelSize(0.04);
+  hempty2->SetMaximum(3);
+  hempty2->SetMinimum(0.);
+  hempty2->Draw();
+
+
+  TLine *l = new TLine(0,1,70,1);
+  l->SetLineStyle(2);
+
+  legendRpA->Draw();
+  gRpAstat->SetMarkerStyle(21);
+  gRpAstat->SetLineColor(1);
+  gRpAstat->SetMarkerColor(1);
+  gRpAstat->Draw("psame");
+  gRpAsyst->SetFillColor(0);
+  gRpAsyst->SetFillStyle(0);
+  gRpAsyst->Draw("2same");
+
+  /*
+  TBox *b = new TBox(-2.5,1-commonErrorN,-2.1,1+commonErrorP);
+  b->SetLineColor(1);
+  b->SetFillColor(kGray);
+  b->Draw();
+  */
+
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R_{FB}  stat unc","P");
+  ent_RpAstat->SetTextFont(42);
+  ent_RpAstat->SetLineColor(2);
+  ent_RpAstat->SetMarkerColor(2);
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"Syst err pPb data","P");
+  ent_RpAsystData->SetTextFont(42);
+  ent_RpAsystData->SetLineColor(4);
+  ent_RpAsystData->SetMarkerColor(1);
+  /*
+  TLegendEntry *ent_RpAsystLB=legendRpA->AddEntry(b,"Syst Lumi+BR","f");
+  ent_RpAsystLB->SetTextFont(42);
+  ent_RpAsystLB->SetLineColor(2);
+  ent_RpAsystLB->SetMarkerColor(2);
+  */
+
+  TLatex * tlatex3=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.04);
+  tlatex3->Draw();
+
+  TLatex * tlatex4=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  tlatex4->SetNDC();
+  tlatex4->SetTextColor(1);
+  tlatex4->SetTextFont(42);
+  tlatex4->SetTextSize(0.04);
+  tlatex4->Draw();
+
+  TLatex * tlatex5=new TLatex(0.5564516,0.8,"L_{int} = 34.8 nb^{-1}");
+  tlatex5->SetNDC();
+  tlatex5->SetTextColor(1);
+  tlatex5->SetTextFont(42);
+  tlatex5->SetTextSize(0.04);
+  tlatex5->Draw();
+
+  canvasRpA->SaveAs(Form("Results%s_y/canvasRfb%s.pdf",particle.Data(),particle.Data()));
+
+
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
   double BRchain=6.09604e-5;
 
@@ -237,7 +411,6 @@ void fitB_y(TString infname="",bool doweight = 1)
   hPtSigma->SetYTitle("d#sigma (B^{+})/dy_{CM}");
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
   hPtSigma->Draw();
   
   TFile *outf = new TFile("ResultsBplus_y/SigmaBplus.root","recreate");
