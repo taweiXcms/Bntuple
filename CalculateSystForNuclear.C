@@ -1,41 +1,41 @@
 /*
 const int nbins=5;
-Double_t acceptance[nbins]={0.1,0.7,1.0,0.5,0.3};
+Double_t acceptance[nbins]={0.8,0.5,1.0,0.5,0.7};
 Double_t hadron[nbins]={3.9,3.9,3.9,3.9,3.9};
 Double_t best[nbins]={3.2,3.2,3.2,3.2,3.2};
 Double_t Bselection[nbins]={9.0,9.0,9.0,9.0,9.0};
 Double_t ptres[nbins]={0.6,0.6,0.6,0.6,0.6};
-Double_t trgeff[nbins]={8.4,4.7,3.1,2.6,2.5};
-Double_t muonid[nbins]={4.9,3.2,2.3,2.0,1.6};
-Double_t innertrk[nbins]={2.1,1.4,1.1,0.8,0.9};
+Double_t trgeff[nbins]={5.9,3.1,2.1,1.6,1.3};
+Double_t muonid[nbins]={5.2,3.5,2.8,2.4,2.6};
+Double_t innertrk[nbins]={4.3,4.1,3.6,2.9,1.2};
 Double_t PDF[nbins]={8.9,8.9,8.9,8.9,8.9};
 Double_t total[nbins]={0.,0.,0.,0.,0.};
 Double_t tandprobe[nbins]={0.,0.,0.,0.,0.};
 
 
 const int nbins=3;
-Double_t acceptance[nbins]={0.7,0.3,0.4};
+Double_t acceptance[nbins]={1.4,0.7,2.0};
 Double_t hadron[nbins]={7.8,7.8,7.8};
 Double_t best[nbins]={3.1,3.1,3.1};
 Double_t Bselection[nbins]={13.5,13.5,13.5};
 Double_t ptres[nbins]={0.6,0.6,0.6};
-Double_t trgeff[nbins]={8.8,4.8,2.9};
-Double_t muonid[nbins]={5.3,3.3,2.2};
-Double_t innertrk[nbins]={2.6,1.4,0.6};
+Double_t trgeff[nbins]={6.8,3.4,1.8};
+Double_t muonid[nbins]={5.6,3.8,2.8};
+Double_t innertrk[nbins]={4.3,4.2,2.9};
 Double_t PDF[nbins]={13.4,13.4,13.4};
 Double_t total[nbins]={0.,0.,0.};
 Double_t tandprobe[nbins]={0.,0.,0.};
 
 
 const int nbins=1;
-Double_t acceptance[nbins]={0.4};
+Double_t acceptance[nbins]={5.6};
 Double_t hadron[nbins]={7.8};
 Double_t best[nbins]={2.4};
 Double_t Bselection[nbins]={13.5};
 Double_t ptres[nbins]={0.6};
-Double_t trgeff[nbins]={7.4};
-Double_t muonid[nbins]={4.5};
-Double_t innertrk[nbins]={2.1};
+Double_t trgeff[nbins]={4.9};
+Double_t muonid[nbins]={4.6};
+Double_t innertrk[nbins]={4.0};
 Double_t PDF[nbins]={7.5};
 Double_t total[nbins]={0.};
 Double_t tandprobe[nbins]={0.};
@@ -45,14 +45,14 @@ Double_t tandprobe[nbins]={0.};
 
 
 const int nbins=1;
-Double_t acceptance[nbins]={0.4};
+Double_t acceptance[nbins]={5.6};
 Double_t hadron[nbins]={7.8};
 Double_t best[nbins]={2.4};
 Double_t Bselection[nbins]={13.5};
 Double_t ptres[nbins]={0.6};
-Double_t trgeff[nbins]={7.4};
-Double_t muonid[nbins]={4.5};
-Double_t innertrk[nbins]={2.1};
+Double_t trgeff[nbins]={4.9};
+Double_t muonid[nbins]={4.6};
+Double_t innertrk[nbins]={4.0};
 Double_t PDF[nbins]={7.5};
 Double_t total[nbins]={0.};
 Double_t tandprobe[nbins]={0.};
