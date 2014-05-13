@@ -1,11 +1,12 @@
 #include <TH2.h>
 #include <TCanvas.h>
-#include "eff_value.h"
+#include "eff_value_20140511_new3.h"
+//#include "eff_value_20140511_new4.h"
 
 Double_t MuPtBins[8] = {0.0,1.5,3.0,4.5,6.0,9.0,20.0,30.0};
 Double_t MuEtaBins[4] = {-2.4, -0.8, 0.8, 1.46};
 
-int type = 3;
+int type = 1;
 void plot2D(){
   TH2F* hdata_ = new TH2F("hdata_","",7,MuPtBins, 3, MuEtaBins);
   TH2F* hmc_ = new TH2F("hmc_","",7,MuPtBins, 3, MuEtaBins);
@@ -63,6 +64,7 @@ void plot2D(){
   c3->cd();
   TH2F* hdiff_ = (TH2F*)hdata_->Clone();
   hdiff_->Add(hmc_,-1);
+  //hdiff_->SetBinContent(7, 1, hdiff_->GetBinContent(8, 1)+0.0000000001);//some ad hoc
   hdiff_->GetYaxis()->CenterTitle();
   if(type==1)hdiff_->SetTitle("Mu trigger efficiency diff. (data-MC)");
   if(type==2)hdiff_->SetTitle("Mu ID efficiency diff. (data-MC)");

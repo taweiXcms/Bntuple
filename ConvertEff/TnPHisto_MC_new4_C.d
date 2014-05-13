@@ -1,0 +1,50 @@
+
+# DO NOT DELETE
+
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TFile.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TDirectoryFile.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TDirectory.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TNamed.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TObject.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/Rtypes.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/RConfig.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/RVersion.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/DllImport.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/Rtypeinfo.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/snprintf.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/strlcpy.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TGenericClassInfo.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TSchemaHelper.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TStorage.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TVersionCheck.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/Riosfwd.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TBuffer.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TString.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMathBase.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TList.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TSeqCollection.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TCollection.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TIterator.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TDatime.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TUUID.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TUrl.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TMap.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/THashTable.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TH1.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TAxis.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TAttAxis.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TArrayD.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TArray.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TAttLine.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TAttFill.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TAttMarker.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TArrayC.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TArrayS.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TArrayI.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TArrayF.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/Foption.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TVectorFfwd.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TVectorDfwd.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/TFitResultPtr.h
+./TnPHisto_MC_new4_C.so: /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/cintdictversion.h /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms9/include/RVersion.h
+TnPHisto_MC_new4_C__ROOTBUILDVERSION= 5.32/00

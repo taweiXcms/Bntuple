@@ -32,17 +32,20 @@ bool UsePOGIDEff = 0;
 TString _eff_ = "Trk";
 
 //Specify channel, 0=B+, 1=B0, 2=Bs
-//int _type=0;
+int _type=0;
 //int _type=1;
-int _type=2;
+//int _type=2;
 
 //Specify B meson pt bin
 //const int nBins = 5;
 //double ptBins[nBins+1] = {10,15,20,25,30,60};
 //const int nBins = 3;
 //double ptBins[nBins+1] = {10,15,20,60};
-const int nBins = 1;
-double ptBins[nBins+1] = {10,60};
+//const int nBins = 1;
+//double ptBins[nBins+1] = {10,60};
+const int nBins = 4;
+double ptBins[nBins+1] = {-1.93,-1.0,0,1.0,1.93};
+
 /////=======
 
 //TString inputdata_kp="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
@@ -52,15 +55,8 @@ TString inputdata_kp="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Kp_Trigger
 TString inputdata_kstar="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Kstar_TriggerMatchingMuon.root";
 TString inputdata_phi="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Phi_TriggerMatchingMuon.root";
 
-TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new4.root");
-TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA_new3.root");
-//TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new3.root");
-//TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA_new2.root");
-//TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new2.root");
-//TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA_new1.root");
-//TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new1.root");
-//TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA.root");
-//TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3.root");
+TFile *infDataEff = new TFile("../TNPHisto_TagMu3_TrgProbeMu3_DATA_new3.root");
+TFile *infMCEff = new TFile("../TNPHisto_TagMu3_TrgProbeMu3_MC_new3.root");
 TH1F* DataEtaBin1 = (TH1F*)infDataEff->Get("hMu"+_eff_+"etabin1");
 TH1F* DataEtaBin2 = (TH1F*)infDataEff->Get("hMu"+_eff_+"etabin2");
 TH1F* DataEtaBin3 = (TH1F*)infDataEff->Get("hMu"+_eff_+"etabin3");
@@ -281,7 +277,8 @@ void ConvertEff(){
       //cout<<mu1eff_data-mu1eff_mc<<"   /   "<<mu1eff_data<<"  /  "<<mu1eff_mc<<endl;
       //cout<<evtEff_data-evtEff_mc<<endl;
       for(int _b=0; _b<nBins; _b++){
-        if(pt[c] > ptBins[_b] && pt[c] < ptBins[_b+1]){
+//        if(pt[c] > ptBins[_b] && pt[c] < ptBins[_b+1]){
+        if(y[c]+0.465 > ptBins[_b] && y[c]+0.465 < ptBins[_b+1]){
           nCand[_b]++;
           effData_tol[_b]+= evtEff_data;
           effMC_tol[_b]+= evtEff_mc;
@@ -354,7 +351,7 @@ float GetEff(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, i
 //  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 //}
 if(_eff_type =="Trk"){ 
-//  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
+  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
   if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 }
 //
