@@ -27,22 +27,22 @@ bool UsePOGTrgEff = 0;
 bool UsePOGIDEff = 0;
 
 //Specify eff., Trg=Mu trigger, ID=Mu ID, Trk=Mu tracking
-//TString _eff_ = "Trg";
+TString _eff_ = "Trg";
 //TString _eff_ = "ID";
-TString _eff_ = "Trk";
+//TString _eff_ = "Trk";
 
 //Specify channel, 0=B+, 1=B0, 2=Bs
-//int _type=0;
+int _type=0;
 //int _type=1;
-int _type=2;
+//int _type=2;
 
 //Specify B meson pt bin
-//const int nBins = 5;
-//double ptBins[nBins+1] = {10,15,20,25,30,60};
+const int nBins = 5;
+double ptBins[nBins+1] = {10,15,20,25,30,60};
 //const int nBins = 3;
 //double ptBins[nBins+1] = {10,15,20,60};
-const int nBins = 1;
-double ptBins[nBins+1] = {10,60};
+//const int nBins = 1;
+//double ptBins[nBins+1] = {10,60};
 /////=======
 
 //TString inputdata_kp="/export/d00/scratch/jwang/nt_BoostedMC_20140427_Kp_TriggerMatchingMuon_EvtBase_skim.root";
@@ -52,9 +52,9 @@ TString inputdata_kp="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Kp_Trigger
 TString inputdata_kstar="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Kstar_TriggerMatchingMuon.root";
 TString inputdata_phi="/export/d00/scratch/jwang/nt_BoostedMC_20140506_Phi_TriggerMatchingMuon.root";
 
-TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new4.root");
+//TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new4.root");
 TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA_new3.root");
-//TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new3.root");
+TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new3.root");
 //TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA_new2.root");
 //TFile *infMCEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_MC_new2.root");
 //TFile *infDataEff = new TFile("TNPHisto_TagMu3_TrgProbeMu3_DATA_new1.root");
@@ -354,7 +354,7 @@ float GetEff(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, i
 //  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 //}
 if(_eff_type =="Trk"){ 
-//  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
+  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
   if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 }
 //
