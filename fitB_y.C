@@ -268,13 +268,13 @@ void fitB_y(TString infname="",bool doweight = 1)
   TH1D* rFB2 = new TH1D("rFB2","",nBins,absl);
   double statf[2],statb[2];
   double sysf[2]={0.142,0.165};
-  for(int k=0;k<2;k++)
+  for(int k=2;k<4;k++)
     {
-      rFB->SetBinContent(k+1,hPtCor->GetBinContent(k+1));
-      rFB->SetBinError(k+1,hPtCor->GetBinError(k+1));
+      rFB->SetBinContent(k-1,hPtCor->GetBinContent(k+1));
+      rFB->SetBinError(k-1,hPtCor->GetBinError(k+1));
       //statf[k] = hPtCor->GetBinError(k+1)/hPtCor->GetBinContent(k+1);
-      rFB2->SetBinContent(k+1,hPtCor->GetBinContent(4-k));
-      rFB2->SetBinError(k+1,hPtCor->GetBinError(4-k));
+      rFB2->SetBinContent(k-1,hPtCor->GetBinContent(4-k));
+      rFB2->SetBinError(k-1,hPtCor->GetBinError(4-k));
       //statb[k] = hPtCor->GetBinError(4-k)/hPtCor->GetBinContent(4-k);
     }
   rFB->Sumw2();
@@ -282,8 +282,8 @@ void fitB_y(TString infname="",bool doweight = 1)
   rFB->Divide(rFB2);
 
   for(Int_t i=0;i<nbins;i++) {
-    yRpA[i]=rFB->GetBinContent(2-i);
-    yRpAStat[i]=rFB->GetBinError(2-i);
+    yRpA[i]=rFB->GetBinContent(i+1);
+    yRpAStat[i]=rFB->GetBinError(i+1);
     yRpPbSystTotHigh[i]=sysf[i];
     yRpPbSystTotLow[i]=sysf[i];
   }
