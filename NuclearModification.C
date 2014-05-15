@@ -57,7 +57,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.0661631,1.0233345,1.0118028,1.0102129,1.0268659};
+  Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
 
 
 void NuclearModification(){
