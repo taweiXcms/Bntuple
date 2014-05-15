@@ -7,6 +7,8 @@
 #include <TNtuple.h>
 #include <TCanvas.h>
 #include <TLegend.h>
+#include <TLegendEntry.h>
+
 #include <TLorentzVector.h>
 #define MAX_XB 8192
 #define MAX_GEN 4096 
@@ -26,7 +28,7 @@ bool UsePOGTrgEff = 0;
 //Use POG ID
 bool UsePOGIDEff = 0;
 
-TString _eff_ = "Trg";
+TString _eff_ = "All";
 //TString _eff_ = "ID";
 //TString _eff_ = "Trk";
 
@@ -66,7 +68,6 @@ TH1F* MCEtaBinTrk1 = (TH1F*)infMCEff->Get("hMuTrketabin1");
 TH1F* MCEtaBinTrk2 = (TH1F*)infMCEff->Get("hMuTrketabin2");
 TH1F* MCEtaBinTrk3 = (TH1F*)infMCEff->Get("hMuTrketabin3");
 
-
 TH1F* DataEtaBinID1 = (TH1F*)infDataEff->Get("hMuIDetabin1");
 TH1F* DataEtaBinID2 = (TH1F*)infDataEff->Get("hMuIDetabin2");
 TH1F* DataEtaBinID3 = (TH1F*)infDataEff->Get("hMuIDetabin3");
@@ -77,12 +78,16 @@ TH1F* MCEtaBinID3 = (TH1F*)infMCEff->Get("hMuIDetabin3");
 
 
 float GetEffTrg(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin);
+float GetEffTrk(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin);
+float GetEffID(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin);
+
 
 float GetPOGTrgEff(float pt, float eta, float eta2,  bool isData);
 float GetPOGIDEff(float pt, float eta, bool isData);
 
 
 void ConvertEffNewMethod(){
+
   TFile *inf;
   TTree *nt;
   if(_type==0){
@@ -140,68 +145,37 @@ void ConvertEffNewMethod(){
   nt->SetBranchAddress("tk1phi",tk1phi);
   nt->SetBranchAddress("tk2phi",tk2phi);
 
-/*
-  int   size; 
-  int   HLT_PAMu3_v1;
-  float y[MAX_XB];
-  float pt[MAX_XB];
-  float mass[MAX_XB];
-  int isbestchi2[MAX_XB];
-  float trk1Pt[MAX_XB];
-  float trk2Pt[MAX_XB];
-  float chi2cl[MAX_XB];
-  float d0[MAX_XB];
-  float d0Err[MAX_XB];
-  float dtheta[MAX_XB];
-  float tktkmass[MAX_XB];
-  float mumumass[MAX_XB];
-  float gen[MAX_XB];
-  float mu1pt[MAX_XB];
-  float mu2pt[MAX_XB];
-  float mu1eta[MAX_XB];
-  float mu2eta[MAX_XB];
-
-  nt->SetBranchAddress("size",&size);
-  nt->SetBranchAddress("HLT_PAMu3_v1",&HLT_PAMu3_v1);
-  nt->SetBranchAddress("pt",pt);
-  nt->SetBranchAddress("y",y);
-  nt->SetBranchAddress("mass",mass);
-  nt->SetBranchAddress("isbestchi2",isbestchi2);
-  nt->SetBranchAddress("trk1Pt",trk1Pt);
-  nt->SetBranchAddress("trk2Pt",trk2Pt);
-  nt->SetBranchAddress("chi2cl",chi2cl);
-  nt->SetBranchAddress("d0",d0);
-  nt->SetBranchAddress("d0Err",d0Err);
-  nt->SetBranchAddress("dtheta",dtheta);
-  nt->SetBranchAddress("tktkmass",tktkmass);
-  nt->SetBranchAddress("mumumass",mumumass);
-  nt->SetBranchAddress("gen",gen);
-  nt->SetBranchAddress("mu1pt",mu1pt);
-  nt->SetBranchAddress("mu2pt",mu2pt);
-  nt->SetBranchAddress("mu1eta",mu1eta);
-  nt->SetBranchAddress("mu2eta",mu2eta);
-*/
   int nevents_total = nt->GetEntries();                                               
   int nCand[nBins];
   float effDataTrg_tol[nBins];
   float effMCTrg_tol[nBins];
+  float effDataTrk_tol[nBins];
+  float effMCTrk_tol[nBins];
+  float effDataID_tol[nBins];
+  float effMCID_tol[nBins];
+  float effDataAll_tol[nBins];
+  float effMCAll_tol[nBins];
   
   float _tot_diff[nBins] ;
   for(int i = 0; i < nBins+1; i ++){
     nCand[i] = 0;
     effDataTrg_tol[i] = 0;
     effMCTrg_tol[i] = 0;
+    effDataTrk_tol[i] = 0;
+    effMCTrk_tol[i] = 0;
+    effDataID_tol[i] = 0;
+    effMCID_tol[i] = 0;
+    effDataAll_tol[i] = 0;
+    effMCAll_tol[i] = 0;
     _tot_diff[i] = 0;
   }
 
-  TH1D *EffDiff = new TH1D("hPt","",nBins,ptBins);
-  if(_type==0)  EffDiff->SetXTitle("B^{+} p_{T} (GeV/c)");
-  if(_type==1)  EffDiff->SetXTitle("B0 p_{T} (GeV/c)");
-  if(_type==2)  EffDiff->SetXTitle("B_{s} p_{T} (GeV/c)");
-  if(_eff_=="Trg")EffDiff->SetYTitle("Trigger eff. diff., data-MC");
-  if(_eff_=="ID")EffDiff->SetYTitle("MuID eff. diff., data-MC");
-  if(_eff_=="Trk")EffDiff->SetYTitle("Tracking eff. diff., data-MC");
-  if(_eff_=="All") EffDiff->SetYTitle("Overall eff. diff., data-MC");
+  TH1D *EffDataOverMCTrg = new TH1D("EffDataOverMCTrg","",nBins,ptBins);
+  TH1D *EffDataOverMCTrk = new TH1D("EffDataOverMCTrk","",nBins,ptBins);
+  TH1D *EffDataOverMCID = new TH1D("EffDataOverMCID","",nBins,ptBins);
+  TH1D *EffDataOverMCAll = new TH1D("EffDataOverMCAll","",nBins,ptBins);
+  TH1D *EffDataOverMCAllOldApproach = new TH1D("EffDataOverMCAllOldApproach","",nBins,ptBins);
+
   int tot_=0;
   TLorentzVector mu1;
   TLorentzVector mu2;
@@ -233,52 +207,66 @@ void ConvertEffNewMethod(){
       int _etabin = -1;
       int _ptbin = -1;
           
+      float evtEffTrg_data,evtEffTrk_data,evtEffID_data;
+      float evtEffTrg_mc,evtEffTrk_mc,evtEffID_mc;
+          
+          
       float mu1effTrg_data = GetEffTrg(mu1pt[c], mu1eta[c], true, "Trg", _ptbin, _etabin);
       float mu2effTrg_data = GetEffTrg(mu2pt[c], mu2eta[c], true, "Trg", _ptbin, _etabin);
       float mu1effTrg_mc = GetEffTrg(mu1pt[c], mu1eta[c], false, "Trg", _ptbin, _etabin);
       float mu2effTrg_mc = GetEffTrg(mu2pt[c], mu2eta[c], false, "Trg", _ptbin, _etabin);
 
+      float mu1effTrk_data = GetEffTrk(mu1pt[c], mu1eta[c], true, "Trk", _ptbin, _etabin);
+      float mu2effTrk_data = GetEffTrk(mu2pt[c], mu2eta[c], true, "Trk", _ptbin, _etabin);
+      float mu1effTrk_mc = GetEffTrk(mu1pt[c], mu1eta[c], false, "Trk", _ptbin, _etabin);
+      float mu2effTrk_mc = GetEffTrk(mu2pt[c], mu2eta[c], false, "Trk", _ptbin, _etabin);
 
-      float evtEffTrg_data,evtEffTrk_data,evtEffID_data;
-      float evtEffTrg_mc,evtEffTrk_mc,evtEffID_mc;
+      float mu1effID_data = GetEffID(mu1pt[c], mu1eta[c], true, "ID", _ptbin, _etabin);
+      float mu2effID_data = GetEffID(mu2pt[c], mu2eta[c], true, "ID", _ptbin, _etabin);
+      float mu1effID_mc = GetEffID(mu1pt[c], mu1eta[c], false, "ID", _ptbin, _etabin);
+      float mu2effID_mc = GetEffID(mu2pt[c], mu2eta[c], false, "ID", _ptbin, _etabin);
+
 
       tot_++;
       if(mu1effTrg_data<0 || mu2effTrg_data<0||mu1effTrg_mc<0||mu1effTrg_mc<0) continue;
-      //if(mu1effTrk_data<0 || mu2effTrk_data<0||mu1effTrk_mc<0||mu1effTrk_mc<0) continue;
-      //if(mu1effID_data<0 || mu2effID_data<0||mu1effID_mc<0||mu1effID_mc<0) continue;
+      if(mu1effTrk_data<0 || mu2effTrk_data<0||mu1effTrk_mc<0||mu1effTrk_mc<0) continue;
+      if(mu1effID_data<0 || mu2effID_data<0||mu1effID_mc<0||mu1effID_mc<0) continue;
       
       
       if(pt[c]<10 || pt[c]>60) continue;
-      float evtEff_data = 0;
-      float evtEff_mc = 0;
+      float evtEffAll_data = 0;
+      float evtEffAll_mc = 0;
     
 
-      if(_eff_=="Trg"){
+      if(_eff_=="All"){
       
         evtEffTrg_data = mu1effTrg_data + mu2effTrg_data - mu1effTrg_data*mu2effTrg_data;
         evtEffTrg_mc = mu1effTrg_mc + mu2effTrg_mc - mu1effTrg_mc*mu2effTrg_mc;
-        //evtEffTrk_data = mu1effTrk_data*mu2effTrk_data;
-        //evtEffTrk_mc = mu1effTrk_mc*mu2effTrk_mc;
-        //evtEffID_data = mu1effID_data*mu2effID_data;
-        //evtEffID_mc = mu1effID_mc*mu2effID_mc;
+        evtEffTrk_data = mu1effTrk_data*mu2effTrk_data;
+        evtEffTrk_mc = mu1effTrk_mc*mu2effTrk_mc;
+        evtEffID_data = mu1effID_data*mu2effID_data;
+        evtEffID_mc = mu1effID_mc*mu2effID_mc;
         
         
-        //evtEff_data=evtEffTrg_data*evtEffTrk_data*evtEffID_data;
-        //evtEff_mc=evtEffTrg_mc+evtEffTrk_mc*evtEffID_mc;
-        
-        
-        
-        
-        evtEff_data=evtEffTrg_data;
-        evtEff_mc=evtEffTrg_mc;
-        
+        evtEffAll_data=evtEffTrg_data*evtEffTrk_data*evtEffID_data;
+        evtEffAll_mc=evtEffTrg_mc*evtEffTrk_mc*evtEffID_mc;        
+                
       }
     
       for(int _b=0; _b<nBins; _b++){
         if(pt[c] > ptBins[_b] && pt[c] < ptBins[_b+1]){
           nCand[_b]++;
-          effDataTrg_tol[_b]+= evtEff_data;
-          effMCTrg_tol[_b]+= evtEff_mc;
+          
+          effDataTrg_tol[_b]+= evtEffTrg_data;
+          effMCTrg_tol[_b]+= evtEffTrg_mc;
+          effDataTrk_tol[_b]+= evtEffTrk_data;
+          effMCTrk_tol[_b]+= evtEffTrk_mc;
+          effDataID_tol[_b]+= evtEffID_data;
+          effMCID_tol[_b]+= evtEffID_mc;
+          
+          effDataAll_tol[_b]+= evtEffAll_data;
+          effMCAll_tol[_b]+= evtEffAll_mc;
+        
         }
       }
   
@@ -286,26 +274,149 @@ void ConvertEffNewMethod(){
     }
   }//Evt loop
 
-  TCanvas *c1=  new TCanvas("c1","",600,600);                                                                                                                                                           
-  c1->cd();
+  TCanvas *c1=  new TCanvas("c1","",850,600);      
+  c1->Divide(2,2);                                                                                                                                                     
   c1->SetLeftMargin(0.15);
   for(int i = 0; i < nBins; i ++){
     cout<<effDataTrg_tol[i]<<endl;
     cout<<effMCTrg_tol[i]<<endl;
     cout<<(effDataTrg_tol[i])/effMCTrg_tol[i]<<endl;
-    //EffDiff->SetBinContent(i+1,(effData_tol[i]-effMC_tol[i])/effMC_tol[i]);
-    EffDiff->SetBinContent(i+1,(effDataTrg_tol[i])/effMCTrg_tol[i]);
-    EffDiff->SetBinError(i+1,0.000000001);
+    EffDataOverMCTrg->SetBinContent(i+1,(effDataTrg_tol[i])/effMCTrg_tol[i]);
+    EffDataOverMCTrg->SetBinError(i+1,0.000000001);
+    EffDataOverMCTrk->SetBinContent(i+1,(effDataTrk_tol[i])/effMCTrk_tol[i]);
+    EffDataOverMCTrk->SetBinError(i+1,0.000000001);
+    EffDataOverMCID->SetBinContent(i+1,(effDataID_tol[i])/effMCID_tol[i]);
+    EffDataOverMCID->SetBinError(i+1,0.000000001);
+    EffDataOverMCAll->SetBinContent(i+1,(effDataAll_tol[i])/effMCAll_tol[i]);
+    EffDataOverMCAll->SetBinError(i+1,0.000000001);
+    
+    EffDataOverMCAllOldApproach->SetBinContent(i+1,EffDataOverMCTrg->GetBinContent(i+1)*EffDataOverMCTrk->GetBinContent(i+1)*EffDataOverMCID->GetBinContent(i+1));
+    EffDataOverMCAllOldApproach->SetBinError(i+1,0.000000001);
   }
   //print a line for AN
   printf("\n");
-  EffDiff->SetMaximum(2.);
-  EffDiff->SetTitleOffset(1.2,"Y");
-  EffDiff->SetMarkerColor(2);
-  EffDiff->SetMarkerSize(1.2);
-  EffDiff->SetLineWidth(1.9);
-  EffDiff->Draw("pe");
-  cout<<"Total B cand. "<<tot_<<endl;
+  c1->cd(1);
+  EffDataOverMCTrg->SetMaximum(0.9);
+  EffDataOverMCTrg->SetMaximum(1.1);
+  EffDataOverMCTrg->SetTitleOffset(1.2,"Y");
+  EffDataOverMCTrg->SetMarkerColor(2);
+  EffDataOverMCTrg->SetMarkerSize(1.2);
+  EffDataOverMCTrg->SetLineWidth(1.9);
+  EffDataOverMCTrg->Draw("pe");  
+  EffDataOverMCTrg->SetXTitle("B^{+} p_{T} (GeV/c)");
+  EffDataOverMCTrg->SetYTitle("B^{+} p_{T} Data/MC trigger (GeV/c)");
+  
+  EffDataOverMCTrg->GetXaxis()->SetTitleOffset(.85);
+  EffDataOverMCTrg->GetYaxis()->SetTitleOffset(.9);
+  EffDataOverMCTrg->GetXaxis()->SetTitleSize(0.045);
+  EffDataOverMCTrg->GetYaxis()->SetTitleSize(0.045);
+  EffDataOverMCTrg->GetXaxis()->SetTitleFont(42);
+  EffDataOverMCTrg->GetYaxis()->SetTitleFont(42);
+  EffDataOverMCTrg->GetXaxis()->SetLabelFont(42);
+  EffDataOverMCTrg->GetYaxis()->SetLabelFont(42);
+  EffDataOverMCTrg->GetXaxis()->SetLabelSize(0.04);
+  EffDataOverMCTrg->GetYaxis()->SetLabelSize(0.04);  
+
+
+  
+  c1->cd(2);
+  EffDataOverMCTrk->SetMaximum(0.9);
+  EffDataOverMCTrk->SetMaximum(1.1);
+  EffDataOverMCTrk->SetTitleOffset(1.2,"Y");
+  EffDataOverMCTrk->SetMarkerColor(2);
+  EffDataOverMCTrk->SetMarkerSize(1.2);
+  EffDataOverMCTrk->SetLineWidth(1.9);
+  EffDataOverMCTrk->Draw("pe");
+  EffDataOverMCTrk->SetXTitle("B^{+} p_{T} (GeV/c)");
+  EffDataOverMCTrk->SetYTitle("B^{+} p_{T} Data/MC tracking (GeV/c)");
+  
+  EffDataOverMCTrk->GetXaxis()->SetTitleOffset(.85);
+  EffDataOverMCTrk->GetYaxis()->SetTitleOffset(.9);
+  EffDataOverMCTrk->GetXaxis()->SetTitleSize(0.045);
+  EffDataOverMCTrk->GetYaxis()->SetTitleSize(0.045);
+  EffDataOverMCTrk->GetXaxis()->SetTitleFont(42);
+  EffDataOverMCTrk->GetYaxis()->SetTitleFont(42);
+  EffDataOverMCTrk->GetXaxis()->SetLabelFont(42);
+  EffDataOverMCTrk->GetYaxis()->SetLabelFont(42);
+  EffDataOverMCTrk->GetXaxis()->SetLabelSize(0.04);
+  EffDataOverMCTrk->GetYaxis()->SetLabelSize(0.04);  
+
+
+  c1->cd(3);
+  EffDataOverMCID->SetMaximum(0.9);
+  EffDataOverMCID->SetMaximum(1.1);
+  EffDataOverMCID->SetTitleOffset(1.2,"Y");
+  EffDataOverMCID->SetMarkerColor(2);
+  EffDataOverMCID->SetMarkerSize(1.2);
+  EffDataOverMCID->SetLineWidth(1.9);
+  EffDataOverMCID->Draw("pe");
+  EffDataOverMCID->SetXTitle("B^{+} p_{T} (GeV/c)");
+  EffDataOverMCID->SetYTitle("B^{+} p_{T} Data/MC ID (GeV/c)");
+  
+  EffDataOverMCID->GetXaxis()->SetTitleOffset(.85);
+  EffDataOverMCID->GetYaxis()->SetTitleOffset(.9);
+  EffDataOverMCID->GetXaxis()->SetTitleSize(0.045);
+  EffDataOverMCID->GetYaxis()->SetTitleSize(0.045);
+  EffDataOverMCID->GetXaxis()->SetTitleFont(42);
+  EffDataOverMCID->GetYaxis()->SetTitleFont(42);
+  EffDataOverMCID->GetXaxis()->SetLabelFont(42);
+  EffDataOverMCID->GetYaxis()->SetLabelFont(42);
+  EffDataOverMCID->GetXaxis()->SetLabelSize(0.04);
+  EffDataOverMCID->GetYaxis()->SetLabelSize(0.04);  
+
+  c1->cd(4);
+  EffDataOverMCAll->SetMaximum(0.9);
+  EffDataOverMCAll->SetMaximum(1.2);
+  EffDataOverMCAll->SetTitleOffset(1.2,"Y");
+  EffDataOverMCAll->SetMarkerColor(2);
+  EffDataOverMCAll->SetMarkerSize(1.2);
+  EffDataOverMCAll->SetLineWidth(1.9);
+  EffDataOverMCAll->Draw("pe");
+  EffDataOverMCAll->SetXTitle("B^{+} p_{T} (GeV/c)");
+  EffDataOverMCAll->SetYTitle("B^{+} p_{T} All convoluted ID (GeV/c)");
+  
+  EffDataOverMCAll->GetXaxis()->SetTitleOffset(.85);
+  EffDataOverMCAll->GetYaxis()->SetTitleOffset(.9);
+  EffDataOverMCAll->GetXaxis()->SetTitleSize(0.045);
+  EffDataOverMCAll->GetYaxis()->SetTitleSize(0.045);
+  EffDataOverMCAll->GetXaxis()->SetTitleFont(42);
+  EffDataOverMCAll->GetYaxis()->SetTitleFont(42);
+  EffDataOverMCAll->GetXaxis()->SetLabelFont(42);
+  EffDataOverMCAll->GetYaxis()->SetLabelFont(42);
+  EffDataOverMCAll->GetXaxis()->SetLabelSize(0.04);
+  EffDataOverMCAll->GetYaxis()->SetLabelSize(0.04);  
+
+  
+  EffDataOverMCAllOldApproach->Draw("pesame");
+  
+
+  
+  
+  TLegend *myleg=new TLegend(0.3,0.564271,0.5145161,0.7167019,"");
+  myleg->SetBorderSize(0);
+  myleg->SetLineColor(0);
+  myleg->SetFillColor(0);
+  myleg->SetFillStyle(1001);
+  myleg->SetTextFont(42);
+  myleg->SetTextSize(0.05);
+
+  TLegendEntry *ent_EffDataOverMCAll=myleg->AddEntry(EffDataOverMCAll,"<Data/MC(trg)><Data/MC(trk)><Data/MC(ID)>","PL");
+  ent_EffDataOverMCAll->SetTextFont(42);
+  ent_EffDataOverMCAll->SetLineColor(1);
+  ent_EffDataOverMCAll->SetMarkerColor(1);
+  
+  TLegendEntry *ent_EffDataOverMCAllOldApproach=myleg->AddEntry(EffsDataOverMCAllOldApproach,"<Data/MC(trg)*Data/MC(trk)*Data/MC(ID)>","PL");
+  ent_EffDataOverMCAllOldApproach->SetTextFont(42);
+  ent_EffDataOverMCAllOldApproach->SetLineColor(1);
+  ent_EffDataOverMCAllOldApproach->SetMarkerColor(1);
+
+  myleg->Draw();
+  
+  c1->SaveAs("checkTPcorrection.pdf");
+  
+  
+
+  //cout<<"Total B cand. "<<tot_<<endl;
 
   //MCEtaBin1->SetMinimum(0);
   //MCEtaBin1->SetMaximum(1);
@@ -414,6 +525,166 @@ if(_eff_type =="Trk"){
   }
   return -1;
 }
+
+
+float GetEffTrk(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin){
+  //cout<<pt<<"/"<<eta<<endl;
+//special condition
+//if(_eff_type =="ID"){ 
+//  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
+//}
+if(_eff_type =="Trk"){ 
+  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
+  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
+}
+//
+
+  if(-2.4<eta && eta<-0.8){
+    _etabin = 1;
+    if(isData){
+      for(int i = 0; i < DataEtaBinTrk1->GetNbinsX(); i++){
+        if(pt>DataEtaBinTrk1->GetBinLowEdge(i+1) && pt<(DataEtaBinTrk1->GetBinLowEdge(i+1)+DataEtaBinTrk1->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return DataEtaBinTrk1->GetBinContent(i+1);
+        }
+      }
+    }
+    if(!isData){
+      for(int i = 0; i < MCEtaBinTrk1->GetNbinsX(); i++){
+        if(pt>MCEtaBinTrk1->GetBinLowEdge(i+1) && pt<(MCEtaBinTrk1->GetBinLowEdge(i+1)+MCEtaBinTrk1->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return MCEtaBinTrk1->GetBinContent(i+1);
+        }
+      }
+    }
+  }
+
+
+  else if(-0.8<eta && eta<0.8){
+//  if(-0.8<eta && eta<0.8){
+    _etabin = 2;
+    if(isData){
+      for(int i = 0; i < DataEtaBinTrk2->GetNbinsX(); i++){
+        if(pt>DataEtaBinTrk2->GetBinLowEdge(i+1) && pt<(DataEtaBinTrk2->GetBinLowEdge(i+1)+DataEtaBinTrk2->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return DataEtaBinTrk2->GetBinContent(i+1);
+        }
+      }
+    }
+    if(!isData){
+      for(int i = 0; i < MCEtaBinTrk2->GetNbinsX(); i++){
+        if(pt>MCEtaBinTrk2->GetBinLowEdge(i+1) && pt<(MCEtaBinTrk2->GetBinLowEdge(i+1)+MCEtaBinTrk2->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return MCEtaBinTrk2->GetBinContent(i+1);
+        }
+      }
+    }
+  }
+
+
+  else if(0.8<eta && eta<1.46){
+//  if(0.8<eta && eta<1.46){
+    _etabin = 3;
+    if(isData){
+      for(int i = 0; i < DataEtaBinTrk3->GetNbinsX(); i++){
+        if(pt>DataEtaBinTrk3->GetBinLowEdge(i+1) && pt<(DataEtaBinTrk3->GetBinLowEdge(i+1)+DataEtaBinTrk3->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return DataEtaBinTrk3->GetBinContent(i+1);
+        }
+      }
+    }
+    if(!isData){
+      for(int i = 0; i < MCEtaBinTrk3->GetNbinsX(); i++){
+        if(pt>MCEtaBinTrk3->GetBinLowEdge(i+1) && pt<(MCEtaBinTrk3->GetBinLowEdge(i+1)+MCEtaBinTrk3->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return MCEtaBinTrk3->GetBinContent(i+1);
+        }
+      }
+    }
+  }
+  return -1;
+}
+
+
+
+float GetEffID(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin){
+  //cout<<pt<<"/"<<eta<<endl;
+//special condition
+//if(_eff_type =="ID"){ 
+//  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
+//}
+if(_eff_type =="Trk"){ 
+  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
+  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
+}
+//
+
+  if(-2.4<eta && eta<-0.8){
+    _etabin = 1;
+    if(isData){
+      for(int i = 0; i < DataEtaBinID1->GetNbinsX(); i++){
+        if(pt>DataEtaBinID1->GetBinLowEdge(i+1) && pt<(DataEtaBinID1->GetBinLowEdge(i+1)+DataEtaBinID1->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return DataEtaBinID1->GetBinContent(i+1);
+        }
+      }
+    }
+    if(!isData){
+      for(int i = 0; i < MCEtaBinID1->GetNbinsX(); i++){
+        if(pt>MCEtaBinID1->GetBinLowEdge(i+1) && pt<(MCEtaBinID1->GetBinLowEdge(i+1)+MCEtaBinID1->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return MCEtaBinID1->GetBinContent(i+1);
+        }
+      }
+    }
+  }
+
+
+  else if(-0.8<eta && eta<0.8){
+//  if(-0.8<eta && eta<0.8){
+    _etabin = 2;
+    if(isData){
+      for(int i = 0; i < DataEtaBinID2->GetNbinsX(); i++){
+        if(pt>DataEtaBinID2->GetBinLowEdge(i+1) && pt<(DataEtaBinID2->GetBinLowEdge(i+1)+DataEtaBinID2->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return DataEtaBinID2->GetBinContent(i+1);
+        }
+      }
+    }
+    if(!isData){
+      for(int i = 0; i < MCEtaBinID2->GetNbinsX(); i++){
+        if(pt>MCEtaBinID2->GetBinLowEdge(i+1) && pt<(MCEtaBinID2->GetBinLowEdge(i+1)+MCEtaBinID2->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return MCEtaBinID2->GetBinContent(i+1);
+        }
+      }
+    }
+  }
+
+
+  else if(0.8<eta && eta<1.46){
+//  if(0.8<eta && eta<1.46){
+    _etabin = 3;
+    if(isData){
+      for(int i = 0; i < DataEtaBinID3->GetNbinsX(); i++){
+        if(pt>DataEtaBinID3->GetBinLowEdge(i+1) && pt<(DataEtaBinID3->GetBinLowEdge(i+1)+DataEtaBinID3->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return DataEtaBinID3->GetBinContent(i+1);
+        }
+      }
+    }
+    if(!isData){
+      for(int i = 0; i < MCEtaBinID3->GetNbinsX(); i++){
+        if(pt>MCEtaBinID3->GetBinLowEdge(i+1) && pt<(MCEtaBinID3->GetBinLowEdge(i+1)+MCEtaBinID3->GetBinWidth(i+1))){
+          _ptbin = i+1;
+          return MCEtaBinID3->GetBinContent(i+1);
+        }
+      }
+    }
+  }
+  return -1;
+}
+
 //Mu17Mu8 dR<0.3
 float GetPOGTrgEff(float pt, float eta, float eta2,  bool isData){
 //page18
