@@ -50,15 +50,16 @@
   const int nbins=5;
   Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+ Double_t exl0[nbins]={0., 0., 0., 0., 0.};
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
   //Double_t commonErrorP = 0.0445 ;  
   //Double_t commonErrorN = 0.0445  ;
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
-  Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
-
+Double_t FFsysterror=0.7/40.2;
+ Double_t tagandprobcorrection[nbins]={1.0661631,1.0233345,1.0118028,1.0102129,1.0268659};
+//Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
 
 void NuclearModification(){
 
@@ -73,8 +74,8 @@ void NuclearModification(){
   TFile*filepPb=new TFile(Form("Results%s/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   for (int i=1;i<nbins;i++){
-    hSigmapPbStat->SetBinContent(i,hSigmapPbStat->GetBinContent(i)/tagandprobcorrection[i]);
-    hSigmapPbStat->SetBinError(i,hSigmapPbStat->GetBinError(i)/tagandprobcorrection[i]);
+    hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i));
+    hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i));
   
   } 
   Double_t yRefPP[nbins];                        //value y reference
@@ -203,7 +204,7 @@ void NuclearModification(){
   gSigmasyst->Draw("2esame");
   
   
-  TLegend *legendSigma=new TLegend(0.5685484,0.5864271,0.8145161,0.7167019,"");
+  TLegend *legendSigma=new TLegend(0.5685484,0.7864271,0.5145161,0.7167019,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -227,14 +228,14 @@ void NuclearModification(){
   ent_Sigmapp->SetMarkerColor(4);
   legendSigma->Draw("same");
   
-  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  TLatex * tlatex1=new TLatex(0.1693548,0.9362368,"CMS Preliminary");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
   tlatex1->SetTextSize(0.04);
   tlatex1->Draw();
   
-  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex2=new TLatex(0.5564516,0.9362368,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
@@ -245,7 +246,8 @@ void NuclearModification(){
   
   canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
-    TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
+  // TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
+    TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
   gRpAstat->SetMarkerColor(1);
   gRpAstat->SetLineColor(1);
@@ -255,11 +257,11 @@ void NuclearModification(){
   
   TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
   gRpAsyst->SetTitle("RpA syst uncertainty from pPb");
-  gRpAsyst->SetMarkerColor(4);
-  gRpAsyst->SetLineColor(4);
+  gRpAsyst->SetMarkerColor(1);
+  gRpAsyst->SetLineColor(1);
   gRpAsyst->SetLineWidth(2);   
   gRpAsyst->SetMarkerStyle(21);
-  gRpAsyst->SetMarkerColor(4);
+  gRpAsyst->SetMarkerColor(1);
 
    
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
@@ -288,7 +290,7 @@ void NuclearModification(){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.3145161,0.5804503,0.5604839,0.770252,"");
+  TLegend *legendRpA=new TLegend(0.205161,0.6804503,0.8604839,0.870252,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
@@ -299,8 +301,8 @@ void NuclearModification(){
   TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA} (B^{+})");
-  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
-  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B_{s})");
+  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA} (B^{0})");
+  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA} (B_{s})");
   hempty->GetXaxis()->SetTitleOffset(1.1);
   hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
@@ -334,46 +336,53 @@ void NuclearModification(){
   gRpAsyst->SetFillStyle(0);
   gRpAsyst->Draw("2same");
   
+  TBox *a = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  a->SetLineColor(1);
+  a->SetFillColor(0);
+  a->Draw();
+
 
   TBox *b = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   b->SetLineColor(1);
   b->SetFillColor(kGray);
   b->Draw();
 
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}  stat unc","P");
+
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}  stat. unc.","lp");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"Syst err pPb data","P");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(a,"           syst. unc.","f");
   ent_RpAsystData->SetTextFont(42);
-  ent_RpAsystData->SetLineColor(4);
+  ent_RpAsystData->SetLineColor(1);
   ent_RpAsystData->SetMarkerColor(1);
   TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst Lumi+BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
 
+
   
-  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","P");
+  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","f");
   ent_RpAsystFONLL->SetTextFont(42);
   ent_RpAsystFONLL->SetLineColor(5);
   ent_RpAsystFONLL->SetMarkerColor(5);
   
-  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  TLatex * tlatex1=new TLatex(0.193548,0.9362368,"CMS Preliminary");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
   tlatex1->SetTextSize(0.04);
   tlatex1->Draw();
   
-  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex2=new TLatex(0.5564516,0.9362368,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
 
-  TLatex * tlatex2=new TLatex(0.5564516,0.8,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatex2=new TLatex(0.7064516,0.85,"L_{int} = 34.8 nb^{-1}");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
