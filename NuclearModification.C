@@ -1,3 +1,7 @@
+
+//Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
+
+
 /*
   TString particle="Bs";
   const int nbins=1;
@@ -11,7 +15,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
   Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
   Double_t FFsysterror=0.6/10.4;
-  Double_t tagandprobcorrection[nbins]={1.0533638};
+  Double_t tagandprobcorrection[nbins]={1.14114};
 
 
   TString particle="Bzero";
@@ -26,7 +30,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555);
   Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.0793123,1.0282137,1.0161554};
+  Double_t tagandprobcorrection[nbins]={1.19097,1.11408,1.06534};
 
 
 
@@ -42,7 +46,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.0661631,1.0233345,1.0118028,1.0102129,1.0268659};
+  Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
 
 */
 
