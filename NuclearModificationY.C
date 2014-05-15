@@ -147,15 +147,16 @@ void NuclearModificationY(){
   canvasSigma->SetBottomMargin(0.1165254);
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetFrameBorderMode(0);
-  canvasSigma->SetLogy();
+  //canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","",4,-2.5,2.5,10.,1e+7,1e10.);  
-  hempty->GetXaxis()->SetTitle("y_{MC}");
-  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dy (B^{+}) (pb)");
-  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dy (B^{0}) (pb)");
-  if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dy (B_{s}) (pb)");
+  TH2F* hempty=new TH2F("hempty","",4,-2.7,2.7,10.,0.,700*1e6);  
+  hempty->GetXaxis()->SetTitle("y_{CM}");
+
+  
+  hempty->GetYaxis()->SetTitle("d#sigma / dy_{CM}(pb GeV^{-1}c)");
+
   hempty->GetXaxis()->SetTitleOffset(1.);
-  hempty->GetYaxis()->SetTitleOffset(1.3);
+  hempty->GetYaxis()->SetTitleOffset(1.4);
   hempty->GetXaxis()->SetTitleSize(0.045);
   hempty->GetYaxis()->SetTitleSize(0.045);
   hempty->GetXaxis()->SetTitleFont(42);
@@ -169,28 +170,34 @@ void NuclearModificationY(){
   hempty->Draw();
     
   
-  gaeBplusReference->SetMarkerColor(4);
+  gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(21);  
-  gaeBplusReference->SetFillColor(4);
-   gaeBplusReference->SetFillStyle(3001);
-   gaeBplusReference->SetLineColor(4);
-   gaeBplusReference->SetLineWidth(4);
-
-  gaeBplusReference->Draw("2epsame");
-
+  gaeBplusReference->SetFillColor(5);
+   gaeBplusReference->SetFillStyle(1001);
+  gaeBplusReference->SetLineColor(1);
+  gaeBplusReference->SetLineWidth(5);
+  
+  
   hSigmapPbStat->SetMarkerSize(2);
+  //ce qu on voit dans la legende
   hSigmapPbStat->SetMarkerStyle(21);
+
   hSigmapPbStat->SetLineWidth(3);
   hSigmapPbStat->SetMarkerSize(1);
   hSigmapPbStat->SetLineColor(1);
-  hSigmapPbStat->Draw("same");
+
   
-  gSigmasyst->SetFillColor(0);
+   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
-  gSigmasyst->Draw("2esame");
+  gaeBplusReference->Draw("2same");
+  hSigmapPbStat->Draw("same");
+    gSigmasyst->SetFillColor(0);
+  gSigmasyst->SetFillStyle(0);
+  gSigmasyst->Draw("2same");
   
   
-  TLegend *legendSigma=new TLegend(0.5685484,0.5864271,0.8145161,0.7167019,"");
+  
+  TLegend *legendSigma=new TLegend(0.3685484,0.6864271,0.8145161,0.8167019,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -198,35 +205,79 @@ void NuclearModificationY(){
   legendSigma->SetTextFont(42);
   legendSigma->SetTextSize(0.04);
 
-  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(hSigmapPbStat,"pPb","PL");
-  ent_SigmapPb->SetTextFont(42);
-  ent_SigmapPb->SetLineColor(1);
-  ent_SigmapPb->SetMarkerColor(1);
+  TBox *d = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  d->SetLineColor(1);
+  d->SetFillColor(0);
+  d->Draw();
 
- // TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb syst err","PL");
- // ent_SigmapPbSyst->SetTextFont(42);
- // ent_SigmapPbSyst->SetLineColor(1);
- // ent_SigmapPbSyst->SetMarkerColor(1);
+  //TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(hSigmapPbStat,"pPb stat err","pf");
+ // ent_SigmapPb->SetTextFont(42);
+ // ent_SigmapPb->SetLineColor(1);
+ // ent_SigmapPb->SetFillColor(0);
+ // ent_SigmapPb->SetMarkerColor(1);
 
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
+  TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb","PL");
+  ent_SigmapPbSyst->SetTextFont(42);
+  ent_SigmapPbSyst->SetLineColor(1);
+  ent_SigmapPbSyst->SetMarkerColor(1);
+  
+  
+
+  TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  c->SetLineColor(5);
+  c->SetFillColor(5);
+  c->Draw();
+
+
+
+  //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
+TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   ent_Sigmapp->SetTextFont(42);
-  ent_Sigmapp->SetLineColor(4);
-  ent_Sigmapp->SetMarkerColor(4);
+  ent_Sigmapp->SetLineColor(5);
+  ent_Sigmapp->SetMarkerColor(1);
   legendSigma->Draw("same");
   
-  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  TLatex * tlatex1=new TLatex(0.1693548,0.9362368,"CMS Preliminary");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
   tlatex1->SetTextSize(0.04);
   tlatex1->Draw();
   
-  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex2=new TLatex(0.5564516,0.9362368,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
+
+if (particle=="Bplus"){
+  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{+}");
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+}
+
+if (particle=="Bzero"){
+  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{0}");
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+}
+
+if (particle=="Bs"){
+  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B_{s}");
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+}
+
 
   
   
