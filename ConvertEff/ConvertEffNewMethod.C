@@ -278,9 +278,8 @@ void ConvertEffNewMethod(){
   c1->Divide(2,2);                                                                                                                                                     
   c1->SetLeftMargin(0.15);
   for(int i = 0; i < nBins; i ++){
-    cout<<effDataTrg_tol[i]<<endl;
-    cout<<effMCTrg_tol[i]<<endl;
-    cout<<(effDataTrg_tol[i])/effMCTrg_tol[i]<<endl;
+    cout<<effDataAll_tol[i]/effMCAll_tol[i]<<endl;
+    //cout<<(effDataTrg_tol[i])/effMCTrg_tol[i]<<endl;
     EffDataOverMCTrg->SetBinContent(i+1,(effDataTrg_tol[i])/effMCTrg_tol[i]);
     EffDataOverMCTrg->SetBinError(i+1,0.000000001);
     EffDataOverMCTrk->SetBinContent(i+1,(effDataTrk_tol[i])/effMCTrk_tol[i]);
@@ -405,7 +404,7 @@ void ConvertEffNewMethod(){
   ent_EffDataOverMCAll->SetLineColor(1);
   ent_EffDataOverMCAll->SetMarkerColor(1);
   
-  TLegendEntry *ent_EffDataOverMCAllOldApproach=myleg->AddEntry(EffsDataOverMCAllOldApproach,"<Data/MC(trg)*Data/MC(trk)*Data/MC(ID)>","PL");
+  TLegendEntry *ent_EffDataOverMCAllOldApproach=myleg->AddEntry(EffDataOverMCAllOldApproach,"<Data/MC(trg)*Data/MC(trk)*Data/MC(ID)>","PL");
   ent_EffDataOverMCAllOldApproach->SetTextFont(42);
   ent_EffDataOverMCAllOldApproach->SetLineColor(1);
   ent_EffDataOverMCAllOldApproach->SetMarkerColor(1);
