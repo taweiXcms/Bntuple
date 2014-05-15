@@ -74,7 +74,7 @@ void CalculateSystForNuclear(){
     total[i]=total[i]+innertrk[i]*innertrk[i];
     total[i]=total[i]+PDF[i]*PDF[i];
     total[i]=TMath::Sqrt(total[i]);
-    tandprobe[i]=(1+trgeff[i]*0.01)*(1+muonid[i]*0.01)*(1-innertrk[i]*0.01);
+    tandprobe[i]=(1+trgeff[i]*0.01)*(1+muonid[i]*0.01)*(1+innertrk[i]*0.01);
 
   }
   cout<<"Total Systematics"<<endl;
