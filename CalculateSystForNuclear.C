@@ -1,4 +1,21 @@
 /*
+
+const int nbins=4;
+Double_t acceptance[nbins]={5.8,6.4,4.0,2.8};
+Double_t hadron[nbins]={3.9,3.9,3.9,3.9};
+Double_t best[nbins]={0.,0.,0.,0.};
+Double_t Bselection[nbins]={9.0,9.0,9.0,9.0};
+Double_t ptres[nbins]={0.6,0.6,0.6,0.6};
+Double_t trgeff[nbins]={3.6,3.6,3.6,3.6};
+Double_t muonid[nbins]={2.5,2.5,2.5,2.5};
+Double_t innertrk[nbins]={1.6,1.6,1.6,1.6};
+Double_t PDF[nbins]={10.6,6.8,5.0,6.6};
+Double_t total[nbins]={0.,0.};
+Double_t tandprobe[nbins]={0.,0.,0.,0.,0.};
+
+
+
+
 const int nbins=5;
 Double_t acceptance[nbins]={0.8,0.5,1.0,0.5,0.7};
 Double_t hadron[nbins]={3.9,3.9,3.9,3.9,3.9};
@@ -44,19 +61,19 @@ Double_t tandprobe[nbins]={0.};
 
 
 
-const int nbins=1;
-Double_t acceptance[nbins]={5.6};
-Double_t hadron[nbins]={7.8};
-Double_t best[nbins]={2.4};
-Double_t Bselection[nbins]={13.5};
-Double_t ptres[nbins]={0.6};
-Double_t trgeff[nbins]={4.9};
-Double_t muonid[nbins]={4.6};
-Double_t innertrk[nbins]={4.0};
-Double_t PDF[nbins]={7.5};
-Double_t total[nbins]={0.};
-Double_t tandprobe[nbins]={0.};
 
+const int nbins=4;
+Double_t acceptance[nbins]={5.8,6.4,4.0,2.8};
+Double_t hadron[nbins]={3.9,3.9,3.9,3.9};
+Double_t best[nbins]={0.,0.,0.,0.};
+Double_t Bselection[nbins]={9.0,9.0,9.0,9.0};
+Double_t ptres[nbins]={0.6,0.6,0.6,0.6};
+Double_t trgeff[nbins]={3.6,3.6,3.6,3.6};
+Double_t muonid[nbins]={2.5,2.5,2.5,2.5};
+Double_t innertrk[nbins]={1.6,1.6,1.6,1.6};
+Double_t PDF[nbins]={10.6,6.8,5.0,6.6};
+Double_t total[nbins]={0.,0.,0.,0.};
+Double_t tandprobe[nbins]={0.,0.,0.,0.};
 
 void CalculateSystForNuclear(){
 
