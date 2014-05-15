@@ -55,19 +55,21 @@
 
 */
 
-  TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t exl0[nbins]={0.,0.,0.,0.,0.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
-  //Double_t commonErrorP = 0.0445 ;  
-  //Double_t commonErrorN = 0.0445  ;
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
-  Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
+  TString particle="Bs";
+  const int nbins=1;
+  Double_t xbins[nbins]={35};
+  Double_t exl[nbins]={25};
+  Double_t exl0[nbins]={0.};
+
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
+
+  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
+  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
+  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
+  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
+  Double_t FFsysterror=0.6/10.4;
+  Double_t tagandprobcorrection[nbins]={1.14114};
 
 void NuclearModification(){
 
@@ -152,7 +154,7 @@ void NuclearModification(){
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
-  gSigmasyst->SetLineWidth(2);   
+  gSigmasyst->SetLineWidth(1);   
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
@@ -172,9 +174,12 @@ void NuclearModification(){
   
   TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,1e5,1e10.);  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
-  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
-  if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B_{s}) (pb GeV^{-1}c)");
+  //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
+  //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
+  //if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B_{s}) (pb GeV^{-1}c)");
+  
+  hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}(pb GeV^{-1}c)");
+
   hempty->GetXaxis()->SetTitleOffset(1.);
   hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
@@ -196,7 +201,7 @@ void NuclearModification(){
    gaeBplusReference->SetFillStyle(1001);
   gaeBplusReference->SetLineColor(1);
   gaeBplusReference->SetLineWidth(5);
-  gaeBplusReference->Draw("2same");
+  
   
   hSigmapPbStat->SetMarkerSize(2);
   //ce qu on voit dans la legende
@@ -207,9 +212,14 @@ void NuclearModification(){
   hSigmapPbStat->SetLineColor(1);
 
   
-  // gSigmasyst->SetFillColor(0);
-  //gSigmasyst->SetFillStyle(0);
-  gSigmasyst->Draw("epsame");
+   gSigmasyst->SetFillColor(0);
+  gSigmasyst->SetFillStyle(0);
+  gaeBplusReference->Draw("2same");
+  hSigmapPbStat->Draw("same");
+    gSigmasyst->SetFillColor(0);
+  gSigmasyst->SetFillStyle(0);
+  gSigmasyst->Draw("2same");
+  
   
   
   TLegend *legendSigma=new TLegend(0.3685484,0.6864271,0.8145161,0.8167019,"");
@@ -225,16 +235,18 @@ void NuclearModification(){
   d->SetFillColor(0);
   d->Draw();
 
-  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(d,"pPb","pf");
-  ent_SigmapPb->SetTextFont(42);
-  ent_SigmapPb->SetLineColor(1);
-  ent_SigmapPb->SetFillColor(0);
-  ent_SigmapPb->SetMarkerColor(1);
+  //TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(hSigmapPbStat,"pPb stat err","pf");
+ // ent_SigmapPb->SetTextFont(42);
+ // ent_SigmapPb->SetLineColor(1);
+ // ent_SigmapPb->SetFillColor(0);
+ // ent_SigmapPb->SetMarkerColor(1);
 
- // TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb syst err","PL");
- // ent_SigmapPbSyst->SetTextFont(42);
- // ent_SigmapPbSyst->SetLineColor(1);
- // ent_SigmapPbSyst->SetMarkerColor(1);
+  TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb","PL");
+  ent_SigmapPbSyst->SetTextFont(42);
+  ent_SigmapPbSyst->SetLineColor(1);
+  ent_SigmapPbSyst->SetMarkerColor(1);
+  
+  
 
   TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   c->SetLineColor(5);
@@ -264,6 +276,32 @@ TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
 
+if (particle=="Bplus"){
+  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{+}");
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+}
+
+if (particle=="Bzero"){
+  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{0}");
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+}
+
+if (particle=="Bs"){
+  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B_{s}");
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+}
   
   
   canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
@@ -374,7 +412,7 @@ TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(a,"           syst. unc.","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"           syst. unc.","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(1);
   ent_RpAsystData->SetMarkerColor(1);
@@ -390,6 +428,8 @@ TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   ent_RpAsystFONLL->SetLineColor(5);
   ent_RpAsystFONLL->SetLineStyle(1);
   ent_RpAsystFONLL->SetMarkerColor(5);
+  
+  legendRpA->Draw();
   
   TLatex * tlatex1=new TLatex(0.193548,0.9362368,"CMS Preliminary");
   tlatex1->SetNDC();
@@ -411,6 +451,8 @@ TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   tlatex2->SetTextFont(42);
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
+  
+  tlatex3->Draw();
 
 //  l->Draw();  
   canvasRpA->SaveAs(Form("Results%s/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
