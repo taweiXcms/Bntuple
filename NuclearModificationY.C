@@ -39,13 +39,12 @@ Double_t xbins[nbins]={-1.465,-0.5,0.5,1.465};
 Double_t exl[nbins]={0.465,0.5,0.5,0.465};
 //Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};////////////////////////////////////////////////
 //Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};/////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotHigh[nbins]={0.128,0.104,0.09,0.099};////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotLow[nbins]={0.128,0.104,0.09,0.099};//////////////////////
+Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.143,0.126,0.130};////////////////////////////////////////////////
+Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.143,0.126,0.130};//////////////////////
 
 Double_t commonErrorP = 0.0555 ;
 Double_t commonErrorN = 0.0555  ;
-
-
+Double_t tagandprobcorrection[nbins]={1.0788904,1.0788904,1.0788904,1.0788904};
 
 void NuclearModificationY(){
 
@@ -60,6 +59,13 @@ void NuclearModificationY(){
 //  TFile*filepPb=new TFile(Form("Results%sY/Sigma%s.root",particle.Data(),particle.Data()));
   TFile*filepPb=new TFile(Form("Results%s_y/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
+  
+  for (int i=1;i<nbins;i++){
+    hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i));
+    hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i));
+  
+  } 
+
   
   Double_t yRefPP[nbins];                        //value y reference
   Double_t xRefPP[nbins];                        //value x reference
