@@ -7,6 +7,8 @@
   const int nbins=1;
   Double_t xbins[nbins]={35};
   Double_t exl[nbins]={25};
+  Double_t exl0[nbins]={0.};
+
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
 
@@ -39,6 +41,7 @@
   const int nbins=5;
   Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+  Double_t exl0[nbins]={0.,0.,0.,0.,0.};
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
   //Double_t commonErrorP = 0.0445 ;  
@@ -50,20 +53,21 @@
 
 */
 
-  TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
- Double_t exl0[nbins]={0., 0., 0., 0., 0.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
-  //Double_t commonErrorP = 0.0445 ;  
-  //Double_t commonErrorN = 0.0445  ;
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
-Double_t FFsysterror=0.7/40.2;
- //Double_t tagandprobcorrection[nbins]={1.0661631,1.0233345,1.0118028,1.0102129,1.0268659};
-Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
+  TString particle="Bs";
+  const int nbins=1;
+  Double_t xbins[nbins]={35};
+  Double_t exl[nbins]={25};
+  Double_t exl0[nbins]={0.};
+
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
+
+  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
+  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
+  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
+  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
+  Double_t FFsysterror=0.6/10.4;
+  Double_t tagandprobcorrection[nbins]={1.14114};
 
 void NuclearModification(){
 
@@ -250,8 +254,8 @@ void NuclearModification(){
   
   canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
-  // TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
-    TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
+  //TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
+  TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
   gRpAstat->SetMarkerColor(1);
   gRpAstat->SetLineColor(1);
