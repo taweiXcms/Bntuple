@@ -24,6 +24,8 @@
   const int nbins=3;
   Double_t xbins[nbins]={12.5,17.5,40};
   Double_t exl[nbins]={2.5,2.5,20};
+  Double_t exl0[nbins]={0.,0.,0.};
+
   Double_t yPercSigmapPbSystTotHigh[nbins]={0.230,0.218,0.214};
   Double_t yPercSigmapPbSystTotLow[nbins]={0.230,0.218,0.214};
   
@@ -53,21 +55,19 @@
 
 */
 
-  TString particle="Bs";
-  const int nbins=1;
-  Double_t xbins[nbins]={35};
-  Double_t exl[nbins]={25};
-  Double_t exl0[nbins]={0.};
-
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
-
-  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
-  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
-  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
-  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
-  Double_t FFsysterror=0.6/10.4;
-  Double_t tagandprobcorrection[nbins]={1.14114};
+  TString particle="Bplus";
+  const int nbins=5;
+  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
+  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+  Double_t exl0[nbins]={0.,0.,0.,0.,0.};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
+  //Double_t commonErrorP = 0.0445 ;  
+  //Double_t commonErrorN = 0.0445  ;
+  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
+  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
+  Double_t FFsysterror=0.7/40.2;
+  Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
 
 void NuclearModification(){
 
@@ -156,7 +156,6 @@ void NuclearModification(){
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
-
   TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
   canvasSigma->cd();
   canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
@@ -191,28 +190,29 @@ void NuclearModification(){
   hempty->Draw();
     
   
-  gaeBplusReference->SetMarkerColor(4);
+  gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(21);  
-  gaeBplusReference->SetFillColor(4);
-   gaeBplusReference->SetFillStyle(3001);
-   gaeBplusReference->SetLineColor(4);
-   gaeBplusReference->SetLineWidth(4);
-
-  gaeBplusReference->Draw("2epsame");
-
+  gaeBplusReference->SetFillColor(5);
+   gaeBplusReference->SetFillStyle(1001);
+  gaeBplusReference->SetLineColor(1);
+  gaeBplusReference->SetLineWidth(5);
+  gaeBplusReference->Draw("2same");
+  
   hSigmapPbStat->SetMarkerSize(2);
+  //ce qu on voit dans la legende
   hSigmapPbStat->SetMarkerStyle(21);
+
   hSigmapPbStat->SetLineWidth(3);
   hSigmapPbStat->SetMarkerSize(1);
   hSigmapPbStat->SetLineColor(1);
-  hSigmapPbStat->Draw("same");
+
   
-  gSigmasyst->SetFillColor(0);
-  gSigmasyst->SetFillStyle(0);
-  gSigmasyst->Draw("2esame");
+  // gSigmasyst->SetFillColor(0);
+  //gSigmasyst->SetFillStyle(0);
+  gSigmasyst->Draw("epsame");
   
   
-  TLegend *legendSigma=new TLegend(0.5685484,0.7864271,0.5145161,0.7167019,"");
+  TLegend *legendSigma=new TLegend(0.3685484,0.6864271,0.8145161,0.8167019,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -220,9 +220,15 @@ void NuclearModification(){
   legendSigma->SetTextFont(42);
   legendSigma->SetTextSize(0.04);
 
-  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(hSigmapPbStat,"pPb","PL");
+  TBox *d = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  d->SetLineColor(1);
+  d->SetFillColor(0);
+  d->Draw();
+
+  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(d,"pPb","pf");
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
+  ent_SigmapPb->SetFillColor(0);
   ent_SigmapPb->SetMarkerColor(1);
 
  // TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb syst err","PL");
@@ -230,10 +236,18 @@ void NuclearModification(){
  // ent_SigmapPbSyst->SetLineColor(1);
  // ent_SigmapPbSyst->SetMarkerColor(1);
 
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
+  TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  c->SetLineColor(5);
+  c->SetFillColor(5);
+  c->Draw();
+
+
+
+  //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
+TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   ent_Sigmapp->SetTextFont(42);
-  ent_Sigmapp->SetLineColor(4);
-  ent_Sigmapp->SetMarkerColor(4);
+  ent_Sigmapp->SetLineColor(5);
+  ent_Sigmapp->SetMarkerColor(1);
   legendSigma->Draw("same");
   
   TLatex * tlatex1=new TLatex(0.1693548,0.9362368,"CMS Preliminary");
@@ -276,7 +290,7 @@ void NuclearModification(){
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
   gRpAsystFONLL->SetMarkerColor(2);
   gRpAsystFONLL->SetLineColor(2);
-  gRpAsystFONLL->SetLineWidth(2);   
+  gRpAsystFONLL->SetLineWidth(2); 
   gRpAsystFONLL->SetMarkerStyle(21);
   gRpAsystFONLL->SetMarkerColor(2);
 
@@ -374,6 +388,7 @@ void NuclearModification(){
   TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","f");
   ent_RpAsystFONLL->SetTextFont(42);
   ent_RpAsystFONLL->SetLineColor(5);
+  ent_RpAsystFONLL->SetLineStyle(1);
   ent_RpAsystFONLL->SetMarkerColor(5);
   
   TLatex * tlatex1=new TLatex(0.193548,0.9362368,"CMS Preliminary");
