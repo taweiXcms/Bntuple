@@ -66,11 +66,9 @@ void NuclearModificationY(){
   TFile*filepPb=new TFile(Form("Results%s_y/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   
-  for (int i=1;i<nbins;i++){
-    hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinContent(i)));
-    hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinError(i)));
-    //  hSigmapPbStat->SetBinContent(i,hSigmapPbStat->GetBinContent(i));
-    // hSigmapPbStat->SetBinError(i,hSigmapPbStat->GetBinError(i)); 
+  for (int i=0;i<nbins;i++){
+    hSigmapPbStat->SetBinContent(i+1,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinContent(i+1)));
+    hSigmapPbStat->SetBinError(i+1,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinError(i+1)));
   } 
 
   
