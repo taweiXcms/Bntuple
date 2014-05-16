@@ -39,8 +39,8 @@ Double_t xbins[nbins]={-1.465,-0.5,0.5,1.465};
 Double_t exl[nbins]={0.465,0.5,0.5,0.465};
 //Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};////////////////////////////////////////////////
 //Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};/////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.143,0.126,0.130};////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.143,0.126,0.130};//////////////////////
+Double_t yPercSigmapPbSystTotHigh[nbins]={0.183,0.155,0.129,0.139};////////////////////////////////////////////////
+Double_t yPercSigmapPbSystTotLow[nbins]={0.183,0.155,0.129,0.139};//////////////////////
 
 Double_t commonErrorP = 0.0555 ;
 Double_t commonErrorN = 0.0555  ;
