@@ -196,7 +196,7 @@ void NuclearModification(){
   gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(21);  
   gaeBplusReference->SetFillColor(5);
-   gaeBplusReference->SetFillStyle(1001);
+  gaeBplusReference->SetFillStyle(1001);
   gaeBplusReference->SetLineColor(1);
   gaeBplusReference->SetLineWidth(5);
   
@@ -208,13 +208,14 @@ void NuclearModification(){
   hSigmapPbStat->SetLineWidth(3);
   hSigmapPbStat->SetMarkerSize(1);
   hSigmapPbStat->SetLineColor(1);
-
   
-   gSigmasyst->SetFillColor(0);
+  
+  
+  gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   gaeBplusReference->Draw("2same");
   hSigmapPbStat->Draw("same");
-    gSigmasyst->SetFillColor(0);
+  gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   gSigmasyst->Draw("2same");
   
@@ -254,7 +255,7 @@ void NuclearModification(){
 
 
   //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
-TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
   ent_Sigmapp->SetMarkerColor(1);
@@ -274,33 +275,17 @@ TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
 
-if (particle=="Bplus"){
-  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{+}");
-  tlatex3->SetNDC();
-  tlatex3->SetTextColor(1);
-  tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
-  tlatex3->Draw();
-}
-
-if (particle=="Bzero"){
-  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{0}");
-  tlatex3->SetNDC();
-  tlatex3->SetTextColor(1);
-  tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
-  tlatex3->Draw();
-}
-
-if (particle=="Bs"){
-  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B_{s}");
-  tlatex3->SetNDC();
-  tlatex3->SetTextColor(1);
-  tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
-  tlatex3->Draw();
-}
+  TString mypar;
+  if(particle=="Bplus") mypar="B^{+}";
+  if(particle=="Bzero") mypar="B^{0}";
+  if(particle=="Bs") mypar="B_{s}";
   
+  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,mypar.Data());
+  tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
   
   canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
