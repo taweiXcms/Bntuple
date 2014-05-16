@@ -229,7 +229,7 @@ void NuclearModification(){
   legendSigma->SetFillColor(0);
   legendSigma->SetFillStyle(1001);
   legendSigma->SetTextFont(42);
-  legendSigma->SetTextSize(0.04);
+  legendSigma->SetTextSize(0.045);
 
   TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   c->SetLineColor(5);
@@ -358,28 +358,32 @@ void NuclearModification(){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.2540323,0.6067653,0.5524194,0.7970402,"");
+  TLegend *legendRpA=new TLegend(0.1975806,0.6109937,0.4959677,0.8012685,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
   legendRpA->SetFillStyle(1001);
   legendRpA->SetTextFont(42);
-  legendRpA->SetTextSize(0.04);
+  legendRpA->SetTextSize(0.045);
 
   TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
+  
+  hempty->GetXaxis()->CenterTitle();
+  hempty->GetYaxis()->CenterTitle();
+  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}");
   
   hempty->GetXaxis()->SetTitleOffset(1.1);
-  hempty->GetYaxis()->SetTitleOffset(1.3);
+  hempty->GetYaxis()->SetTitleOffset(1.1);
   hempty->GetXaxis()->SetTitleSize(0.045);
   hempty->GetYaxis()->SetTitleSize(0.045);
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.04);
-  hempty->GetYaxis()->SetLabelSize(0.04);  
+  hempty->GetXaxis()->SetLabelSize(0.045);
+  hempty->GetYaxis()->SetLabelSize(0.045);  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
@@ -438,18 +442,18 @@ void NuclearModification(){
   
   legendRpA->Draw();
   
-  TLatex * tlatex1=new TLatex(0.1673387,0.8393235,"CMS Preliminary              p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
-  tlatex1->SetTextSize(0.04);
+  tlatex1->SetTextSize(0.045);
   tlatex1->Draw();
   
-    TLatex * tlatex2=new TLatex(0.6875,0.7801268,"L_{int} = 34.8 nb^{-1}");
+    TLatex * tlatex2=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
-  tlatex2->SetTextSize(0.04);
+  tlatex2->SetTextSize(0.045);
   tlatex2->Draw();
   
   tlatex3->Draw();
