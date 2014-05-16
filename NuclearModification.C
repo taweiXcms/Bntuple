@@ -281,7 +281,7 @@ void NuclearModification(){
 
 
     
-  TLatex * tlatex1=new TLatex(0.1673387,0.8393235,"CMS Preliminary       p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1673387,0.8393235,"CMS Preliminary              p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
@@ -295,7 +295,7 @@ void NuclearModification(){
   if(particle=="Bs") mypar="B_{s}";
   
   
-  TLatex * tlatexlumi=new TLatex(0.6935484,0.1945032,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatexlumi=new TLatex(0.6875,0.7801268,"L_{int} = 34.8 nb^{-1}");
   tlatexlumi->SetNDC();
   tlatexlumi->SetTextColor(1);
   tlatexlumi->SetTextFont(42);
@@ -304,7 +304,7 @@ void NuclearModification(){
 
 
   
-  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,mypar.Data());
+  TLatex * tlatex3=new TLatex(0.8528226,0.6849894,mypar.Data());
   tlatex3->SetNDC();
   tlatex3->SetTextColor(1);
   tlatex3->SetTextFont(42);
@@ -438,14 +438,14 @@ void NuclearModification(){
   
   legendRpA->Draw();
   
-  TLatex * tlatex1=new TLatex(0.171371,0.858351,"CMS Preliminary         p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1673387,0.8393235,"CMS Preliminary              p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
   tlatex1->SetTextSize(0.04);
   tlatex1->Draw();
   
-  TLatex * tlatex2=new TLatex(0.6754032,0.2029598,"L_{int} = 34.8 nb^{-1}");
+    TLatex * tlatex2=new TLatex(0.6875,0.7801268,"L_{int} = 34.8 nb^{-1}");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
