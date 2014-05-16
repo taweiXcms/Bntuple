@@ -368,9 +368,8 @@ void NuclearModification(){
 
   TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA} (B^{+})");
-  if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA} (B^{0})");
-  if(particle=="Bs") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA} (B_{s})");
+  hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}");
+  
   hempty->GetXaxis()->SetTitleOffset(1.1);
   hempty->GetYaxis()->SetTitleOffset(1.3);
   hempty->GetXaxis()->SetTitleSize(0.045);
@@ -420,7 +419,7 @@ void NuclearModification(){
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"           syst. unc.","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"            syst. unc.","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(1);
   ent_RpAsystData->SetMarkerColor(1);
