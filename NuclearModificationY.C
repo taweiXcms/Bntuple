@@ -134,6 +134,17 @@ void NuclearModificationY(){
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
+  TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
+  gSigmastat->SetTitle("Sigma stat uncertainty from pPb");
+  gSigmastat->SetMarkerColor(1);
+  gSigmastat->SetLineColor(1);
+  gSigmastat->SetLineWidth(1);   
+  gSigmastat->SetMarkerStyle(21);
+  gSigmastat->SetMarkerColor(1);
+  
+  gSigmastat->SetFillColor(0);
+  gSigmastat->SetFillStyle(0);
+
 
   TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
   canvasSigma->cd();
@@ -147,13 +158,19 @@ void NuclearModificationY(){
   canvasSigma->SetBottomMargin(0.1165254);
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetFrameBorderMode(0);
-  //canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","",4,-2.7,2.7,10.,0.,700*1e6);  
+  TH2F* hempty=new TH2F("hempty","",10,-2.5,2.5,10,0,600*1e6.);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
+  //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
+  //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
+  //if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B_{s}) (pb GeV^{-1}c)");
+  
+    hempty->GetXaxis()->CenterTitle();
+  hempty->GetYaxis()->CenterTitle();
 
   
   hempty->GetYaxis()->SetTitle("d#sigma / dy_{CM}(pb GeV^{-1}c)");
+  
 
   hempty->GetXaxis()->SetTitleOffset(1.);
   hempty->GetYaxis()->SetTitleOffset(1.4);
@@ -173,116 +190,115 @@ void NuclearModificationY(){
   gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(21);  
   gaeBplusReference->SetFillColor(5);
-   gaeBplusReference->SetFillStyle(1001);
+  gaeBplusReference->SetFillStyle(1001);
   gaeBplusReference->SetLineColor(1);
   gaeBplusReference->SetLineWidth(5);
   
   
-  hSigmapPbStat->SetMarkerSize(2);
-  //ce qu on voit dans la legende
-  hSigmapPbStat->SetMarkerStyle(21);
+  gSigmastat->SetMarkerColor(1);
+  gSigmastat->SetLineColor(1);
+  gSigmastat->SetLineWidth(2);   
+  gSigmastat->SetMarkerStyle(21);
+  gSigmastat->SetMarkerColor(1);
 
-  hSigmapPbStat->SetLineWidth(3);
-  hSigmapPbStat->SetMarkerSize(1);
-  hSigmapPbStat->SetLineColor(1);
-
-  
-   gSigmasyst->SetFillColor(0);
-  gSigmasyst->SetFillStyle(0);
   gaeBplusReference->Draw("2same");
-  hSigmapPbStat->Draw("same");
-    gSigmasyst->SetFillColor(0);
-  gSigmasyst->SetFillStyle(0);
-  gSigmasyst->Draw("2same");
+  gSigmastat->SetFillColor(0);
+  gSigmastat->Draw("epsame");
   
   
-  
-  TLegend *legendSigma=new TLegend(0.3685484,0.6864271,0.8145161,0.8167019,"");
+
+ 
+  TLegend *legendSigma=new TLegend(0.5745968,0.564482,0.8729839,0.7378436,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
   legendSigma->SetFillStyle(1001);
   legendSigma->SetTextFont(42);
-  legendSigma->SetTextSize(0.04);
-
-  TBox *d = new TBox(3,1-commonErrorN,7,1+commonErrorP);
-  d->SetLineColor(1);
-  d->SetFillColor(0);
-  d->Draw();
-
-  //TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(hSigmapPbStat,"pPb stat err","pf");
- // ent_SigmapPb->SetTextFont(42);
- // ent_SigmapPb->SetLineColor(1);
- // ent_SigmapPb->SetFillColor(0);
- // ent_SigmapPb->SetMarkerColor(1);
-
-  TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb","PL");
-  ent_SigmapPbSyst->SetTextFont(42);
-  ent_SigmapPbSyst->SetLineColor(1);
-  ent_SigmapPbSyst->SetMarkerColor(1);
-  
-  
+  legendSigma->SetTextSize(0.045);
 
   TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   c->SetLineColor(5);
   c->SetFillColor(5);
   c->Draw();
 
-
-
+  
   //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
-TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"pp reference","f");
+  
+  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pPb","pf");
+  ent_SigmapPb->SetTextFont(42);
+  ent_SigmapPb->SetLineColor(1);
+  //ent_SigmapPb->SetFillColor(0);
+  ent_SigmapPb->SetMarkerColor(1);
+  
+  //TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb","f");
+  //ent_SigmapPbSyst->SetTextFont(42);
+  //ent_SigmapPbSyst->SetLineColor(1);
+  //ent_SigmapPbSyst->SetMarkerColor(1);
+  
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"FONLL pp ref","f");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
   ent_Sigmapp->SetMarkerColor(1);
+
   legendSigma->Draw("same");
+
+
+
   
-  TLatex * tlatex1=new TLatex(0.1693548,0.9362368,"CMS Preliminary");
+
+  
+  
+  gSigmasyst->SetFillColor(0);
+  gSigmasyst->SetFillStyle(0);
+  
+  //hSigmapPbStat->Draw("same");
+  gSigmasyst->SetFillColor(0);
+  gSigmasyst->SetFillStyle(0);
+  gSigmasyst->Draw("2same");
+  
+  
+  
+
+  TBox *d = new TBox(3,1-commonErrorN,7,1+commonErrorP);
+  d->SetLineColor(1);
+  d->SetFillColor(0);
+  d->Draw();
+
+
+    
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
-  tlatex1->SetTextSize(0.04);
+  tlatex1->SetTextSize(0.045);
   tlatex1->Draw();
   
-  TLatex * tlatex2=new TLatex(0.5564516,0.9362368,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
-  tlatex2->SetNDC();
-  tlatex2->SetTextColor(1);
-  tlatex2->SetTextFont(42);
-  tlatex2->SetTextSize(0.04);
-  tlatex2->Draw();
 
-if (particle=="Bplus"){
-  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{+}");
-  tlatex3->SetNDC();
-  tlatex3->SetTextColor(1);
-  tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
-  tlatex3->Draw();
-}
-
-if (particle=="Bzero"){
-  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B^{0}");
-  tlatex3->SetNDC();
-  tlatex3->SetTextColor(1);
-  tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
-  tlatex3->Draw();
-}
-
-if (particle=="Bs"){
-  TLatex * tlatex3=new TLatex(0.8528226,0.7272727,"B_{s}");
-  tlatex3->SetNDC();
-  tlatex3->SetTextColor(1);
-  tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
-  tlatex3->Draw();
-}
-
-
+  TString mypar;
+  if(particle=="Bplus") mypar="B^{+}";
+  if(particle=="Bzero") mypar="B^{0}";
+  if(particle=="Bs") mypar="B_{s}";
   
   
-//  canvasSigma->SaveAs(Form("Results%sY/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
-  canvasSigma->SaveAs(Form("Results%s_y/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
+  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
+  tlatexlumi->SetNDC();
+  tlatexlumi->SetTextColor(1);
+  tlatexlumi->SetTextFont(42);
+  tlatexlumi->SetTextSize(0.045);
+  tlatexlumi->Draw();
+
+ double xpos=0.8528226;
+ double ypos=0.6849894;
+  
+  TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
+   tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+  
+
+  canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
