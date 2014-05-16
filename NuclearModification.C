@@ -163,6 +163,9 @@ void NuclearModification(){
   gSigmastat->SetLineWidth(1);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
+  
+  gSigmastat->SetFillColor(0);
+  gSigmastat->SetFillStyle(0);
 
 
   TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
@@ -185,7 +188,12 @@ void NuclearModification(){
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
   //if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B_{s}) (pb GeV^{-1}c)");
   
+    hempty->GetXaxis()->CenterTitle();
+  hempty->GetYaxis()->CenterTitle();
+
+  
   hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}(pb GeV^{-1}c)");
+  
 
   hempty->GetXaxis()->SetTitleOffset(1.);
   hempty->GetYaxis()->SetTitleOffset(1.3);
@@ -223,7 +231,7 @@ void NuclearModification(){
   
 
  
-  TLegend *legendSigma=new TLegend(0.6129032,0.4989429,0.9112903,0.6300211,"");
+  TLegend *legendSigma=new TLegend(0.5745968,0.4756871,0.8729839,0.6490486,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -239,16 +247,16 @@ void NuclearModification(){
   
   //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
   
-  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pPb stat unc","PLF");
+  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pPb","pf");
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
   //ent_SigmapPb->SetFillColor(0);
   ent_SigmapPb->SetMarkerColor(1);
   
-  TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb syst unc","f");
-  ent_SigmapPbSyst->SetTextFont(42);
-  ent_SigmapPbSyst->SetLineColor(1);
-  ent_SigmapPbSyst->SetMarkerColor(1);
+  //TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb","f");
+  //ent_SigmapPbSyst->SetTextFont(42);
+  //ent_SigmapPbSyst->SetLineColor(1);
+  //ent_SigmapPbSyst->SetMarkerColor(1);
   
   TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"FONLL pp ref","f");
   ent_Sigmapp->SetTextFont(42);
@@ -281,11 +289,11 @@ void NuclearModification(){
 
 
     
-  TLatex * tlatex1=new TLatex(0.1673387,0.8393235,"CMS Preliminary              p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
-  tlatex1->SetTextSize(0.04);
+  tlatex1->SetTextSize(0.045);
   tlatex1->Draw();
   
 
@@ -295,11 +303,11 @@ void NuclearModification(){
   if(particle=="Bs") mypar="B_{s}";
   
   
-  TLatex * tlatexlumi=new TLatex(0.6875,0.7801268,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
   tlatexlumi->SetNDC();
   tlatexlumi->SetTextColor(1);
   tlatexlumi->SetTextFont(42);
-  tlatexlumi->SetTextSize(0.04);
+  tlatexlumi->SetTextSize(0.045);
   tlatexlumi->Draw();
 
 
@@ -320,7 +328,7 @@ void NuclearModification(){
   gRpAstat->SetMarkerColor(1);
   gRpAstat->SetLineColor(1);
   gRpAstat->SetLineWidth(2);   
-  gRpAstat->SetMarkerStyle(22);
+  gRpAstat->SetMarkerStyle(21);
   gRpAstat->SetMarkerColor(1);
   
   TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
@@ -405,6 +413,9 @@ void NuclearModification(){
   gRpAstat->Draw("psame");
   gRpAsyst->SetFillColor(0);
   gRpAsyst->SetFillStyle(0);
+  
+  gRpAstat->SetFillColor(0);
+  gRpAstat->SetFillStyle(0);
   gRpAsyst->Draw("2same");
   
   TBox *a = new TBox(3,1-commonErrorN,7,1+commonErrorP);
@@ -419,14 +430,14 @@ void NuclearModification(){
   b->Draw();
 
 
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}  stat. unc.","lp");
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}","pf");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"            syst. unc.","f");
-  ent_RpAsystData->SetTextFont(42);
-  ent_RpAsystData->SetLineColor(1);
-  ent_RpAsystData->SetMarkerColor(1);
+  //TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"            syst. unc.","f");
+  //ent_RpAsystData->SetTextFont(42);
+  //ent_RpAsystData->SetLineColor(1);
+  //ent_RpAsystData->SetMarkerColor(1);
   TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst Lumi+BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
