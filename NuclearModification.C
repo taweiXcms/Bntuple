@@ -34,7 +34,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555);
   Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.19097,1.11408,1.06534};
+  Double_t tagandprobcorrection[nbins]={1.1763037,1.1183703,1.0768526};
 
 
 
@@ -51,7 +51,7 @@
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.16197,1.11084,1.08737,1.07056,1.05181};
+  Double_t tagandprobcorrection[nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
 
 */
 
