@@ -33,8 +33,14 @@
 
 */
 
+
 TString particle="Bplus";
-const int nbins=4;
+const int nbinsRFB = 2;
+Double_t xbinsRFB[nbinsRFB]={0.5,1.465};
+Double_t exlRFB[nbinsRFB]={0.5,0.465};
+Double_t yRFBSystTotHighRel[nbinsRFB]= {0.162,0.196};////////////////////////////////////////////////
+Double_t yRFBSystTotLowRel[nbinsRFB]= {0.162,0.196};//////////////////////
+const int nbins = 4;
 Double_t xbins[nbins]={-1.465,-0.5,0.5,1.465};
 Double_t exl[nbins]={0.465,0.5,0.5,0.465};
 //Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};////////////////////////////////////////////////
@@ -61,9 +67,10 @@ void NuclearModificationY(){
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   
   for (int i=1;i<nbins;i++){
-    hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i));
-    hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i));
-  
+    hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinContent(i)));
+    hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinError(i)));
+    //  hSigmapPbStat->SetBinContent(i,hSigmapPbStat->GetBinContent(i));
+    // hSigmapPbStat->SetBinError(i,hSigmapPbStat->GetBinError(i)); 
   } 
 
   
@@ -96,8 +103,13 @@ void NuclearModificationY(){
   Double_t yRpPbSystTotHigh[nbins];              //y percentuale err syst RpPb TOT
   Double_t yRpPbSystTotLow[nbins];              //y percentuale err syst RpPb TOT
 
-  
+  Double_t yRFB[nbinsRFB];
+  Double_t yRFBStat[nbinsRFB];
+Double_t yRFBSystTotHigh[nbinsRFB];////////////////////////////////////////////////
+Double_t yRFBSystTotLow[nbinsRFB];
+
   double x,y;
+  cout<<"hello"<<endl;
   for (Int_t i=0;i<nbins;i++) {
     gaeBplusReference->GetPoint(i,xRefPP[i],yRefPP[i]);
     yPPsystFONLLhigh[i]=gaeBplusReference->GetEYhigh()[i];
@@ -118,13 +130,31 @@ void NuclearModificationY(){
     yRpA[i]=ySigmapPb[i]/yRefPP[i];
     yRpAStat[i]=ySigmapPbStat[i]/yRefPP[i];
     yFONLL[i]=yRpA[i];
-    yRpAsystFONLLhigh[i]=yPercPPsystFONLLlow[i];//*yRpA[i];
-    yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i];//*yRpA[i];
+    yPercRpAsystFONLLhigh[i]=(yPercPPsystFONLLlow[i]/(1-yPercPPsystFONLLlow[i]));
+    yPercRpAsystFONLLlow[i]=(yPercPPsystFONLLhigh[i]/(1+yPercPPsystFONLLhigh[i]));
+    yRpAsystFONLLhigh[i]=yPercRpAsystFONLLhigh[i]*yRpA[i];
+    yRpAsystFONLLlow[i]=yPercRpAsystFONLLlow[i]*yRpA[i];
     yRpPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*yRpA[i];
     yRpPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*yRpA[i];
-    //cout<<yRpPbSystTot[i]<<endl;
-    
+    //cout<<yRpPbSystTotLow[i]<<endl;
   }
+
+  //RFB stuff
+  //central value
+ yRFB[0] =  ySigmapPb[2]/ySigmapPb[1];
+ yRFB[1] =  ySigmapPb[3]/ySigmapPb[0];
+ //Stat.
+ yRFBStat[0] =  yRFB[0]*sqrt(pow(ySigmapPbStat[1]/ySigmapPb[1],2)+pow(ySigmapPbStat[2]/ySigmapPb[2],2));
+ yRFBStat[1] =  yRFB[1]*sqrt(pow(ySigmapPbStat[3]/ySigmapPb[3],2)+pow(ySigmapPbStat[0]/ySigmapPb[0],2));
+ //Syst.
+
+  yRFBSystTotHigh[0] = yRFB[0]*yRFBSystTotHighRel[0];
+  yRFBSystTotLow[0] = yRFB[0]*yRFBSystTotLowRel[0];////////////////////////////////////////////////
+  yRFBSystTotHigh[1] = yRFB[1]*yRFBSystTotHighRel[1];
+  yRFBSystTotLow[1] = yRFB[1]*yRFBSystTotLowRel[1];
+  
+cout<<yRFBStat[0]<<endl;
+cout<<yRFBStat[1]<<endl;
   
   TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
@@ -166,7 +196,7 @@ void NuclearModificationY(){
   //if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B_{s}) (pb GeV^{-1}c)");
   
     hempty->GetXaxis()->CenterTitle();
-  hempty->GetYaxis()->CenterTitle();
+    hempty->GetYaxis()->CenterTitle();
 
   
   hempty->GetYaxis()->SetTitle("d#sigma / dy_{CM}(pb GeV^{-1}c)");
@@ -188,11 +218,11 @@ void NuclearModificationY(){
     
   
   gaeBplusReference->SetMarkerColor(1);
-  gaeBplusReference->SetMarkerStyle(21);  
+  gaeBplusReference->SetMarkerStyle(25);  
   gaeBplusReference->SetFillColor(5);
   gaeBplusReference->SetFillStyle(1001);
-  gaeBplusReference->SetLineColor(1);
-  gaeBplusReference->SetLineWidth(5);
+  gaeBplusReference->SetLineColor(5);
+  gaeBplusReference->SetLineWidth(1);
   
   
   gSigmastat->SetMarkerColor(1);
@@ -201,14 +231,15 @@ void NuclearModificationY(){
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
 
-  gaeBplusReference->Draw("2same");
+  gaeBplusReference->Draw("2psame");
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
   
   
 
  
-  TLegend *legendSigma=new TLegend(0.5745968,0.564482,0.8729839,0.7378436,"");
+  //TLegend *legendSigma=new TLegend(0.5745968,0.564482,0.8729839,0.7378436,"");
+  TLegend *legendSigma=new TLegend(0.233871,0.6419492,0.5322581,0.815678,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -235,12 +266,12 @@ void NuclearModificationY(){
   //ent_SigmapPbSyst->SetLineColor(1);
   //ent_SigmapPbSyst->SetMarkerColor(1);
   
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"FONLL pp ref","f");
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","fp");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
   ent_Sigmapp->SetMarkerColor(1);
-
-  legendSigma->Draw("same");
+  ent_Sigmapp->SetMarkerStyle(25);
+  legendSigma->Draw("psame");
 
 
 
@@ -430,6 +461,124 @@ void NuclearModificationY(){
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
 
+  TCanvas *canvasRFB=new TCanvas("canvasRFB","canvasRFB",500,500);   
+  canvasRFB->cd();
+  canvasRFB->Range(-1.989924,-0.2917772,25.49622,2.212202);
+  canvasRFB->SetFillColor(0);
+  canvasRFB->SetBorderMode(0);
+  canvasRFB->SetBorderSize(2);
+  canvasRFB->SetLeftMargin(0.1451613);
+  canvasRFB->SetRightMargin(0.05443548);
+  canvasRFB->SetTopMargin(0.08474576);
+  canvasRFB->SetBottomMargin(0.1165254);
+  canvasRFB->SetFrameBorderMode(0);
+  canvasRFB->SetFrameBorderMode(0);
+ 
+  TLegend *legendRFB=new TLegend(0.2564516,0.5804503,0.549894,0.770252,"");
+  legendRFB->SetBorderSize(0);
+  legendRFB->SetLineColor(0);
+  legendRFB->SetFillColor(0);
+  legendRFB->SetFillStyle(1001);
+  legendRFB->SetTextFont(42);
+  legendRFB->SetTextSize(0.04);
+
+  TH2F* hempty=new TH2F("hempty","",4,-0.1,2.,10.,0.,2.5);  
+  hempty->GetXaxis()->SetTitle("|y_{CM}|");
+ //  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{+})");
+//   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
+  hempty->GetYaxis()->SetTitle("R_{FB}");
+  hempty->GetXaxis()->SetTitleOffset(1.1);
+  hempty->GetYaxis()->SetTitleOffset(1.3);
+  hempty->GetXaxis()->SetTitleSize(0.045);
+  hempty->GetYaxis()->SetTitleSize(0.045);
+  hempty->GetXaxis()->SetTitleFont(42);
+  hempty->GetYaxis()->SetTitleFont(42);
+  hempty->GetXaxis()->SetLabelFont(42);
+  hempty->GetYaxis()->SetLabelFont(42);
+  hempty->GetXaxis()->SetLabelSize(0.04);
+  hempty->GetYaxis()->SetLabelSize(0.04);  
+  hempty->GetXaxis()->CenterTitle();
+  hempty->GetYaxis()->CenterTitle();
+  hempty->SetMaximum(3);
+  hempty->SetMinimum(0.);
+  hempty->Draw();
+  legendRFB->Draw();
+
+  TGraphAsymmErrors *gRFBsyst = new TGraphAsymmErrors(nbinsRFB,xbinsRFB,yRFB,exlRFB,exlRFB,yRFBSystTotLow,yRFBSystTotHigh);
+  gRFBsyst->SetTitle("gRFBsyst");
+   gRFBsyst->SetName("gRFBsyst");
+  gRFBsyst->SetMarkerColor(4);
+  gRFBsyst->SetLineColor(4);
+  gRFBsyst->SetLineWidth(2);   
+  gRFBsyst->SetMarkerStyle(0);
+  gRFBsyst->SetMarkerColor(1);
+
+
+  
+
+
+  TGraphAsymmErrors *gRFBstat = new TGraphAsymmErrors(nbinsRFB,xbinsRFB,yRFB,exlRFB,exlRFB,yRFBStat, yRFBStat);
+  gRFBstat->SetTitle("gRFBstat");
+  gRFBstat->SetName("gRFBstat");
+  gRFBstat->SetMarkerColor(1);
+  gRFBstat->SetLineColor(1);
+  gRFBstat->SetLineWidth(2);   
+  gRFBstat->SetMarkerStyle(21);
+  gRFBstat->SetMarkerColor(1);
+  gRFBstat->SetFillColor(0);
+  gRFBstat->SetFillStyle(0);
+
+  gRFBsyst->SetFillColor(0);
+  gRFBsyst->SetFillStyle(0);
+  
+  gRFBsyst->Draw("2same");
+  gRFBstat->Draw("psame");
+
+
+
+  TLegendEntry *ent_RFB=legendRFB->AddEntry(gRFBstat,"R_{FB} stat.","pl");
+  ent_RFB->SetTextFont(42);
+  ent_RFB->SetLineColor(2);
+  ent_RFB->SetMarkerColor(2);
+
+  TLegendEntry *ent_RFB=legendRFB->AddEntry(gRFBsyst,"R_{FB} syst.","l");
+  ent_RFB->SetTextFont(42);
+  ent_RFB->SetLineColor(4);
+  // ent_RFB->SetMarkerColor(2);
+
+  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  tlatex1->SetNDC();
+  tlatex1->SetTextColor(1);
+  tlatex1->SetTextFont(42);
+  tlatex1->SetTextSize(0.04);
+  tlatex1->Draw();
+  
+  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  tlatex2->SetNDC();
+  tlatex2->SetTextColor(1);
+  tlatex2->SetTextFont(42);
+  tlatex2->SetTextSize(0.04);
+  tlatex2->Draw();
+
+  TLatex * tlatex2=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
+  tlatex2->SetNDC();
+  tlatex2->SetTextColor(1);
+  tlatex2->SetTextFont(42);
+  tlatex2->SetTextSize(0.04);
+  tlatex2->Draw();
+  
+  //double xpos1=0.6528226;
+  // double ypos1=0.6849894;
+  TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
+   tlatex3->SetNDC();
+  tlatex3->SetTextColor(1);
+  tlatex3->SetTextFont(42);
+  tlatex3->SetTextSize(0.06);
+  tlatex3->Draw();
+
+
+
+
 //  l->Draw();  
 //  canvasRpA->SaveAs(Form("Results%sY/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
   canvasRpA->SaveAs(Form("Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
@@ -441,4 +590,10 @@ void NuclearModificationY(){
   gSigmasyst->Write();
   gaeBplusReference->Write();
   hSigmapPbStat->Write();
+
+
+
+
+
+
 }
