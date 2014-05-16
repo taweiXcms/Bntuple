@@ -55,19 +55,23 @@
 
 */
 
-  TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t exl0[nbins]={0.,0.,0.,0.,0.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
-  //Double_t commonErrorP = 0.0445 ;  
-  //Double_t commonErrorN = 0.0445  ;
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
-  Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
+
+  TString particle="Bs";
+  const int nbins=1;
+  Double_t xbins[nbins]={35};
+  Double_t exl[nbins]={25};
+  Double_t exl0[nbins]={0.};
+
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
+
+  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
+  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
+  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
+  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
+  Double_t FFsysterror=0.6/10.4;
+  Double_t tagandprobcorrection[nbins]={1.14114};
+
 
 void NuclearModification(){
 
@@ -310,10 +314,11 @@ void NuclearModification(){
   tlatexlumi->SetTextSize(0.045);
   tlatexlumi->Draw();
 
-
+ double xpos=0.8528226;
+ double ypos=0.6849894;
   
-  TLatex * tlatex3=new TLatex(0.8528226,0.6849894,mypar.Data());
-  tlatex3->SetNDC();
+  TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
+   tlatex3->SetNDC();
   tlatex3->SetTextColor(1);
   tlatex3->SetTextFont(42);
   tlatex3->SetTextSize(0.06);
