@@ -278,7 +278,7 @@ void NuclearModification(){
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   
-  hSigmapPbStat->Draw("same");
+  //hSigmapPbStat->Draw("same");
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   gSigmasyst->Draw("2same");
