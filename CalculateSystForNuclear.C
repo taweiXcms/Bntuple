@@ -3,7 +3,7 @@
 const int nbins=4;
 Double_t acceptance[nbins]={5.8,6.4,4.0,2.8};
 Double_t hadron[nbins]={3.9,3.9,3.9,3.9};
-Double_t best[nbins]={0.,0.,0.,0.};
+Double_t best[nbins]={3.2,3.2,3.2,3.2};
 Double_t Bselection[nbins]={9.0,9.0,9.0,9.0};
 Double_t ptres[nbins]={0.6,0.6,0.6,0.6};
 Double_t trgeff[nbins]={5.7,4.6,3.4,4.0};
@@ -65,7 +65,7 @@ Double_t tandprobe[nbins]={0.};
 const int nbins=4;
 Double_t acceptance[nbins]={5.8,6.4,4.0,2.8};
 Double_t hadron[nbins]={3.9,3.9,3.9,3.9};
-Double_t best[nbins]={0.,0.,0.,0.};
+Double_t best[nbins]={3.2,3.2,3.2,3.2};
 Double_t Bselection[nbins]={9.0,9.0,9.0,9.0};
 Double_t ptres[nbins]={0.6,0.6,0.6,0.6};
 Double_t trgeff[nbins]={5.7,4.6,3.4,4.0};
