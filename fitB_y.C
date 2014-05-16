@@ -8,7 +8,7 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 
-  Double_t tagandprobcorrection[nbins]={1.1742287,1.1346129,1.0915380,1.0972000};
+  Double_t tagandprobcorrection[4]={1.1742287,1.1346129,1.0915380,1.0972000};
 
 
 //svmit2
