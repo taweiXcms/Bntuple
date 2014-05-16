@@ -36,26 +36,8 @@
   Double_t FFsysterror=0.7/40.2;
   Double_t tagandprobcorrection[nbins]={1.1763037,1.1183703,1.0768526};
 
-
-
-
-  TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t exl0[nbins]={0.,0.,0.,0.,0.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
-  //Double_t commonErrorP = 0.0445 ;  
-  //Double_t commonErrorN = 0.0445  ;
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
-  Double_t FFsysterror=0.7/40.2;
-  Double_t tagandprobcorrection[nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
-
 */
-
-
+  
 
   TString particle="Bplus";
   const int nbins=5;
@@ -71,6 +53,25 @@
   Double_t FFsysterror=0.7/40.2;
   Double_t tagandprobcorrection[nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
 
+
+
+/*
+  TString particle="Bs";
+  const int nbins=1;
+  Double_t xbins[nbins]={35};
+  Double_t exl[nbins]={25};
+  Double_t exl0[nbins]={0.};
+
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
+
+  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
+  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
+  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
+  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
+  Double_t FFsysterror=0.6/10.4;
+  Double_t tagandprobcorrection[nbins]={1.14114};
+*/
 
 void NuclearModification(){
 
@@ -84,7 +85,13 @@ void NuclearModification(){
   
   TFile*filepPb=new TFile(Form("Results%s/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
+  TH1F*hPt=(TH1F*)filepPb->Get("hPt");
+  TH1F*hEff=(TH1F*)filepPb->Get("hEff");
   for (int i=1;i<nbins;i++){
+
+    //cout <<"bin  :"<<i<<hPt->GetBinContent(i)<<endl;
+    cout <<"eff  :"<<hEff->GetBinContent(i)<<endl;
+
     hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i));
     hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i));
   
@@ -147,8 +154,10 @@ void NuclearModification(){
     yPercRpAsystFONLLlow[i]=(yPercPPsystFONLLhigh[i]/(1+yPercPPsystFONLLhigh[i]));
     yRpAsystFONLLhigh[i]=yPercRpAsystFONLLhigh[i]*yRpA[i];
     yRpAsystFONLLlow[i]=yPercRpAsystFONLLlow[i]*yRpA[i];
+
     yRpPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*yRpA[i];
     yRpPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*yRpA[i];
+    //cout<<yRpPbSystTot[i]<<endl;
     
   }
   
@@ -234,15 +243,19 @@ void NuclearModification(){
   
   
 
- 
-  TLegend *legendSigma=new TLegend(0.5745968,0.4756871,0.8729839,0.6490486,"");
+  //coord. for B+ and B0
+  //TLegend *legendSigma=new TLegend(0.5745968,0.4756871,0.8729839,0.6490486,"");
+  //coord.  B0
+  TLegend *legendSigma=new TLegend(0.5100806,0.5868644,0.8084677,0.7605932,"");
+  //coord. for B_s
+  //TLegend *legendSigma=new TLegend(0.2580645,0.6122881,0.5564516,0.7860169,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
   legendSigma->SetFillStyle(1001);
   legendSigma->SetTextFont(42);
   legendSigma->SetTextSize(0.045);
-
+  
   TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   c->SetLineColor(5);
   c->SetFillColor(5);
@@ -262,7 +275,7 @@ void NuclearModification(){
   //ent_SigmapPbSyst->SetLineColor(1);
   //ent_SigmapPbSyst->SetMarkerColor(1);
   
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"FONLL pp ref","f");
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"FONLL pp ref.","f");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
   ent_Sigmapp->SetMarkerColor(1);
@@ -443,14 +456,14 @@ void NuclearModification(){
   //ent_RpAsystData->SetTextFont(42);
   //ent_RpAsystData->SetLineColor(1);
   //ent_RpAsystData->SetMarkerColor(1);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst Lumi+BR","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. L_{int}+BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
 
 
   
-  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","f");
+  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. err. from FONLL pp ref.","f");
   ent_RpAsystFONLL->SetTextFont(42);
   ent_RpAsystFONLL->SetLineColor(5);
   ent_RpAsystFONLL->SetLineStyle(1);
