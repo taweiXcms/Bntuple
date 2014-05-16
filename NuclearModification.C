@@ -55,21 +55,19 @@
 
 */
 
-  TString particle="Bs";
-  const int nbins=1;
-  Double_t xbins[nbins]={35};
-  Double_t exl[nbins]={25};
-  Double_t exl0[nbins]={0.};
-
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
-
-  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
-  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
-  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
-  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
-  Double_t FFsysterror=0.6/10.4;
-  Double_t tagandprobcorrection[nbins]={1.14114};
+  TString particle="Bplus";
+  const int nbins=5;
+  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
+  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+  Double_t exl0[nbins]={0.,0.,0.,0.,0.};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
+  //Double_t commonErrorP = 0.0445 ;  
+  //Double_t commonErrorN = 0.0445  ;
+  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
+  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
+  Double_t FFsysterror=0.7/40.2;
+  Double_t tagandprobcorrection[nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
 
 void NuclearModification(){
 
@@ -350,7 +348,7 @@ if (particle=="Bs"){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.205161,0.6804503,0.8604839,0.870252,"");
+  TLegend *legendRpA=new TLegend(0.2540323,0.6067653,0.5524194,0.7970402,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
@@ -431,21 +429,14 @@ if (particle=="Bs"){
   
   legendRpA->Draw();
   
-  TLatex * tlatex1=new TLatex(0.193548,0.9362368,"CMS Preliminary");
+  TLatex * tlatex1=new TLatex(0.171371,0.858351,"CMS Preliminary         p+Pb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
   tlatex1->SetTextSize(0.04);
   tlatex1->Draw();
   
-  TLatex * tlatex2=new TLatex(0.5564516,0.9362368,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
-  tlatex2->SetNDC();
-  tlatex2->SetTextColor(1);
-  tlatex2->SetTextFont(42);
-  tlatex2->SetTextSize(0.04);
-  tlatex2->Draw();
-
-  TLatex * tlatex2=new TLatex(0.7064516,0.85,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatex2=new TLatex(0.6754032,0.2029598,"L_{int} = 34.8 nb^{-1}");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
