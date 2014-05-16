@@ -8,9 +8,6 @@ double setparam2=0.05;
 double setparam3=0.03;
 double fixparam1=5.279;
 
-  Double_t tagandprobcorrection[4]={1.1742287,1.1346129,1.0915380,1.0972000};
-
-
 //svmit2
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Kp_TriggerMatchingMuon_EvtBase_skim.root";
@@ -270,19 +267,7 @@ void fitB_y(TString infname="",bool doweight = 1)
   TH1D* rFB = new TH1D("rFB","",nBins,absl);
   TH1D* rFB2 = new TH1D("rFB2","",nBins,absl);
   double statf[2],statb[2];
-  double sysf[2]={0.162,0.196};
-  
-  
-  hPtCor->SetBinContent(1,hPtCor->GetBinContent(1)/tagandprobcorrection[0]);
-  hPtCor->SetBinContent(2,hPtCor->GetBinContent(2)/tagandprobcorrection[1]);
-  hPtCor->SetBinContent(2,hPtCor->GetBinContent(3)/tagandprobcorrection[2]);
-  hPtCor->SetBinContent(3,hPtCor->GetBinContent(4)/tagandprobcorrection[3]);
-  
-  hPtCor->SetBinError(1,hPtCor->GetBinError(1)/tagandprobcorrection[0]);
-  hPtCor->SetBinError(2,hPtCor->GetBinError(2)/tagandprobcorrection[1]);
-  hPtCor->SetBinError(2,hPtCor->GetBinError(3)/tagandprobcorrection[2]);
-  hPtCor->SetBinError(3,hPtCor->GetBinError(4)/tagandprobcorrection[3]);
-  
+  double sysf[2]={0.142,0.165};
   for(int k=2;k<4;k++)
     {
       rFB->SetBinContent(k-1,hPtCor->GetBinContent(k+1));
