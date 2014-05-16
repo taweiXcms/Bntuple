@@ -56,21 +56,20 @@
 */
 
 
-  TString particle="Bs";
-  const int nbins=1;
-  Double_t xbins[nbins]={35};
-  Double_t exl[nbins]={25};
-  Double_t exl0[nbins]={0.};
 
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.199};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.199};
-
-  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
-  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
-  Double_t commonErrorP = TMath::Sqrt(0.22*0.22);
-  Double_t commonErrorN = TMath::Sqrt(0.24*0.24);
-  Double_t FFsysterror=0.6/10.4;
-  Double_t tagandprobcorrection[nbins]={1.14114};
+  TString particle="Bplus";
+  const int nbins=5;
+  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
+  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
+  Double_t exl0[nbins]={0.,0.,0.,0.,0.};
+  Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
+  Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
+  //Double_t commonErrorP = 0.0445 ;  
+  //Double_t commonErrorN = 0.0445  ;
+  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
+  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
+  Double_t FFsysterror=0.7/40.2;
+  Double_t tagandprobcorrection[nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
 
 
 void NuclearModification(){
@@ -144,11 +143,12 @@ void NuclearModification(){
     yRpA[i]=ySigmapPb[i]/yRefPP[i];
     yRpAStat[i]=ySigmapPbStat[i]/yRefPP[i];
     yFONLL[i]=yRpA[i];
-    yRpAsystFONLLhigh[i]=yPercPPsystFONLLlow[i];//*yRpA[i];
-    yRpAsystFONLLlow[i]=yPercPPsystFONLLhigh[i];//*yRpA[i];
+    yPercRpAsystFONLLhigh[i]=(yPercPPsystFONLLlow[i]/(1-yPercPPsystFONLLlow[i]));
+    yPercRpAsystFONLLlow[i]=(yPercPPsystFONLLhigh[i]/(1+yPercPPsystFONLLhigh[i]));
+    yRpAsystFONLLhigh[i]=yPercRpAsystFONLLhigh[i]*yRpA[i];
+    yRpAsystFONLLlow[i]=yPercRpAsystFONLLlow[i]*yRpA[i];
     yRpPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*yRpA[i];
     yRpPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*yRpA[i];
-    //cout<<yRpPbSystTot[i]<<endl;
     
   }
   
