@@ -44,7 +44,7 @@ Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.143,0.126,0.130};//////////////
 
 Double_t commonErrorP = 0.0555 ;
 Double_t commonErrorN = 0.0555  ;
-Double_t tagandprobcorrection[nbins]={1.0788904,1.0788904,1.0788904,1.0788904};
+Double_t tagandprobcorrection[nbins]={1.1742287,1.1346129,1.0915380,1.0972000};
 
 void NuclearModificationY(){
 
