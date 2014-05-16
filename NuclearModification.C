@@ -50,7 +50,7 @@
   //Double_t commonErrorN = 0.0445  ;
   Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
-  Double_t FFsysterror=0.7/40.2;
+  Double_t FFsysterror=0.7/40.1;
   Double_t tagandprobcorrection[nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
 
 
@@ -88,10 +88,6 @@ void NuclearModification(){
   TH1F*hPt=(TH1F*)filepPb->Get("hPt");
   TH1F*hEff=(TH1F*)filepPb->Get("hEff");
   for (int i=1;i<nbins;i++){
-
-    //cout <<"bin  :"<<i<<hPt->GetBinContent(i)<<endl;
-    cout <<"eff  :"<<hEff->GetBinContent(i)<<endl;
-
     hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i));
     hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i));
   
@@ -365,9 +361,6 @@ void NuclearModification(){
   gRpAsystFONLL->SetLineWidth(2); 
   gRpAsystFONLL->SetMarkerStyle(21);
   gRpAsystFONLL->SetMarkerColor(2);
-
-
-
 
   TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",500,500);   
   
