@@ -156,6 +156,15 @@ void NuclearModification(){
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
+  TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
+  gSigmastat->SetTitle("Sigma stat uncertainty from pPb");
+  gSigmastat->SetMarkerColor(1);
+  gSigmastat->SetLineColor(1);
+  gSigmastat->SetLineWidth(1);   
+  gSigmastat->SetMarkerStyle(21);
+  gSigmastat->SetMarkerColor(1);
+
+
   TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
   canvasSigma->cd();
   canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
@@ -200,7 +209,7 @@ void NuclearModification(){
   gaeBplusReference->SetLineColor(1);
   gaeBplusReference->SetLineWidth(5);
   
-  
+  /*
   hSigmapPbStat->SetMarkerSize(2);
   //ce qu on voit dans la legende
   hSigmapPbStat->SetMarkerStyle(21);
@@ -274,11 +283,14 @@ void NuclearModification(){
   tlatex2->SetTextFont(42);
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
+  
+    */
 
   TString mypar;
   if(particle=="Bplus") mypar="B^{+}";
   if(particle=="Bzero") mypar="B^{0}";
   if(particle=="Bs") mypar="B_{s}";
+
   
   TLatex * tlatex3=new TLatex(0.8528226,0.7272727,mypar.Data());
   tlatex3->SetNDC();
@@ -287,6 +299,7 @@ void NuclearModification(){
   tlatex3->SetTextSize(0.06);
   tlatex3->Draw();
   
+
   canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
   //TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
