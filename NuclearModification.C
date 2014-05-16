@@ -87,9 +87,9 @@ void NuclearModification(){
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   TH1F*hPt=(TH1F*)filepPb->Get("hPt");
   TH1F*hEff=(TH1F*)filepPb->Get("hEff");
-  for (int i=1;i<nbins;i++){
-    hSigmapPbStat->SetBinContent(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i));
-    hSigmapPbStat->SetBinError(i,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i));
+  for (int i=0;i<nbins;i++){
+    hSigmapPbStat->SetBinContent(i+1,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i+1));
+    hSigmapPbStat->SetBinError(i+1,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i+1));
   
   } 
   Double_t yRefPP[nbins];                        //value y reference
