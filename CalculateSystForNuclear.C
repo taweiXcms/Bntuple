@@ -10,8 +10,8 @@ Double_t trgeff[nbins]={3.6,3.6,3.6,3.6};
 Double_t muonid[nbins]={2.5,2.5,2.5,2.5};
 Double_t innertrk[nbins]={1.6,1.6,1.6,1.6};
 Double_t PDF[nbins]={10.6,6.8,5.0,6.6};
-Double_t total[nbins]={0.,0.};
-Double_t tandprobe[nbins]={0.,0.,0.,0.,0.};
+Double_t total[nbins]={0.,0.,0.,0.};
+Double_t tandprobe[nbins]={0.,0.,0.,0.};
 
 
 
@@ -74,6 +74,7 @@ Double_t innertrk[nbins]={1.6,1.6,1.6,1.6};
 Double_t PDF[nbins]={10.6,6.8,5.0,6.6};
 Double_t total[nbins]={0.,0.,0.,0.};
 Double_t tandprobe[nbins]={0.,0.,0.,0.};
+
 
 void CalculateSystForNuclear(){
 
