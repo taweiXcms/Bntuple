@@ -223,7 +223,7 @@ void NuclearModification(){
   
 
  
-  TLegend *legendSigma=new TLegend(0.5866935,0.4947146,0.8850806,0.6257928,"");
+  TLegend *legendSigma=new TLegend(0.6129032,0.4989429,0.9112903,0.6300211,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -295,7 +295,7 @@ void NuclearModification(){
   if(particle=="Bs") mypar="B_{s}";
   
   
-  TLatex * tlatexlumi=new TLatex(0.6612903,0.397463,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatexlumi=new TLatex(0.6935484,0.1945032,"L_{int} = 34.8 nb^{-1}");
   tlatexlumi->SetNDC();
   tlatexlumi->SetTextColor(1);
   tlatexlumi->SetTextFont(42);
