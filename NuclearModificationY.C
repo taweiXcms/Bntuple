@@ -66,6 +66,33 @@ void NuclearModificationY(){
   TFile*filepPb=new TFile(Form("Results%s_y/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   
+  
+    double scalingfactor=1e-6;
+  
+  
+  double yvalue,xvalue,yerrorhigh,yerrorlow;
+  
+  for (int i=0;i<nbins;i++){
+    hSigmapPbStat->SetBinContent(i+1,scalingfactor*hSigmapPbStat->GetBinContent(i+1));
+    hSigmapPbStat->SetBinError(i+1,scalingfactor*hSigmapPbStat->GetBinError(i+1));
+    
+    yvalue=-1.;
+    xvalue=-1.;
+    yerrorhigh=-1.;
+    yerrorlow=-1.;
+    
+    gaeBplusReference->GetPoint(i,xvalue,yvalue);
+    yerrorhigh=gaeBplusReference->GetEYhigh()[i];
+    yerrorlow=gaeBplusReference->GetEYlow()[i];
+  
+    gaeBplusReference->SetPoint(i,xvalue,yvalue*scalingfactor);
+    gaeBplusReference->SetPointEYhigh(i,yerrorhigh*scalingfactor);
+    gaeBplusReference->SetPointEYlow(i,yerrorlow*scalingfactor);
+
+  } 
+
+  
+  
   for (int i=0;i<nbins;i++){
     hSigmapPbStat->SetBinContent(i+1,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinContent(i+1)));
     hSigmapPbStat->SetBinError(i+1,(1./tagandprobcorrection[i])*(hSigmapPbStat->GetBinError(i+1)));
@@ -187,7 +214,7 @@ cout<<yRFBStat[1]<<endl;
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetFrameBorderMode(0);
   
-  TH2F* hempty=new TH2F("hempty","",10,-2.5,2.5,10,0,600*1e6.);  
+  TH2F* hempty=new TH2F("hempty","",10,-2.5,2.5,10,0,600.);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
@@ -197,11 +224,11 @@ cout<<yRFBStat[1]<<endl;
     hempty->GetYaxis()->CenterTitle();
 
   
-  hempty->GetYaxis()->SetTitle("d#sigma / dy_{CM}(pb GeV^{-1}c)");
+  hempty->GetYaxis()->SetTitle("d#sigma / dy_{CM}(#mub GeV^{-1}c)");
   
 
   hempty->GetXaxis()->SetTitleOffset(1.);
-  hempty->GetYaxis()->SetTitleOffset(1.4);
+  hempty->GetYaxis()->SetTitleOffset(1.32);
   hempty->GetXaxis()->SetTitleSize(0.045);
   hempty->GetYaxis()->SetTitleSize(0.045);
   hempty->GetXaxis()->SetTitleFont(42);
@@ -295,7 +322,7 @@ cout<<yRFBStat[1]<<endl;
 
 
     
-  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
@@ -309,7 +336,7 @@ cout<<yRFBStat[1]<<endl;
   if(particle=="Bs") mypar="B_{s}";
   
   
-  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
   tlatexlumi->SetNDC();
   tlatexlumi->SetTextColor(1);
   tlatexlumi->SetTextFont(42);
@@ -353,6 +380,8 @@ cout<<yRFBStat[1]<<endl;
   gRpAsystFONLL->SetLineWidth(2);   
   gRpAsystFONLL->SetMarkerStyle(21);
   gRpAsystFONLL->SetMarkerColor(2);
+
+/*
 
   TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",500,500);   
   
@@ -445,19 +474,21 @@ cout<<yRFBStat[1]<<endl;
   tlatex1->SetTextSize(0.04);
   tlatex1->Draw();
   
-  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
 
-  TLatex * tlatex2=new TLatex(0.5564516,0.8,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatex2=new TLatex(0.5564516,0.8,"L = 34.8 nb^{-1}");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
+
+*/
 
   TCanvas *canvasRFB=new TCanvas("canvasRFB","canvasRFB",500,500);   
   canvasRFB->cd();
@@ -472,13 +503,13 @@ cout<<yRFBStat[1]<<endl;
   canvasRFB->SetFrameBorderMode(0);
   canvasRFB->SetFrameBorderMode(0);
  
-  TLegend *legendRFB=new TLegend(0.2564516,0.5804503,0.549894,0.770252,"");
+  TLegend *legendRFB=new TLegend(0.2560484,0.6490486,0.5483871,0.7716702,"");
   legendRFB->SetBorderSize(0);
   legendRFB->SetLineColor(0);
   legendRFB->SetFillColor(0);
   legendRFB->SetFillStyle(1001);
   legendRFB->SetTextFont(42);
-  legendRFB->SetTextSize(0.04);
+  legendRFB->SetTextSize(0.045);
 
   TH2F* hempty=new TH2F("hempty","",4,-0.1,2.,10.,0.,2.5);  
   hempty->GetXaxis()->SetTitle("|y_{CM}|");
@@ -544,26 +575,21 @@ cout<<yRFBStat[1]<<endl;
   ent_RFB->SetLineColor(4);
   // ent_RFB->SetMarkerColor(2);
 
-  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
-  tlatex1->SetTextSize(0.04);
+  tlatex1->SetTextSize(0.045);
   tlatex1->Draw();
-  
-  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"p+Pb #sqrt{s_{NN}}= 5.02 TeV");
-  tlatex2->SetNDC();
-  tlatex2->SetTextColor(1);
-  tlatex2->SetTextFont(42);
-  tlatex2->SetTextSize(0.04);
-  tlatex2->Draw();
 
-  TLatex * tlatex2=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
-  tlatex2->SetNDC();
-  tlatex2->SetTextColor(1);
-  tlatex2->SetTextFont(42);
-  tlatex2->SetTextSize(0.04);
-  tlatex2->Draw();
+    
+  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
+  tlatexlumi->SetNDC();
+  tlatexlumi->SetTextColor(1);
+  tlatexlumi->SetTextFont(42);
+  tlatexlumi->SetTextSize(0.045);
+  tlatexlumi->Draw();
+
   
   //double xpos1=0.6528226;
   // double ypos1=0.6849894;
@@ -579,7 +605,7 @@ cout<<yRFBStat[1]<<endl;
 
 //  l->Draw();  
 //  canvasRpA->SaveAs(Form("Results%sY/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
-  canvasRpA->SaveAs(Form("Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+//  canvasRpA->SaveAs(Form("Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
   
 //  TFile *fout=new TFile(Form("Results%sY/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
   TFile *fout=new TFile(Form("Results%s_y/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
