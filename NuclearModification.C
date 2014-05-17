@@ -87,6 +87,32 @@ void NuclearModification(){
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   TH1F*hPt=(TH1F*)filepPb->Get("hPt");
   TH1F*hEff=(TH1F*)filepPb->Get("hEff");
+  
+  double scalingfactor=1e-6;
+  
+  
+  double yvalue,xvalue,yerrorhigh,yerrorlow;
+  
+  for (int i=0;i<nbins;i++){
+    hSigmapPbStat->SetBinContent(i+1,scalingfactor*hSigmapPbStat->GetBinContent(i+1));
+    hSigmapPbStat->SetBinError(i+1,scalingfactor*hSigmapPbStat->GetBinError(i+1));
+    
+    yvalue=-1.;
+    xvalue=-1.;
+    yerrorhigh=-1.;
+    yerrorlow=-1.;
+    
+    gaeBplusReference->GetPoint(i,xvalue,yvalue);
+    yerrorhigh=gaeBplusReference->GetEYhigh()[i];
+    yerrorlow=gaeBplusReference->GetEYlow()[i];
+  
+    gaeBplusReference->SetPoint(i,xvalue,yvalue*scalingfactor);
+    gaeBplusReference->SetPointEYhigh(i,yerrorhigh*scalingfactor);
+    gaeBplusReference->SetPointEYlow(i,yerrorlow*scalingfactor);
+
+  } 
+  
+  
   for (int i=0;i<nbins;i++){
     hSigmapPbStat->SetBinContent(i+1,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinContent(i+1));
     hSigmapPbStat->SetBinError(i+1,(1./tagandprobcorrection[i])*hSigmapPbStat->GetBinError(i+1));
@@ -191,7 +217,7 @@ void NuclearModification(){
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,1e5,1e9.);  
+  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.1,1e3.);  
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
@@ -201,7 +227,7 @@ void NuclearModification(){
   hempty->GetYaxis()->CenterTitle();
 
   
-  hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}(pb GeV^{-1}c)");
+  hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}( #mub GeV^{-1}c)");
   
 
   hempty->GetXaxis()->SetTitleOffset(1.);
@@ -302,7 +328,7 @@ void NuclearModification(){
 
 
     
-  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
@@ -316,7 +342,7 @@ void NuclearModification(){
   if(particle=="Bs") mypar="B_{s}";
   
   
-  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
+  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
   tlatexlumi->SetNDC();
   tlatexlumi->SetTextColor(1);
   tlatexlumi->SetTextFont(42);
@@ -449,7 +475,7 @@ void NuclearModification(){
   //ent_RpAsystData->SetTextFont(42);
   //ent_RpAsystData->SetLineColor(1);
   //ent_RpAsystData->SetMarkerColor(1);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. L_{int}+BR","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. L+BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
@@ -464,14 +490,14 @@ void NuclearModification(){
   
   legendRpA->Draw();
   
-  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     p+Pb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
   tlatex1->SetTextSize(0.045);
   tlatex1->Draw();
   
-    TLatex * tlatex2=new TLatex(0.671371,0.7801268,"L_{int} = 34.8 nb^{-1}");
+    TLatex * tlatex2=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
   tlatex2->SetNDC();
   tlatex2->SetTextColor(1);
   tlatex2->SetTextFont(42);
