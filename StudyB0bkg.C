@@ -6,20 +6,24 @@
 #define NUM_BX 9000
 
 
-void StudyB0bkg(){
-
-  Float_t trkPtCut=0.7;
-  Float_t chi2clCut=1.65*0.1;
-  Float_t d0d0ErrCut=4.16;
-  Float_t cosdthetaCut=7.50*0.1;
-  
-  std::vector<int> isbestchi2clarrayindex;
-  std::vector<int> isbestchi2clarrayvalue;
-
+void Loop(Float_t invmasscut=0.05){
 
   TString infname="/afs/cern.ch/work/g/ginnocen/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
   TFile *inf = new TFile(infname.Data());
   TTree *nt = (TTree*) inf->Get("ntKstar");
+  
+  Float_t trkPtCut=0.7;
+  Float_t chi2clCut=1.65*0.1;
+  Float_t d0d0ErrCut=4.16;
+  Float_t cosdthetaCut=7.50*0.1;
+
+  const int nBins = 1;
+  double ptBins[nBins+1] = {10,60};
+
+  
+  std::vector<int> isbestchi2clarrayindex;
+  std::vector<int> isbestchi2clarrayvalue;
+  std::vector<int> numberofcandperevents;
 
   int Run,HLT_PAMu3_v1,size,Event;
   
@@ -53,20 +57,19 @@ void StudyB0bkg(){
   nt->SetBranchAddress("tktkmass",tktkmass);
   nt->SetBranchAddress("Event",&Event);
   nt->SetBranchAddress("pt",pt);
-
-  const int nBins = 1;
-  double ptBins[nBins+1] = {10,60};
+  
   TH1D *hInvMassSelected = new TH1D("hInvMassSelected","hInvMassSelected",30,5.03,5.93);
   TH1D *hInvMassAll = new TH1D("hInvMassAll","hInvMassAll",30,5.03,5.93);
   
   Int_t entries = (Int_t)nt->GetEntries();
-  entries=1000000;
+  entries=100000;
   
   bool cut_yvsRun,cut_pt,cut_mumumass,cut_HLT_PAMu3_v1,cut_mass;
   bool cut_trk1Pt,cut_trk2Pt,cut_chi2cl,cut_d0d0err,cut_d0Err;
   bool cut_dtheta,cut_tktkmass,cut_d0Err;
   
   int bestchi2index;
+  int ncandperevent;
   Float_t bestchi2;
   
   for (int i=0; i<entries; i++) {
@@ -74,6 +77,7 @@ void StudyB0bkg(){
     
     bestchi2index=-999;
     bestchi2=-999.;
+    ncandperevent=0;
     
     for(int j=0;j<size;j++){
   
@@ -90,29 +94,30 @@ void StudyB0bkg(){
   	  hInvMassAll->Fill(mass[j]);
   	  
       if(cut_pt&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_d0d0err&&cut_dtheta){
-        cout<<"eventid"<<i<<endl;
+        ncandperevent++;
         if(chi2cl>bestchi2) {bestchi2=chi2cl[j]; bestchi2index=j;}
-  	  
+          	  
   	  }//candidate seleection
   	}//loop over candidates
+  	
+  	numberofcandperevents.push_back(ncandperevent);
   	isbestchi2clarrayindex.push_back(bestchi2index);
   	isbestchi2clarrayvalue.push_back(bestchi2);
-  	
-  	//if(isbestchi2clarrayindex.at(i)>=0) cout<<isbestchi2clarrayindex.at(i)<<endl;
-  	
+  	  	
   }// loop over events
   
   
   for (int m=0; m<entries; m++) {
     nt->GetEntry(m);
-    if(m>471&&m<471) continue;
-    
     if(isbestchi2clarrayindex.at(m)>=0){
       hInvMassSelected->Fill(mass[isbestchi2clarrayindex.at(m)]);
     }
   }
   
   
+  isbestchi2clarrayindex.clear();
+  isbestchi2clarrayvalue.clear();
+  numberofcandperevents.clear();
   
   TCanvas*canvas=new TCanvas("canvas","canvas",1000,500);
   canvas->Divide(2,1);
@@ -121,5 +126,6 @@ void StudyB0bkg(){
   canvas->cd(2);
   hInvMassSelected->Draw("ep");
   canvas->SaveAs("canvas.eps");
+
   
 }
