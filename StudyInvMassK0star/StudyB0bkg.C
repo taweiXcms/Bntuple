@@ -6,7 +6,7 @@
 #define NUM_BX 9000
 
 
-void StudyB0bkg(Int_t icut){
+void StudyB0bkg(Int_t icut=1){
 
   
 
@@ -14,12 +14,13 @@ void StudyB0bkg(Int_t icut){
   //TString infname="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
   TFile *inf = new TFile(infname.Data());
   TTree *nt = (TTree*) inf->Get("ntKstar");
-  
+    
   Float_t trkPtCut=0.7;
   Float_t chi2clCut=1.65*0.1;
   Float_t d0d0ErrCut=4.16;
   Float_t cosdthetaCut=7.50*0.1;
   Float_t mumumassCut=0.15;
+
   Float_t tktkmassCut;
   
   if(icut==1) tktkmassCut=0.02;
@@ -82,7 +83,7 @@ void StudyB0bkg(Int_t icut){
   
   bool cut_yvsRun,cut_pt,cut_mumumass,cut_HLT_PAMu3_v1,cut_mass;
   bool cut_trk1Pt,cut_trk2Pt,cut_chi2cl,cut_d0d0err;
-  bool cut_dtheta,cut_tktkmass;
+  bool cut_dtheta,cut_tktkmass,cut_isbestchi2;
   
   int bestchi2index;
   int ncandperevent;
@@ -90,7 +91,7 @@ void StudyB0bkg(Int_t icut){
   
   for (int i=0; i<entries; i++) {
     nt->GetEntry(i);
-    
+        
     bestchi2index=-999;
     bestchi2=-999.;
     ncandperevent=0;
@@ -108,34 +109,22 @@ void StudyB0bkg(Int_t icut){
   	  cut_dtheta=(cos(dtheta[j])>cosdthetaCut);
   	  cut_mumumass=abs(mumumass[j]-3.096916)<mumumassCut;
   	  cut_tktkmass=abs(tktkmass[j]-0.89594)<tktkmassCut;
+  	  cut_isbestchi2=(isbestchi2[j]==1);
   	  
   	  hInvMassAll->Fill(mass[j]);
   	  
-      if(cut_yvsRun&&cut_pt&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_d0d0err&&cut_dtheta&&cut_mumumass&&cut_tktkmass){
+      if(cut_isbestchi2&&cut_yvsRun&&cut_pt&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_d0d0err&&cut_dtheta&&cut_mumumass&&cut_tktkmass){
+      //if(cut_yvsRun&&cut_pt&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_d0d0err&&cut_dtheta&&cut_mumumass&&cut_tktkmass){
+        
         ncandperevent++;
+        //cout<<"index="<<j<<", chi2cl="<<chi2cl[j]<<endl;
         if(chi2cl[j]>bestchi2) {bestchi2=chi2cl[j]; bestchi2index=j;}
           	  
   	  }//candidate seleection
   	}//loop over candidates
-  	
-  	numberofcandperevents.push_back(ncandperevent);
-  	isbestchi2clarrayindex.push_back(bestchi2index);
-  	isbestchi2clarrayvalue.push_back(bestchi2);
-  	  	
+  	hInvMassSelected->Fill(mass[bestchi2index]);
+
   }// loop over events
-  
-  
-  for (int m=0; m<entries; m++) {
-    nt->GetEntry(m);
-    if(isbestchi2clarrayindex.at(m)>=0){
-      hInvMassSelected->Fill(mass[isbestchi2clarrayindex.at(m)]);
-    }
-  }
-  
-  
-  isbestchi2clarrayindex.clear();
-  isbestchi2clarrayvalue.clear();
-  numberofcandperevents.clear();
   
   TCanvas*canvas=new TCanvas("canvas","canvas",1000,500);
   canvas->Divide(2,1);
