@@ -9,6 +9,7 @@
 void StudyB0bkg(Int_t icut=1){
 
   
+  //TString infname="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 
   TString infname="/afs/cern.ch/work/g/ginnocen/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
   //TString infname="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
@@ -23,21 +24,21 @@ void StudyB0bkg(Int_t icut=1){
 
   Float_t tktkmassCut;
   
-  if(icut==1) tktkmassCut=0.02;
-  if(icut==2) tktkmassCut=0.03;
-  if(icut==3) tktkmassCut=0.04;
-  if(icut==4) tktkmassCut=0.05;
-  if(icut==5) tktkmassCut=0.08;
+  cout<<"CUT CONFIGURATION number "<<icut<<endl; 
+  if(icut==1) tktkmassCut=0.01;
+  if(icut==2) tktkmassCut=0.02;
+  if(icut==3) tktkmassCut=0.03;
+  if(icut==4) tktkmassCut=0.04;
+  if(icut==5) tktkmassCut=0.05;
   if(icut==6) tktkmassCut=0.10;
   if(icut==7) tktkmassCut=0.13;
   if(icut==8) tktkmassCut=0.15;
   if(icut==9) tktkmassCut=0.18;
   if(icut==10) tktkmassCut=0.20;
 
-  const int nBins = 1;
-  double ptBins[nBins+1] = {10,60};
+  //const int nBins = 1;
+  //double ptBins[nBins+1] = {10,60};
 
-  
   std::vector<int> isbestchi2clarrayindex;
   std::vector<int> isbestchi2clarrayvalue;
   std::vector<int> numberofcandperevents;
@@ -76,10 +77,11 @@ void StudyB0bkg(Int_t icut=1){
   nt->SetBranchAddress("pt",pt);
   
   TH1D *hInvMassSelected = new TH1D("hInvMassSelected","hInvMassSelected",30,5.03,5.93);
+  TH1D *hInvMassSelectedWrongMethod = new TH1D("hInvMassSelectedWrongMethod","hInvMassSelectedWrongMethod",30,5.03,5.93);
   TH1D *hInvMassAll = new TH1D("hInvMassAll","hInvMassAll",30,5.03,5.93);
   
   Int_t entries = (Int_t)nt->GetEntries();
-  entries=1000000;
+  //entries=5000000;
   
   bool cut_yvsRun,cut_pt,cut_mumumass,cut_HLT_PAMu3_v1,cut_mass;
   bool cut_trk1Pt,cut_trk2Pt,cut_chi2cl,cut_d0d0err;
@@ -113,9 +115,8 @@ void StudyB0bkg(Int_t icut=1){
   	  
   	  hInvMassAll->Fill(mass[j]);
   	  
-      if(cut_isbestchi2&&cut_yvsRun&&cut_pt&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_d0d0err&&cut_dtheta&&cut_mumumass&&cut_tktkmass){
-      //if(cut_yvsRun&&cut_pt&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_d0d0err&&cut_dtheta&&cut_mumumass&&cut_tktkmass){
-        
+      if(cut_yvsRun&&cut_pt&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_d0d0err&&cut_dtheta&&cut_mumumass&&cut_tktkmass){
+        if(cut_isbestchi2) hInvMassSelectedWrongMethod->Fill(mass[j]);
         ncandperevent++;
         //cout<<"index="<<j<<", chi2cl="<<chi2cl[j]<<endl;
         if(chi2cl[j]>bestchi2) {bestchi2=chi2cl[j]; bestchi2index=j;}
@@ -129,7 +130,15 @@ void StudyB0bkg(Int_t icut=1){
   TCanvas*canvas=new TCanvas("canvas","canvas",1000,500);
   canvas->Divide(2,1);
   canvas->cd(1);
-  hInvMassSelected->Draw("ep");
-  canvas->SaveAs(Form("Results/canvasNew_CutId%d.eps",icut));
+  hInvMassSelected->Draw("e");
+  canvas->cd(2);
+  hInvMassSelectedWrongMethod->Draw("ep");
+  canvas->SaveAs(Form("Results/canvas_CutId%d.eps",icut));
+  TFile*fileoutput=new TFile(Form("Results/file_CutId%d.eps",icut),"recreate");
+  fileoutput->cd();
+  hInvMassSelected->Write();
+  hInvMassSelectedWrongMethod->Write();
+  fileoutput->Close();
+  
   
 }
