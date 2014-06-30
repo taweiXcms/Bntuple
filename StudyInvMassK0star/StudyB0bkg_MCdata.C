@@ -89,7 +89,7 @@ Float_t bestchi2_mcNP;
 void StudyB0bkg_MCdata(Int_t icut=1){
 
   TString infname_data="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-  //TString infname_data="/afs/cern.ch/work/g/ginnocen/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
+//  TString infname_data="/afs/cern.ch/work/g/ginnocen/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
   TString infname_mc="/data/bmeson/MC/nt_MixMC_20140503_Kstar__TriggerMatchingMuon_EvtBase_skim.root";
   TString infname_mcNP="/afs/cern.ch/work/g/ginnocen/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
   
@@ -184,7 +184,7 @@ void StudyB0bkg_MCdata(Int_t icut=1){
   Int_t entries_mc = (Int_t)nt_mc->GetEntries();
   Int_t entries_mcNP = (Int_t)nt_mcNP->GetEntries();
   
-  entries_data=1;  
+  //entries_data=1;  
 
   for (int i=0; i<entries_data; i++) {
     nt_data->GetEntry(i);
