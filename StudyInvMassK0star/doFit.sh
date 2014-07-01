@@ -41,3 +41,15 @@ time root -b <<EOI
 .q
 EOI
 
+
+time root -b <<EOI
+.x testfit.C(9)
+.q
+EOI
+
+
+time root -b <<EOI
+.x testfit.C(10)
+.q
+EOI
+
