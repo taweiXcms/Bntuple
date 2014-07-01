@@ -15,25 +15,30 @@ double fixparam2=0.04;
 
 void testfit(int icut=3){
   
-  /*
-  gROOT->SetStyle("Plain");	
-  gStyle->SetOptStat(0);
-  gStyle->SetOptStat(0000);
-  gStyle->SetPalette(0);
-  gStyle->SetCanvasColor(0);
-  gStyle->SetFrameFillColor(0);
-  gStyle->SetOptTitle(0);
-  */
+  
+  //gROOT->SetStyle("Plain");	
+  //gStyle->SetOptStat(0);
+  //gStyle->SetOptStat(0000);
+  //gStyle->SetPalette(0);
+  //gStyle->SetCanvasColor(0);
+  //gStyle->SetFrameFillColor(0);
+  //gStyle->SetOptTitle(0);
+  
 
   TFile*fileoutput=new TFile(Form("Results/file_CutId%d.root",icut));
+  //TH1D*h=(TH1D*)fileoutput->Get("hInvMassSelectedWrongMethod_data");
   TH1D*h=(TH1D*)fileoutput->Get("hInvMassSelected_data");
   TH1D*hMC=(TH1D*)fileoutput->Get("hInvMassSelected_mc");
   TH1D*hMCNP=(TH1D*)fileoutput->Get("hInvMassSelected_mcNP");
   
-  TCanvas *c= new TCanvas("canvas","",600,600);
-    
+  TCanvas *c= new TCanvas("canvas","",1350,500);
+  c->Divide(3,1);
+  c->cd(1);
   TString iNP="6.71675e+00*Gaus(x,5.30142e+00,8.42680e-02)/(sqrt(2*3.14159)*8.42680e-02)+4.06744e+01*Gaus(x,5.00954e+00,8.11305e-02)/(sqrt(2*3.14159)*8.11305e-02)+5.99974e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.31767e-01*(61.195688*Gaus(x,5.127566,0.087439)/(sqrt(2*3.14159)*0.087439)+58.943919*Gaus(x,5.246471,0.041983)/(sqrt(2*3.14159)*0.041983))";
   TF1 *f = new TF1("f","[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
+    
+  TF1 *fNP= new TF1("fNP","[0]*("+iNP+")");
+  
   
   h->Draw();
   f->SetParLimits(4,-1000,0);
@@ -140,15 +145,35 @@ void testfit(int icut=3){
   leg2->AddEntry(h,"B meson","");
   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",yield,yieldErr),"");
-  leg2->Draw();
-  
-  c->SaveAs(Form("Plots/BMass%d.pdf",icut));
-  
-  TCanvas*canvasMCNP=new TCanvas("canvasMCNP","canvasMCNP",650,600);
-  canvasMCNP->cd();
+  leg2->Draw(); 
+
+  c->cd(2);
+  hMC->SetMarkerSize(0.8);
+  hMC->SetMarkerStyle(20);
+  hMC->Draw("e");
+  c->cd(3);
   hMCNP->SetMarkerSize(0.8);
   hMCNP->SetMarkerStyle(20);
+  //hMCNP->Fit("fNP","q","",5,6);
   hMCNP->Draw("e");
-  canvasMCNP->SaveAs(Form("Plots/canvasMCNP%d.pdf",icut));
+
+  c->SaveAs(Form("Plots/canvascheck%d.pdf",icut));
+  
+  TCanvas *cFit= new TCanvas("cFit","",650,500);
+  cFit->cd();
+  
+  h->Draw("e");
+  Bkpi->Draw("same");
+  background->Draw("same");   
+  mass->SetRange(5,6);
+  mass->Draw("same");
+  mass->SetLineStyle(2);
+  mass->SetFillStyle(3004);
+  mass->SetFillColor(2);
+  f->Draw("same");
+  leg->Draw();
+  leg2->Draw();
+  cFit->SaveAs(Form("Plots/canvasFit%d.pdf",icut));
+
 
 }
