@@ -33,21 +33,38 @@ void LoopB0(){
   nt_mcgen->AddFriend(nt_mc);
   
   
-  TH1D *houtput1=Loop(nt_data,10.,60.,1);
-  TH1D *houtput2=Loop(nt_mc,10.,60.,2);
-  TH1D *houtput3=Loop(nt_mc,10.,60.,3);
-  TH1D *houtput4=LoopGen(nt_mcgen,10.,60.);
+  TH1D *hMass0=Loop(nt_data,10.,15.,1);
+  TH1D *hMass1=Loop(nt_data,15.,20.,1);
+  TH1D *hMass2=Loop(nt_data,20.,60.,1);
   
-  TFile*ftry=new TFile("ftry.root","recreate");
+  TH1D *hMassMC0=Loop(nt_mc,10.,15.,2);
+  TH1D *hMassMC1=Loop(nt_mc,15.,20.,2);
+  TH1D *hMassMC2=Loop(nt_mc,20.,60.,2);
+  
+  TH1D *hPtMC=Loop(nt_mc,10.,60.,3);
+  TH1D *hPtGen=LoopGen(nt_mcgen,10.,60.);
+  
+  TFile*ftry=new TFile("B0output.root","recreate");
   ftry->cd();
-  houtput1->SetName("houtput1");
-  houtput2->SetName("houtput2");
-  houtput3->SetName("houtput3");
-  houtput4->SetName("houtput4");
-  houtput1->Write();
-  houtput2->Write();
-  houtput3->Write();
-  houtput4->Write();
+  hMass0->SetName("hMass0");
+  hMass1->SetName("hMass1");
+  hMass2->SetName("hMass2");
+  hMassMC0->SetName("hMassMC0");
+  hMassMC1->SetName("hMassMC1");
+  hMassMC2->SetName("hMassMC2");
+  hPtMC->SetName("hPtMC");
+  hPtGen->SetName("hPtGen");
+
+  hMass0->Write();
+  hMass1->Write();
+  hMass2->Write();
+  hMassMC0->Write();
+  hMassMC1->Write();
+  hMassMC2->Write();
+
+  hPtMC->Write();
+  hPtGen->Write();
+  
   ftry->Close();
 
 }
