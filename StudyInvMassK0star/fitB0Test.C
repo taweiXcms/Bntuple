@@ -13,7 +13,7 @@ double ptBins[nBins+1] = {10,15,20,60};
 
 
 TString weight = "27.493+pt*(-0.218769)";
-TFile*finput=new TFile("B0output.root");
+TFile*finput=new TFile("ResultsLoopBzero/B0output.root");
 
 void clean0(TH1D *h)
 {
@@ -149,7 +149,7 @@ TF1 *fit(double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",yield,yieldErr),"");
    leg2->Draw();
 
-   c->SaveAs(Form("ResultsBzero/BMass-%d.pdf",count));
+   c->SaveAs(Form("ResultsLoopBzero/BMass-%d.pdf",count));
 
    return mass;
 }
@@ -208,7 +208,7 @@ void fitB0Test(TString infname="",bool doweight = 1)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile("ResultsBzero/SigmaBzero.root","recreate");
+  TFile *outf = new TFile("ResultsLoopBzero/SigmaBzero.root","recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();

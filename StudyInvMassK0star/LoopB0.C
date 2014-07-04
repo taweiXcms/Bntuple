@@ -44,7 +44,7 @@ void LoopB0(){
   TH1D *hPtMC=Loop(nt_mc,10.,60.,3);
   TH1D *hPtGen=LoopGen(nt_mcgen,10.,60.);
   
-  TFile*ftry=new TFile("B0output.root","recreate");
+  TFile*ftry=new TFile("ResultsLoopBzero/B0output.root","recreate");
   ftry->cd();
   hMass0->SetName("hMass0");
   hMass1->SetName("hMass1");
