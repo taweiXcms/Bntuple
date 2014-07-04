@@ -73,7 +73,7 @@
   Double_t tagandprobcorrection[nbins]={1.1763037,1.1183703,1.0768526};
 
 
-void NuclearModification(){
+void NuclearModificationLoop(){
 
   gROOT->SetStyle("Plain");
   gStyle->SetOptTitle(0);
