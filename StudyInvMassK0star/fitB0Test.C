@@ -8,9 +8,12 @@ double fixparam1=5.279;
 double setparam3=0.03;
 double fixparam2=0.04;
 
+const int nBins = 3;
+double ptBins[nBins+1] = {10,15,20,60};
+
 
 TString weight = "27.493+pt*(-0.218769)";
-TFile*finput=new TFile("StudyInvMassK0star/B0output.root");
+TFile*finput=new TFile("B0output.root");
 
 void clean0(TH1D *h)
 {
@@ -20,20 +23,20 @@ void clean0(TH1D *h)
    }
 }
 
-TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
+TF1 *fit(double ptmin,double ptmax)
 {   
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    //TH1D *h = new TH1D(Form("h%d",count),"",30,5.03,5.93);
-   TH1D *h = (TH1D*)finput->Get(Form("hMass%d",count));
-   TH1D *hMC = (TH1D*)finput->Get(Form("hMassMC%d",count));
+   TH1D *h = (TH1D*)finput->Get(Form("hMass%d",count-1));
+   TH1D *hMC = (TH1D*)finput->Get(Form("hMassMC%d",count-1));
 
    // Fit function
    TString iNP="6.71675e+00*Gaus(x,5.30142e+00,8.42680e-02)/(sqrt(2*3.14159)*8.42680e-02)+4.06744e+01*Gaus(x,5.00954e+00,8.11305e-02)/(sqrt(2*3.14159)*8.11305e-02)+5.99974e-01*(2.376716*Gaus(x,5.640619,0.095530)/(sqrt(2*3.14159)*0.095530)+3.702342*Gaus(x,5.501706,0.046222)/(sqrt(2*3.14159)*0.046222))+1.31767e-01*(61.195688*Gaus(x,5.127566,0.087439)/(sqrt(2*3.14159)*0.087439)+58.943919*Gaus(x,5.246471,0.041983)/(sqrt(2*3.14159)*0.041983))";
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
 
-   clean0(h);
+   //clean0(h);
    h->Draw();
    f->SetParLimits(4,-1000,0);
    f->SetParLimits(2,0.01,0.05);
@@ -162,7 +165,7 @@ void fitB0Test(TString infname="",bool doweight = 1)
   
   for (int i=0;i<nBins;i++)
     {
-      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
+      TF1 *f = fit(ptBins[i],ptBins[i+1]);
       double yield = f->Integral(5,6)/0.03;
       double yieldErr = f->Integral(5,6)/0.03*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
