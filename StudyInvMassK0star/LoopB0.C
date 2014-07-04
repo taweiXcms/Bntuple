@@ -6,14 +6,22 @@
 #define NUM_BX 9000
 
 Float_t trkPtCut=0.7;
-Float_t chi2clCut=1.65*0.1;
-Float_t d0d0ErrCut=4.16;
-Float_t cosdthetaCut=7.50*0.1;
+Float_t chi2clCut=9.94e-02;
+Float_t d0d0ErrCut=6.08;
+Float_t cosdthetaCut=7.93e-01;
 Float_t mumumassCut=0.15;
 Float_t tktkmassCut=0.10;
 
 const int nBins = 3;
 double ptBins[nBins+1] = {10,15,20,60};
+//TString weight = "27.493+pt*(-0.218769)";
+
+
+double funcweight(double mypt){
+
+  double myweight=27.493+mypt*(-0.218769);
+  return myweight;
+}
 
 void LoopB0(){
 
@@ -33,43 +41,44 @@ void LoopB0(){
   nt_mcgen->AddFriend(nt_mc);
   
   
-  TH1D *hMass0=Loop(nt_data,10.,15.,1);
-  TH1D *hMass1=Loop(nt_data,15.,20.,1);
-  TH1D *hMass2=Loop(nt_data,20.,60.,1);
+  TH1D *hMass1=Loop(nt_data,10.,15.,1);
+  TH1D *hMass2=Loop(nt_data,15.,20.,1);
+  TH1D *hMass3=Loop(nt_data,20.,60.,1);
   
-  TH1D *hMassMC0=Loop(nt_mc,10.,15.,2);
-  TH1D *hMassMC1=Loop(nt_mc,15.,20.,2);
-  TH1D *hMassMC2=Loop(nt_mc,20.,60.,2);
+  TH1D *hMassMC1=Loop(nt_mc,10.,15.,2);
+  TH1D *hMassMC2=Loop(nt_mc,15.,20.,2);
+  TH1D *hMassMC3=Loop(nt_mc,20.,60.,2);
   
   TH1D *hPtMC=Loop(nt_mc,10.,60.,3);
   TH1D *hPtGen=LoopGen(nt_mcgen,10.,60.);
   
-  TFile*ftry=new TFile("ResultsLoopBzero/B0output.root","recreate");
-  ftry->cd();
-  hMass0->SetName("hMass0");
-  hMass1->SetName("hMass1");
-  hMass2->SetName("hMass2");
-  hMassMC0->SetName("hMassMC0");
+  TFile*fB0output=new TFile("ResultsLoopBzero/B0output.root","recreate");
+  fB0output->cd();
+  hMass1->SetName("hMass0");
+  hMass2->SetName("hMass1");
+  hMass3->SetName("hMass2");
   hMassMC1->SetName("hMassMC1");
   hMassMC2->SetName("hMassMC2");
+  hMassMC3->SetName("hMassMC3");
   hPtMC->SetName("hPtMC");
   hPtGen->SetName("hPtGen");
 
-  hMass0->Write();
   hMass1->Write();
   hMass2->Write();
-  hMassMC0->Write();
+  hMass3->Write();
   hMassMC1->Write();
   hMassMC2->Write();
-
+  hMassMC3->Write(); 
   hPtMC->Write();
   hPtGen->Write();
   
-  ftry->Close();
+  fB0output->Close();
 
 }
 
 TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
+
+  double funcweight(double);
 
   bool cut_yvsRun,cut_pt,cut_mumumass,cut_HLT_PAMu3_v1,cut_mass;
   bool cut_trk1Pt,cut_trk2Pt,cut_chi2cl,cut_d0d0err;
@@ -144,7 +153,7 @@ TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
   	  }//candidate seleection
   	}//loop over candidates
   	h->Fill(mass[bestchi2index]);
-  	hPtMC->Fill(pt[bestchi2index]);
+  	hPtMC->Fill(pt[bestchi2index],funcweight(pt[bestchi2index]));
   
   }// loop over events
   if(option==1 || option==2) return h;
@@ -153,6 +162,8 @@ TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
 
 
 TH1D* LoopGen(TTree* ntuple,double ptmin,double ptmax){
+
+  double funcweight(double);
 
   int Run,size;
   bool cut_yvsRun,cut_pt;
@@ -182,7 +193,7 @@ TH1D* LoopGen(TTree* ntuple,double ptmin,double ptmax){
     
       cut_yvsRun=((Run<=1&&abs(y[j]+0.465)<1.93)||(Run>1&&abs(y[j]-0.465)<1.93))&&abs(pdgId[j])==511&&isSignal[j]!=0;
       cut_pt=((pt[j]>ptmin)&&(pt[j]<ptmax));
-      if(cut_yvsRun&&cut_pt) hPtMCGen->Fill(pt[j]);
+      if(cut_yvsRun&&cut_pt) hPtMCGen->Fill(pt[j],funcweight(pt[j]));
           	  
   	}//loop over candidates
   }// loop over events
