@@ -13,7 +13,9 @@ double ptBins[nBins+1] = {10,15,20,60};
 
 
 TString weight = "27.493+pt*(-0.218769)";
-TFile*finput=new TFile("ResultsLoopBzero/B0output.root");
+TString cutconfig="newcutopt8";
+
+TFile*finput=new TFile(Form("ResultsLoopBzero/B0output_%s.root",cutconfig.Data()));
 
 void clean0(TH1D *h)
 {
@@ -215,7 +217,7 @@ void fitB0Test(TString infname="",bool doweight = 1)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile("ResultsLoopBzero/SigmaBzero.root","recreate");
+  TFile *outf = new TFile(Form("ResultsLoopBzero/SigmaBzero_%s.root",cutconfig.Data()),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();

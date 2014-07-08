@@ -73,7 +73,7 @@
   Double_t tagandprobcorrection[nbins]={1.1763037,1.1183703,1.0768526};
 
 
-void NuclearModificationLoop(){
+void NuclearModificationLoop(TString cutconfig="newcutopt8"){
 
   gROOT->SetStyle("Plain");
   gStyle->SetOptTitle(0);
@@ -83,7 +83,7 @@ void NuclearModificationLoop(){
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
-  TFile*filepPb=new TFile(Form("ResultsLoop%s/Sigma%s.root",particle.Data(),particle.Data()));
+  TFile*filepPb=new TFile(Form("ResultsLoop%s/Sigma%s_%s.root",particle.Data(),particle.Data(),cutconfig.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   TH1F*hPt=(TH1F*)filepPb->Get("hPt");
   TH1F*hEff=(TH1F*)filepPb->Get("hEff");
@@ -507,7 +507,7 @@ void NuclearModificationLoop(){
   tlatex3->Draw();
 
 //  l->Draw();  
-  canvasRpA->SaveAs(Form("ResultsLoop%s/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+  canvasRpA->SaveAs(Form("ResultsLoop%s/canvasRpA%s_%s.pdf",particle.Data(),particle.Data(),cutconfig.Data()));  
   
   TFile *fout=new TFile(Form("ResultsLoop%s/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
   fout->cd();

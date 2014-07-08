@@ -6,12 +6,11 @@
 #define NUM_BX 9000
 
 Float_t trkPtCut=0.7;
-Float_t chi2clCut=1.65*0.1;
-Float_t d0d0ErrCut=4.16;
-Float_t cosdthetaCut=7.50*0.1;
+Float_t chi2clCut=9.94e-02;
+Float_t d0d0ErrCut=6.08;
+Float_t cosdthetaCut=7.93e-01;
 Float_t mumumassCut=0.15;
-Float_t tktkmassCut=2.33e-01;
-
+Float_t tktkmassCut=0.10;
 
 const int nBins = 3;
 double ptBins[nBins+1] = {10,15,20,60};
@@ -23,7 +22,7 @@ double funcweight(double mypt){
   return myweight;
 }
 
-void LoopB0(){
+void LoopB0(TString cutconfig="newcutopt8"){
 
   TH1D* Loop(TTree*,double,double,int);
   TH1D* LoopGen(TTree*,double,double);
@@ -52,7 +51,7 @@ void LoopB0(){
   TH1D *hPtMC=Loop(nt_mc,10.,60.,3);
   TH1D *hPtGen=LoopGen(nt_mcgen,10.,60.);
   
-  TFile*fB0output=new TFile("ResultsLoopBzero/B0output.root","recreate");
+  TFile*fB0output=new TFile(Form("ResultsLoopBzero/B0output_%s.root",cutconfig.Data()),"recreate");
   fB0output->cd();
   hMass1->SetName("hMass1");
   hMass2->SetName("hMass2");
@@ -72,6 +71,26 @@ void LoopB0(){
   hPtMC->Write();
   hPtGen->Write();
   
+  fB0output->Close();
+
+}
+
+
+void TestNPBackground(){
+
+  TH1D* Loop(TTree*,double,double,int);
+
+  TString infname_mcNP="/afs/cern.ch/work/g/ginnocen/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
+  TFile *inf_mcNP = new TFile(infname_mcNP.Data());
+  TTree *nt_mcNP = (TTree*) inf_mcNP->Get("ntKstar");
+
+  
+  TH1D *hMassBkg=Loop(nt_mcNP,10.,60.,4);
+  
+  TFile*fB0output=new TFile("ResultsLoopBzero/B0outputBkgCutInv10.root","recreate");
+  fB0output->cd();
+  hMassBkg->SetName("hMassBkg");
+  hMassBkg->Write();
   fB0output->Close();
 
 }
@@ -118,7 +137,7 @@ TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
   ntuple->SetBranchAddress("tktkmass",tktkmass);
   ntuple->SetBranchAddress("Event",&Event);
   ntuple->SetBranchAddress("pt",pt);
-  if(option==2 || option==3) ntuple->SetBranchAddress("gen",gen);
+  if(option==2 || option==3 || option==4) ntuple->SetBranchAddress("gen",gen);
 
 
   TH1D *h = new TH1D("h","h",30,5.03,5.93);
@@ -142,7 +161,8 @@ TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
       cut_yvsRun=false;
 	  if(option==1 || option==2) cut_yvsRun=((Run>1&&Run<12&&abs(y[j]-0.465)<1.93)||(Run<=1&&abs(y[j]+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y[j]+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y[j]-0.465)<1.93));
    	  if(option==3) cut_yvsRun=((Run>1&&Run<12&&abs(y[j]-0.465)<1.93)||(Run<=1&&abs(y[j]+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y[j]+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y[j]-0.465)<1.93))&&(gen[j]==23333||gen[j]==41000);
-   	  
+   	  if(option==4) cut_yvsRun=((Run>1&&Run<12&&abs(y[j]-0.465)<1.93)||(Run<=1&&abs(y[j]+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y[j]+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y[j]-0.465)<1.93))&&(!(gen[j]==23333||gen[j]==41000));
+
 	  cut_HLT_PAMu3_v1=(HLT_PAMu3_v1);
 	  cut_mass=((mass[j]>5.)&&(mass[j]<6.));
 	  cut_trk1Pt=(trk1Pt[j]>trkPtCut);
@@ -162,7 +182,7 @@ TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
   	hPtMC->Fill(pt[bestchi2index],funcweight(pt[bestchi2index]));
   
   }// loop over events
-  if(option==1 || option==2) return h;
+  if(option==1 || option==2 || option==4) return h;
   else return hPtMC; 
 }
 
