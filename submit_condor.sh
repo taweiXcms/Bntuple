@@ -6,31 +6,39 @@
 
 ###Plain root .C to be run
 #CONFIGFILE="loop.C"
-CONFIGFILE="loopcand.C"
+CONFIGFILE="loop.C"
 
 ###All the header/related files needed
 #TRANSFERFILE="loop.C,loop.h"
-TRANSFERFILE="loopcand.C,loopcand.h"
+TRANSFERFILE="loop.C,loop.h"
 
 ###Folder location within which files are to be run
-DATASET=/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140319_PAMuon_HIRun2013_28Sep2013_v1_MuonMatching/*
+#DATASET=/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140319_PAMuon_HIRun2013_28Sep2013_v1_MuonMatching/*
 #DATASET=/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140309_PAMuon_HIRun2013_PromptReco_v1_MuonMatching/*
+#DATASET=/net/hisrv0001/home/tawei/twang/HI_Btuple/20140607_PAMuon_HIRun2013_PromptReco_v1/*
+#DATASET=/net/hisrv0001/home/tawei/twang/HI_Btuple/20140607_PAMuon_HIRun2013_28Sep2013_v1/*
+#DATASET=/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140707_BuJpsiK_pPb/*
+DATASET=/mnt/hadoop/cms/store/user/twang/HI_Btuple/20140707_PAMuon_HIRun2013_28Sep2013_v1/*
 
 ###Output file location
-#DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_28Sep2013_v1_MuonMatching_EvtBase_skim
-#DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_20140411_PAMuon_HIRun2013_PromptReco_v1_MuonMatching_EvtBase_skim
+DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_20140708_PAMuon_HIRun2013_28Sep2013_v1_MuonMatching_EvtBase_skim
+#DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_20140708_PAMuon_HIRun2013_PromptReco_v1_MuonMatching_EvtBase_skim
 #DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_20140413_PAMuon_HIRun2013_PromptReco_v1_MuonMatching_CandBase_skim
-DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_20140413_PAMuon_HIRun2013_28Sep2013_v1_MuonMatching_CandBase_skim
+#DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_20140413_PAMuon_HIRun2013_28Sep2013_v1_MuonMatching_CandBase_skim
+#DESTINATION=/mnt/hadoop/cms/store/user/jwang/nt_BoostedMC_20140708_Kp_TriggerMatchingMuon_pPb_EvtBase_skim
 
 ###Output file name
-OUTFILE="nt_20140413_rereco_muonmatching_candbase_skim"
+OUTFILE="nt_20140708_rereco_muonmatching_evtbase"
+#OUTFILE="nt_20140708_kp_pPb_evtbase"
 
 ###Maximum number of files to be run
 MAXFILES=1000
 
 ###Log file location and it's name
-LOGDIR=/export/d00/scratch/jwang/nt_20140413_rereco_candbase_logs
-LOGNAME=log_nt_20140413_rereco_muonmatching_candbase
+LOGDIR=/export/d00/scratch/jwang/nt_20140708_rereco_evtbase_logs
+LOGNAME=log_nt_20140708_rereco_muonmatching_evtbase
+#LOGDIR=/export/d00/scratch/jwang/nt_20140708_kp_pPb_evtbase_logs
+#LOGNAME=log_nt_20140708_kp_pPb_evtbase
 
 ########################## Create subfile ###############################
 dateTime=$(date +%Y%m%d%H%M)
