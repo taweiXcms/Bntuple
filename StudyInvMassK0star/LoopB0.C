@@ -11,6 +11,7 @@ Float_t d0d0ErrCut=6.08;
 Float_t cosdthetaCut=7.93e-01;
 Float_t mumumassCut=0.15;
 Float_t tktkmassCut=0.10;
+Float_t mintktkmassCut=0.85;
 
 const int nBins = 3;
 double ptBins[nBins+1] = {10,15,20,60};
@@ -80,7 +81,7 @@ void TestNPBackground(){
 
   TH1D* Loop(TTree*,double,double,int);
 
-  TString infname_mcNP="/afs/cern.ch/work/g/ginnocen/nt_BoostedMC_20140427_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
+  TString infname_mcNP="/data/ginnocen/InclusiveNonPromptMC/nt_BoostedMC_20140506_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root";
   TFile *inf_mcNP = new TFile(infname_mcNP.Data());
   TTree *nt_mcNP = (TTree*) inf_mcNP->Get("ntKstar");
 
@@ -171,7 +172,7 @@ TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
 	  
   	  cut_dtheta=(cos(dtheta[j])>cosdthetaCut);
   	  cut_mumumass=abs(mumumass[j]-3.096916)<mumumassCut;
-  	  cut_tktkmass=abs(tktkmass[j]-0.89594)<tktkmassCut;
+  	  cut_tktkmass=abs(tktkmass[j]-0.89594)<tktkmassCut&&(tktkmass[j]>mintktkmassCut);
   	    	  
       if(cut_yvsRun&&cut_HLT_PAMu3_v1&&cut_mass&&cut_trk1Pt&&cut_trk2Pt&&cut_chi2cl&&cut_dtheta&&cut_mumumass&&cut_tktkmass){
         if(chi2cl[j]>bestchi2) {bestchi2=chi2cl[j]; bestchi2index=j;}
