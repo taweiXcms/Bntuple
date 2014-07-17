@@ -1039,7 +1039,7 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 		best = chi2cl[type4size];
 		bestindex = type4size;
 	      }
-	    if(abs(tktkmass[type4size]-KSTAR_MASS)<best2&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>1.65e-01&&(d0[type4size]/d0Err[type4size])>4.16&&cos(dtheta[type4size])>7.50e-01&&abs(tktkmass[type4size]-0.89594)<2.33e-01)
+	    if(abs(tktkmass[type4size]-KSTAR_MASS)<best2&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmass[type4size]>0.85)
 	      {
 		best2 = abs(tktkmass[type4size]-KSTAR_MASS);
 		best2index = type4size;
