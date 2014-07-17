@@ -1070,7 +1070,7 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	if(BInfo_type[j]==4 || BInfo_type[j]==5)
 	  {
 	    fillTree(bP,bVtx,b4P,j,type4size,KAON_MASS,PION_MASS,REAL,PbpMC);
-	    if(chi2cl[type4size]>best&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>1.65e-01&&(d0[type4size]/d0Err[type4size])>4.16&&cos(dtheta[type4size])>7.50e-01&&abs(tktkmass[type4size]-0.89594)<2.33e-01)
+	    if(chi2cl[type4size]>best&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmass[type4size]>0.85)
 	      {
 		best = chi2cl[type4size];
 		bestindex = type4size;
