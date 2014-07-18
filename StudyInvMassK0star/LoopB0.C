@@ -28,7 +28,7 @@ void LoopB0(TString cutconfig="newcutopt8"){
   TH1D* Loop(TTree*,double,double,int);
   TH1D* LoopGen(TTree*,double,double);
   
-  TString infname_data="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+  TString infname_data="/data/bmeson/data/nt_20140607_PAMuon_HIRun2013_Merged.root";
   TString infname_mc="/data/bmeson/MC/nt_MixMC_20140503_Kstar__TriggerMatchingMuon_EvtBase_skim.root";
 
   TFile *inf_data = new TFile(infname_data.Data());
@@ -179,8 +179,11 @@ TH1D* Loop(TTree* ntuple,double ptmin,double ptmax,int option=1){
         //h->Fill(mass[j]);  	  
   	  }//candidate seleection
   	}//loop over candidates
-  	h->Fill(mass[bestchi2index]);
-  	hPtMC->Fill(pt[bestchi2index],funcweight(pt[bestchi2index]));
+  	
+  	if(bestchi2index>-1 ){
+  	  h->Fill(mass[bestchi2index]);
+  	  hPtMC->Fill(pt[bestchi2index],funcweight(pt[bestchi2index]));
+  	}
   
   }// loop over events
   if(option==1 || option==2 || option==4) return h;
