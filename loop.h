@@ -109,6 +109,7 @@ float trk2StripHit[MAX_XB];
 float trk2Chi2ndf[MAX_XB];
 
 float tktkmass[MAX_XB];
+float tktkmassKK[MAX_XB];
 float tktkvProb[MAX_XB];
 float tktkpt[MAX_XB];
 float tktketa[MAX_XB];
@@ -148,6 +149,7 @@ void buildBranch(TTree* nt){
   nt->Branch("bindex",bindex, "bindex[size]/I");
   nt->Branch("mass",mass, "mass[size]/F");
   nt->Branch("tktkmass",tktkmass, "tktkmass[size]/F");
+  nt->Branch("tktkmassKK",tktkmassKK, "tktkmassKK[size]/F");
   nt->Branch("pt",pt, "pt[size]/F");
   nt->Branch("eta",eta, "eta[size]/F");
   nt->Branch("phi",phi, "phi[size]/F");
@@ -242,6 +244,7 @@ void buildBranch(TTree* nt){
   nt->Branch("trk2Y",trk2Y, "trk2Y[size]/F");  
   
   nt->Branch("tktkmass",tktkmass, "tktkmass[size]/F");
+  nt->Branch("tktkmassKK",tktkmassKK, "tktkmassKK[size]/F");
   nt->Branch("tktkvProb",tktkvProb, "tktkvProb[size]/F");
   nt->Branch("tktkpt",tktkpt, "tktkpt[size]/F");
   nt->Branch("tktketa",tktketa, "tktketa[size]/F");
