@@ -18,11 +18,11 @@ TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBa
 //TString inputmc="/net/hisrv0001/home/yenjie/slocal/tmp/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
 
 //tk pt, chi2
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
+TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
-TString seldata_2y=Form("((Run>1&&Run<12&&abs(y-0.465)<1.93)||(Run<=1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-TString selmc=Form("((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&gen==23333&&%s",cut.Data());
-TString selmcgen="((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&abs(pdgId)==521&&isSignal==1";
+TString seldata_2y=Form("%s",cut.Data());
+TString selmc=Form("gen==23333&&%s",cut.Data());
+TString selmcgen="abs(pdgId)==521&&isSignal==1";
 
 TString weight = "(27.493+pt*(-0.218769))";
 
@@ -179,6 +179,8 @@ void fitB(TString infname="",bool doweight = 1)
     
   const int nBins = 5;
   double ptBins[nBins+1] = {10,15,20,25,30,60};
+//  const int nBins = 1;
+//  double ptBins[nBins+1] = {10,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
   TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
