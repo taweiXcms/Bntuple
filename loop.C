@@ -722,8 +722,8 @@ int signalGen(int Btype, int j)
 
 
 //void loop(string infile="/export/d00/scratch/jwang/Bfinder_BoostedMC_20140418_Hijing_PPb502_MinimumBias_HIJINGemb_inclBtoPsiMuMu_5TeV.root", string outfile="/export/d00/scratch/jwang/jpsi.root", bool REAL=0){
-void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140707_BuJpsiK_pPb.root", string
-	  outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140708_BuJpsiK_pPb.root.root", bool REAL=0,bool PbpMC=0,int nEntries=0, bool doMuonSelection = 1){
+int loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140707_BuJpsiK_pPb.root", string
+	  outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140708_BuJpsiK_pPb.root.root", bool REAL=1,bool PbpMC=0,int startEntries=0,int nEntries=0, bool doMuonSelection = 0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -749,11 +749,11 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
   TTree *root = (TTree*)f->Get("demo/root");
   TTree *hlt = (TTree*)f->Get("hltanalysis/HltTree");
   if (root->GetEntries()!=hlt->GetEntries()) {
-     cout <<"Inconsistent number of entries!!!"<<endl;
+     cout <<"Inconsistent number of entries!!! "<<infile<<endl;
      cout <<"HLT tree: "<<hlt->GetEntries()<<endl;
      cout <<"Bfinder tree: "<<root->GetEntries()<<endl;
   }
-  
+
   //Chain type
   //TChain* root = new TChain("demo/root");
   //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_100_1_dXJ.root");
@@ -808,7 +808,7 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
   
   if (nEntries!=0) nentries=nEntries;
 
-  for (Long64_t i=0; i<nentries;i++) {
+  for (Long64_t i=startEntries; i<nentries;i++) {
     nbytes += root->GetEntry(i);
     flagEvt=0;
     while (flagEvt==0)
@@ -859,12 +859,15 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	temy = b4Pout->Rapidity();
 	if(REAL)
 	  {
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+//	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
 	  }
 	else
 	  {
-	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
-	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+//	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+//	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy)>=2.4) continue;
+	    if((PbpMC==1)&&abs(temy)>=2.4) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -923,12 +926,15 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	temy = b4Pout->Rapidity();
 	if(REAL)
 	  {
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+//	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
 	  }
 	else
 	  {
-	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
-	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+//	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+//	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy)>=2.4) continue;
+	    if((PbpMC==1)&&abs(temy)>=2.4) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -986,12 +992,15 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	temy = b4Pout->Rapidity();
 	if(REAL)
 	  {
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+//	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
 	  }
 	else
 	  {
-	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
-	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+//	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+//	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy)>=2.4) continue;
+	    if((PbpMC==1)&&abs(temy)>=2.4) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -1057,12 +1066,15 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	temy = b4Pout->Rapidity();
 	if(REAL)
 	  {
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+//	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
 	  }
 	else
 	  {
-	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
-	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+//	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+//	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy)>=2.4) continue;
+	    if((PbpMC==1)&&abs(temy)>=2.4) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -1070,12 +1082,14 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	if(BInfo_type[j]==4 || BInfo_type[j]==5)
 	  {
 	    fillTree(bP,bVtx,b4P,j,type4size,KAON_MASS,PION_MASS,REAL,PbpMC);
-	    if(chi2cl[type4size]>best&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmass[type4size]>0.85)
+//	    if(chi2cl[type4size]>best&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmass[type4size]>0.85)
+	    if(chi2cl[type4size]>best&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmassKK[type4size]>1.04)
 	      {
 		best = chi2cl[type4size];
 		bestindex = type4size;
 	      }
-	    if(abs(tktkmass[type4size]-KSTAR_MASS)<best2&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmass[type4size]>0.85)
+//	    if(abs(tktkmass[type4size]-KSTAR_MASS)<best2&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmass[type4size]>0.85)
+	    if(abs(tktkmass[type4size]-KSTAR_MASS)<best2&&(HLT_PAMu3_v1)&&abs(mumumass[type4size]-3.096916)<0.15&&trk1Pt[type4size]>0.7&&trk2Pt[type4size]>0.7&&chi2cl[type4size]>9.94e-02&&(d0[type4size]/d0Err[type4size])>6.08&&cos(dtheta[type4size])>7.93e-01&&abs(tktkmass[type4size]-0.89594)<0.10&&tktkmassKK[type4size]>1.04)
 	      {
 		best2 = abs(tktkmass[type4size]-KSTAR_MASS);
 		best2index = type4size;
@@ -1130,12 +1144,15 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	temy = b4Pout->Rapidity();
 	if(REAL)
 	  {
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+//	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
 	  }
 	else
 	  {
-	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
-	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+//	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+//	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy)>=2.4) continue;
+	    if((PbpMC==1)&&abs(temy)>=2.4) continue;
 	  }
 	if(BInfo_mass[j]<5 || BInfo_mass[j]>6) continue;
 	if(BInfo_pt[j]<10.) continue;
@@ -1203,14 +1220,18 @@ void loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_2014
 	//skim{{{
 	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
 	temy = b4Pout->Rapidity();
+
 	if(REAL)
 	  {
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+//	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
 	  }
 	else
 	  {
-	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
-	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+//	    if((PbpMC==0)&&abs(temy+0.465)>=1.93) continue;
+//	    if((PbpMC==1)&&abs(temy-0.465)>=1.93) continue;
+	    if((PbpMC==0)&&abs(temy)>=2.4) continue;
+	    if((PbpMC==1)&&abs(temy)>=2.4) continue;
 	  }
 	//}}}
 	if(BInfo_type[j]==7)
