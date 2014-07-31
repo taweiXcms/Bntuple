@@ -10,20 +10,19 @@ double fixparam1=5.367;
 //svmit02
 //TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
-//TString inputdata="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+TString inputdata="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
 //TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140427_Phi_TriggerMatchingMuon_EvtBase_skim.root";          
-//TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Phi__TriggerMatchingMuon_EvtBase_skim.root";
+TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Phi__TriggerMatchingMuon_EvtBase_skim.root";
 //cgate
-TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-TString inputmc="/net/hisrv0001/home/yenjie/slocal/tmp/nt_MixMC_20140503_Phi__TriggerMatchingMuon_EvtBase_skim.root";
+//TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
+//TString inputmc="/net/hisrv0001/home/yenjie/slocal/tmp/nt_MixMC_20140503_Phi__TriggerMatchingMuon_EvtBase_skim.root";
 
 //Bs tkpt chi2
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
 
-//TString seldata=Form("abs(y+0.465)<1.93&&%s",cut.Data());
-TString seldata_2y=Form("((Run>1&&Run<12&&abs(y-0.465)<1.93)||(Run<=1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut.Data());
-TString selmc=Form("((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&gen==23333&&%s",cut.Data());
-TString selmcgen="((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&abs(pdgId)==531&&isSignal>0";
+TString seldata_2y=Form("%s",cut.Data());
+TString selmc=Form("gen==23333&&%s",cut.Data());
+TString selmcgen="abs(pdgId)==531&&isSignal>0";
 
 TString weight = "27.493+pt*(-0.218769)";
 
