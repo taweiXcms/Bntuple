@@ -5,7 +5,7 @@
 #include "TH1D.h"
 #define NUM_BX 9000
 
-const int nBins = 40;
+const int nBins = 10;
 double trkPtCut=0.9;
 double ptmax=60.;
 double ptmin=10.;
