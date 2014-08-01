@@ -21,8 +21,14 @@ void Acceptance(){
   TTree *nt_mcgen = (TTree*)filemc->Get("ntGen");
   TTree *nt = (TTree*)filemc->Get("ntKp");
   
-  TH1D *hPtAccNum = new TH1D("hPtAccNum","",nBins,10.,60.);
-  TH1D *hPtAccDen = new TH1D("hPtAccDen","",nBins,10.,60.);
+  TH1D *hPtAccNumVsPt = new TH1D("hPtAccNumVsPt","",nBins,10.,60.);
+  TH1D *hPtAccDenVsPt = new TH1D("hPtAccDenVsPt","",nBins,10.,60.);
+  
+  hPtAccNumVsPt->Sumw2();
+  hPtAccDenVsPt->Sumw2();
+  
+  
+  
   bool cut_yvsRun,cut_pt,cut_trk1Pt,cut_trk1eta,cut_mu1acc,cut_mu2acc;
   
   int Run,size;
@@ -52,7 +58,7 @@ void Acceptance(){
   nt_mcgen->SetBranchAddress("mu2p",mu2p);
   nt_mcgen->SetBranchAddress("tk1pt",trk1Pt);
   nt_mcgen->SetBranchAddress("tk1eta",trk1eta);
-  nt->SetBranchAddress("Run",&Run);
+  //nt->SetBranchAddress("Run",&Run);
 
   Int_t entries = (Int_t)nt_mcgen->GetEntries();
   
@@ -60,35 +66,30 @@ void Acceptance(){
     nt_mcgen->GetEntry(i);        
     nt->GetEntry(i);        
     for(int j=0;j<size;j++){
-      cut_yvsRun=((Run<=1&&abs(y[j]+0.465)<1.93)||(Run>1&&abs(y[j]-0.465)<1.93))&&abs(pdgId[j])==521&&isSignal[j]==1;
+      //cut_yvsRun=((Run<=1&&abs(y[j]+0.465)<1.93)||(Run>1&&abs(y[j]-0.465)<1.93))&&abs(pdgId[j])==521&&isSignal[j]==1;
+      cut_yvsRun=abs(y[j])<2.4&&abs(pdgId[j])==521&&isSignal[j]==1;
       cut_pt=((pt[j]>ptmin)&&(pt[j]<ptmax));
       if(cut_pt&&cut_yvsRun) {
-        hPtAccDen->Fill(pt[j]);  
+        hPtAccDenVsPt->Fill(pt[j]);  
         cut_mu1acc=(abs(mu1eta[j])<1.3&&mu1pt[j]>3.3)||(abs(mu1eta[j])>1.3&&abs(mu1eta[j])<2.2&&mu1p[j]>2.9)||(abs(mu1eta[j])>2.2&&abs(mu1eta[j])<2.4&&mu1pt[j]>0.8);
 	    cut_mu2acc=(abs(mu2eta[j])<1.3&&mu2pt[j]>3.3)||(abs(mu2eta[j])>1.3&&abs(mu2eta[j])<2.2&&mu2p[j]>2.9)||(abs(mu2eta[j])>2.2&&abs(mu2eta[j])<2.4&&mu2pt[j]>0.8);
 	    cut_trk1Pt=(trk1Pt[j]>trkPtCut);
 	    cut_trk1eta=(abs(trk1eta[j])<2.4);
         if(cut_mu1acc&&cut_mu2acc&&cut_trk1Pt&&cut_trk1eta){
-          hPtAccNum->Fill(pt[j]);  
+          hPtAccNumVsPt->Fill(pt[j]);  
         }
       }    	  
   	}//loop over candidates
   }// loop over events
 
   
-  TH1D *hAcc = (TH1D*)hPtAccNum->Clone();
-  hAcc->Divide(hPtAccDen);
+  TH1D *hAccVsPt = (TH1D*)hPtAccNumVsPt->Clone("hAccVsPt");  
+  hAccVsPt->Sumw2();
+  hAccVsPt->Divide(hAccVsPt, hPtAccDenVsPt, 1.0, 1.0, "B");
 
-  TCanvas*canvas=new TCanvas("canvas","canvas",1000,500);
-  canvas->Divide(3,1);
-  canvas->cd(1);
-  hPtAccDen->Draw();
-  canvas->cd(2);
-  hPtAccNum->Draw();
-  canvas->cd(3);
-  hAcc->SetMinimum(0);
-  hAcc->SetMaximum(1.);
-  hAcc->Draw();
-  canvas->SaveAs("canvas.eps");
-  
+  TFile*fileoutput=new TFile("Results/outputBplus.root","recreate");
+  fileoutput->cd();
+  hAccVsPt->Write();
+  hPtAccNumVsPt->Write();
+  hPtAccDenVsPt->Write();  
 }
