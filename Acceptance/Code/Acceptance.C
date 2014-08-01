@@ -21,6 +21,19 @@ void Acceptance(){
   TTree *nt_mcgen = (TTree*)filemc->Get("ntGen");
   TTree *nt = (TTree*)filemc->Get("ntKp");
   
+  TFile*fileinputreweight=new TFile("../InputFile/InputFilesMCData.root");
+
+  TH1D *hPtData = (TH1D*)fileinputreweight->Get("hPtData");
+  TH1D *hPtMC = (TH1D*)fileinputreweight->Get("hPtData");
+  TH1D *hyData = (TH1D*)fileinputreweight->Get("hPtData");
+  TH1D *hyMC = (TH1D*)fileinputreweight->Get("hPtData");
+  
+  TH1D*hReweightDataOverMC_Pt=(TH1D*)hPtData->Clone("hReweightDataOverMC_Pt");
+  TH1D*hReweightDataOverMC_y=(TH1D*)hyData->Clone("hReweightDataOverMC_y");
+  
+  hReweightDataOverMC_Pt->Divide(hPtMC);
+  hReweightDataOverMC_y->Divide(hyMC);
+  
   TH1D *hPtAccNumVsPt = new TH1D("hPtAccNumVsPt","",nBins,10.,60.);
   TH1D *hPtAccDenVsPt = new TH1D("hPtAccDenVsPt","",nBins,10.,60.);
   
@@ -58,7 +71,7 @@ void Acceptance(){
   nt_mcgen->SetBranchAddress("mu2p",mu2p);
   nt_mcgen->SetBranchAddress("tk1pt",trk1Pt);
   nt_mcgen->SetBranchAddress("tk1eta",trk1eta);
-  //nt->SetBranchAddress("Run",&Run);
+  nt->SetBranchAddress("Run",&Run);
 
   Int_t entries = (Int_t)nt_mcgen->GetEntries();
   
@@ -66,8 +79,8 @@ void Acceptance(){
     nt_mcgen->GetEntry(i);        
     nt->GetEntry(i);        
     for(int j=0;j<size;j++){
-      //cut_yvsRun=((Run<=1&&abs(y[j]+0.465)<1.93)||(Run>1&&abs(y[j]-0.465)<1.93))&&abs(pdgId[j])==521&&isSignal[j]==1;
-      cut_yvsRun=abs(y[j])<2.4&&abs(pdgId[j])==521&&isSignal[j]==1;
+      cut_yvsRun=((Run<=1&&abs(y[j]+0.465)<1.93)||(Run>1&&abs(y[j]-0.465)<1.93))&&abs(pdgId[j])==521&&isSignal[j]==1;
+      //cut_yvsRun=abs(y[j])<2.4&&abs(pdgId[j])==521&&isSignal[j]==1;
       cut_pt=((pt[j]>ptmin)&&(pt[j]<ptmax));
       if(cut_pt&&cut_yvsRun) {
         hPtAccDenVsPt->Fill(pt[j]);  
@@ -92,4 +105,12 @@ void Acceptance(){
   hAccVsPt->Write();
   hPtAccNumVsPt->Write();
   hPtAccDenVsPt->Write();  
+  
+  TCanvas*canvasreweight=new TCanvas("canvasreweight","canvasreweight",1000,500);
+  canvasreweight->Divide(2,1);
+  canvasreweight->cd(1);
+  hReweightDataOverMC_Pt->Draw();
+  canvasreweight->cd(2);
+  hReweightDataOverMC_y->Draw();
+  
 }
