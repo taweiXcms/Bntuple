@@ -126,8 +126,8 @@ TH1D* LoopAccNum(TTree* ntuple,double ptmin,double ptmax){
       if(!cut_pt) continue;
       
       cut_yvsRun=((Run<=1&&abs(y[j]+0.465)<1.93)||(Run>1&&abs(y[j]-0.465)<1.93))&&gen[j]==23333;	  
-	  cut_mu1acc=(abs(mu1eta[j])<1.3&&mu1p[j]>3.3)||(abs(mu1eta[j])>1.3&&abs(mu1eta[j])<2.2&&mu1p[j]>2.9)||(abs(mu1eta[j])>2.2&&abs(mu1eta[j])<2.4&&mu1p[j]>0.8);
-	  cut_mu2acc=(abs(mu2eta[j])<1.3&&mu2p[j]>3.3)||(abs(mu2eta[j])>1.3&&abs(mu2eta[j])<2.2&&mu2p[j]>2.9)||(abs(mu2eta[j])>2.2&&abs(mu2eta[j])<2.4&&mu2p[j]>0.8);
+	  cut_mu1acc=(abs(mu1eta[j])<1.3&&mu1pt[j]>3.3)||(abs(mu1eta[j])>1.3&&abs(mu1eta[j])<2.2&&mu1p[j]>2.9)||(abs(mu1eta[j])>2.2&&abs(mu1eta[j])<2.4&&mu1pt[j]>0.8);
+	  cut_mu2acc=(abs(mu2eta[j])<1.3&&mu2pt[j]>3.3)||(abs(mu2eta[j])>1.3&&abs(mu2eta[j])<2.2&&mu2p[j]>2.9)||(abs(mu2eta[j])>2.2&&abs(mu2eta[j])<2.4&&mu2pt[j]>0.8);
 	  cut_trk1Pt=(trk1Pt[j]>trkPtCut);
 	  
       if(cut_yvsRun&&cut_mu1acc&&cut_mu2acc&&cut_trk1Pt){
