@@ -22,8 +22,8 @@ TString selmcgen="((Run<=1&&abs(y+0.465)<1.93)||(Run>1&&abs(y-0.465)<1.93))&&abs
 */
 
 TString seldata_2y_kpi=Form("%s",cut_kpi.Data());
-TString selmc_kpi=Form("(gen==23333||gen==41000)&&%s",cut_kpi.Data());
-TString selmcgen="abs(pdgId)==511&&isSignal!=0";
+TString selmc_kpi=Form("abs(y)<2.4&&(gen==23333||gen==41000)&&%s",cut_kpi.Data());
+TString selmcgen="abs(y)<2.4&&abs(pdgId)==511&&isSignal!=0";
 
 TString weight = "27.493+pt*(-0.218769)";
 
