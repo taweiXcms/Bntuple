@@ -126,13 +126,20 @@ void Acceptance(){
 
   TFile*fileoutput=new TFile("Results/outputBplus.root","recreate");
   fileoutput->cd();
+  
   hAccVsPt->Write();
   hAccVsPtReweight->Write();
   hPtAccNumVsPt->Write();
+  hPtAccNumVsPtReweight->Write();  
   hPtAccDenVsPt->Write(); 
+  hPtAccDenVsPtReweight->Write(); 
+
   hAccVsy->Write();
   hAccVsyReweight->Write();
   hPtAccNumVsy->Write();
-  hPtAccDenVsy->Write();  
+  hPtAccNumVsyReweight->Write();  
+  hPtAccDenVsy->Write(); 
+  hPtAccDenVsyReweight->Write(); 
+
  
 }
