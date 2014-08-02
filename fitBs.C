@@ -8,14 +8,8 @@ double setparam3=0.03;
 double fixparam1=5.367;
 
 //svmit02
-//TString inputdata="/data/bmeson/data/nt_20140411_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140411_Phi_TriggerMatchingMuon_EvtBase_skim.root";
-TString inputdata="/data/bmeson/data/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-//TString inputmc="/data/bmeson/MC/nt_BoostedMC_20140427_Phi_TriggerMatchingMuon_EvtBase_skim.root";          
-TString inputmc="/data/bmeson/MC/nt_MixMC_20140503_Phi__TriggerMatchingMuon_EvtBase_skim.root";
-//cgate
-//TString inputdata="/export/d00/scratch/jwang/nt_20140427_PAMuon_HIRun2013_PromptrecoAndRereco_v1_MuonMatching_EvtBase_skim.root";
-//TString inputmc="/net/hisrv0001/home/yenjie/slocal/tmp/nt_MixMC_20140503_Phi__TriggerMatchingMuon_EvtBase_skim.root";
+TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
 //Bs tkpt chi2
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
