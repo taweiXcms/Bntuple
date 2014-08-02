@@ -15,8 +15,8 @@ TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Phi.root";
 TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02";
 
 TString seldata_2y=Form("%s",cut.Data());
-TString selmc=Form("gen==23333&&%s",cut.Data());
-TString selmcgen="abs(pdgId)==531&&isSignal>0";
+TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
+TString selmcgen="abs(y)<2.4&&abs(pdgId)==531&&isSignal>0";
 
 TString weight = "27.493+pt*(-0.218769)";
 
