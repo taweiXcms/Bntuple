@@ -1,6 +1,4 @@
-
-
-void plotAcceptance(){
+void plotAcceptanceVsPt(TString suffix="Pt"){
 
   gROOT->SetStyle("Plain");	
   gStyle->SetOptStat(0);
@@ -12,15 +10,36 @@ void plotAcceptance(){
 
   TFile*fileoutput=new TFile("../Code/Results/outputBplus.root");
   
+  TH1D*hPtAccNumVsPt=(TH1D*)fileoutput->Get("hPtAccNumVsPt");
+  TH1D*hPtAccNumVsPtReweight=(TH1D*)fileoutput->Get("hPtAccNumVsPtReweight");
+  TH1D*hPtAccNumVsPtLow=(TH1D*)fileoutput->Get("hPtAccNumVsPtLow");
+  TH1D*hPtAccNumVsPtHigh=(TH1D*)fileoutput->Get("hPtAccNumVsPtHigh");
+  
+  TH1D*hPtAccDenVsPt=(TH1D*)fileoutput->Get("hPtAccDenVsPt");
+  TH1D*hPtAccDenVsPtReweight=(TH1D*)fileoutput->Get("hPtAccDenVsPtReweight");
+  TH1D*hPtAccDenVsPtLow=(TH1D*)fileoutput->Get("hPtAccDenVsPtLow");
+  TH1D*hPtAccDenVsPtHigh=(TH1D*)fileoutput->Get("hPtAccDenVsPtHigh");
+  
   TH1D*hAccVsPt=(TH1D*)fileoutput->Get("hAccVsPt");
   TH1D*hAccVsPtReweight=(TH1D*)fileoutput->Get("hAccVsPtReweight");
-  TH1D*hPtAccNumVsPt=(TH1D*)fileoutput->Get("hPtAccNumVsPt");
-  TH1D*hPtAccDenVsPt=(TH1D*)fileoutput->Get("hPtAccDenVsPt");
+  TH1D*hAccVsPtLow=(TH1D*)fileoutput->Get("hAccVsPtLow");
+  TH1D*hAccVsPtHigh=(TH1D*)fileoutput->Get("hAccVsPtHigh");
+
+  TH1D*hPtAccNumVsy=(TH1D*)fileoutput->Get("hPtAccNumVsy");
+  TH1D*hPtAccNumVsyReweight=(TH1D*)fileoutput->Get("hPtAccNumVsyReweight");
+  TH1D*hPtAccNumVsyLow=(TH1D*)fileoutput->Get("hPtAccNumVsyLow");
+  TH1D*hPtAccNumVsyHigh=(TH1D*)fileoutput->Get("hPtAccNumVsyHigh");
+  
+  TH1D*hPtAccDenVsy=(TH1D*)fileoutput->Get("hPtAccDenVsy");
+  TH1D*hPtAccDenVsyReweight=(TH1D*)fileoutput->Get("hPtAccDenVsyReweight");
+  TH1D*hPtAccDenVsyLow=(TH1D*)fileoutput->Get("hPtAccDenVsyLow");
+  TH1D*hPtAccDenVsyHigh=(TH1D*)fileoutput->Get("hPtAccDenVsyHigh");
   
   TH1D*hAccVsy=(TH1D*)fileoutput->Get("hAccVsy");
   TH1D*hAccVsyReweight=(TH1D*)fileoutput->Get("hAccVsyReweight");
-  TH1D*hPtAccNumVsy=(TH1D*)fileoutput->Get("hPtAccNumVsy");
-  TH1D*hAccVsPt=(TH1D*)fileoutput->Get("hAccVsPt");
+  TH1D*hAccVsyLow=(TH1D*)fileoutput->Get("hAccVsyLow");
+  TH1D*hAccVsyHigh=(TH1D*)fileoutput->Get("hAccVsyHigh");
+
   
   TCanvas*canvasAccVsPt=new TCanvas("canvasAccVsPt","canvasAccVsPt",1000,1200);
   canvasAccVsPt->Divide(2,2);
@@ -48,6 +67,19 @@ void plotAcceptance(){
   hPtAccNumVsPtReweight->SetMarkerStyle(21);
   hPtAccNumVsPtReweight->SetMarkerColor(2);
   hPtAccNumVsPtReweight->Draw("SAMES");
+  hPtAccNumVsPtLow->SetLineWidth(2);
+  hPtAccNumVsPtLow->SetLineColor(3);
+  hPtAccNumVsPtLow->SetMarkerSize(0.5);
+  hPtAccNumVsPtLow->SetMarkerStyle(21);
+  hPtAccNumVsPtLow->SetMarkerColor(3);
+  hPtAccNumVsPtLow->Draw("SAMES");
+  hPtAccNumVsPtHigh->SetLineWidth(2);
+  hPtAccNumVsPtHigh->SetLineColor(4);
+  hPtAccNumVsPtHigh->SetMarkerSize(0.5);
+  hPtAccNumVsPtHigh->SetMarkerStyle(21);
+  hPtAccNumVsPtHigh->SetMarkerColor(4);
+  hPtAccNumVsPtHigh->Draw("SAMES");
+
 
   TLegend *legAccVsPt=new TLegend(0.2383901,0.6608392,0.7972136,0.7706294,"");
   legAccVsPt->SetBorderSize(0);
@@ -58,6 +90,11 @@ void plotAcceptance(){
   entAccVsPt->SetTextColor(1);
   TLegendEntry *entAccVsPtReweight=legAccVsPt->AddEntry(hPtAccNumVsPtReweight," reweighted","P");
   entAccVsPtReweight->SetTextColor(2);
+  TLegendEntry *entAccVsPtLow=legAccVsPt->AddEntry(hPtAccNumVsPtLow," reweight y low 40%","P");
+  entAccVsPtLow->SetTextColor(3);
+  TLegendEntry *entAccVsPtHigh=legAccVsPt->AddEntry(hPtAccNumVsPtHigh," reweight y up 40%","P");
+  entAccVsPtHigh->SetTextColor(4);
+
   legAccVsPt->Draw();
   
   canvasAccVsPt->cd(2);
@@ -83,6 +120,19 @@ void plotAcceptance(){
   hPtAccDenVsPtReweight->SetMarkerStyle(21);
   hPtAccDenVsPtReweight->SetMarkerColor(2);
   hPtAccDenVsPtReweight->Draw("SAMES");
+  hPtAccDenVsPtLow->SetLineWidth(2);
+  hPtAccDenVsPtLow->SetLineColor(3);
+  hPtAccDenVsPtLow->SetMarkerSize(0.5);
+  hPtAccDenVsPtLow->SetMarkerStyle(21);
+  hPtAccDenVsPtLow->SetMarkerColor(3);
+  hPtAccDenVsPtLow->Draw("SAMES");
+  hPtAccDenVsPtHigh->SetLineWidth(2);
+  hPtAccDenVsPtHigh->SetLineColor(4);
+  hPtAccDenVsPtHigh->SetMarkerSize(0.5);
+  hPtAccDenVsPtHigh->SetMarkerStyle(21);
+  hPtAccDenVsPtHigh->SetMarkerColor(4);
+  hPtAccDenVsPtHigh->Draw("SAMES");
+
   legAccVsPt->Draw();
 
   canvasAccVsPt->cd(3);
@@ -109,6 +159,19 @@ void plotAcceptance(){
   hAccVsPtReweight->SetMarkerStyle(21);
   hAccVsPtReweight->SetMarkerColor(2);
   hAccVsPtReweight->Draw("SAMES");
+  hAccVsPtLow->SetLineWidth(2);
+  hAccVsPtLow->SetLineColor(3);
+  hAccVsPtLow->SetMarkerSize(0.5);
+  hAccVsPtLow->SetMarkerStyle(21);
+  hAccVsPtLow->SetMarkerColor(3);
+  hAccVsPtLow->Draw("SAMES");
+  hAccVsPtHigh->SetLineWidth(2);
+  hAccVsPtHigh->SetLineColor(4);
+  hAccVsPtHigh->SetMarkerSize(0.5);
+  hAccVsPtHigh->SetMarkerStyle(21);
+  hAccVsPtHigh->SetMarkerColor(4);
+  hAccVsPtHigh->Draw("SAMES");
+
   legAccVsPt->Draw();
 
   canvasAccVsPt->cd(4);
@@ -116,154 +179,64 @@ void plotAcceptance(){
   gPad->SetBottomMargin(0.12);
   gPad->SetTickx();
   gPad->SetTicky();
-  TH1D*hAccVsPtRatioWeightOverNoWeight=(TH1D*)hAccVsPtReweight->Clone("hAccVsPtRatioWeightOverNoWeight");
-  hAccVsPtRatioWeightOverNoWeight->Divide(hAccVsPt);
   
-  hAccVsPtRatioWeightOverNoWeight->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  hAccVsPtRatioWeightOverNoWeight->GetYaxis()->SetTitle("Ratio Acceptance Reweight/NoWeight");
-  hAccVsPtRatioWeightOverNoWeight->SetMinimum(0.9);
-  hAccVsPtRatioWeightOverNoWeight->SetMaximum(1.1);
-  hAccVsPtRatioWeightOverNoWeight->GetXaxis()->SetTitleOffset(1.1);
-  hAccVsPtRatioWeightOverNoWeight->GetYaxis()->SetTitleOffset(1.85);
-  hAccVsPtRatioWeightOverNoWeight->SetLineWidth(2);
-  hAccVsPtRatioWeightOverNoWeight->SetLineColor(1);
-  hAccVsPtRatioWeightOverNoWeight->SetMarkerSize(0.5);
-  hAccVsPtRatioWeightOverNoWeight->SetMarkerStyle(21);
-  hAccVsPtRatioWeightOverNoWeight->SetMarkerColor(1);
-  hAccVsPtRatioWeightOverNoWeight->Draw();
+  TH1D*hAccVsPtRatioReweightOverNoWeight=(TH1D*)hAccVsPtReweight->Clone("hAccVsPtRatioReweightOverNoWeight");
+  hAccVsPtRatioReweightOverNoWeight->Divide(hAccVsPt);
+  TH1D*hAccVsPtRatioLowOverNoWeight=(TH1D*)hAccVsPtLow->Clone("hAccVsPtRatioLowOverNoWeight");
+  hAccVsPtRatioLowOverNoWeight->Divide(hAccVsPt);
+  TH1D*hAccVsPtRatioHighOverNoWeight=(TH1D*)hAccVsPtHigh->Clone("hAccVsPtRatioHighOverNoWeight");
+  hAccVsPtRatioHighOverNoWeight->Divide(hAccVsPt);
+
+  
+  hAccVsPtRatioReweightOverNoWeight->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  hAccVsPtRatioReweightOverNoWeight->GetYaxis()->SetTitle("Ratio Acceptance Reweight/NoWeight");
+  hAccVsPtRatioReweightOverNoWeight->SetMinimum(0.9);
+  hAccVsPtRatioReweightOverNoWeight->SetMaximum(1.1);
+  hAccVsPtRatioReweightOverNoWeight->GetXaxis()->SetTitleOffset(1.1);
+  hAccVsPtRatioReweightOverNoWeight->GetYaxis()->SetTitleOffset(1.85);
+  
+  hAccVsPtRatioReweightOverNoWeight->SetLineWidth(2);
+  hAccVsPtRatioReweightOverNoWeight->SetLineColor(2);
+  hAccVsPtRatioReweightOverNoWeight->SetMarkerSize(0.5);
+  hAccVsPtRatioReweightOverNoWeight->SetMarkerStyle(21);
+  hAccVsPtRatioReweightOverNoWeight->SetMarkerColor(2);
+  hAccVsPtRatioReweightOverNoWeight->Draw();
+
+  hAccVsPtRatioLowOverNoWeight->SetLineWidth(2);
+  hAccVsPtRatioLowOverNoWeight->SetLineColor(3);
+  hAccVsPtRatioLowOverNoWeight->SetMarkerSize(0.5);
+  hAccVsPtRatioLowOverNoWeight->SetMarkerStyle(21);
+  hAccVsPtRatioLowOverNoWeight->SetMarkerColor(3);
+  hAccVsPtRatioLowOverNoWeight->Draw("same");
+
+  hAccVsPtRatioHighOverNoWeight->SetLineWidth(2);
+  hAccVsPtRatioHighOverNoWeight->SetLineColor(4);
+  hAccVsPtRatioHighOverNoWeight->SetMarkerSize(0.5);
+  hAccVsPtRatioHighOverNoWeight->SetMarkerStyle(21);
+  hAccVsPtRatioHighOverNoWeight->SetMarkerColor(4);
+  hAccVsPtRatioHighOverNoWeight->Draw("same");
+
+
+  for (int i=1;i<=40;i++){
+    hAccVsPtRatioReweightOverNoWeight->SetBinError(i,0.);
+    hAccVsPtRatioLowOverNoWeight->SetBinError(i,0.);
+    hAccVsPtRatioHighOverNoWeight->SetBinError(i,0.);
+  
+  }
   
   TLegend *legRatioAccVsPt=new TLegend(0.2383901,0.6608392,0.7972136,0.7706294,"");
   legRatioAccVsPt->SetBorderSize(0);
   legRatioAccVsPt->SetFillStyle(0);
   legRatioAccVsPt->SetTextSize(0.045);
 
-  TLegendEntry *entRatioAccVsPt=legRatioAccVsPt->AddEntry(hAccVsPtRatioWeightOverNoWeight," function","P");
-  entRatioAccVsPt->SetTextColor(1);
+  TLegendEntry *entRatioReweightAccVsPt=legRatioAccVsPt->AddEntry(hAccVsPtRatioReweightOverNoWeight," reweight","P");
+  entRatioReweightAccVsPt->SetTextColor(2);
+  TLegendEntry *entRatioLowAccVsPt=legRatioAccVsPt->AddEntry(hAccVsPtRatioLowOverNoWeight," reweight y up 40%","P");
+  entRatioLowAccVsPt->SetTextColor(3);
+  TLegendEntry *entRatioHighAccVsPt=legRatioAccVsPt->AddEntry(hAccVsPtRatioHighOverNoWeight," reweight y down 40%","P");
+  entRatioHighAccVsPt->SetTextColor(4);
+
   legRatioAccVsPt->Draw();
   canvasAccVsPt->SaveAs("Plots/canvasAccVsPt.eps");
-
-
-
-  TCanvas*canvasAccVsy=new TCanvas("canvasAccVsy","canvasAccVsy",1000,1200);
-  canvasAccVsy->Divide(2,2);
-  
-  canvasAccVsy->cd(1);
-  gPad->SetLeftMargin(0.12);
-  gPad->SetBottomMargin(0.12);
-  gPad->SetTickx();
-  gPad->SetTicky();
-  
-  hPtAccNumVsy->GetXaxis()->SetTitle("y_{LAB}");
-  hPtAccNumVsy->GetYaxis()->SetTitle("Numerator");
-  hPtAccNumVsy->SetMinimum(0.);
-  hPtAccNumVsy->SetMaximum(30000.);
-  hPtAccNumVsy->GetXaxis()->SetTitleOffset(1.1);
-  hPtAccNumVsy->GetYaxis()->SetTitleOffset(1.85);
-  hPtAccNumVsy->SetLineWidth(2);
-  hPtAccNumVsy->SetLineColor(1);
-  hPtAccNumVsy->SetMarkerSize(0.5);
-  hPtAccNumVsy->SetMarkerStyle(21);
-  hPtAccNumVsy->SetMarkerColor(1);
-  hPtAccNumVsy->Draw();
-  hPtAccNumVsyReweight->SetLineWidth(2);
-  hPtAccNumVsyReweight->SetLineColor(2);
-  hPtAccNumVsyReweight->SetMarkerSize(0.5);
-  hPtAccNumVsyReweight->SetMarkerStyle(21);
-  hPtAccNumVsyReweight->SetMarkerColor(2);
-  hPtAccNumVsyReweight->Draw("SAMES");
-
-  TLegend *legAccVsy=new TLegend(0.2383901,0.6608392,0.7972136,0.7706294,"");
-  legAccVsy->SetBorderSize(0);
-  legAccVsy->SetFillStyle(0);
-  legAccVsy->SetTextSize(0.045);
-
-  TLegendEntry *entAccVsy=legAccVsy->AddEntry(hPtAccNumVsy," central","P");
-  entAccVsy->SetTextColor(1);
-  TLegendEntry *entAccVsyReweight=legAccVsy->AddEntry(hPtAccNumVsyReweight," reweighted","P");
-  entAccVsyReweight->SetTextColor(2);
-  legAccVsy->Draw();
-  
-  canvasAccVsy->cd(2);
-  gPad->SetLeftMargin(0.12);
-  gPad->SetBottomMargin(0.12);
-  gPad->SetTickx();
-  gPad->SetTicky();
-  
-  hPtAccDenVsy->GetXaxis()->SetTitle("y_{LAB}");
-  hPtAccDenVsy->GetYaxis()->SetTitle("Denumerator");
-  hPtAccDenVsy->SetMinimum(0.);
-  hPtAccDenVsy->SetMaximum(60000.);
-  hPtAccDenVsy->GetXaxis()->SetTitleOffset(1.1);
-  hPtAccDenVsy->GetYaxis()->SetTitleOffset(1.85);
-  hPtAccDenVsy->SetLineWidth(2);
-  hPtAccDenVsy->SetLineColor(1);
-  hPtAccDenVsy->SetMarkerSize(0.5);
-  hPtAccDenVsy->SetMarkerStyle(21);
-  hPtAccDenVsy->SetMarkerColor(1);
-  hPtAccDenVsy->Draw();
-  hPtAccDenVsyReweight->SetLineWidth(2);
-  hPtAccDenVsyReweight->SetLineColor(2);
-  hPtAccDenVsyReweight->SetMarkerSize(0.5);
-  hPtAccDenVsyReweight->SetMarkerStyle(21);
-  hPtAccDenVsyReweight->SetMarkerColor(2);
-  hPtAccDenVsyReweight->Draw("SAMES");
-  legAccVsy->Draw();
-
-  canvasAccVsy->cd(3);
-  gPad->SetLeftMargin(0.12);
-  gPad->SetBottomMargin(0.12);
-  gPad->SetTickx();
-  gPad->SetTicky();
-  
-  hAccVsy->GetXaxis()->SetTitle("y_{LAB}");
-  hAccVsy->GetYaxis()->SetTitle("Acceptance");
-  hAccVsy->SetMinimum(0.);
-  hAccVsy->SetMaximum(1.5);
-  hAccVsy->GetXaxis()->SetTitleOffset(1.1);
-  hAccVsy->GetYaxis()->SetTitleOffset(1.85);
-  hAccVsy->SetLineWidth(2);
-  hAccVsy->SetLineColor(1);
-  hAccVsy->SetMarkerSize(0.5);
-  hAccVsy->SetMarkerStyle(21);
-  hAccVsy->SetMarkerColor(1);
-  hAccVsy->Draw();
-  hAccVsyReweight->SetLineWidth(2);
-  hAccVsyReweight->SetLineColor(2);
-  hAccVsyReweight->SetMarkerSize(0.5);
-  hAccVsyReweight->SetMarkerStyle(21);
-  hAccVsyReweight->SetMarkerColor(2);
-  hAccVsyReweight->Draw("SAMES");
-  legAccVsy->Draw();
-
-  canvasAccVsy->cd(4);
-  gPad->SetLeftMargin(0.12);
-  gPad->SetBottomMargin(0.12);
-  gPad->SetTickx();
-  gPad->SetTicky();
-  TH1D*hAccVsyRatioWeightOverNoWeight=(TH1D*)hAccVsyReweight->Clone("hAccVsyRatioWeightOverNoWeight");
-  hAccVsyRatioWeightOverNoWeight->Divide(hAccVsy);
-  
-  hAccVsyRatioWeightOverNoWeight->GetXaxis()->SetTitle("y_{LAB}");
-  hAccVsyRatioWeightOverNoWeight->GetYaxis()->SetTitle("Ratio Acceptance Reweight/NoWeight");
-  hAccVsyRatioWeightOverNoWeight->SetMinimum(0.9);
-  hAccVsyRatioWeightOverNoWeight->SetMaximum(1.1);
-  hAccVsyRatioWeightOverNoWeight->GetXaxis()->SetTitleOffset(1.1);
-  hAccVsyRatioWeightOverNoWeight->GetYaxis()->SetTitleOffset(1.85);
-  hAccVsyRatioWeightOverNoWeight->SetLineWidth(2);
-  hAccVsyRatioWeightOverNoWeight->SetLineColor(1);
-  hAccVsyRatioWeightOverNoWeight->SetMarkerSize(0.5);
-  hAccVsyRatioWeightOverNoWeight->SetMarkerStyle(21);
-  hAccVsyRatioWeightOverNoWeight->SetMarkerColor(1);
-  hAccVsyRatioWeightOverNoWeight->Draw();
-  
-  TLegend *legRatioAccVsy=new TLegend(0.2383901,0.6608392,0.7972136,0.7706294,"");
-  legRatioAccVsy->SetBorderSize(0);
-  legRatioAccVsy->SetFillStyle(0);
-  legRatioAccVsy->SetTextSize(0.045);
-
-  TLegendEntry *entRatioAccVsy=legRatioAccVsy->AddEntry(hAccVsyRatioWeightOverNoWeight," function","P");
-  entRatioAccVsy->SetTextColor(1);
-  legRatioAccVsy->Draw();
-  canvasAccVsy->SaveAs("Plots/canvasAccVsy.eps");
 
 }
