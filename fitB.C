@@ -16,8 +16,8 @@ TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&ma
 //TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
 TString seldata_2y=Form("%s",cut.Data());
-TString selmc=Form("gen==23333&&%s",cut.Data());
-TString selmcgen="abs(pdgId)==521&&isSignal==1";
+TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
+TString selmcgen="abs(y)<2.4&&abs(pdgId)==521&&isSignal==1";
 
 TString weight = "(27.493+pt*(-0.218769))";
 
