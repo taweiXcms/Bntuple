@@ -1,4 +1,4 @@
-void plotAcceptance(TString suffix="Pt"){
+void plotAcceptance(TString suffix="Pt",int optionplot=1){
 
   gROOT->SetStyle("Plain");	
   gStyle->SetOptStat(0);
@@ -47,12 +47,14 @@ void plotAcceptance(TString suffix="Pt"){
   hPtAccNum->SetMarkerStyle(21);
   hPtAccNum->SetMarkerColor(1);
   hPtAccNum->Draw();
+  if(optionplot){
   hPtAccNumReweight->SetLineWidth(2);
   hPtAccNumReweight->SetLineColor(2);
   hPtAccNumReweight->SetMarkerSize(0.5);
   hPtAccNumReweight->SetMarkerStyle(21);
   hPtAccNumReweight->SetMarkerColor(2);
   hPtAccNumReweight->Draw("SAMES");
+  }
   hPtAccNumLow->SetLineWidth(2);
   hPtAccNumLow->SetLineColor(3);
   hPtAccNumLow->SetMarkerSize(0.5);
@@ -74,8 +76,10 @@ void plotAcceptance(TString suffix="Pt"){
 
   TLegendEntry *entAcc=legAcc->AddEntry(hPtAccNum," central","P");
   entAcc->SetTextColor(1);
-  TLegendEntry *entAccReweight=legAcc->AddEntry(hPtAccNumReweight," reweighted","P");
+  if(optionplot){
+  TLegendEntry *entAccReweight=legAcc->AddEntry(hPtAccNumReweight," reweight according to Data-MC diff","P");
   entAccReweight->SetTextColor(2);
+  }
   TLegendEntry *entAccLow=legAcc->AddEntry(hPtAccNumLow," reweight low 40%","P");
   entAccLow->SetTextColor(3);
   TLegendEntry *entAccHigh=legAcc->AddEntry(hPtAccNumHigh," reweight up 40%","P");
@@ -102,12 +106,14 @@ void plotAcceptance(TString suffix="Pt"){
   hPtAccDen->SetMarkerStyle(21);
   hPtAccDen->SetMarkerColor(1);
   hPtAccDen->Draw();
+  if(optionplot){
   hPtAccDenReweight->SetLineWidth(2);
   hPtAccDenReweight->SetLineColor(2);
   hPtAccDenReweight->SetMarkerSize(0.5);
   hPtAccDenReweight->SetMarkerStyle(21);
   hPtAccDenReweight->SetMarkerColor(2);
   hPtAccDenReweight->Draw("SAMES");
+  }
   hPtAccDenLow->SetLineWidth(2);
   hPtAccDenLow->SetLineColor(3);
   hPtAccDenLow->SetMarkerSize(0.5);
@@ -142,12 +148,14 @@ void plotAcceptance(TString suffix="Pt"){
   hAcc->SetMarkerStyle(21);
   hAcc->SetMarkerColor(1);
   hAcc->Draw();
+  if(optionplot){
   hAccReweight->SetLineWidth(2);
   hAccReweight->SetLineColor(2);
   hAccReweight->SetMarkerSize(0.5);
   hAccReweight->SetMarkerStyle(21);
   hAccReweight->SetMarkerColor(2);
   hAccReweight->Draw("SAMES");
+  }
   hAccLow->SetLineWidth(2);
   hAccLow->SetLineColor(3);
   hAccLow->SetMarkerSize(0.5);
@@ -180,18 +188,11 @@ void plotAcceptance(TString suffix="Pt"){
   if(suffix=="Pt")hAccRatioReweightOverNoWeight->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   if(suffix=="y")hAccRatioReweightOverNoWeight->GetXaxis()->SetTitle("y_{LAB}");
   hAccRatioReweightOverNoWeight->GetYaxis()->SetTitle("Ratio Acceptance Reweight/NoWeight");
-  hAccRatioReweightOverNoWeight->SetMinimum(0.9);
-  hAccRatioReweightOverNoWeight->SetMaximum(1.1);
+  hAccRatioLowOverNoWeight->SetMinimum(0.9);
+  hAccRatioLowOverNoWeight->SetMaximum(1.1);
   hAccRatioReweightOverNoWeight->GetXaxis()->SetTitleOffset(1.1);
   hAccRatioReweightOverNoWeight->GetYaxis()->SetTitleOffset(1.85);
   
-  hAccRatioReweightOverNoWeight->SetLineWidth(2);
-  hAccRatioReweightOverNoWeight->SetLineColor(2);
-  hAccRatioReweightOverNoWeight->SetMarkerSize(0.5);
-  hAccRatioReweightOverNoWeight->SetMarkerStyle(21);
-  hAccRatioReweightOverNoWeight->SetMarkerColor(2);
-  hAccRatioReweightOverNoWeight->Draw();
-
   hAccRatioLowOverNoWeight->SetLineWidth(2);
   hAccRatioLowOverNoWeight->SetLineColor(3);
   hAccRatioLowOverNoWeight->SetMarkerSize(0.5);
@@ -205,6 +206,15 @@ void plotAcceptance(TString suffix="Pt"){
   hAccRatioHighOverNoWeight->SetMarkerStyle(21);
   hAccRatioHighOverNoWeight->SetMarkerColor(4);
   hAccRatioHighOverNoWeight->Draw("same");
+  
+  if(optionplot){
+  hAccRatioReweightOverNoWeight->SetLineWidth(2);
+  hAccRatioReweightOverNoWeight->SetLineColor(2);
+  hAccRatioReweightOverNoWeight->SetMarkerSize(0.5);
+  hAccRatioReweightOverNoWeight->SetMarkerStyle(21);
+  hAccRatioReweightOverNoWeight->SetMarkerColor(2);
+  hAccRatioReweightOverNoWeight->Draw("same");
+  }
 
 
   for (int i=1;i<=40;i++){
@@ -218,9 +228,10 @@ void plotAcceptance(TString suffix="Pt"){
   legRatioAcc->SetBorderSize(0);
   legRatioAcc->SetFillStyle(0);
   legRatioAcc->SetTextSize(0.045);
-
-  TLegendEntry *entRatioReweightAcc=legRatioAcc->AddEntry(hAccRatioReweightOverNoWeight," reweight","P");
+  if(optionplot){
+  TLegendEntry *entRatioReweightAcc=legRatioAcc->AddEntry(hAccRatioReweightOverNoWeight," reweight according to Data-MC diff","P");
   entRatioReweightAcc->SetTextColor(2);
+  }
   TLegendEntry *entRatioLowAcc=legRatioAcc->AddEntry(hAccRatioLowOverNoWeight," reweight up 40%","P");
   entRatioLowAcc->SetTextColor(3);
   TLegendEntry *entRatioHighAcc=legRatioAcc->AddEntry(hAccRatioHighOverNoWeight," reweight down 40%","P");

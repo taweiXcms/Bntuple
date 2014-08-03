@@ -132,7 +132,9 @@ void BuildFunctions(){
   hReweightDataOverMC_y->Draw("p");
   hReweightDataOverMC_y->SetMarkerStyle(22);
   hReweightDataOverMC_y->SetMarkerSize(0.5);
-  hReweightDataOverMC_y->Fit("fy");  
+  hReweightDataOverMC_y->Fit("fy"); 
+  
+  canvas->SaveAs("FitstoRatioDataMC.eps"); 
   
   
   TFile*fout=new TFile("FunctionsReweighting.root","recreate");
