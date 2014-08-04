@@ -40,17 +40,17 @@ Double_t xbinsRFB[nbinsRFB]={0.5,1.465};
 Double_t exlRFB[nbinsRFB]={0.5,0.465};
 Double_t yRFBSystTotHighRel[nbinsRFB]= {0.162,0.196};////////////////////////////////////////////////
 Double_t yRFBSystTotLowRel[nbinsRFB]= {0.162,0.196};//////////////////////
-const int nbins = 4;
-Double_t xbins[nbins]={-1.465,-0.5,0.5,1.465};
-Double_t exl[nbins]={0.465,0.5,0.5,0.465};
+const int nbins = 5;
+Double_t xbins[nbins]={-2.4,-1.465,-0.5,0.5,1.465};
+Double_t exl[nbins]={0.465,0.465,0.5,0.5,0.465};
 //Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};////////////////////////////////////////////////
 //Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};/////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotHigh[nbins]={0.185,0.158,0.133,0.143};////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotLow[nbins]={0.185,0.158,0.133,0.143};//////////////////////
+Double_t yPercSigmapPbSystTotHigh[nbins]={0.,0.185,0.158,0.133,0.143};////////////////////////////////////////////////
+Double_t yPercSigmapPbSystTotLow[nbins]={0.,0.185,0.158,0.133,0.143};//////////////////////
 
 Double_t commonErrorP = 0.0555 ;
 Double_t commonErrorN = 0.0555  ;
-Double_t tagandprobcorrection[nbins]={1.1742287,1.1346129,1.0915380,1.0972000};
+Double_t tagandprobcorrection[nbins]={1.,1.1742287,1.1346129,1.0915380,1.0972000};
 
 void NuclearModificationY(){
 
@@ -166,11 +166,11 @@ Double_t yRFBSystTotLow[nbinsRFB];
 
   //RFB stuff
   //central value
- yRFB[0] =  ySigmapPb[2]/ySigmapPb[1];
- yRFB[1] =  ySigmapPb[3]/ySigmapPb[0];
+ yRFB[0] =  ySigmapPb[3]/ySigmapPb[2];
+ yRFB[1] =  ySigmapPb[4]/ySigmapPb[1];
  //Stat.
- yRFBStat[0] =  yRFB[0]*sqrt(pow(ySigmapPbStat[1]/ySigmapPb[1],2)+pow(ySigmapPbStat[2]/ySigmapPb[2],2));
- yRFBStat[1] =  yRFB[1]*sqrt(pow(ySigmapPbStat[3]/ySigmapPb[3],2)+pow(ySigmapPbStat[0]/ySigmapPb[0],2));
+ yRFBStat[0] =  yRFB[0]*sqrt(pow(ySigmapPbStat[2]/ySigmapPb[2],2)+pow(ySigmapPbStat[3]/ySigmapPb[3],2));
+ yRFBStat[1] =  yRFB[1]*sqrt(pow(ySigmapPbStat[4]/ySigmapPb[4],2)+pow(ySigmapPbStat[1]/ySigmapPb[1],2));
  //Syst.
 
   yRFBSystTotHigh[0] = yRFB[0]*yRFBSystTotHighRel[0];
@@ -214,7 +214,7 @@ cout<<yRFBStat[1]<<endl;
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetFrameBorderMode(0);
   
-  TH2F* hempty=new TH2F("hempty","",10,-2.5,2.5,10,0,600.);  
+  TH2F* hempty=new TH2F("hempty","",10,-3.5,2.5,10,0,650.);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
@@ -354,7 +354,7 @@ cout<<yRFBStat[1]<<endl;
   tlatex3->Draw();
   
 
-  canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
+  canvasSigma->SaveAs(Form("Results%s_y/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
