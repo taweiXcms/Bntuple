@@ -599,6 +599,7 @@ cout<<yRFBStat[1]<<endl;
   tlatex3->SetTextFont(42);
   tlatex3->SetTextSize(0.06);
   tlatex3->Draw();
+  canvasRFB->SaveAs(Form("Results%s_y/CanvasRDFB.pdf",particle.Data(),particle.Data()));
 
 
 
