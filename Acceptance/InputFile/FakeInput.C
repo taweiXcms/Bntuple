@@ -101,6 +101,64 @@ void FakeInput(){
 
 }
 
+void ReadFiles(){
+
+  TFile*foutMCPt=new TFile("Inputfileforreweighting/SigmaBplusMCPt.root","read");
+  TFile*foutDataPt=new TFile("Inputfileforreweighting/SigmaBplusDataPt.root","read");
+  TFile*foutMCy=new TFile("Inputfileforreweighting/SigmaBplusMCy.root","read");
+  TFile*foutDatay=new TFile("Inputfileforreweighting/SigmaBplusDatay.root","read");
+  
+  TH1D*hPtMC=(TH1D*)foutMCPt->Get("hPt");
+  TH1D*hPtData=(TH1D*)foutDataPt->Get("hPt");
+  TH1D*hyMC=(TH1D*)foutMCy->Get("hPt");
+  TH1D*hyData=(TH1D*)foutDatay->Get("hPt");
+  
+  hPtMC->SetName("hPtMC");
+  hPtData->SetName("hPtData");
+  hyMC->SetName("hyMC");
+  hyData->SetName("hyData");
+
+  hPtMC->Scale(1./hPtMC->Integral());
+  hPtData->Scale(1./hPtData->Integral());
+  hyMC->Scale(1./hyMC->Integral());
+  hyData->Scale(1./hyData->Integral());
+  
+  cout<<"QUI"<<hPtMC->Integral()<<endl;
+  cout<<"QUI"<<hPtData->Integral()<<endl;
+  cout<<"QUI"<<hyMC->Integral()<<endl;
+  cout<<"QUI"<<hyData->Integral()<<endl;
+  
+
+  TH1D*hReweightDataOverMC_Pt=(TH1D*)hPtData->Clone("hReweightDataOverMC_Pt");
+  TH1D*hReweightDataOverMC_y=(TH1D*)hyData->Clone("hReweightDataOverMC_y");
+  
+  hReweightDataOverMC_Pt->Divide(hPtMC);
+  hReweightDataOverMC_y->Divide(hyMC);
+
+  TCanvas*c=new TCanvas("c","c",800,500);
+  c->Divide(2,2);
+  c->cd(1);
+  hPtData->Draw();
+  c->cd(2);
+  hPtMC->Draw();
+  c->cd(3);
+  hyData->Draw();
+  c->cd(4);
+  hyMC->Draw();
+
+  c->SaveAs("prova.pdf");
+  
+  TFile*fout=new TFile("InputFilesMCData.root","recreate");
+  fout->cd();
+  hPtData->Write();
+  hPtMC->Write();
+  hyData->Write();
+  hyMC->Write();
+  hReweightDataOverMC_Pt->Write();
+  hReweightDataOverMC_y->Write();
+
+}
+  
 
 void BuildFunctions(){
 
@@ -118,7 +176,7 @@ void BuildFunctions(){
   canvas->cd(1);
   
   hReweightDataOverMC_Pt->SetMinimum(0);
-  hReweightDataOverMC_Pt->SetMaximum(1.5);
+  hReweightDataOverMC_Pt->SetMaximum(3);
   hReweightDataOverMC_Pt->Draw("p");
   hReweightDataOverMC_Pt->SetMarkerStyle(22);
   hReweightDataOverMC_Pt->SetMarkerSize(0.5);
@@ -128,7 +186,7 @@ void BuildFunctions(){
   canvas->cd(2);
   
   hReweightDataOverMC_y->SetMinimum(0);
-  hReweightDataOverMC_y->SetMaximum(1.5);
+  hReweightDataOverMC_y->SetMaximum(3);
   hReweightDataOverMC_y->Draw("p");
   hReweightDataOverMC_y->SetMarkerStyle(22);
   hReweightDataOverMC_y->SetMarkerSize(0.5);
