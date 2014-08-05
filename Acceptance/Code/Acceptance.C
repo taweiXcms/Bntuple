@@ -132,7 +132,7 @@ void Acceptance(){
     nt->GetEntry(i);        
     for(int j=0;j<size;j++){
     
-     cut_yvsRun=abs(y[j])<2.4&&abs(pdgId[j])==521&&isSignal[j]==1;
+     cut_yvsRun=Run<=1&&abs(y[j])<2.4&&abs(pdgId[j])==521&&isSignal[j]==1;
       cut_pt=((pt[j]>ptmin)&&(pt[j]<ptmax));
       if(cut_pt&&cut_yvsRun) {
       
@@ -142,7 +142,7 @@ void Acceptance(){
         weightyLow=+(0.8/4.8)*y[j]+1;
             
         hPtAccDenVsPt->Fill(pt[j]);  
-        hPtAccDenVsPtReweight->Fill(pt[j],fy->Eval(y[j])); 
+        hPtAccDenVsPtReweight->Fill(pt[j],fy->Eval(y[j]+0.465)); 
         hPtAccDenVsPtLow->Fill(pt[j],weightyLow);  
         hPtAccDenVsPtHigh->Fill(pt[j],weightyHigh);  
 
@@ -157,7 +157,7 @@ void Acceptance(){
 	    cut_trk1eta=(abs(trk1eta[j])<2.4);
         if(cut_mu1acc&&cut_mu2acc&&cut_trk1Pt&&cut_trk1eta){
           hPtAccNumVsPt->Fill(pt[j]);  
-          hPtAccNumVsPtReweight->Fill(pt[j],fy->Eval(y[j])); 
+          hPtAccNumVsPtReweight->Fill(pt[j],fy->Eval(y[j]+0.465)); 
           hPtAccNumVsPtLow->Fill(pt[j],weightyLow);  
           hPtAccNumVsPtHigh->Fill(pt[j],weightyHigh);  
 
