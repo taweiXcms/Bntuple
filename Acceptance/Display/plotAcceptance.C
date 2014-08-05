@@ -38,7 +38,7 @@ void plotAcceptance(TString suffix="Pt",int optionplot=1){
   if(suffix=="y") hPtAccNum->GetXaxis()->SetTitle("y_{LAB}");
   hPtAccNum->GetYaxis()->SetTitle("Numumerator");
   hPtAccNum->SetMinimum(0.);
-  if(suffix=="y") hPtAccNum->SetMaximum(6000.);
+  if(suffix=="y") hPtAccNum->SetMaximum(5000.);
   hPtAccNum->GetXaxis()->SetTitleOffset(1.1);
   hPtAccNum->GetYaxis()->SetTitleOffset(1.85);
   hPtAccNum->SetLineWidth(2);
@@ -97,7 +97,7 @@ void plotAcceptance(TString suffix="Pt",int optionplot=1){
   if(suffix=="y") hPtAccDen->GetXaxis()->SetTitle("y_{LAB}");
   hPtAccDen->GetYaxis()->SetTitle("Denumerator");
   hPtAccDen->SetMinimum(0.);
-  if(suffix=="y") hPtAccDen->SetMaximum(10000.);
+  if(suffix=="y") hPtAccDen->SetMaximum(5000.);
   hPtAccDen->GetXaxis()->SetTitleOffset(1.1);
   hPtAccDen->GetYaxis()->SetTitleOffset(1.85);
   hPtAccDen->SetLineWidth(2);
