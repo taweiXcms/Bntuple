@@ -12,7 +12,7 @@ void test(){
   TH1D *hYGenLastRuns = new TH1D("hYGenLastRuns","hYGenLastRuns",100,-10,10);
 
 
-  TString infnamemc="/Users/ginnocen/BAnalysis/InputMCexample/nt_MixMC_20140503_Kp__TriggerMatchingMuon_EvtBase_skim.root";
+  TString infnamemc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
   TFile *filemc = new TFile(infnamemc.Data());
   TTree *nt_mcgen = (TTree*)filemc->Get("ntGen");
   TTree *nt = (TTree*)filemc->Get("ntKp");
