@@ -162,13 +162,6 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
      cout <<"HLT tree: "<<hlt->GetEntries()<<endl;
      cout <<"Bfinder tree: "<<root->GetEntries()<<endl;
   }
-
-  //Chain type
-  //TChain* root = new TChain("demo/root");
-  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_100_1_dXJ.root");
-  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_101_1_kuy.root");
-  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_10_1_ZkX.root");
-  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_102_1_NyI.root");
   
   TFile *outf = new TFile(outfname,"recreate");
 
@@ -177,6 +170,10 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
     
   TTree* nt0 = new TTree("ntJpsi","");
   buildBranch(nt0);
+
+  TTree* ntGen = new TTree("ntGen","");
+  buildGenBranch(ntGen);
+
 
   cout<<"--- Tree building finished ---"<<endl;
   
@@ -297,6 +294,7 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 
 
           gen[size]=0;
+	  genpt[size]=-1;
 	  int level1=0;
 	  int level2=0;
           if(MuonInfo_geninfo_index[mu1]>-1) {
@@ -325,7 +323,10 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 	  }
 	  
 	  if (level1==2&&level2==2) {
-	     if (GenInfo_mo1[MuonInfo_geninfo_index[mu2]]==GenInfo_mo1[MuonInfo_geninfo_index[mu1]]) gen[size]+=100;
+	     if (GenInfo_mo1[MuonInfo_geninfo_index[mu2]]==GenInfo_mo1[MuonInfo_geninfo_index[mu1]]) {
+	        gen[size]+=100;
+		genpt[size]=GenInfo_pt[GenInfo_mo1[MuonInfo_geninfo_index[mu2]]];
+	     }
 	  }
 
           size++;
@@ -333,74 +334,25 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
     }
     
     nt0->Fill();
-/*
+
      if(!REAL)
       {
 	Gensize = 0;
 	for (int j=0;j<GenInfo_size;j++)
 	  {
+	    if (GenInfo_pdgId[j]!=443) continue;
 	    bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
-	    flag=0;
-	    for(type=1;type<8;type++)
-	      {
-		if (signalGen(type,j)) {
-                  flag=type;
-		  break;
-                }
-	      }
-	    Genmu1pt[j] = -1;
-	    Genmu1eta[j] = -20;
-	    Genmu1phi[j] = -20;
-	    Genmu1p[j] = -1;
-	    Genmu2pt[j] = -1;
-	    Genmu2eta[j] = -20;
-	    Genmu2phi[j] = -20;
-	    Genmu2p[j] = -1;
-	    Gentk1pt[j] = -1;
-	    Gentk1eta[j] = -20;
-	    Gentk1phi[j] = -20;
-	    Gentk2pt[j] = -1;
-	    Gentk2eta[j] = -20;
-	    Gentk2phi[j] = -20;
-
-            if(flag!=0)
-              {
-                Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da1[j]]];
-                Genmu1p[j] = Genmu1pt[j]*cosh(Genmu1eta[j]);
-                Genmu2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
-                Genmu2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
-		Genmu2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da1[j]]];
-                Genmu2p[j] = Genmu2pt[j]*cosh(Genmu2eta[j]);
-		if(flag==1||flag==2)
-		  {
-		    Gentk1pt[j] = GenInfo_pt[GenInfo_da2[j]];
-		    Gentk1eta[j] = GenInfo_eta[GenInfo_da2[j]];
-		    Gentk1phi[j] = GenInfo_phi[GenInfo_da2[j]];
-		  }
-		else
-		  {
-		    Gentk1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da2[j]]];
-		    Gentk1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da2[j]]];
-		    Gentk1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da2[j]]];
-		    Gentk2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da2[j]]];
-		    Gentk2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da2[j]]];
-		    Gentk2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da2[j]]];
-		  }
-              }
-	    Gensize = GenInfo_size;
 	    Geny[j] = bGen.Rapidity();
 	    Geneta[j] = bGen.Eta();
 	    Genphi[j] = bGen.Phi();
 	    Genpt[j] = bGen.Pt();
 	    GenpdgId[j] = GenInfo_pdgId[j];
-	    GenisSignal[j] = flag;
+	    Gensize++;
 	  }
 	ntGen->Fill();
     
 	}
-*/
+
   }
 
   outf->Write();
