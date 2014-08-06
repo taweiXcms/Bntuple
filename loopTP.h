@@ -29,6 +29,10 @@ int   id1[MAX_XB];
 int   id2[MAX_XB];
 int   gen[MAX_XB];
 float genpt[MAX_XB];
+int   isGlobal1[MAX_XB];
+int   isGlobal2[MAX_XB];
+int   isTriggered1[MAX_XB];
+int   isTriggered2[MAX_XB];
 
 bool   outerTrackisNonnull1[MAX_XB];
 bool   outerTrackisNonnull2[MAX_XB];
@@ -63,6 +67,8 @@ void buildBranch(TTree* nt){
   nt->Branch("phi",   phi  , "phi[size]/F");
   nt->Branch("isTracker1",isTracker1, "isTracker1[size]/I");
   nt->Branch("isTracker2",isTracker2, "isTracker2[size]/I");
+  nt->Branch("isTriggered1",isTriggered1, "isTriggered1[size]/I");
+  nt->Branch("isTriggered2",isTriggered2, "isTriggered2[size]/I");
   nt->Branch("pt1",pt1, "pt1[size]/I");
   nt->Branch("pt2",pt2, "pt2[size]/I");
   nt->Branch("eta1",eta1, "eta1[size]/I");
@@ -156,6 +162,7 @@ Int_t           MuonInfo_i_nPixelLayer[MAX_MUON];
 Int_t           MuonInfo_g_striphit[MAX_MUON];
 Int_t           MuonInfo_g_pixelhit[MAX_MUON];
 Bool_t          MuonInfo_isTrackerMuon[MAX_MUON];
+Bool_t          MuonInfo_isTriggered[MAX_MUON];
 Bool_t          MuonInfo_isGlobalMuon[MAX_MUON];
 //Bool_t          MuonInfo_TMOneStationTight[MAX_MUON];
 
@@ -359,6 +366,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("MuonInfo.g_striphit",MuonInfo_g_striphit);
    root->SetBranchAddress("MuonInfo.g_pixelhit",MuonInfo_g_pixelhit);
 
+   root->SetBranchAddress("MuonInfo.isTriggered",MuonInfo_isTriggered);
    root->SetBranchAddress("MuonInfo.isTrackerMuon",MuonInfo_isTrackerMuon);
    root->SetBranchAddress("MuonInfo.isGlobalMuon",MuonInfo_isGlobalMuon);
    //root->SetBranchAddress("MuonInfo.TMOneStationTight",MuonInfo_TMOneStationTight);

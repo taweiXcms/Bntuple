@@ -201,13 +201,7 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
   for (Long64_t i=startEntries; i<nentries;i++) {
     nbytes += root->GetEntry(i);
     flagEvt=0;
-/*
-    while (flagEvt==0)
-    {
-       hlt->GetEntry(i+offsetHltTree);
-       if (Bfr_HLT_Event==EvtInfo_EvtNo && Bfr_HLT_Run==EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
-    } 
-*/
+
     if (i%10000==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
 
     int type1size=0,type2size=0,type3size=0,type4size=0,type5size=0,type6size=0,type7size=0;
@@ -216,30 +210,10 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 
     size=0;
 
-    // select the first muon
+    // get the first muon
     for (int muIt1=0;muIt1<MuonInfo_size;muIt1++) {
-
-       // select the second muon
-/*
-   	 if(!(MuonInfo_isTrackerMuon[mu1] || MuonInfo_isGlobalMuon[mu1])) continue;
-	 if(abs(MuonInfo_dxyPV[mu1])>=3. || abs(MuonInfo_dzPV[mu1])>=30.) continue;
-	 if(MuonInfo_i_nPixelLayer[mu1]<1.) continue;
-	 if(MuonInfo_normchi2[mu1]>1.8) continue;
-	 if((MuonInfo_i_nStripLayer[mu1]+MuonInfo_i_nPixelLayer[mu1])<6.) continue;
-         if(!(MuonInfo_muqual[mu1]&4096)) continue;
-*/
-
+       // get the second muon
        for (int muIt2=muIt1+1;muIt2<MuonInfo_size;muIt2++) {
-
-/*
-	 if(!(MuonInfo_isTrackerMuon[mu2] || MuonInfo_isGlobalMuon[mu2])) continue;
-	 if(abs(MuonInfo_dxyPV[mu2])>=3. || abs(MuonInfo_dzPV[mu2])>=30.) continue;
-	 if(MuonInfo_i_nPixelLayer[mu2]<1.) continue;
-	 if(MuonInfo_normchi2[mu2]>1.8) continue;
-	 if((MuonInfo_i_nStripLayer[mu2]+MuonInfo_i_nPixelLayer[mu2])<6.) continue;
-	 if(!(MuonInfo_muqual[mu2]&4096)) continue;
-*/
-
          if(MuonInfo_charge[muIt1]==MuonInfo_charge[muIt2]) continue;
 
          int mu1,mu2;	 
@@ -262,13 +236,21 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 		              );
 
           if (JpsiP4->Mag()>5) continue;
+	  
+	  // store jpsi info
           mass[size]=JpsiP4->Mag();
           pt[size]=JpsiP4->Pt();
           eta[size]=JpsiP4->Eta();
           y[size]=JpsiP4->Y();
           phi[size]=JpsiP4->Phi();
-	  isTracker1[size]=(MuonInfo_isTrackerMuon[mu1] || MuonInfo_isGlobalMuon[mu1]);
-	  isTracker2[size]=(MuonInfo_isTrackerMuon[mu2] || MuonInfo_isGlobalMuon[mu2]);
+	  
+	  // store muon info
+	  isTracker1[size]=MuonInfo_isTrackerMuon[mu1];
+	  isTracker2[size]=MuonInfo_isTrackerMuon[mu2];
+	  isGlobal1[size]=MuonInfo_isGlobalMuon[mu1];
+	  isGlobal2[size]=MuonInfo_isGlobalMuon[mu2];
+	  isTriggered1[size]=MuonInfo_isTriggered[mu1];
+	  isTriggered2[size]=MuonInfo_isTriggered[mu2];
 	  pt1[size]=MuonInfo_pt[mu1];
 	  pt2[size]=MuonInfo_pt[mu2];
 	  eta1[size]=MuonInfo_eta[mu1];
