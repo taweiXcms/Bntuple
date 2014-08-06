@@ -28,6 +28,7 @@ float phi[MAX_XB];
 int   id1[MAX_XB];
 int   id2[MAX_XB];
 int   gen[MAX_XB];
+float genpt[MAX_XB];
 
 bool   outerTrackisNonnull1[MAX_XB];
 bool   outerTrackisNonnull2[MAX_XB];
@@ -54,11 +55,12 @@ void buildBranch(TTree* nt){
   nt->Branch("Run",  &Run);
   nt->Branch("Event",&Event);
   nt->Branch("size", &size);
-  nt->Branch("mass",  mass, "mass[size]/F");
-  nt->Branch("pt",    pt  , "pt[size]/F");
-  nt->Branch("eta",   eta , "eta[size]/F");
-  nt->Branch("y",     y   , "y[size]/F");
-  nt->Branch("phi",   phi , "phi[size]/F");
+  nt->Branch("mass",  mass , "mass[size]/F");
+  nt->Branch("pt",    pt   , "pt[size]/F");
+  nt->Branch("genpt", genpt, "genpt[size]/F");
+  nt->Branch("eta",   eta  , "eta[size]/F");
+  nt->Branch("y",     y    , "y[size]/F");
+  nt->Branch("phi",   phi  , "phi[size]/F");
   nt->Branch("isTracker1",isTracker1, "isTracker1[size]/I");
   nt->Branch("isTracker2",isTracker2, "isTracker2[size]/I");
   nt->Branch("pt1",pt1, "pt1[size]/I");
@@ -101,21 +103,6 @@ Float_t Geneta[MAX_GEN];
 Float_t Genphi[MAX_GEN];
 Float_t Genpt[MAX_GEN];
 Float_t GenpdgId[MAX_GEN];
-Float_t GenisSignal[MAX_GEN];
-Float_t Genmu1pt[MAX_GEN];
-Float_t Genmu2pt[MAX_GEN];
-Float_t Genmu1p[MAX_GEN];
-Float_t Genmu2p[MAX_GEN];
-Float_t Genmu1eta[MAX_GEN];
-Float_t Genmu2eta[MAX_GEN];
-Float_t Genmu1phi[MAX_GEN];
-Float_t Genmu2phi[MAX_GEN];
-Float_t Gentk1pt[MAX_GEN];
-Float_t Gentk2pt[MAX_GEN];
-Float_t Gentk1eta[MAX_GEN];
-Float_t Gentk2eta[MAX_GEN];
-Float_t Gentk1phi[MAX_GEN];
-Float_t Gentk2phi[MAX_GEN];
 
 void buildGenBranch(TTree* nt)
 {
@@ -125,21 +112,6 @@ void buildGenBranch(TTree* nt)
   nt->Branch("phi",Genphi, "phi[size]/F");
   nt->Branch("pt",Genpt, "pt[size]/F");
   nt->Branch("pdgId",GenpdgId, "pdgId[size]/F");
-  nt->Branch("isSignal",GenisSignal, "isSignal[size]/F");
-  nt->Branch("mu1eta",Genmu1eta,"mu1eta[size]/F");
-  nt->Branch("mu1phi",Genmu1phi,"mu1phi[size]/F");
-  nt->Branch("mu1pt",Genmu1pt,"mu1pt[size]/F");
-  nt->Branch("mu1p",Genmu1p,"mu1p[size]/F");
-  nt->Branch("mu2eta",Genmu2eta,"mu2eta[size]/F");
-  nt->Branch("mu2phi",Genmu2phi,"mu2phi[size]/F");
-  nt->Branch("mu2pt",Genmu2pt,"mu2pt[size]/F");
-  nt->Branch("mu2p",Genmu2p,"mu2p[size]/F");
-  nt->Branch("tk1pt",Gentk1pt,"tk1pt[size]/F");
-  nt->Branch("tk1eta",Gentk1eta,"tk1eta[size]/F");
-  nt->Branch("tk1phi",Gentk1phi,"tk1phi[size]/F");
-  nt->Branch("tk2pt",Gentk2pt,"tk2pt[size]/F");
-  nt->Branch("tk2eta",Gentk2eta,"tk2eta[size]/F");
-  nt->Branch("tk2phi",Gentk2phi,"tk2phi[size]/F");
 }
 
 //#########################################################################################
