@@ -29,6 +29,9 @@ int   id1[MAX_XB];
 int   id2[MAX_XB];
 int   gen[MAX_XB];
 
+bool   outerTrackisNonnull1[MAX_XB];
+bool   outerTrackisNonnull2[MAX_XB];
+
 Int_t HLT_PAL1DoubleMu0_v1;
 Int_t HLT_PAL1DoubleMu0_v1_Prescl;
 Int_t HLT_PADimuon0_NoVertexing_v1;
@@ -66,6 +69,8 @@ void buildBranch(TTree* nt){
   nt->Branch("phi2",phi2, "phi2[size]/I");
   nt->Branch("id1",id1, "id1[size]/I");
   nt->Branch("id2",id2, "id2[size]/I");
+  nt->Branch("outerTrackisNonnull1",outerTrackisNonnull1, "outerTrackisNonnull1[size]/O");
+  nt->Branch("outerTrackisNonnull2",outerTrackisNonnull2, "outerTrackisNonnull2[size]/O");
   nt->Branch("gen",gen, "gen[size]/I");
   
   
@@ -201,6 +206,8 @@ Double_t        MuonInfo_iso_hcal[MAX_MUON];
 Double_t        MuonInfo_n_matches[MAX_MUON];
 Int_t           MuonInfo_isGoodCand[MAX_MUON];
 Int_t           MuonInfo_geninfo_index[MAX_MUON];
+
+Bool_t          MuonInfo_outerTrackisNonnull[MAX_MUON];
 
 Int_t           TrackInfo_size;
 Int_t           TrackInfo_index[MAX_TRACK];
@@ -408,6 +415,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("MuonInfo.isGoodCand",MuonInfo_isGoodCand);
    */
    root->SetBranchAddress("MuonInfo.geninfo_index",MuonInfo_geninfo_index);
+   root->SetBranchAddress("MuonInfo.outerTrackisNonnull",MuonInfo_outerTrackisNonnull);
    
 /*
    root->SetBranchAddress("TrackInfo.size",&TrackInfo_size);

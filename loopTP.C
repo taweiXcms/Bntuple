@@ -278,6 +278,8 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 	  eta2[size]=MuonInfo_eta[mu2];
 	  phi1[size]=MuonInfo_phi[mu1];
 	  phi2[size]=MuonInfo_phi[mu2];
+	  outerTrackisNonnull1[size]=MuonInfo_outerTrackisNonnull[mu1];
+	  outerTrackisNonnull2[size]=MuonInfo_outerTrackisNonnull[mu2];
 
           id1[size]=1;
   	  if(abs(MuonInfo_dxyPV[mu1])>=3. || abs(MuonInfo_dzPV[mu1])>=30.) id1[size]=0;
