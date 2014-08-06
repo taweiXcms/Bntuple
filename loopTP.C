@@ -1,0 +1,332 @@
+#include <TTree.h>
+#include <TFile.h>
+#include <TChain.h>
+#include <TMath.h>
+#include <iostream>
+#include <TNtuple.h>
+#include <TVector3.h>
+#include <TLorentzVector.h>
+#include <cmath>
+#include "loopTP.h"
+
+#define MUON_MASS   0.10565837
+#define PION_MASS   0.13957018
+#define KAON_MASS   0.493677
+#define KSHORT_MASS 0.497614
+#define KSTAR_MASS  0.89594
+#define PHI_MASS    1.019455
+#define JPSI_MASS   3.096916
+
+void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, float track_mass1, float track_mass2, int REAL, int PbpMC)
+{
+
+  //Event Info
+  Event = EvtInfo_EvtNo;
+  Run = EvtInfo_RunNo+10*PbpMC;
+  size = typesize+1;
+
+  // Trigger Info
+  HLT_PAL1DoubleMu0_v1 = Bfr_HLT_PAL1DoubleMu0_v1;
+  HLT_PAL1DoubleMu0_v1_Prescl = Bfr_HLT_PAL1DoubleMu0_v1_Prescl;
+  HLT_PADimuon0_NoVertexing_v1 = Bfr_HLT_PADimuon0_NoVertexing_v1;
+  HLT_PADimuon0_NoVertexing_v1_Prescl = Bfr_HLT_PADimuon0_NoVertexing_v1_Prescl;
+  HLT_PAL1DoubleMu0_HighQ_v1 = Bfr_HLT_PAL1DoubleMu0_HighQ_v1;
+  HLT_PAL1DoubleMu0_HighQ_v1_Prescl = Bfr_HLT_PAL1DoubleMu0_HighQ_v1_Prescl;
+  HLT_PAL1DoubleMuOpen_v1 = Bfr_HLT_PAL1DoubleMuOpen_v1;
+  HLT_PAL1DoubleMuOpen_v1_Prescl = Bfr_HLT_PAL1DoubleMuOpen_v1_Prescl;
+  HLT_PAL2DoubleMu3_v1 = Bfr_HLT_PAL2DoubleMu3_v1;
+  HLT_PAL2DoubleMu3_v1_Prescl = Bfr_HLT_PAL2DoubleMu3_v1_Prescl;
+  HLT_PAMu3_v1 = Bfr_HLT_PAMu3_v1;
+  HLT_PAMu3_v1_Prescl = Bfr_HLT_PAMu3_v1_Prescl;
+  HLT_PAMu7_v1 = Bfr_HLT_PAMu7_v1;
+  HLT_PAMu7_v1_Prescl = Bfr_HLT_PAMu7_v1_Prescl;
+  HLT_PAMu12_v1 = Bfr_HLT_PAMu12_v1;
+  HLT_PAMu12_v1_Prescl = Bfr_HLT_PAMu12_v1_Prescl;
+
+}
+
+int signalGen(int Btype, int j)
+{
+  float BId,MId,tk1Id,tk2Id;
+  int twoTks;
+  //tk1:positive, tk2:negtive
+  if(Btype==1)
+    {
+      BId = 521;//B+-
+      MId = -1;
+      tk1Id = 321;//K+-
+      tk2Id = -1;
+      twoTks = 0;
+    }
+  if(Btype==2)
+    {
+      BId = 521;//B+-
+      MId = -1;
+      tk1Id = 211;//pi+-
+      tk2Id = -1;
+      twoTks = 0;
+    }
+  if(Btype==3)
+    {
+      BId = 511;//B0
+      MId = 310;//Ks
+      tk1Id = 211;//pi+
+      tk2Id = -211;//pi-
+      twoTks = 1;
+    }
+  if(Btype==4)
+    {
+      BId = 511;//B0
+      MId = 313;//K*0
+      tk1Id = 321;//K+
+      tk2Id = -211;//pi-
+      twoTks = 1;
+    }
+  if(Btype==5)
+    {
+      BId = 511;//B0
+      MId = 313;//K*0
+      tk1Id = -321;//pi+
+      tk2Id = 211;//K-
+      twoTks = 1;
+    }
+  if(Btype==6)
+    {
+      BId = 531;//Bs
+      MId = 333;//phi
+      tk1Id = 321;//K+
+      tk2Id = -321;//K-
+      twoTks = 1;
+    }
+
+  int flag=0;
+  if (abs(GenInfo_pdgId[j])==BId&&GenInfo_nDa[j]==2&&GenInfo_da1[j]!=-1&&GenInfo_da2[j]!=-1)
+    {
+      if (abs(GenInfo_pdgId[GenInfo_da1[j]]==443))//jpsi
+	{
+	  if(GenInfo_da1[GenInfo_da1[j]]!=-1&&GenInfo_da2[GenInfo_da1[j]]!=-1)
+	    {
+	      if(abs(GenInfo_pdgId[GenInfo_da1[GenInfo_da1[j]]])==13&&abs(GenInfo_pdgId[GenInfo_da2[GenInfo_da1[j]]])==13)
+		{
+		  if(!twoTks)
+		    {
+		      if(abs(GenInfo_pdgId[GenInfo_da2[j]])==tk1Id) flag++;
+		    }
+		  else
+		    {
+		      if (abs(GenInfo_pdgId[GenInfo_da2[j]])==MId) 
+			{
+			  if(GenInfo_da1[GenInfo_da2[j]]!=-1 && GenInfo_da2[GenInfo_da2[j]]!=-1)
+			    {
+			      if(GenInfo_pdgId[GenInfo_da1[GenInfo_da2[j]]]==tk1Id && GenInfo_pdgId[GenInfo_da2[GenInfo_da2[j]]]==tk2Id) flag++;
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+  return flag;
+}
+
+
+int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140707_BuJpsiK_pPb.root", string
+	  outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140708_BuJpsiK_pPb.root.root", bool REAL=1,bool PbpMC=0,int startEntries=0,int
+	  nEntries=0, bool doMuonSelection = 0){
+//////////////////////////////////////////////////////////Phi
+//   This file has been automatically generated 
+//     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
+//   from TTree root/root
+//   found on file: merged_pPbData_20131114.root
+//////////////////////////////////////////////////////////
+
+  const char* infname;
+  const char* outfname;
+
+  if(REAL) cout<<"--- REAL DATA ---"<<endl;
+  else {
+     cout<<"--- MC ---"<<endl;
+     if(PbpMC) cout<<"--- Pbp ---"<<endl;
+     else cout<<"--- pPb ---"<<endl;
+  }
+
+  infname = infile.c_str();
+  outfname = outfile.c_str();
+
+  //File type
+  TFile *f = new TFile(infname);
+  TTree *root = (TTree*)f->Get("demo/root");
+  TTree *hlt = (TTree*)f->Get("hltanalysis/HltTree");
+  if (root->GetEntries()!=hlt->GetEntries()) {
+     cout <<"Inconsistent number of entries!!! "<<infile<<endl;
+     cout <<"HLT tree: "<<hlt->GetEntries()<<endl;
+     cout <<"Bfinder tree: "<<root->GetEntries()<<endl;
+  }
+
+  //Chain type
+  //TChain* root = new TChain("demo/root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_100_1_dXJ.root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_101_1_kuy.root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_10_1_ZkX.root");
+  //root->Add("/mnt/hadoop/cms/store/user/wangj/HI_Btuple/20140213_PAMuon_HIRun2013_PromptReco_v1/Bfinder_all_102_1_NyI.root");
+  
+  TFile *outf = new TFile(outfname,"recreate");
+
+  setBranch(root);
+  setHltBranch(hlt);
+    
+  TTree* nt0 = new TTree("ntJpsi","");
+  buildBranch(nt0);
+
+  cout<<"--- Tree building finished ---"<<endl;
+  
+  Long64_t nentries = root->GetEntries();
+  //nentries = 10000;
+  Long64_t nbytes = 0;
+  TVector3* bP = new TVector3;
+  TVector3* bVtx = new TVector3;
+  TLorentzVector* b4P = new TLorentzVector;
+  TLorentzVector* b4Pout = new TLorentzVector;
+  TLorentzVector bGen;
+  int type,flag;
+  int flagEvt=0;  
+  int offsetHltTree=0;
+
+  int testevent=0,testcand=0;
+  
+  if (nEntries!=0) nentries=nEntries;
+
+  TLorentzVector* mu1P4 = new TLorentzVector;
+  TLorentzVector* mu2P4 = new TLorentzVector;
+  TLorentzVector* JpsiP4 = new TLorentzVector;
+
+
+  for (Long64_t i=startEntries; i<nentries/1;i++) {
+    nbytes += root->GetEntry(i);
+    flagEvt=0;
+/*
+    while (flagEvt==0)
+    {
+       hlt->GetEntry(i+offsetHltTree);
+       if (Bfr_HLT_Event==EvtInfo_EvtNo && Bfr_HLT_Run==EvtInfo_RunNo) flagEvt=1; else offsetHltTree++;
+    } 
+*/
+    if (i%10000==0) cout <<i<<" / "<<nentries<<"   offset HLT:"<<offsetHltTree<<endl;
+
+    int type1size=0,type2size=0,type3size=0,type4size=0,type5size=0,type6size=0,type7size=0;
+    float best,best2,temy;
+    int bestindex,best2index;
+
+    size=0;
+
+
+    for (int mu1=0;mu1<MuonInfo_size;mu1++) {
+       mu1P4->SetPtEtaPhiM(MuonInfo_pt[mu1],MuonInfo_eta[mu1],MuonInfo_phi[mu1],MUON_MASS);
+
+
+       for (int mu2=mu1+1;mu2<MuonInfo_size;mu2++) {
+   		if(!(MuonInfo_isTrackerMuon[mu1] || MuonInfo_isGlobalMuon[mu1])) continue;
+		if(!(MuonInfo_isTrackerMuon[mu2] || MuonInfo_isGlobalMuon[mu2])) continue;
+		if(abs(MuonInfo_dxyPV[mu1])>=3. || abs(MuonInfo_dzPV[mu1])>=30.) continue;
+		if(abs(MuonInfo_dxyPV[mu2])>=3. || abs(MuonInfo_dzPV[mu2])>=30.) continue;
+		if(MuonInfo_i_nPixelLayer[mu1]<1.) continue;
+		if(MuonInfo_i_nPixelLayer[mu2]<1.) continue;
+		if(MuonInfo_normchi2[mu1]>1.8) continue;
+		if(MuonInfo_normchi2[mu2]>1.8) continue;
+		if((MuonInfo_i_nStripLayer[mu1]+MuonInfo_i_nPixelLayer[mu1])<6.) continue;
+		if((MuonInfo_i_nStripLayer[mu2]+MuonInfo_i_nPixelLayer[mu2])<6.) continue;
+        	if(!(MuonInfo_muqual[mu1]&4096)) continue;
+		if(!(MuonInfo_muqual[mu2]&4096)) continue;
+         if(MuonInfo_charge[mu1]==MuonInfo_charge[mu2]) continue;
+	
+          mu2P4->SetPtEtaPhiM(MuonInfo_pt[mu2],MuonInfo_eta[mu2],MuonInfo_phi[mu2],MUON_MASS);
+          JpsiP4 ->SetPxPyPzE(    mu1P4->Px()+mu2P4->Px(),
+                                  mu1P4->Py()+mu2P4->Py(),
+                                  mu1P4->Pz()+mu2P4->Pz(),
+		   	          mu1P4->E()+mu2P4->E()
+		              );
+
+          mass[size]=JpsiP4->Mag();
+          pt[size]=JpsiP4->Pt();
+          eta[size]=JpsiP4->Eta();
+          phi[size]=JpsiP4->Phi();
+          size++;
+       }
+    }
+    
+    nt0->Fill();
+/*
+     if(!REAL)
+      {
+	Gensize = 0;
+	for (int j=0;j<GenInfo_size;j++)
+	  {
+	    bGen.SetPtEtaPhiM(GenInfo_pt[j],GenInfo_eta[j],GenInfo_phi[j],GenInfo_mass[j]);
+	    flag=0;
+	    for(type=1;type<8;type++)
+	      {
+		if (signalGen(type,j)) {
+                  flag=type;
+		  break;
+                }
+	      }
+	    Genmu1pt[j] = -1;
+	    Genmu1eta[j] = -20;
+	    Genmu1phi[j] = -20;
+	    Genmu1p[j] = -1;
+	    Genmu2pt[j] = -1;
+	    Genmu2eta[j] = -20;
+	    Genmu2phi[j] = -20;
+	    Genmu2p[j] = -1;
+	    Gentk1pt[j] = -1;
+	    Gentk1eta[j] = -20;
+	    Gentk1phi[j] = -20;
+	    Gentk2pt[j] = -1;
+	    Gentk2eta[j] = -20;
+	    Gentk2phi[j] = -20;
+
+            if(flag!=0)
+              {
+                Genmu1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da1[j]]];
+                Genmu1p[j] = Genmu1pt[j]*cosh(Genmu1eta[j]);
+                Genmu2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da1[j]]];
+		Genmu2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da1[j]]];
+                Genmu2p[j] = Genmu2pt[j]*cosh(Genmu2eta[j]);
+		if(flag==1||flag==2)
+		  {
+		    Gentk1pt[j] = GenInfo_pt[GenInfo_da2[j]];
+		    Gentk1eta[j] = GenInfo_eta[GenInfo_da2[j]];
+		    Gentk1phi[j] = GenInfo_phi[GenInfo_da2[j]];
+		  }
+		else
+		  {
+		    Gentk1pt[j] = GenInfo_pt[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk1eta[j] = GenInfo_eta[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk1phi[j] = GenInfo_phi[GenInfo_da1[GenInfo_da2[j]]];
+		    Gentk2pt[j] = GenInfo_pt[GenInfo_da2[GenInfo_da2[j]]];
+		    Gentk2eta[j] = GenInfo_eta[GenInfo_da2[GenInfo_da2[j]]];
+		    Gentk2phi[j] = GenInfo_phi[GenInfo_da2[GenInfo_da2[j]]];
+		  }
+              }
+	    Gensize = GenInfo_size;
+	    Geny[j] = bGen.Rapidity();
+	    Geneta[j] = bGen.Eta();
+	    Genphi[j] = bGen.Phi();
+	    Genpt[j] = bGen.Pt();
+	    GenpdgId[j] = GenInfo_pdgId[j];
+	    GenisSignal[j] = flag;
+	  }
+	ntGen->Fill();
+    
+	}
+*/
+  }
+
+  outf->Write();
+  outf->Close();
+}
+
+
