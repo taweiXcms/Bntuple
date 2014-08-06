@@ -201,7 +201,7 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
   TLorentzVector* JpsiP4 = new TLorentzVector;
 
 
-  for (Long64_t i=startEntries; i<nentries/1;i++) {
+  for (Long64_t i=startEntries; i<nentries;i++) {
     nbytes += root->GetEntry(i);
     flagEvt=0;
 /*
@@ -219,26 +219,44 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 
     size=0;
 
+    // select the first muon
+    for (int muIt1=0;muIt1<MuonInfo_size;muIt1++) {
 
-    for (int mu1=0;mu1<MuonInfo_size;mu1++) {
-       mu1P4->SetPtEtaPhiM(MuonInfo_pt[mu1],MuonInfo_eta[mu1],MuonInfo_phi[mu1],MUON_MASS);
+       // select the second muon
+/*
+   	 if(!(MuonInfo_isTrackerMuon[mu1] || MuonInfo_isGlobalMuon[mu1])) continue;
+	 if(abs(MuonInfo_dxyPV[mu1])>=3. || abs(MuonInfo_dzPV[mu1])>=30.) continue;
+	 if(MuonInfo_i_nPixelLayer[mu1]<1.) continue;
+	 if(MuonInfo_normchi2[mu1]>1.8) continue;
+	 if((MuonInfo_i_nStripLayer[mu1]+MuonInfo_i_nPixelLayer[mu1])<6.) continue;
+         if(!(MuonInfo_muqual[mu1]&4096)) continue;
+*/
 
+       for (int muIt2=muIt1+1;muIt2<MuonInfo_size;muIt2++) {
 
-       for (int mu2=mu1+1;mu2<MuonInfo_size;mu2++) {
-   		if(!(MuonInfo_isTrackerMuon[mu1] || MuonInfo_isGlobalMuon[mu1])) continue;
-		if(!(MuonInfo_isTrackerMuon[mu2] || MuonInfo_isGlobalMuon[mu2])) continue;
-		if(abs(MuonInfo_dxyPV[mu1])>=3. || abs(MuonInfo_dzPV[mu1])>=30.) continue;
-		if(abs(MuonInfo_dxyPV[mu2])>=3. || abs(MuonInfo_dzPV[mu2])>=30.) continue;
-		if(MuonInfo_i_nPixelLayer[mu1]<1.) continue;
-		if(MuonInfo_i_nPixelLayer[mu2]<1.) continue;
-		if(MuonInfo_normchi2[mu1]>1.8) continue;
-		if(MuonInfo_normchi2[mu2]>1.8) continue;
-		if((MuonInfo_i_nStripLayer[mu1]+MuonInfo_i_nPixelLayer[mu1])<6.) continue;
-		if((MuonInfo_i_nStripLayer[mu2]+MuonInfo_i_nPixelLayer[mu2])<6.) continue;
-        	if(!(MuonInfo_muqual[mu1]&4096)) continue;
-		if(!(MuonInfo_muqual[mu2]&4096)) continue;
-         if(MuonInfo_charge[mu1]==MuonInfo_charge[mu2]) continue;
-	
+/*
+	 if(!(MuonInfo_isTrackerMuon[mu2] || MuonInfo_isGlobalMuon[mu2])) continue;
+	 if(abs(MuonInfo_dxyPV[mu2])>=3. || abs(MuonInfo_dzPV[mu2])>=30.) continue;
+	 if(MuonInfo_i_nPixelLayer[mu2]<1.) continue;
+	 if(MuonInfo_normchi2[mu2]>1.8) continue;
+	 if((MuonInfo_i_nStripLayer[mu2]+MuonInfo_i_nPixelLayer[mu2])<6.) continue;
+	 if(!(MuonInfo_muqual[mu2]&4096)) continue;
+*/
+
+         if(MuonInfo_charge[muIt1]==MuonInfo_charge[muIt2]) continue;
+
+         int mu1,mu2;	 
+	 // mu1 is charged +1
+	 if(MuonInfo_charge[muIt1]>0) {
+	    mu1=muIt1;
+	    mu2=muIt2;
+         } else {
+	    mu1=muIt2;
+	    mu2=muIt1;
+	 
+	 }	 
+	 
+          mu1P4->SetPtEtaPhiM(MuonInfo_pt[mu1],MuonInfo_eta[mu1],MuonInfo_phi[mu1],MUON_MASS);
           mu2P4->SetPtEtaPhiM(MuonInfo_pt[mu2],MuonInfo_eta[mu2],MuonInfo_phi[mu2],MUON_MASS);
           JpsiP4 ->SetPxPyPzE(    mu1P4->Px()+mu2P4->Px(),
                                   mu1P4->Py()+mu2P4->Py(),
@@ -246,10 +264,68 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 		   	          mu1P4->E()+mu2P4->E()
 		              );
 
+          if (JpsiP4->Mag()>5) continue;
           mass[size]=JpsiP4->Mag();
           pt[size]=JpsiP4->Pt();
           eta[size]=JpsiP4->Eta();
+          y[size]=JpsiP4->Y();
           phi[size]=JpsiP4->Phi();
+	  isTracker1[size]=(MuonInfo_isTrackerMuon[mu1] || MuonInfo_isGlobalMuon[mu1]);
+	  isTracker2[size]=(MuonInfo_isTrackerMuon[mu2] || MuonInfo_isGlobalMuon[mu2]);
+	  pt1[size]=MuonInfo_pt[mu1];
+	  pt2[size]=MuonInfo_pt[mu2];
+	  eta1[size]=MuonInfo_eta[mu1];
+	  eta2[size]=MuonInfo_eta[mu2];
+	  phi1[size]=MuonInfo_phi[mu1];
+	  phi2[size]=MuonInfo_phi[mu2];
+
+          id1[size]=1;
+  	  if(abs(MuonInfo_dxyPV[mu1])>=3. || abs(MuonInfo_dzPV[mu1])>=30.) id1[size]=0;
+	  if(MuonInfo_i_nPixelLayer[mu1]<1.) id1[size]=0;
+	  if(MuonInfo_normchi2[mu1]>1.8) id1[size]=0;
+	  if((MuonInfo_i_nStripLayer[mu1]+MuonInfo_i_nPixelLayer[mu1])<6.) id1[size]=0;
+          if(!(MuonInfo_muqual[mu1]&4096)) id1[size]=0;
+
+          id2[size]=1;
+  	  if(abs(MuonInfo_dxyPV[mu2])>=3. || abs(MuonInfo_dzPV[mu2])>=30.) id2[size]=0;
+	  if(MuonInfo_i_nPixelLayer[mu2]<1.) id2[size]=0;
+	  if(MuonInfo_normchi2[mu2]>1.8) id2[size]=0;
+	  if((MuonInfo_i_nStripLayer[mu2]+MuonInfo_i_nPixelLayer[mu2])<6.) id2[size]=0;
+          if(!(MuonInfo_muqual[mu2]&4096)) id2[size]=0;
+
+
+          gen[size]=0;
+	  int level1=0;
+	  int level2=0;
+          if(MuonInfo_geninfo_index[mu1]>-1) {
+	     if(abs(GenInfo_pdgId[MuonInfo_geninfo_index[mu1]])==13) {
+	         level1=1;
+	      if(GenInfo_mo1[MuonInfo_geninfo_index[mu1]]>-1) {
+		  if(GenInfo_pdgId[GenInfo_mo1[MuonInfo_geninfo_index[mu1]]]==443) {
+		      level1=2;
+	  	  }
+	      }
+	      gen[size]+=(level1*1);
+	     }
+          }
+	  
+          if(MuonInfo_geninfo_index[mu2]>-1) {
+	     if(abs(GenInfo_pdgId[MuonInfo_geninfo_index[mu2]])==13) {
+	         level2=1;
+	      if(GenInfo_mo1[MuonInfo_geninfo_index[mu2]]>-1) {
+		  if(GenInfo_pdgId[GenInfo_mo1[MuonInfo_geninfo_index[mu2]]]==443) {
+		      level2=2;
+		      
+	  	  }
+	      }
+	      gen[size]+=(level2*10);
+	     }
+	  }
+	  
+	  if (level1==2&&level2==2) {
+	     if (GenInfo_mo1[MuonInfo_geninfo_index[mu2]]==GenInfo_mo1[MuonInfo_geninfo_index[mu1]]) gen[size]+=100;
+	  }
+
           size++;
        }
     }

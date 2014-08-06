@@ -12,10 +12,22 @@ Int_t   Event;
 Int_t   size;
 
 int   bindex[MAX_XB];
+int   isTracker1[MAX_XB];
+int   isTracker2[MAX_XB];
+int   pt1[MAX_XB];
+int   pt2[MAX_XB];
+int   eta1[MAX_XB];
+int   eta2[MAX_XB];
+int   phi1[MAX_XB];
+int   phi2[MAX_XB];
 float mass[MAX_XB];
 float pt[MAX_XB];
 float eta[MAX_XB];
+float y[MAX_XB];
 float phi[MAX_XB];
+int   id1[MAX_XB];
+int   id2[MAX_XB];
+int   gen[MAX_XB];
 
 Int_t HLT_PAL1DoubleMu0_v1;
 Int_t HLT_PAL1DoubleMu0_v1_Prescl;
@@ -36,14 +48,28 @@ Int_t HLT_PAMu12_v1_Prescl;
 
 
 void buildBranch(TTree* nt){
-  nt->Branch("Run",&Run);
+  nt->Branch("Run",  &Run);
   nt->Branch("Event",&Event);
-  nt->Branch("size",&size);
-  nt->Branch("mass",mass, "mass[size]/F");
-  nt->Branch("pt",pt, "pt[size]/F");
-  nt->Branch("eta",eta, "eta[size]/F");
-  nt->Branch("phi",phi, "phi[size]/F");
-
+  nt->Branch("size", &size);
+  nt->Branch("mass",  mass, "mass[size]/F");
+  nt->Branch("pt",    pt  , "pt[size]/F");
+  nt->Branch("eta",   eta , "eta[size]/F");
+  nt->Branch("y",     y   , "y[size]/F");
+  nt->Branch("phi",   phi , "phi[size]/F");
+  nt->Branch("isTracker1",isTracker1, "isTracker1[size]/I");
+  nt->Branch("isTracker2",isTracker2, "isTracker2[size]/I");
+  nt->Branch("pt1",pt1, "pt1[size]/I");
+  nt->Branch("pt2",pt2, "pt2[size]/I");
+  nt->Branch("eta1",eta1, "eta1[size]/I");
+  nt->Branch("eta2",eta2, "eta2[size]/I");
+  nt->Branch("phi1",phi1, "phi1[size]/I");
+  nt->Branch("phi2",phi2, "phi2[size]/I");
+  nt->Branch("id1",id1, "id1[size]/I");
+  nt->Branch("id2",id2, "id2[size]/I");
+  nt->Branch("gen",gen, "gen[size]/I");
+  
+  
+/*
   nt->Branch("HLT_PAL1DoubleMu0_v1",&HLT_PAL1DoubleMu0_v1);
   nt->Branch("HLT_PAL1DoubleMu0_v1_Prescl",&HLT_PAL1DoubleMu0_v1_Prescl);
   nt->Branch("HLT_PADimuon0_NoVertexing_v1",&HLT_PADimuon0_NoVertexing_v1);
@@ -60,6 +86,7 @@ void buildBranch(TTree* nt){
   nt->Branch("HLT_PAMu7_v1_Prescl",&HLT_PAMu7_v1_Prescl);
   nt->Branch("HLT_PAMu12_v1",&HLT_PAMu12_v1);
   nt->Branch("HLT_PAMu12_v1_Prescl",&HLT_PAMu12_v1_Prescl);
+  */
   
 }
 
@@ -488,7 +515,6 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("BInfo.tktk_vtxchi2",BInfo_tktk_vtxchi2);
 
 */
-/*
    root->SetBranchAddress("GenInfo.size",&GenInfo_size);
    root->SetBranchAddress("GenInfo.index",&GenInfo_index);
    root->SetBranchAddress("GenInfo.handle_index",&GenInfo_handle_index);
@@ -504,7 +530,7 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("GenInfo.mo2",&GenInfo_mo2);
    root->SetBranchAddress("GenInfo.da1",&GenInfo_da1);
    root->SetBranchAddress("GenInfo.da2",&GenInfo_da2);
-*/   
+
    //root->SetBranchAddress("Geninfo.mhmu1_index",&GenInfo_mhmu1_index);
    //root->SetBranchAddress("Geninfo.mhmu2_index",&GenInfo_mhmu2_index);
    //root->SetBranchAddress("Geninfo.mhtk1_index",&GenInfo_mhtk1_index);
