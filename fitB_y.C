@@ -47,8 +47,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    // Fit function
    TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
-   nt->Project(Form("h%d",count),"mass",Form("%s&& (((y+0.465)>%f&&(y+0.465)<%f&&Run>=210498&&Run<=211256) || ((y-0.465)>%f&&(y-0.465)<%f&&Run>=211313&&Run<=211631) ||(Run<=1&&(y+0.465)>%f&&(y+0.465)<%f)||(Run>1&&Run<12&&(y-0.465)>%f&&(y-0.465)<%f))",seldata_2y.Data(),ptmin,ptmax,ptmin,ptmax,ptmin,ptmax,ptmin,ptmax));   
-   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&((Run<=1&&(y+0.465)>%f&&(y+0.465)<%f)||(Run>1&&(y-0.465)>%f&&(y-0.465)<%f))",seldata.Data(),ptmin,ptmax,ptmin,ptmax));   
+   nt->Project(Form("h%d",count),"mass",Form("%s&& (((-y-0.465)>%f&&(-y-0.465)<%f&&Run>=210498&&Run<=211256) || ((y-0.465)>%f&&(y-0.465)<%f&&Run>=211313&&Run<=211631) ||(Run<=1&&(-y-0.465)>%f&&(-y-0.465)<%f)||(Run>1&&Run<12&&(y-0.465)>%f&&(y-0.465)<%f))",seldata_2y.Data(),ptmin,ptmax,ptmin,ptmax,ptmin,ptmax,ptmin,ptmax));   
+   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&((Run<=1&&(-y-0.465)>%f&&(-y-0.465)<%f)||(Run>1&&(y-0.465)>%f&&(y-0.465)<%f))",seldata.Data(),ptmin,ptmax,ptmin,ptmax));   
    clean0(h);
    h->Draw();
    f->SetParLimits(4,-1000,0);
