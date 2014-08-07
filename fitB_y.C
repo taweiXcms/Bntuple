@@ -204,13 +204,13 @@ void fitB_y(TString infname="",bool doweight = 1)
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","(y+0.465)",TCut(weight)*(TCut(Form("%s&&gen==23333&&Run<=1",selmc.Data()))));
+  ntMC->Project("hPtMC","(-y-0.465)",TCut(weight)*(TCut(Form("%s&&gen==23333&&Run<=1",selmc.Data()))));
   cout<<hPtMC->GetEntries()<<endl;
   ntMC->Project("hPtMC2","(y-0.465)",TCut(weight)*(TCut(Form("%s&&gen==23333&&Run>1",selmc.Data()))));
   cout<<hPtMC2->GetEntries()<<endl;
-  nt->Project("hPtRecoTruth","(y+0.465)",TCut(Form("%s&&Run>=210498&&Run<=211256",seldata.Data())));
+  nt->Project("hPtRecoTruth","(-y-0.465)",TCut(Form("%s&&Run>=210498&&Run<=211256",seldata.Data())));
   nt->Project("hPtRecoTruth2","(y-0.465)",TCut(Form("%s&&(Run>=211313&&Run<=211631)",seldata.Data())));
-  ntGen->Project("hPtGen","(y+0.465)",TCut(weight)*(TCut(Form("%s&&Run<=1",selmcgen.Data()))));
+  ntGen->Project("hPtGen","(-y-0.465)",TCut(weight)*(TCut(Form("%s&&Run<=1",selmcgen.Data()))));
   cout<<hPtGen->GetEntries()<<endl;
   ntGen->Project("hPtGen2","(y-0.465)",TCut(weight)*(TCut(Form("%s&&Run>1",selmcgen.Data()))));
   cout<<hPtGen2->GetEntries()<<endl;
