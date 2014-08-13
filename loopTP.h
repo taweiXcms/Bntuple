@@ -88,7 +88,12 @@ void buildBranch(TTree* nt){
   nt->Branch("outerTrackisNonnull1",outerTrackisNonnull1, "outerTrackisNonnull1[size]/O");
   nt->Branch("outerTrackisNonnull2",outerTrackisNonnull2, "outerTrackisNonnull2[size]/O");
   nt->Branch("gen",gen, "gen[size]/I");
-  
+  nt->Branch("outerTrackisNonnull1",outerTrackisNonnull1, "outerTrackisNonnull1[size]/I");
+  nt->Branch("outerTrackisNonnull2",outerTrackisNonnull2, "outerTrackisNonnull2[size]/I");
+  nt->Branch("isTrackerMuArbitrated1",isTrackerMuArbitrated1, "isTrackerMuArbitrated1[size]/I");
+  nt->Branch("isTrackerMuArbitrated2",isTrackerMuArbitrated2, "isTrackerMuArbitrated2[size]/I");
+  nt->Branch("isTMOneStationTight1",isTMOneStationTight1, "isTMOneStationTight1[size]/I");
+  nt->Branch("isTMOneStationTight2",isTMOneStationTight2, "isTMOneStationTight2[size]/I");  
   
 /*
   nt->Branch("HLT_PAL1DoubleMu0_v1",&HLT_PAL1DoubleMu0_v1);
