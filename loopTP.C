@@ -275,20 +275,31 @@ int loopTP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140707_BdJpsiKstar
 	  
 	  outerTrackisNonnull1[size]=MuonInfo_outerTrackisNonnull[mu1];
 	  outerTrackisNonnull2[size]=MuonInfo_outerTrackisNonnull[mu2];
+	  
+	  
+     if(MuonInfo_muqual[mu1]&16) isTrackerMuArbitrated1[size] = 1;
+     else isTrackerMuArbitrated1[size] = 0;
+     if(MuonInfo_muqual[mu1]&4096) isTMOneStationTight1[size] = 1;
+     else isTMOneStationTight1[mu1] = 0;
 
+     if(MuonInfo_muqual[mu2]&16) isTrackerMuArbitrated2[size] = 1;
+     else isTrackerMuArbitrated2[size] = 0;
+     if(MuonInfo_muqual[mu2]&4096) isTMOneStationTight2[size] = 1;
+     else isTMOneStationTight2[mu2] = 0;
+	
           id1[size]=1;
   	  if(abs(MuonInfo_dxyPV[mu1])>=3. || abs(MuonInfo_dzPV[mu1])>=30.) id1[size]=0;
 	  if(MuonInfo_i_nPixelLayer[mu1]<1.) id1[size]=0;
 	  if(MuonInfo_normchi2[mu1]>1.8) id1[size]=0;
 	  if((MuonInfo_i_nStripLayer[mu1]+MuonInfo_i_nPixelLayer[mu1])<6.) id1[size]=0;
-          if(!(MuonInfo_muqual[mu1]&4096)) id1[size]=0;
+      //    if(!(MuonInfo_muqual[mu1]&4096)) id1[size]=0;
 
           id2[size]=1;
   	  if(abs(MuonInfo_dxyPV[mu2])>=3. || abs(MuonInfo_dzPV[mu2])>=30.) id2[size]=0;
 	  if(MuonInfo_i_nPixelLayer[mu2]<1.) id2[size]=0;
 	  if(MuonInfo_normchi2[mu2]>1.8) id2[size]=0;
 	  if((MuonInfo_i_nStripLayer[mu2]+MuonInfo_i_nPixelLayer[mu2])<6.) id2[size]=0;
-          if(!(MuonInfo_muqual[mu2]&4096)) id2[size]=0;
+      //    if(!(MuonInfo_muqual[mu2]&4096)) id2[size]=0;
 
 
           gen[size]=0;
