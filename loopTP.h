@@ -36,8 +36,12 @@ int   isGlobal2[MAX_XB];
 int   isTriggered1[MAX_XB];
 int   isTriggered2[MAX_XB];
 
-bool   outerTrackisNonnull1[MAX_XB];
-bool   outerTrackisNonnull2[MAX_XB];
+bool  outerTrackisNonnull1[MAX_XB];
+bool  outerTrackisNonnull2[MAX_XB];
+bool isTrackerMuArbitrated1[MAX_XB];
+bool isTrackerMuArbitrated2[MAX_XB];
+bool isTMOneStationTight1[MAX_XB];
+bool isTMOneStationTight2[MAX_XB];
 
 Int_t HLT_PAL1DoubleMu0_v1;
 Int_t HLT_PAL1DoubleMu0_v1_Prescl;
