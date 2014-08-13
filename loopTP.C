@@ -130,8 +130,8 @@ int signalGen(int Btype, int j)
 }
 
 
-int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140707_BuJpsiK_pPb.root", string
-	  outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140708_BuJpsiK_pPb.root.root", bool REAL=1,bool PbpMC=0,int startEntries=0,int
+int loopTP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140707_BdJpsiKstar_pPb.root", string
+	  outfile="/data/ginnocen/TnPinputsMC/nt_BoostedMC_20140707_BdJpsiKstar_pPb_TnP.root", bool REAL=0,bool PbpMC=0,int startEntries=0,int
 	  nEntries=0, bool doMuonSelection = 0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
@@ -257,6 +257,22 @@ int loopTP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_201
 	  eta2[size]=MuonInfo_eta[mu2];
 	  phi1[size]=MuonInfo_phi[mu1];
 	  phi2[size]=MuonInfo_phi[mu2];
+	  
+	  float mu1px,mu1py,mu1pz,mu1E;
+      float mu2px,mu2py,mu2pz,mu2E;
+
+      mu1px = MuonInfo_pt[mu1]*cos(MuonInfo_phi[mu1]);
+      mu1py = MuonInfo_pt[mu1]*sin(MuonInfo_phi[mu1]);
+      mu1pz = MuonInfo_pt[mu1]*sinh(MuonInfo_phi[mu1]);
+      b4P->SetXYZM(mu1px,mu1py,mu1pz,MUON_MASS);
+      p1[size] = b4P->P();
+
+      mu2px = MuonInfo_pt[mu2]*cos(MuonInfo_phi[mu2]);
+      mu2py = MuonInfo_pt[mu2]*sin(MuonInfo_phi[mu2]);
+      mu2pz = MuonInfo_pt[mu2]*sinh(MuonInfo_phi[mu2]);
+      b4P->SetXYZM(mu2px,mu2py,mu2pz,MUON_MASS);
+      p2[size] = b4P->P();	  
+	  
 	  outerTrackisNonnull1[size]=MuonInfo_outerTrackisNonnull[mu1];
 	  outerTrackisNonnull2[size]=MuonInfo_outerTrackisNonnull[mu2];
 
