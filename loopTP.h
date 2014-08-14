@@ -35,6 +35,8 @@ int   isGlobal1[MAX_XB];
 int   isGlobal2[MAX_XB];
 int   isTriggered1[MAX_XB];
 int   isTriggered2[MAX_XB];
+int   isCalo1[MAX_XB];
+int   isCalo2[MAX_XB];
 
 bool  outerTrackisNonnull1[MAX_XB];
 bool  outerTrackisNonnull2[MAX_XB];
@@ -94,7 +96,9 @@ void buildBranch(TTree* nt){
   nt->Branch("isTrackerMuArbitrated2",isTrackerMuArbitrated2, "isTrackerMuArbitrated2[size]/O");
   nt->Branch("isTMOneStationTight1",isTMOneStationTight1, "isTMOneStationTight1[size]/O");
   nt->Branch("isTMOneStationTight2",isTMOneStationTight2, "isTMOneStationTight2[size]/O");  
-  
+  nt->Branch("isCalo1",isCalo1, "isCalo1[size]/I");  
+  nt->Branch("isCalo2",isCalo2, "isCalo2[size]/I");  
+
 /*
   nt->Branch("HLT_PAL1DoubleMu0_v1",&HLT_PAL1DoubleMu0_v1);
   nt->Branch("HLT_PAL1DoubleMu0_v1_Prescl",&HLT_PAL1DoubleMu0_v1_Prescl);
@@ -177,6 +181,7 @@ Int_t           MuonInfo_g_pixelhit[MAX_MUON];
 Bool_t          MuonInfo_isTrackerMuon[MAX_MUON];
 Bool_t          MuonInfo_isTriggered[MAX_MUON];
 Bool_t          MuonInfo_isGlobalMuon[MAX_MUON];
+Int_t          MuonInfo_type[MAX_MUON];
 //Bool_t          MuonInfo_TMOneStationTight[MAX_MUON];
 
 Double_t        MuonInfo_normchi2[MAX_MUON];
@@ -382,6 +387,8 @@ void setBranch(TTree *root) {
    root->SetBranchAddress("MuonInfo.isTriggered",MuonInfo_isTriggered);
    root->SetBranchAddress("MuonInfo.isTrackerMuon",MuonInfo_isTrackerMuon);
    root->SetBranchAddress("MuonInfo.isGlobalMuon",MuonInfo_isGlobalMuon);
+   root->SetBranchAddress("MuonInfo.type",MuonInfo_type);
+
    //root->SetBranchAddress("MuonInfo.TMOneStationTight",MuonInfo_TMOneStationTight);
    root->SetBranchAddress("MuonInfo.normchi2",MuonInfo_normchi2);
    root->SetBranchAddress("MuonInfo.i_chi2",MuonInfo_i_chi2);
