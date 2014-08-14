@@ -16,6 +16,8 @@
 #define KSTAR_MASS  0.89594
 #define PHI_MASS    1.019455
 #define JPSI_MASS   3.096916
+static const unsigned int CaloMuon =  1<<4;
+
 
 void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int typesize, float track_mass1, float track_mass2, int REAL, int PbpMC)
 {
@@ -249,6 +251,9 @@ int loopTP(string infile="/data/bmeson/MC/Production0806MC/BfinderBoostedMC_2014
 	  isTracker2[size]=MuonInfo_isTrackerMuon[mu2];
 	  isGlobal1[size]=MuonInfo_isGlobalMuon[mu1];
 	  isGlobal2[size]=MuonInfo_isGlobalMuon[mu2];
+	  
+	  isCalo1[size]=MuonInfo_type[mu1]&CaloMuon;
+	  isCalo2[size]=MuonInfo_type[mu2]&CaloMuon;
 	  isTriggered1[size]=MuonInfo_isTriggered[mu1];
 	  isTriggered2[size]=MuonInfo_isTriggered[mu2];
 	  pt1[size]=MuonInfo_pt[mu1];
