@@ -130,8 +130,8 @@ int signalGen(int Btype, int j)
 }
 
 
-int loopTP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140707_BdJpsiKstar_pPb.root", string
-	  outfile="/data/ginnocen/TnPinputsMC/nt_BoostedMC_20140707_BdJpsiKstar_pPb_TnP.root", bool REAL=0,bool PbpMC=0,int startEntries=0,int
+int loopTP(string infile="/data/bmeson/MC/Production0806MC/BfinderBoostedMC_20140806_Kp/Bfinder_20140806_HIJINGemb_BuJpsiK_TuneZ2star_5TeV.root", string
+	  outfile="/data/ginnocen/TnPinputsMC/nt_BoostedMC_20140806_HIJINGemb_BuJpsiK_TuneZ2star_5TeV.root", bool REAL=0,bool PbpMC=0,int startEntries=0,int
 	  nEntries=0, bool doMuonSelection = 0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
