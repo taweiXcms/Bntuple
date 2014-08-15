@@ -130,10 +130,13 @@ int signalGen(int Btype, int j)
     }
   return flag;
 }
+//string infile="/data/bmeson/MC/Production0806MC/BfinderBoostedMC_20140806_Kp/Bfinder_20140806_HIJINGemb_BuJpsiK_TuneZ2star_5TeV.root", 
+//string outfile="/data/ginnocen/TnPinputsMC/nt_BoostedMC_20140806_HIJINGemb_BuJpsiK_TuneZ2star_5TeV.root"
 
+//string infile="/data/bmeson/data/Production0802Data/20140802_PAMuon_HIRun2013_28Sep2013_v1/Bfinder_20140802_PAMuon_HIRun2013_28Sep2013_v1.root"
+//string outfile="/data/ginnocen/TnPinputsData/nt_BoostedMC_20140802_PAMuon_HIRun2013_28Sep2013_v1.root"
 
-int loopTP(string infile="/data/bmeson/MC/Production0806MC/BfinderBoostedMC_20140806_Kp/Bfinder_20140806_HIJINGemb_BuJpsiK_TuneZ2star_5TeV.root", string
-	  outfile="/data/ginnocen/TnPinputsMC/nt_BoostedMC_20140806_HIJINGemb_BuJpsiK_TuneZ2star_5TeV.root", bool REAL=0,bool PbpMC=0,int startEntries=0,int
+int loopTP(string infile="", string outfile="", bool REAL=1,bool PbpMC=0,int startEntries=0,int
 	  nEntries=0, bool doMuonSelection = 0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
