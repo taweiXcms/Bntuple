@@ -179,9 +179,9 @@ void ConvertEff(){
   }
 
   TH1D *EffDiff = new TH1D("hPt","",nBins,ptBins);
-  if(_type==0)  EffDiff->SetXTitle("B^{+} p_{T} (GeV/c)");
-  if(_type==1)  EffDiff->SetXTitle("B0 p_{T} (GeV/c)");
-  if(_type==2)  EffDiff->SetXTitle("B_{s} p_{T} (GeV/c)");
+  if(_type==0)  EffDiff->SetXTitle("B^{+} y_{CM} (GeV/c)");
+  if(_type==1)  EffDiff->SetXTitle("B0 y_{CM} (GeV/c)");
+  if(_type==2)  EffDiff->SetXTitle("B_{s} y_{CM} (GeV/c)");
   if(_eff_=="Trg")EffDiff->SetYTitle("Trigger eff. diff., data-MC");
   if(_eff_=="ID")EffDiff->SetYTitle("MuID eff. diff., data-MC");
   if(_eff_=="Trk")EffDiff->SetYTitle("Tracking eff. diff., data-MC");
