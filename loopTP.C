@@ -136,7 +136,7 @@ int signalGen(int Btype, int j)
 //string infile="/data/bmeson/data/Production0802Data/20140802_PAMuon_HIRun2013_28Sep2013_v1/Bfinder_20140802_PAMuon_HIRun2013_28Sep2013_v1.root"
 //string outfile="/data/ginnocen/TnPinputsData/nt_BoostedMC_20140802_PAMuon_HIRun2013_28Sep2013_v1.root"
 
-int loopTP(string infile="", string outfile="", bool REAL=1,bool PbpMC=0,int startEntries=0,int
+int loopTP(string infile="", string outfile="", bool REAL=0,bool PbpMC=0,int startEntries=0,int
 	  nEntries=0, bool doMuonSelection = 0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
@@ -147,6 +147,13 @@ int loopTP(string infile="", string outfile="", bool REAL=1,bool PbpMC=0,int sta
 
   const char* infname;
   const char* outfname;
+//  infile="/mnt/hadoop/cms/store/user/tawei/Bfinder/BfinderBoostedMC_20140806_Kp.root";
+//  infile="/mnt/hadoop/cms/store/user/tawei/Bfinder/BfinderBoostedMC_20140806_Kp/*.root";
+//  infile="/mnt/hadoop/cms/store/user/tawei/Bfinder/BfinderBoostedMC_20140905_Kp/*.root";
+  infile="/mnt/hadoop/cms/store/user/tawei/Bfinder/BfinderBoostedMC_20140906_Kp/*.root";
+//  outfile="TnPnt_BoostedMC_20140806_Kp.root";
+//  outfile="TnPnt_BoostedMC_20140905_Kp.root";
+  outfile="TnPnt_BoostedMC_20140906_Kp.root";
 
   if(REAL) cout<<"--- REAL DATA ---"<<endl;
   else {
@@ -158,10 +165,13 @@ int loopTP(string infile="", string outfile="", bool REAL=1,bool PbpMC=0,int sta
   infname = infile.c_str();
   outfname = outfile.c_str();
 
-  //File type
-  TFile *f = new TFile(infname);
-  TTree *root = (TTree*)f->Get("demo/root");
-  TTree *hlt = (TTree*)f->Get("hltanalysis/HltTree");
+//  TFile *f = new TFile(infname);
+//  TTree *root = (TTree*)f->Get("demo/root");
+//  TTree *hlt = (TTree*)f->Get("hltanalysis/HltTree");
+  TChain *root = new TChain("demo/root");
+  TChain *hlt = new TChain("hltanalysis/HltTree");
+  root->Add(infile.c_str());
+  hlt->Add(infile.c_str());
   if (root->GetEntries()!=hlt->GetEntries()) {
      cout <<"Inconsistent number of entries!!! "<<infile<<endl;
      cout <<"HLT tree: "<<hlt->GetEntries()<<endl;
@@ -283,6 +293,17 @@ int loopTP(string infile="", string outfile="", bool REAL=1,bool PbpMC=0,int sta
 	  
 	  outerTrackisNonnull1[size]=MuonInfo_outerTrackisNonnull[mu1];
 	  outerTrackisNonnull2[size]=MuonInfo_outerTrackisNonnull[mu2];
+
+	nPixel1[size] = MuonInfo_i_nPixelLayer[mu1];
+	nPixel2[size] = MuonInfo_i_nPixelLayer[mu2];
+	nTracker1[size] = MuonInfo_i_nStripLayer[mu1] + +MuonInfo_i_nPixelLayer[mu1];
+	nTracker2[size] = MuonInfo_i_nStripLayer[mu2] + +MuonInfo_i_nPixelLayer[mu2];
+    dxy1[size] = MuonInfo_dxyPV[mu1];
+    dxy2[size] = MuonInfo_dxyPV[mu2];
+    dz1[size] = MuonInfo_dzPV[mu1];
+    dz2[size] = MuonInfo_dzPV[mu2];
+    chisq1[size] = MuonInfo_normchi2[mu1];
+    chisq2[size] = MuonInfo_normchi2[mu2];
 	  
 	  
      if(MuonInfo_muqual[mu1]&16) isTrackerMuArbitrated1[size] = 1;

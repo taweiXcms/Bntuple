@@ -45,6 +45,17 @@ bool isTrackerMuArbitrated2[MAX_XB];
 bool isTMOneStationTight1[MAX_XB];
 bool isTMOneStationTight2[MAX_XB];
 
+float nPixel1[MAX_XB];
+float nPixel2[MAX_XB];
+float nTracker1[MAX_XB];
+float nTracker2[MAX_XB];
+float dz1[MAX_XB];
+float dz2[MAX_XB];
+float dxy1[MAX_XB];
+float dxy2[MAX_XB];
+float chisq1[MAX_XB];
+float chisq2[MAX_XB];
+
 Int_t HLT_PAL1DoubleMu0_v1;
 Int_t HLT_PAL1DoubleMu0_v1_Prescl;
 Int_t HLT_PADimuon0_NoVertexing_v1;
@@ -98,6 +109,17 @@ void buildBranch(TTree* nt){
   nt->Branch("isTMOneStationTight2",isTMOneStationTight2, "isTMOneStationTight2[size]/O");  
   nt->Branch("isCalo1",isCalo1, "isCalo1[size]/I");  
   nt->Branch("isCalo2",isCalo2, "isCalo2[size]/I");  
+
+  nt->Branch("nPixel1", nPixel1, "nPixel1[size]/F");  
+  nt->Branch("nPixel2", nPixel2, "nPixel2[size]/F");  
+  nt->Branch("nTracker1", nTracker1, "nTracker1[size]/F");  
+  nt->Branch("nTracker2", nTracker2, "nTracker2[size]/F");  
+  nt->Branch("dxy1", dxy1, "dxy1[size]/F");  
+  nt->Branch("dxy2", dxy2, "dxy2[size]/F");  
+  nt->Branch("dz1", dz1, "dz1[size]/F");  
+  nt->Branch("dz2", dz2, "dz2[size]/F");  
+  nt->Branch("chisq1", chisq1, "chisq1[size]/F");  
+  nt->Branch("chisq2", chisq2, "chisq2[size]/F");  
 
 /*
   nt->Branch("HLT_PAL1DoubleMu0_v1",&HLT_PAL1DoubleMu0_v1);
