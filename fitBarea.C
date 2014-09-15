@@ -1,5 +1,9 @@
 #include "utilities.h"
 
+//Look at me!!!!////////////////////////////////////////////
+float RatioOfArea=0.0139756;
+///////////////////////////////////////////////////////////
+
 double luminosity=34.8*1e-3;
 double setparam0=100.;
 double setparam1=5.28;
@@ -31,12 +35,16 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    //cout<<cut.Data()<<endl;
    static int count=0;
    count++;
+
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
 
    TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([5]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[5])*Gaus(x,[1],[6])/(sqrt(2*3.14159)*[6]))+[3]+[4]*x+[0]*0.012599*("+iNP+")");
+   TString fun1 = "[0]*([5]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[5])*Gaus(x,[1],[6])/(sqrt(2*3.14159)*[6]))+[3]+[4]*x";
+   TString fun2 = "[0]*("+iNP+")";
+   TF1 *f = new TF1(Form("f%d",count),Form("%s+%s*%f",fun1.Data(),fun2.Data(),RatioOfArea));
+
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    clean0(h);
@@ -87,7 +95,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    
    // function for signal shape plotting. take the fit result from f
    TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
-   Bkpi->SetParameter(0,f->GetParameter(0)*0.012599);
+   Bkpi->SetParameter(0,f->GetParameter(0)*RatioOfArea);
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
 //   Bkpi->SetRange(5.00,5.28);
