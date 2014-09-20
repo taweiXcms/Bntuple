@@ -1,7 +1,7 @@
 #include "utilities.h"
 
 //Look at me!!!!////////////////////////////////////////////
-float RatioOfArea=0.0139756;
+float RatioOfArea=6.22;
 ///////////////////////////////////////////////////////////
 
 double luminosity=34.8*1e-3;
@@ -40,10 +40,11 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
 
-   TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
-   TString fun1 = "[0]*([5]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[5])*Gaus(x,[1],[6])/(sqrt(2*3.14159)*[6]))+[3]+[4]*x";
-   TString fun2 = "[0]*("+iNP+")";
-   TF1 *f = new TF1(Form("f%d",count),Form("%s+%s*%f",fun1.Data(),fun2.Data(),RatioOfArea));
+   TString iNP="(7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01)))";
+   TString fun1 = "([5]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[5])*Gaus(x,[1],[6])/(sqrt(2*3.14159)*[6]))";
+   TString fun2 = "[3]+[4]*x";
+   TString normSignal="((-0.199471)*([5]*[6]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[5])*(TMath::Erf((-6+[1])/(sqrt(2)*[6]))-TMath::Erf((-5+[1])/(sqrt(2)*[6]))))/([2]*[6]))";
+   TF1 *f = new TF1(Form("f%d",count),Form("([0]/%s)*%s*%f+%s+%s*([0]/203.577)",normSignal.Data(),fun1.Data(),RatioOfArea,fun2.Data(),iNP.Data()));
 
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
@@ -94,8 +95,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
-   Bkpi->SetParameter(0,f->GetParameter(0)*RatioOfArea);
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),"([0]/203.577)*("+iNP+")");
+   Bkpi->SetParameter(0,f->GetParameter(0));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
 //   Bkpi->SetRange(5.00,5.28);
@@ -104,12 +105,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    Bkpi->SetFillStyle(3004);
 
    // function for signal shape plotting. take the fit result from f
-   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
+   TString normSignalDraw="((-0.199471)*([3]*[4]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[3])*(TMath::Erf((-6+[1])/(sqrt(2)*[4]))-TMath::Erf((-5+[1])/(sqrt(2)*[4]))))/([2]*[4]))";
+   TF1 *mass = new TF1(Form("fmass",count),Form("([0]/%s)*%f*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))",normSignalDraw.Data(),RatioOfArea));
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(5),f->GetParameter(6));
-   mass->SetParError(0,f->GetParError(0));
-   mass->SetParError(1,f->GetParError(1));
-   mass->SetParError(2,f->GetParError(2));
-
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
 
