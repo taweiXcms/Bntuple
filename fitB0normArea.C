@@ -110,6 +110,11 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    TString normSignalDraw="((-0.199471)*([3]*[4]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[3])*(TMath::Erf((-6+[1])/(sqrt(2)*[4]))-TMath::Erf((-5+[1])/(sqrt(2)*[4]))))/([2]*[4]))";
    TF1 *mass = new TF1(Form("fmass",count),Form("([0]/%s)*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))",normSignalDraw.Data()));
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
+   mass->SetParError(0,f->GetParError(0));
+   mass->SetParError(1,f->GetParError(1));
+   mass->SetParError(2,f->GetParError(2));
+   mass->SetParError(7,f->GetParError(7));
+   mass->SetParError(8,f->GetParError(8));
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
 
