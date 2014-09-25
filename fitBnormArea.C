@@ -1,4 +1,5 @@
 #include "utilities.h"
+#include <iomanip>
 
 double luminosity=34.8*1e-3;
 double setparam0=100.;
@@ -36,10 +37,17 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
 
-   TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
-   TString normSignal="((-0.199471)*([7]*[8]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[7])*(TMath::Erf((-6+[1])/(sqrt(2)*[8]))-TMath::Erf((-5+[1])/(sqrt(2)*[8]))))/([2]*[8]))";
+   TString iNP="(7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01)))";
+   TF1 *fNP = new TF1("fNP",iNP);
+   float normNP=fNP->Integral(5,6);//"203.577";
+   cout<<"NormNP  "<<normNP<<endl;
 
-   TF1 *f = new TF1(Form("f%d",count),Form("([0]/%s)*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+([5]/203.577)*%s",normSignal.Data(),iNP.Data()));
+   //TString normSignal="(([7]*[8]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[7])*(TMath::Erf((-6+[1])/(sqrt(2)*[8]))-TMath::Erf((-5+[1])/(sqrt(2)*[8])))/2)";
+   //TF1 *fsignal = new TF1("fsignal","([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))");
+   //TString normSignal="fsingal->Integral(5,6)";
+
+   //TString normNP="fNP->Integral(5,6)";
+   TF1 *f = new TF1(Form("f%d",count),Form("[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+([5]/%f)*%s",normNP,iNP.Data()));
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    clean0(h);
@@ -81,6 +89,10 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    h->SetMarkerStyle(20);
    cout <<h->GetEntries()<<endl;
 
+   TF1 *fsignalDraw = new TF1("fsignal","([2]*Gaus(x,[0],[1])/(sqrt(2*3.14159)*[1])+(1-[2])*Gaus(x,[0],[3])/(sqrt(2*3.14159)*[3]))");
+   fsignalDraw->SetParameters(f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
+   cout<<"NormNP "<<fsignalDraw->Integral(5,6)<<endl;
+
    // function for background shape plotting. take the fit result from f
    TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x");
    background->SetParameter(0,f->GetParameter(3));
@@ -92,7 +104,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),Form("([0]/203.577)*%s",iNP.Data()));
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),Form("([0]/%f)*%s",normNP,iNP.Data()));
    Bkpi->SetParameter(0,f->GetParameter(5));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
@@ -102,8 +114,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    Bkpi->SetFillStyle(3004);
    
    // function for signal shape plotting. take the fit result from f
-   TString normSignalDraw="((-0.199471)*([3]*[4]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[3])*(TMath::Erf((-6+[1])/(sqrt(2)*[4]))-TMath::Erf((-5+[1])/(sqrt(2)*[4]))))/([2]*[4]))";
-   TF1 *mass = new TF1(Form("fmass",count),Form("([0]/%s)*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))",normSignalDraw.Data()));
+   //TString normSignalDraw="((-0.199471)*([3]*[4]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[3])*(TMath::Erf((-6+[1])/(sqrt(2)*[4]))-TMath::Erf((-5+[1])/(sqrt(2)*[4]))))/([2]*[4]))";
+
+   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
    mass->SetParError(0,f->GetParError(0));
    mass->SetParError(1,f->GetParError(1));
@@ -112,6 +125,11 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    mass->SetParError(8,f->GetParError(8));
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
+
+   cout<<"======================================================"<<endl;
+   cout<<"NP Area:"<<setw(8)<<Bkpi->Integral(5,6)<<setw(25)<<"NP Parameter:"<<setw(8)<<f->GetParameter(5)<<endl;
+   cout<<"Sg Area:"<<setw(8)<<mass->Integral(5,6)<<setw(25)<<"Signal Parameter: "<<setw(8)<<f->GetParameter(0)<<endl;
+   cout<<"======================================================"<<endl;
 
 //   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
    h->SetMarkerStyle(24);
@@ -134,7 +152,24 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 
    double yield = mass->Integral(5,6)/0.02;
    double yieldErr = mass->Integral(5,6)/0.02*mass->GetParError(0)/mass->GetParameter(0);
+   /*
+   TF1 *fsignal = new TF1("fsignal","([2]*Gaus(x,[0],[1])/(sqrt(2*3.14159)*[1])+(1-[2])*Gaus(x,[0],[3])/(sqrt(2*3.14159)*[3]))");
+   fsignal->SetParameters(mass->GetParameter(1),mass->GetParameter(2),mass->GetParameter(3),mass->GetParameter(4));
+   double par0=mass->GetParameter(1);
+   double par1=mass->GetParameter(2);
+   double par2=mass->GetParameter(3);
+   double par3=mass->GetParameter(4);
+   double fnormsignal = ((-0.199471)*(par2*par3*(TMath::Erf((-6+par0)/(sqrt(2)*par1))-TMath::Erf((-5+par0)/(sqrt(2)*par1)))+par1*(1-par2)*(TMath::Erf((-6+par0)/(sqrt(2)*par3))-TMath::Erf((-5+par0)/(sqrt(2)*par3))))/(par1*par3));
 
+   cout<<endl;
+   cout<<"==========================="<<endl;
+   cout<<"First parameter: "<<mass->GetParameter(0)<<endl;
+   cout<<"Integral: "<<mass->Integral(5,6)<<endl;
+   cout<<"Signal Integral: "<<fsignal->Integral(5,6)<<endl;
+   cout<<"Signal Normalization: "<<fnormsignal<<endl;
+   cout<<"==========================="<<endl;
+   cout<<endl;
+   */
 
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
