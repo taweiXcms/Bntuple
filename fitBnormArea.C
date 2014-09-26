@@ -128,7 +128,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 
    cout<<"======================================================"<<endl;
    cout<<"NP Area:"<<setw(8)<<Bkpi->Integral(5,6)<<setw(25)<<"NP Parameter:"<<setw(8)<<f->GetParameter(5)<<endl;
-   cout<<"Sg Area:"<<setw(8)<<mass->Integral(5,6)<<setw(25)<<"Signal Parameter: "<<setw(8)<<f->GetParameter(0)<<endl;
+   cout<<"Sg Area:"<<setw(8)<<mass->Integral(5,6)<<setw(25)<<"Signal Parameter:"<<setw(8)<<f->GetParameter(0)<<endl;
    cout<<"======================================================"<<endl;
 
 //   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
@@ -139,7 +139,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.,"Y");
+   h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
    Bkpi->Draw("same");
    background->Draw("same");   
@@ -172,7 +172,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    */
 
    // Draw the legend:)   
-   TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
+   TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");

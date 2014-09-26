@@ -1,7 +1,7 @@
 #include "utilities.h"
 
 //Look at me!!!!////////////////////////////////////////////
-float RatioOfArea=4.91;
+float RatioOfArea=32.0323/17.524;
 ///////////////////////////////////////////////////////////
 
 double luminosity=34.8*1e-3;
@@ -46,10 +46,10 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    // Fit function
    //QM2014
    TString iNP="(2.28629e1*Gaus(x,5.02606,6.84e-2)/(sqrt(2*3.14159)*(6.84e-2))+3.85695*Gaus(x,5.27701,0.04305)/(sqrt(2*3.14159)*(0.04305)))";
-   TString fun1 = "([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))";
-   TString fun2 = "[3]+[4]*x";
+   TF1* fNP = new TF1("fNP",iNP);
+   float normNP = fNP->Integral(5,6);
    TString normSignal="((-0.199471)*([7]*[8]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[7])*(TMath::Erf((-6+[1])/(sqrt(2)*[8]))-TMath::Erf((-5+[1])/(sqrt(2)*[8]))))/([2]*[8]))";
-   TF1 *f = new TF1(Form("f%d",count),Form("([0]/%s)*%s*%f+%s+%s*([0]/122.204)",normSignal.Data(),fun1.Data(),RatioOfArea,fun2.Data(),iNP.Data()));
+   TF1 *f = new TF1(Form("f%d",count),Form("[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+(%s*[0])/(%f*%f)",iNP.Data(),RatioOfArea,normNP));
 
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y_kpi.Data(),ptmin,ptmax));   
@@ -104,7 +104,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),"([0]/122.204)*("+iNP+")");
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),Form("([0]/(%f*%f))*%s",RatioOfArea,normNP,iNP.Data()));
    Bkpi->SetParameter(0,f->GetParameter(0));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
@@ -113,8 +113,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    Bkpi->SetFillStyle(3005);
 
    // function for signal shape plotting. take the fit result from f
-   TString normSignalDraw="((-0.199471)*([3]*[4]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[3])*(TMath::Erf((-6+[1])/(sqrt(2)*[4]))-TMath::Erf((-5+[1])/(sqrt(2)*[4]))))/([2]*[4]))";
-   TF1 *mass = new TF1(Form("fmass",count),Form("([0]/%s)*%f*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))",normSignalDraw.Data(),RatioOfArea));
+   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
    mass->SetParError(0,f->GetParError(0));
    mass->SetParError(1,f->GetParError(1));
@@ -132,7 +131,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    h->SetYTitle("Entries / (30 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.,"Y");
+   h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
 
  //  hBck->Draw("hist same");
@@ -152,7 +151,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    double yieldErr = mass->Integral(5,6)/0.03*mass->GetParError(0)/mass->GetParameter(0);
    
    // Draw the legend:)   
-   TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
+   TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");

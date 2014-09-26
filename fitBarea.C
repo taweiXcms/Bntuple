@@ -127,7 +127,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.,"Y");
+   h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
    Bkpi->Draw("same");
    background->Draw("same");   
@@ -139,7 +139,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    f->Draw("same");
 
    // Draw the legend:)   
-   TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
+   TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
@@ -196,8 +196,9 @@ void fitBarea(TString infname="",bool doweight = 1)
       double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
-    }  
+    }
   
+  /*  
   TCanvas *c=  new TCanvas("cResult","",600,600);
   hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
   hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
@@ -247,4 +248,5 @@ void fitBarea(TString infname="",bool doweight = 1)
   hPtSigma->Write();
   outf->Close();
   delete outf;
+  */
 }
