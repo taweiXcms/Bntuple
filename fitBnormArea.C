@@ -176,14 +176,14 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
-   leg->AddEntry(h,"Data","pl");
+   leg->AddEntry(h,"Non-prmopt J/#psi MC","pl");
    leg->AddEntry(f,"Fit","l");
    leg->AddEntry(mass,"Signal","f");
    leg->AddEntry(background,"Combinatorial Background","l");
    leg->AddEntry(Bkpi,"Non-prompt J/#psi","f");
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
-   leg2->AddEntry(h,"B meson","");
+   leg2->AddEntry(h,"B^{+} meson","");
    leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
@@ -230,14 +230,14 @@ void fitBnormArea(TString infname="",bool doweight = 1)
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
-  
+
+  /*  
   TCanvas *c=  new TCanvas("cResult","",600,600);
   hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
   hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
   hPt->Sumw2();
   hPt->Draw();
-
-  /*  
+  
   ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
   nt->Project("hPtRecoTruth","pt",TCut(seldata_2y.Data())&&"gen==23333");
   ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));

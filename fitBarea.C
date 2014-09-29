@@ -1,7 +1,8 @@
 #include "utilities.h"
 
 //Look at me!!!!////////////////////////////////////////////
-float RatioOfArea=75.3808/28.7983;
+//float RatioOfArea=75.3808/28.7983;
+float RatioOfArea=(75.3808/28.7983)*(1-0.0400804);
 ///////////////////////////////////////////////////////////
 
 double luminosity=34.8*1e-3;
@@ -150,15 +151,18 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg->AddEntry(Bkpi,"Non-prompt J/#psi","f");
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
-   leg2->AddEntry(h,"B meson","");
+   leg2->AddEntry(h,"B^{+} meson","");
    leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
+   TLegend *leg3 = myLegend(0.02,0.83,0.37,0.92);
+   leg3->AddEntry((TObject*)0,Form("Ratio=%.2f(-4.0%)",RatioOfArea),"");
+   leg3->Draw();
 
    //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
    //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
-   c->SaveAs(Form("ResultsBplus/BMass_FixAreaRatio-%d.pdf",count));
+   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
 
    return mass;
 }
