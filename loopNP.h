@@ -43,15 +43,15 @@ Int_t kstar[MAX_XB];
 //Int_t isnonprompt[MAX_XB];
 //Int_t isprompt[MAX_XB];
 
-Float_t genBplusFrBplusToK892[MAX_XB];
-Float_t genBplusFrBplusToK1270[MAX_XB];
-Float_t genBplusFrBplusToPi[MAX_XB];
-Float_t genBplusFrBzeroToKstar892ToKPi_K[MAX_XB];
-Float_t genBplusFrBzeroToKstar892ToKPi_Pi[MAX_XB];
-Float_t genBplusFrBzeroToKzero1270ToKPi_K[MAX_XB];
-Float_t genBplusFrBzeroToKzero1270ToKPi_Pi[MAX_XB];
-Float_t genBplusFrBzeroToKPi_K[MAX_XB];
-Float_t genBplusFrBzeroToKPi_Pi[MAX_XB];
+Bool_t genBplusFrBplusToK892[MAX_XB];
+Bool_t genBplusFrBplusToK1270[MAX_XB];
+Bool_t genBplusFrBplusToPi[MAX_XB];
+Bool_t genBplusFrBzeroToKstar892ToKPi_K[MAX_XB];
+Bool_t genBplusFrBzeroToKstar892ToKPi_Pi[MAX_XB];
+Bool_t genBplusFrBzeroToKzero1270ToKPi_K[MAX_XB];
+Bool_t genBplusFrBzeroToKzero1270ToKPi_Pi[MAX_XB];
+Bool_t genBplusFrBzeroToKPi_K[MAX_XB];
+Bool_t genBplusFrBzeroToKPi_Pi[MAX_XB];
 
 /*
 Float_t genBzeroFrToPhiK[MAX_XB];
@@ -208,15 +208,15 @@ void buildBranch(TTree* nt){
   nt->Branch("geneta",geneta, "geneta[size]/F");
   nt->Branch("genphi",genphi, "genphi[size]/F");
 
-  nt->Branch("genBplusFrBplusToK892",genBplusFrBplusToK892, "genBplusFrBplusToK892[size]/F");
-  nt->Branch("genBplusFrBplusToK1270",genBplusFrBplusToK1270,"genBplusFrBplusToK1270[size]/F");
-  nt->Branch("genBplusFrBplusToPi",genBplusFrBplusToPi, "genBplusFrBplusToPi[size]/F");
-  nt->Branch("genBplusFrBzeroToKstar892ToKPi_K",genBplusFrBzeroToKstar892ToKPi_K, "genBplusFrBzeroToKstar892ToKPi_K[size]/F");
-  nt->Branch("genBplusFrBzeroToKstar892ToKPi_Pi",genBplusFrBzeroToKstar892ToKPi_Pi, "genBplusFrBzeroToKstar892ToKPi_Pi[size]/F");
-  nt->Branch("genBplusFrBzeroToKzero1270ToKPi_K",genBplusFrBzeroToKzero1270ToKPi_K, "genBplusFrBzeroToKzero1270ToKPi_K[size]/F");
-  nt->Branch("genBplusFrBzeroToKzero1270ToKPi_Pi",genBplusFrBzeroToKzero1270ToKPi_Pi, "genBplusFrBzeroToKzero1270ToKPi_Pi[size]/F");
-  nt->Branch("genBplusFrBzeroToKPi_K",genBplusFrBzeroToKPi_K, "genBplusFrBzeroToKPi_K[size]/F");
-  nt->Branch("genBplusFrBzeroToKPi_Pi",genBplusFrBzeroToKPi_Pi, "genBplusFrBzeroToKPi_Pi[size]/F");
+  nt->Branch("genBplusFrBplusToK892",genBplusFrBplusToK892, "genBplusFrBplusToK892[size]/B");
+  nt->Branch("genBplusFrBplusToK1270",genBplusFrBplusToK1270,"genBplusFrBplusToK1270[size]/B");
+  nt->Branch("genBplusFrBplusToPi",genBplusFrBplusToPi, "genBplusFrBplusToPi[size]/B");
+  nt->Branch("genBplusFrBzeroToKstar892ToKPi_K",genBplusFrBzeroToKstar892ToKPi_K, "genBplusFrBzeroToKstar892ToKPi_K[size]/B");
+  nt->Branch("genBplusFrBzeroToKstar892ToKPi_Pi",genBplusFrBzeroToKstar892ToKPi_Pi, "genBplusFrBzeroToKstar892ToKPi_Pi[size]/B");
+  nt->Branch("genBplusFrBzeroToKzero1270ToKPi_K",genBplusFrBzeroToKzero1270ToKPi_K, "genBplusFrBzeroToKzero1270ToKPi_K[size]/B");
+  nt->Branch("genBplusFrBzeroToKzero1270ToKPi_Pi",genBplusFrBzeroToKzero1270ToKPi_Pi, "genBplusFrBzeroToKzero1270ToKPi_Pi[size]/B");
+  nt->Branch("genBplusFrBzeroToKPi_K",genBplusFrBzeroToKPi_K, "genBplusFrBzeroToKPi_K[size]/B");
+  nt->Branch("genBplusFrBzeroToKPi_Pi",genBplusFrBzeroToKPi_Pi, "genBplusFrBzeroToKPi_Pi[size]/B");
 
   nt->Branch("mu1isTrackerMuon",mu1isTrackerMuon, "mu1isTrackerMuon[size]/B");
   nt->Branch("mu1isGlobalMuon",mu1isGlobalMuon, "mu1isGlobalMuon[size]/B");
@@ -341,12 +341,12 @@ Float_t Gentk1phi[MAX_GEN];
 Float_t Gentk2phi[MAX_GEN];
 
 Float_t GenisSignal[MAX_GEN];
-Float_t GenisSignalBplusToK892[MAX_GEN];
-Float_t GenisSignalBplusToK1270[MAX_GEN];
-Float_t GenisSignalBplusToPi[MAX_GEN];
-Float_t GenisSignalBzeroToKstar892[MAX_GEN];
-Float_t GenisSignalBzeroToKzero1270[MAX_GEN];
-Float_t GenisSignalBzeroToKPi[MAX_GEN];
+Bool_t GenisSignalBplusToK892[MAX_GEN];
+Bool_t GenisSignalBplusToK1270[MAX_GEN];
+Bool_t GenisSignalBplusToPi[MAX_GEN];
+Bool_t GenisSignalBzeroToKstar892[MAX_GEN];
+Bool_t GenisSignalBzeroToKzero1270[MAX_GEN];
+Bool_t GenisSignalBzeroToKPi[MAX_GEN];
 
 void buildGenBranch(TTree* nt)
 {
@@ -371,12 +371,12 @@ void buildGenBranch(TTree* nt)
   nt->Branch("tk2eta",Gentk2eta,"tk2eta[size]/F");
   nt->Branch("tk2phi",Gentk2phi,"tk2phi[size]/F");
   nt->Branch("isSignal",GenisSignal, "isSignal[size]/F");
-  nt->Branch("isSignalBplusToK892",GenisSignalBplusToK892, "isSignalBplusToK892[size]/F");
-  nt->Branch("isSignalBplusToK1270",GenisSignalBplusToK1270, "isSignalBplusToK1270[size]/F");
-  nt->Branch("isSignalBplusToPi",GenisSignalBplusToPi, "isSignalBplusToPi[size]/F");
-  nt->Branch("isSignalBzeroToKstar892",GenisSignalBzeroToKstar892, "isSignalBzeroToKstar892[size]/F");
-  nt->Branch("isSignalBzeroToKzero1270",GenisSignalBzeroToKzero1270, "isSignalBzeroToKzero1270[size]/F");
-  nt->Branch("isSignalBzeroToKPi",GenisSignalBzeroToKPi, "isSignalBzeroToKPi[size]/F");
+  nt->Branch("isSignalBplusToK892",GenisSignalBplusToK892, "isSignalBplusToK892[size]/B");
+  nt->Branch("isSignalBplusToK1270",GenisSignalBplusToK1270, "isSignalBplusToK1270[size]/B");
+  nt->Branch("isSignalBplusToPi",GenisSignalBplusToPi, "isSignalBplusToPi[size]/B");
+  nt->Branch("isSignalBzeroToKstar892",GenisSignalBzeroToKstar892, "isSignalBzeroToKstar892[size]/B");
+  nt->Branch("isSignalBzeroToKzero1270",GenisSignalBzeroToKzero1270, "isSignalBzeroToKzero1270[size]/B");
+  nt->Branch("isSignalBzeroToKPi",GenisSignalBzeroToKPi, "isSignalBzeroToKPi[size]/B");
 }
 
 //#########################################################################################
