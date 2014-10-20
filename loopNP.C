@@ -261,6 +261,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   HLT_PAMu12_v1_Prescl = Bfr_HLT_PAMu12_v1_Prescl;
 
   //B Info
+
   bP->SetXYZ(BInfo_px[j],BInfo_py[j],BInfo_pz[j]*0);
   bVtx->SetXYZ(BInfo_vtxX[j]-EvtInfo_PVx,
 	       BInfo_vtxY[j]-EvtInfo_PVy,
@@ -354,7 +355,6 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
   mumuy[typesize] = b4P->Rapidity();
   mumupt[typesize] = b4P->Pt();
 
-
   //jpsi section
   ujmass[typesize] = BInfo_uj_mass[BInfo_rfuj_index[j]];
   ujvProb[typesize] = TMath::Prob(BInfo_uj_vtxchi2[BInfo_rfuj_index[j]],BInfo_uj_vtxdof[BInfo_rfuj_index[j]]);
@@ -364,6 +364,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	       BInfo_uj_mass[BInfo_rfuj_index[j]]);
   ujpt[typesize] = b4P->Pt();
   ujeta[typesize] = b4P->PseudoRapidity();
+  if(b4P->Pt()==0) cout<<"debug jpsi"<<endl;
   ujphi[typesize] = b4P->Phi();
   ujy[typesize] = b4P->Rapidity();
   ujlxy[typesize] = ((BInfo_uj_vtxX[BInfo_rfuj_index[j]]-EvtInfo_PVx)*BInfo_uj_px[BInfo_rfuj_index[j]] + (BInfo_uj_vtxY[BInfo_rfuj_index[j]]-EvtInfo_PVy)*BInfo_uj_py[BInfo_rfuj_index[j]])/ujpt[typesize];
@@ -407,6 +408,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       doubletphi[typesize] = -20;
       doublety[typesize] = -1;
     }  
+
   else if(BInfo_type[j]==5)
     {
       b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk2_index[j]],TrackInfo_eta[BInfo_rftk2_index[j]],TrackInfo_phi[BInfo_rftk2_index[j]],track_mass1);
@@ -444,7 +446,8 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		      tk1pz+tk2pz,
 		      tk1E+tk2E);
       tktkmass[typesize] = b4P->Mag();
-      tktketa[typesize] = b4P->Eta();
+      if(b4P->Pt()!=0) tktketa[typesize] = b4P->Eta();
+      else tktketa[typesize] = 0;
       tktkphi[typesize] = b4P->Phi();
       tktky[typesize] = b4P->Rapidity();
       tktkpt[typesize] = b4P->Pt();
@@ -453,6 +456,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
       doubletpt[typesize] = b4P->Pt();
       doubleteta[typesize] = b4P->PseudoRapidity();
+      if(b4P->Pt()==0) cout<<"debug doublet"<<endl;
       doubletphi[typesize] = b4P->Phi();
       doublety[typesize] = b4P->Rapidity();
 
@@ -464,10 +468,10 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		      tk1py+tk2py,
 		      tk1pz+tk2pz,
 		      tk1EK+tk2EK);
-
       tktkmassKK[typesize] = b4P->Mag();
 
     }
+
   else
     {
       b4P->SetPtEtaPhiM(TrackInfo_pt[BInfo_rftk1_index[j]],TrackInfo_eta[BInfo_rftk1_index[j]],TrackInfo_phi[BInfo_rftk1_index[j]],track_mass1);
@@ -499,14 +503,14 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       tk2py = b4P->Py();
       tk2pz = b4P->Pz();
       tk2E = b4P->E();
-
       b4P->SetPxPyPzE(tk1px+tk2px,
 		      tk1py+tk2py,
 		      tk1pz+tk2pz,
 		      tk1E+tk2E);
-
+      /////
       tktkmass[typesize] = b4P->Mag();
-      tktketa[typesize] = b4P->Eta();
+      if(b4P->Pt()!=0) tktketa[typesize] = b4P->Eta();
+      else tktketa[typesize] = 0;
       tktkphi[typesize] = b4P->Phi();
       tktky[typesize] = b4P->Rapidity();
       tktkpt[typesize] = b4P->Pt();
@@ -521,9 +525,8 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		      tk1py+tk2py,
 		      tk1pz+tk2pz,
 		      tk1EK+tk2EK);
-
       tktkmassKK[typesize] = b4P->Mag();
-
+      //////
       b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
       doubletpt[typesize] = b4P->Pt();
       doubleteta[typesize] = b4P->PseudoRapidity();
@@ -601,7 +604,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       if(BInfo_type[j]==4 || BInfo_type[j]==5) kStar=1;
       else kStar=0;
       int nonprompt=0,prompt=0;
-
+      
       // tk1
       if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
 	{
@@ -835,24 +838,22 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		       GenInfo_pt[tgenIndex]*sin(GenInfo_phi[tgenIndex]),
 		       GenInfo_pt[tgenIndex]*sinh(GenInfo_eta[tgenIndex]),
 		       GenInfo_mass[tgenIndex]);
+	  //if(b4P->Pt()==0) cout<<"Debug GenInfo"<<endl;
 	  geny[typesize] = b4P->Rapidity();
 	}
+      
+      //Non-prompt Discussion
+      //bool RecoMatching(int j, int twoTks, int BId, int TktkId, int Tk1Id, int Tk2Id);  
+      genBplusFrBplusToK892[typesize] = RecoMatching(j,1,521,0,323,0);    
+      genBplusFrBplusToK1270[typesize] = RecoMatching(j,1,521,0,10323,0);
+      genBplusFrBplusToPi[typesize] = RecoMatching(j,1,521,0,211,0);
+      genBplusFrBzeroToKstar892ToKPi_K[typesize] = RecoMatching(j,-1,511,313,321,211);
+      genBplusFrBzeroToKstar892ToKPi_Pi[typesize] = RecoMatching(j,-1,511,313,211,321);
+      genBplusFrBzeroToKzero1270ToKPi_K[typesize] = RecoMatching(j,-1,511,10313,321,211);
+      genBplusFrBzeroToKzero1270ToKPi_Pi[typesize] = RecoMatching(j,-1,511,10313,211,321);
+      //genBplusFrBzeroToKPi_K[typesize] = RecoMatching(j,4,511,0,321,211);
+      //genBplusFrBzeroToKPi_Pi[typesize] = RecoMatching(j,4,511,0,211,321);
     }
-
-
-  //Non-prompt Discussion
-  //bool RecoMatching(int j, int twoTks, int BId, int TktkId, int Tk1Id, int Tk2Id);
-  
-  genBplusFrBplusToK892[typesize] = RecoMatching(j,1,521,0,323,0);    
-  genBplusFrBplusToK1270[typesize] = RecoMatching(j,1,521,0,10323,0);
-  genBplusFrBplusToPi[typesize] = RecoMatching(j,1,521,0,211,0);
-  genBplusFrBzeroToKstar892ToKPi_K[typesize] = RecoMatching(j,-1,511,313,321,211);
-  genBplusFrBzeroToKstar892ToKPi_Pi[typesize] = RecoMatching(j,-1,511,313,211,321);
-  genBplusFrBzeroToKzero1270ToKPi_K[typesize] = RecoMatching(j,-1,511,10313,321,211);
-  genBplusFrBzeroToKzero1270ToKPi_Pi[typesize] = RecoMatching(j,-1,511,10313,211,321);
-  //genBplusFrBzeroToKPi_K[typesize] = RecoMatching(j,4,511,0,321,211);
-  //genBplusFrBzeroToKPi_Pi[typesize] = RecoMatching(j,4,511,0,211,321);
-
 }
 
 int signalGen(int Btype, int j)
@@ -1044,7 +1045,7 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  //nentries = 10000;
+  nentries = 100000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
@@ -1085,20 +1086,20 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
 	if(ifchannel[BInfo_type[j]-1]!=1) continue;
         
 	if (doMuonSelection) {
-   		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
 	}
-
+	
 	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
 	temy = b4Pout->Rapidity();
 	if(REAL)
@@ -1141,19 +1142,19 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
 	if (ifchannel[BInfo_type[j]-1]!=1) continue;
 
 	if (doMuonSelection) {
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
-	
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
 	}
 	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
 	temy = b4Pout->Rapidity();
@@ -1197,19 +1198,19 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
 	if (ifchannel[BInfo_type[j]-1]!=1) continue;
 
 	if (doMuonSelection) {
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
-
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
 	}
 	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
 	temy = b4Pout->Rapidity();
@@ -1260,19 +1261,19 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
 	if (ifchannel[BInfo_type[j]-1]!=1) continue;
 
 	if (doMuonSelection) {
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
-
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
 	}
 
 	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
@@ -1327,21 +1328,21 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
 	if (ifchannel[BInfo_type[j]-1]!=1) continue;
 
 	if (doMuonSelection) {
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
-		if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
-		if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
-	
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
-		if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])) continue;
+	  if(!(MuonInfo_isTrackerMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]] || MuonInfo_isGlobalMuon[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(abs(MuonInfo_dxyPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=3. || abs(MuonInfo_dzPV[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])>=30.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]<1.) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if(MuonInfo_normchi2[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]>1.8) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  if((MuonInfo_i_nStripLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]+MuonInfo_i_nPixelLayer[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]])<6.) continue;
+	  
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]&4096)) continue;
+	  if(!(MuonInfo_muqual[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]&4096)) continue;
 	}
-
+	
 	b4Pout->SetXYZM(BInfo_px[j],BInfo_py[j],BInfo_pz[j],BInfo_mass[j]);
 	temy = b4Pout->Rapidity();
 	if(REAL)
@@ -1437,7 +1438,7 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
 	isbestchi2[bestindex] = 1;
       }
     nt6->Fill();
-
+    /*
     if(!REAL)
       {
 	Gensize = 0;
@@ -1496,6 +1497,7 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
               }
 	    Gensize = GenInfo_size;
 	    Geny[j] = bGen.Rapidity();
+	    if(bGen.Pt()==0) cout<<"Debug GenFill"<<endl;
 	    Geneta[j] = bGen.Eta();
 	    Genphi[j] = bGen.Phi();
 	    Genpt[j] = bGen.Pt();
@@ -1508,9 +1510,9 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
 	    GenisSignalBzeroToKstar892[j] = GenFindisSignal(j,2,511,321,211,313) || GenFindisSignal(j,2,511,211,321,313);
 	    GenisSignalBzeroToKzero1270[j] = GenFindisSignal(j,2,511,321,211,10313) || GenFindisSignal(j,2,511,211,321,10313);
 	  }
-	ntGen->Fill();
-    
+	ntGen->Fill();    
 	}
+    */
 
   }
 
