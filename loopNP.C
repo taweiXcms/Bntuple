@@ -507,7 +507,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		      tk1py+tk2py,
 		      tk1pz+tk2pz,
 		      tk1E+tk2E);
-      /////
+
       tktkmass[typesize] = b4P->Mag();
       if(b4P->Pt()!=0) tktketa[typesize] = b4P->Eta();
       else tktketa[typesize] = 0;
@@ -526,7 +526,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 		      tk1pz+tk2pz,
 		      tk1EK+tk2EK);
       tktkmassKK[typesize] = b4P->Mag();
-      //////
+
       b4P->SetXYZM(BInfo_tktk_px[j],BInfo_tktk_py[j],BInfo_tktk_pz[j],BInfo_tktk_mass[j]);
       doubletpt[typesize] = b4P->Pt();
       doubleteta[typesize] = b4P->PseudoRapidity();
@@ -844,15 +844,18 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       
       //Non-prompt Discussion
       //bool RecoMatching(int j, int twoTks, int BId, int TktkId, int Tk1Id, int Tk2Id);  
-      genBplusFrBplusToK892[typesize] = RecoMatching(j,1,521,0,323,0);    
-      genBplusFrBplusToK1270[typesize] = RecoMatching(j,1,521,0,10323,0);
-      genBplusFrBplusToPi[typesize] = RecoMatching(j,1,521,0,211,0);
-      genBplusFrBzeroToKstar892ToKPi_K[typesize] = RecoMatching(j,-1,511,313,321,211);
-      genBplusFrBzeroToKstar892ToKPi_Pi[typesize] = RecoMatching(j,-1,511,313,211,321);
-      genBplusFrBzeroToKzero1270ToKPi_K[typesize] = RecoMatching(j,-1,511,10313,321,211);
-      genBplusFrBzeroToKzero1270ToKPi_Pi[typesize] = RecoMatching(j,-1,511,10313,211,321);
-      //genBplusFrBzeroToKPi_K[typesize] = RecoMatching(j,4,511,0,321,211);
-      //genBplusFrBzeroToKPi_Pi[typesize] = RecoMatching(j,4,511,0,211,321);
+      if(BInfo_type[j]==1)
+	{
+	  genBplusFrBplusToK892[typesize] = RecoMatching(j,1,521,0,323,0);    
+	  genBplusFrBplusToK1270[typesize] = RecoMatching(j,1,521,0,10323,0);
+	  genBplusFrBplusToPi[typesize] = RecoMatching(j,1,521,0,211,0);
+	  genBplusFrBzeroToKstar892ToKPi_K[typesize] = RecoMatching(j,-1,511,313,321,211);
+	  genBplusFrBzeroToKstar892ToKPi_Pi[typesize] = RecoMatching(j,-1,511,313,211,321);
+	  genBplusFrBzeroToKzero1270ToKPi_K[typesize] = RecoMatching(j,-1,511,10313,321,211);
+	  genBplusFrBzeroToKzero1270ToKPi_Pi[typesize] = RecoMatching(j,-1,511,10313,211,321);
+	  //genBplusFrBzeroToKPi_K[typesize] = RecoMatching(j,4,511,0,321,211);
+	  //genBplusFrBzeroToKPi_Pi[typesize] = RecoMatching(j,4,511,0,211,321);
+	}
     }
 }
 
@@ -1045,7 +1048,7 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 100000;
+  nentries = 500000;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
