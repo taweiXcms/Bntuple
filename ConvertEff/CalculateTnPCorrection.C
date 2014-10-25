@@ -87,6 +87,8 @@ void CalculateTnPCorrection(){
   Float_t isSignal[MAX_GEN];
   Float_t mu1pt[MAX_GEN];
   Float_t mu2pt[MAX_GEN];
+  Float_t mu1p[MAX_GEN];
+  Float_t mu2p[MAX_GEN];
   Float_t mu1eta[MAX_GEN];
   Float_t mu2eta[MAX_GEN];
   Float_t mu1phi[MAX_GEN];
@@ -106,6 +108,8 @@ void CalculateTnPCorrection(){
   nt->SetBranchAddress("isSignal",isSignal);
   nt->SetBranchAddress("mu1pt",mu1pt);
   nt->SetBranchAddress("mu2pt",mu2pt);
+  nt->SetBranchAddress("mu1p",mu1p);
+  nt->SetBranchAddress("mu2p",mu2p);
   nt->SetBranchAddress("mu1eta",mu1eta);
   nt->SetBranchAddress("mu2eta",mu2eta);
   nt->SetBranchAddress("mu1phi",mu1phi);
@@ -160,11 +164,11 @@ void CalculateTnPCorrection(){
       if(pt[c]<10 || pt[c]>60 || fabs(y[c]+0.465)>1.93) continue;
       //Acc
       if(fabs(mu1eta[c]) < 1.3) {if(mu1pt[c] < 3.3) continue;}
-      else if(fabs(mu1eta[c]) > 1.3 && fabs(mu1eta[c]) < 2.2) {if(mu1pt[c] < 2.9) continue;}
+      else if(fabs(mu1eta[c]) > 1.3 && fabs(mu1eta[c]) < 2.2) {if(mu1p[c] < 2.9) continue;}
       else if(fabs(mu1eta[c]) > 2.2 && fabs(mu1eta[c]) < 2.4) {if(mu1pt[c] < 0.8) continue;}
       else {continue;}
       if(fabs(mu2eta[c]) < 1.3) {if(mu2pt[c] < 3.3) continue;}
-      else if(fabs(mu2eta[c]) > 1.3 && fabs(mu2eta[c]) < 2.2) {if(mu2pt[c] < 2.9) continue;}
+      else if(fabs(mu2eta[c]) > 1.3 && fabs(mu2eta[c]) < 2.2) {if(mu2p[c] < 2.9) continue;}
       else if(fabs(mu2eta[c]) > 2.2 && fabs(mu2eta[c]) < 2.4) {if(mu2pt[c] < 0.8) continue;}
       else {continue;}
 
