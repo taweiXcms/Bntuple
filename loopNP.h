@@ -53,6 +53,13 @@ Bool_t genBplusFrBzeroToKzero1270ToKPi_Pi[MAX_XB];
 Bool_t genBplusFrBzeroToKPi_K[MAX_XB];
 Bool_t genBplusFrBzeroToKPi_Pi[MAX_XB];
 
+Bool_t genBzeroFrBplusToK[MAX_XB];
+Bool_t genBzeroFrBplusToKplus892[MAX_XB];
+Bool_t genBzeroFrBplusToKplus1270[MAX_XB];
+Bool_t genBzeroFrBplusToPi[MAX_XB];
+Bool_t genBzeroFrBzeroToKzero1270[MAX_XB];
+Bool_t genBzeroFrBsubsToKK[MAX_XB];
+
 /*
 Float_t genBzeroFrToPhiK[MAX_XB];
 Float_t genBzeroToPhiPi[MAX_XB];
@@ -217,6 +224,13 @@ void buildBranch(TTree* nt){
   nt->Branch("genBplusFrBzeroToKzero1270ToKPi_Pi",genBplusFrBzeroToKzero1270ToKPi_Pi, "genBplusFrBzeroToKzero1270ToKPi_Pi[size]/B");
   nt->Branch("genBplusFrBzeroToKPi_K",genBplusFrBzeroToKPi_K, "genBplusFrBzeroToKPi_K[size]/B");
   nt->Branch("genBplusFrBzeroToKPi_Pi",genBplusFrBzeroToKPi_Pi, "genBplusFrBzeroToKPi_Pi[size]/B");
+
+  nt->Branch("genBzeroFrBplusToK",genBzeroFrBplusToK, "genBzeroFrBplusToK[size]/B");
+  nt->Branch("genBzeroFrBplusToKplus892",genBzeroFrBplusToKplus892, "genBzeroFrBplusToKplus892[size]/B");
+  nt->Branch("genBzeroFrBplusToKplus1270",genBzeroFrBplusToKplus1270,"genBzeroFrBplusToKplus1270[size]/B");
+  nt->Branch("genBzeroFrBplusToPi",genBzeroFrBplusToPi, "genBzeroFrBplusToPi[size]/B");
+  nt->Branch("genBzeroFrBzeroToKzero1270",genBzeroFrBzeroToKzero1270, "genBzeroFrBzeroToKzero1270[size]/B");
+  nt->Branch("genBzeroFrBsubsToKK",genBzeroFrBsubsToKK, "genBzeroFrBsubsToKK[size]/B");
 
   nt->Branch("mu1isTrackerMuon",mu1isTrackerMuon, "mu1isTrackerMuon[size]/B");
   nt->Branch("mu1isGlobalMuon",mu1isGlobalMuon, "mu1isGlobalMuon[size]/B");
