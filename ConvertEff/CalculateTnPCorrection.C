@@ -388,10 +388,6 @@ float GetEffTrg(float pt, float eta, bool isData, TString _eff_type, int &_ptbin
 //if(_eff_type =="ID"){ 
 //  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 //}
-if(_eff_type =="Trk"){ 
-  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
-  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
-}
 //
 
   if(-2.4<eta && eta<-0.8){
@@ -437,8 +433,8 @@ if(_eff_type =="Trk"){
   }
 
 
-  else if(0.8<eta && eta<1.46){
-//  if(0.8<eta && eta<1.46){
+  else if(0.8<eta && eta<2.4){
+//  if(0.8<eta && eta<2.4){
     _etabin = 3;
     if(isData){
       for(int i = 0; i < DataEtaBinTrg3->GetNbinsX(); i++){
@@ -467,10 +463,9 @@ float GetEffTrk(float pt, float eta, bool isData, TString _eff_type, int &_ptbin
 //if(_eff_type =="ID"){ 
 //  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 //}
-if(_eff_type =="Trk"){ 
   if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
   if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
-}
+
 //
 
   if(-2.4<eta && eta<-0.8){
@@ -516,8 +511,8 @@ if(_eff_type =="Trk"){
   }
 
 
-  else if(0.8<eta && eta<1.46){
-//  if(0.8<eta && eta<1.46){
+  else if(0.8<eta && eta<2.4){
+//  if(0.8<eta && eta<2.4){
     _etabin = 3;
     if(isData){
       for(int i = 0; i < DataEtaBinTrk3->GetNbinsX(); i++){
@@ -547,11 +542,6 @@ float GetEffID(float pt, float eta, bool isData, TString _eff_type, int &_ptbin,
 //if(_eff_type =="ID"){ 
 //  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
 //}
-if(_eff_type =="Trk"){ 
-  if(eta>-2.4 && eta<-0.8 && pt>0 && pt<1.5) return -1;
-  if(eta>-0.8 && eta<0.8 && pt>0 && pt<3) return -1;
-}
-//
 
   if(-2.4<eta && eta<-0.8){
     _etabin = 1;
@@ -575,7 +565,6 @@ if(_eff_type =="Trk"){
 
 
   else if(-0.8<eta && eta<0.8){
-//  if(-0.8<eta && eta<0.8){
     _etabin = 2;
     if(isData){
       for(int i = 0; i < DataEtaBinID2->GetNbinsX(); i++){
@@ -596,8 +585,7 @@ if(_eff_type =="Trk"){
   }
 
 
-  else if(0.8<eta && eta<1.46){
-//  if(0.8<eta && eta<1.46){
+  else if(0.8<eta && eta<2.4){
     _etabin = 3;
     if(isData){
       for(int i = 0; i < DataEtaBinID3->GetNbinsX(); i++){
