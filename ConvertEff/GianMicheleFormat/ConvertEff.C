@@ -28,9 +28,9 @@ bool UsePOGTrgEff = 0;
 bool UsePOGIDEff = 0;
 
 //Specify eff., Trg=Mu trigger, ID=Mu ID, Trk=Mu tracking
-TString _eff_ = "Trg";
-//TString _eff_ = "ID";
-//TString _eff_ = "Trk";
+//TString _eff_ = "Trg"; TString _fpostfix_ = "Trigger";
+//TString _eff_ = "ID"; TString _fpostfix_ = "MuonID";
+TString _eff_ = "Trk"; TString _fpostfix_ = "Tracking";
 
 //Specify channel, 0=B+, 1=B0, 2=Bs
 //int _type=0;
@@ -50,8 +50,8 @@ TString inputdata_kp="/mnt/hadoop/cms/store/user/tawei/Bntuple/nt_20140801_mixed
 TString inputdata_kstar="/mnt/hadoop/cms/store/user/tawei/Bntuple/nt_20140801_mixed_fromQMBFinder_Kstar.root";
 TString inputdata_phi="/mnt/hadoop/cms/store/user/tawei/Bntuple/nt_20140801_mixed_fromQMBFinder_Phi.root";
 
-TFile *infMCEff = new TFile("Results/foutputTrigger.root");
-TFile *infDataEff = new TFile("Results/foutputTrigger.root");
+TFile *infMCEff = new TFile("Results/foutput"+_fpostfix_+".root");
+TFile *infDataEff = new TFile("Results/foutput"+_fpostfix_+".root");
 //TFile *infMCEff = new TFile("Results/foutputMuonID.root");
 //TFile *infDataEff = new TFile("Results/foutputMuonID.root");
 //TFile *infMCEff = new TFile("Results/foutputTracking.root");
@@ -94,6 +94,8 @@ void ConvertEff(){
   Float_t isSignal[MAX_GEN];
   Float_t mu1pt[MAX_GEN];
   Float_t mu2pt[MAX_GEN];
+  Float_t mu1p[MAX_GEN];
+  Float_t mu2p[MAX_GEN];
   Float_t mu1eta[MAX_GEN];
   Float_t mu2eta[MAX_GEN];
   Float_t mu1phi[MAX_GEN];
@@ -113,6 +115,8 @@ void ConvertEff(){
   nt->SetBranchAddress("isSignal",isSignal);
   nt->SetBranchAddress("mu1pt",mu1pt);
   nt->SetBranchAddress("mu2pt",mu2pt);
+  nt->SetBranchAddress("mu1p",mu1p);
+  nt->SetBranchAddress("mu2p",mu2p);
   nt->SetBranchAddress("mu1eta",mu1eta);
   nt->SetBranchAddress("mu2eta",mu2eta);
   nt->SetBranchAddress("mu1phi",mu1phi);
@@ -201,11 +205,11 @@ void ConvertEff(){
       if(pt[c]<10 || pt[c]>60 || fabs(y[c]+0.465)>1.93) continue;
       //Acc
       if(fabs(mu1eta[c]) < 1.3) {if(mu1pt[c] < 3.3) continue;}
-      else if(fabs(mu1eta[c]) > 1.3 && fabs(mu1eta[c]) < 2.2) {if(mu1pt[c] < 2.9) continue;}
+      else if(fabs(mu1eta[c]) > 1.3 && fabs(mu1eta[c]) < 2.2) {if(mu1p[c] < 2.9) continue;}
       else if(fabs(mu1eta[c]) > 2.2 && fabs(mu1eta[c]) < 2.4) {if(mu1pt[c] < 0.8) continue;}
       else {continue;}
       if(fabs(mu2eta[c]) < 1.3) {if(mu2pt[c] < 3.3) continue;}
-      else if(fabs(mu2eta[c]) > 1.3 && fabs(mu2eta[c]) < 2.2) {if(mu2pt[c] < 2.9) continue;}
+      else if(fabs(mu2eta[c]) > 1.3 && fabs(mu2eta[c]) < 2.2) {if(mu2p[c] < 2.9) continue;}
       else if(fabs(mu2eta[c]) > 2.2 && fabs(mu2eta[c]) < 2.4) {if(mu2pt[c] < 0.8) continue;}
       else {continue;}
 /*
@@ -432,7 +436,8 @@ double y=0;
   }
 
 
-  else if(0.8<eta && eta<1.46){
+  else if(0.8<eta && eta<2.4){
+//  else if(0.8<eta && eta<1.46){
 //  if(0.8<eta && eta<1.46){
     _etabin = 3;
     if(isData){
