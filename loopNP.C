@@ -17,76 +17,123 @@
 #define PHI_MASS    1.019455
 #define JPSI_MASS   3.096916
 
-
 bool RecoMatching(int j, int nTks, int BId, int TktkId, int Tk1Id, int Tk2Id)
 {
 
   int tktkGenIdTk1=-1;
   int tktkGenIdTk2=-1;
-  int bGenIdTk1=-1;
-  int bGenIdTk2=-1;
   int bGenIdTktk=-1;
   int ujGenIdMu1=-1;
   int ujGenIdMu2=-1;
   int bGenIdMumu=-1;
 
   int mat=0;
+  int cross2=-1;
+  int crossm1=-1;
+  int cross4=-1;
+  int dau=-1;
+  int dau4=-1;
 
   // tk1
   if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
     {
-      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id)
+      if(nTks==1)//GENnTks==1 && RECOnTks==1
 	{
-	  if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
+	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id)
 	    {
-	      if(nTks==1)//GENnTks==1 && RECOnTks==1
+	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
 		{
-		  tktkGenIdTk1=0;
 		  if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==BId)
 		    {
-		      mat++;//mat=1
-		      bGenIdTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-		    }  
+		      if(GenInfo_nDa[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==2)
+			{
+			  mat++;//mat=1
+			  bGenIdTktk=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+			}
+		    }
 		}
-	      else if(nTks==4)//GENnTks==2 && RECOnTks==1 && no reso 
-		{
-		  tktkGenIdTk1=0;
-		  if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==BId)
-		    {
-		      mat++;//mat=1
-		      bGenIdTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-		    }  
-		}
-	      else if(nTks==2)//GENnTks==2 && RECOnTks==2
+	    }
+	}
+      if(nTks==2)//GENnTks==2 && RECOnTks==2
+	{
+	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id || abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk2Id)
+	    {
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id) cross2=1;
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk2Id) cross2=0;
+	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
 		{
 		  if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==TktkId)
 		    {
 		      tktkGenIdTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-		      if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+		      if(GenInfo_nDa[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==2)
 			{
-			  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
 			    {
-			      mat++;//mat=1
-			      bGenIdTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
+				{
+				  if(abs(GenInfo_nDa[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]]==2))
+				    {
+				      mat++;//mat=1
+				      bGenIdTktk=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+				    }
+				}
 			    }
 			}
 		    }
 		}
-	      else if(nTks==-1)//GENnTks==2 && RECOnTks==1
+	    }
+	}
+      /*
+      if(nTks==4)//GENnTks==2 && RECOnTks==1 && no reso 
+	{
+	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id || abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk2Id)
+	    {
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id) cross4=1;
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk2Id) cross4=0;
+	      if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==BId)
+		{
+		  if(GenInfo_nDa[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==3)
+		    {
+		      if(GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==TrackInfo_geninfo_index[BInfo_rftk1_index[j]]) dau4=1;
+		      if(GenInfo_da3[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==TrackInfo_geninfo_index[BInfo_rftk1_index[j]]) dau4=0;
+		      mat++;//mat=1
+		      bGenIdTktk=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
+		    }
+		}
+	    }
+	}
+      */
+      if(nTks==-1)//GENnTks==2 && RECOnTks==1
+	{
+	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id || abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk2Id)
+	    {
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id) crossm1=1;
+	      if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk2Id) crossm1=0;
+	      
+	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
 		{
 		  if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==TktkId)
 		    {
 		      tktkGenIdTk1=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-                      if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
-                        {
-                          if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
-                            {
-                              mat++;//mat=1
-                              bGenIdTk1=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
-                            }
-                        }
+		      if(GenInfo_nDa[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==2)
+			{
+			  if(GenInfo_da1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==TrackInfo_geninfo_index[BInfo_rftk1_index[j]]) dau=1;
+			  if(GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]==TrackInfo_geninfo_index[BInfo_rftk1_index[j]]) dau=0;
+			  
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+			    {
+			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==BId)
+				{
+				  if(GenInfo_nDa[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]]==2)
+				    {
+				      mat++;//mat=1
+				      bGenIdTktk=GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
+				    }
+				}
+			    }
+			}
 		    }
-		}	      
+		}
 	    }
 	}
     }
@@ -95,26 +142,29 @@ bool RecoMatching(int j, int nTks, int BId, int TktkId, int Tk1Id, int Tk2Id)
   if(nTks==1)//GENnTks==1 && RECOnTks==1
     {
       mat++;//mat=2
-      tktkGenIdTk2=0;
-      bGenIdTk2=GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
     }
-  else if(nTks==2)//GENnTks==1 && RECOnTks==1
+  if(nTks==2)//GENnTks==2 && RECOnTks==2
     {
       if(TrackInfo_geninfo_index[BInfo_rftk2_index[j]]>-1)
 	{
-	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==Tk2Id)
+	  if((cross2==1&&abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==Tk2Id) || (cross2==0&&abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]])==Tk1Id))
 	    {
 	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]>-1)
 		{
 		  if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]])==TktkId)
 		    {
-		      tktkGenIdTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
-		      if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
+		      if(GenInfo_nDa[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]==2)
 			{
-			  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
+			  tktkGenIdTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]];
+			  if(GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]>-1)
 			    {
-			      mat++;//mat=2
-			      bGenIdTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]];
+			      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]])==BId)
+				{
+				  if(GenInfo_nDa[GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk2_index[j]]]]]==2)
+				    {
+				      mat++;//mat=2
+				    }
+				}
 			    }
 			}
 		    }
@@ -122,42 +172,61 @@ bool RecoMatching(int j, int nTks, int BId, int TktkId, int Tk1Id, int Tk2Id)
 	    }
 	}
     }
-  else if(nTks==-1)//GENnTks==2 && RECOnTks==1
+  /*
+  if(nTks==4)
     {
-      if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]>-1)
+      if(mat==1)
 	{
-	  if(abs(GenInfo_pdgId[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]])==Tk1Id)
+	  if(dau4==1)
 	    {
-	      if(GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]>-1)
+	      if(GenInfo_da3[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
 		{
-		  if(abs(GenInfo_pdgId[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])==TktkId)
+		  if(((crossm1==1)&&(abs(GenInfo_pdgId[GenInfo_da3[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk2Id)) ||
+                     ((crossm1==0)&&(abs(GenInfo_pdgId[GenInfo_da3[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk1Id)))
 		    {
-		      if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]==GenInfo_da1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])
-			{
-			  if(GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
-			    {
-			      if(abs(GenInfo_pdgId[GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk2Id)
-				{
-				  mat++;//mat=2
-				  tktkGenIdTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-				  bGenIdTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
-				}
-			    }
-			}
-		      else if(TrackInfo_geninfo_index[BInfo_rftk1_index[j]]==GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]])
-			{
-			  if(GenInfo_da1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
-			    {
-			      if(abs(GenInfo_pdgId[GenInfo_da1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk2Id)
-				{
-				  mat++;//mat=2
-				  tktkGenIdTk2 = GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]];
-				  bGenIdTk2 = GenInfo_mo1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]];
-				}
-			    }
-			}
+		      mat++;//mat=2
 		    }
 		}
+	    }
+	  if(dau4==0)
+	    {
+	      if(GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+		{
+		  if(((crossm1==1)&&(abs(GenInfo_pdgId[GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk2Id)) ||
+		     ((crossm1==0)&&(abs(GenInfo_pdgId[GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk1Id)))
+		    {
+		      mat++;//mat=2
+		    }
+		}
+	    }
+	}
+    }
+  */
+  if(nTks==-1)//GENnTks==2 && RECOnTks==1
+    {
+      if(mat==1)
+	{
+	  if(dau==1)
+	    {
+	      if(GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+		{
+		  if(((crossm1==1)&&(abs(GenInfo_pdgId[GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk2Id)) || 
+		     ((crossm1==0)&&(abs(GenInfo_pdgId[GenInfo_da2[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk1Id)))
+		    {
+		      mat++;//mat=2
+		    }
+		}
+	    }
+	  if(dau==0)
+	    {
+	      if(GenInfo_da1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]>-1)
+		{
+		  if(((crossm1==1)&&(abs(GenInfo_pdgId[GenInfo_da1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk2Id)) || 
+		     ((crossm1==0)&&(abs(GenInfo_pdgId[GenInfo_da1[GenInfo_mo1[TrackInfo_geninfo_index[BInfo_rftk1_index[j]]]]])==Tk1Id)))
+		    {
+		      mat++;//mat=2
+		    }
+		}	      
 	    }
 	} 
     }
@@ -172,12 +241,18 @@ bool RecoMatching(int j, int nTks, int BId, int TktkId, int Tk1Id, int Tk2Id)
 	      if(GenInfo_pdgId[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]==443)
 		{
 		  ujGenIdMu1 = GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]];
-		  if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1)
+		  if(GenInfo_nDa[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]==2)
 		    {
-		      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]])==BId)
+		      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]>-1)
 			{
-			  mat++;//mat=3
-			  bGenIdMumu=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
+			  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]])==BId)
+			    {
+			      if(GenInfo_nDa[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]]]==2)
+				{
+				  mat++;//mat=3
+				  bGenIdMumu=GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu1_index[BInfo_rfuj_index[j]]]]];
+				}
+			    }
 			}
 		    }
 		} 
@@ -194,12 +269,18 @@ bool RecoMatching(int j, int nTks, int BId, int TktkId, int Tk1Id, int Tk2Id)
 	    {
 	      if(GenInfo_pdgId[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]==443)
 		{
-		  ujGenIdMu2 = GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]];
-		  if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]>-1)
+		  if(GenInfo_nDa[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]==2)
 		    {
-		      if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]])==BId)
+		      ujGenIdMu2 = GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]];
+		      if(GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]>-1)
 			{
-			  mat++;//mat=4
+			  if(abs(GenInfo_pdgId[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]])==BId)
+			    {
+			      if(GenInfo_nDa[GenInfo_mo1[GenInfo_mo1[MuonInfo_geninfo_index[BInfo_uj_rfmu2_index[BInfo_rfuj_index[j]]]]]]==2)
+				{
+				  mat++;//mat=4
+				}
+			    }
 			}
 		    }
 		}
@@ -207,28 +288,29 @@ bool RecoMatching(int j, int nTks, int BId, int TktkId, int Tk1Id, int Tk2Id)
 	}
     }
 
-  if(tktkGenIdTk1>-1 && tktkGenIdTk2>-1)
+  if(ujGenIdMu1>-1 && ujGenIdMu1==ujGenIdMu2)
     {
-      if(tktkGenIdTk1==tktkGenIdTk2) 
+      mat++;//mat=5
+    }
+
+  if(nTks==1 || nTks==-1 || nTks==4)
+    {
+      mat++;//mat=6
+    }
+  if(nTks==2)
+    {
+      if(tktkGenIdTk1>-1 && tktkGenIdTk1==tktkGenIdTk2)
 	{
-	  if(bGenIdTk1>-1 && bGenIdTk2>-1)
-	    {
-	      if(bGenIdTk1==bGenIdTk2)
-		{
-		  bGenIdTktk = bGenIdTk1;
-		  mat++;//mat=5
-		}
-	    }
+	  mat++;//mat=6
 	}
-
     }
-
-  if(ujGenIdMu1>-1 && ujGenIdMu2>-1 && ujGenIdMu1==ujGenIdMu2)
+  
+  if(bGenIdTktk>-1 && bGenIdTktk==bGenIdMumu)
     {
-      if(bGenIdMumu==bGenIdTktk) mat++;//mat=6
+      mat++;//mat=7
     }
 
-  if(mat==6) return true;
+  if(mat==7) return true;
   else return false;
 }
 
@@ -844,9 +926,10 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
       
       //Non-prompt Discussion
       //bool RecoMatching(int j, int twoTks, int BId, int TktkId, int Tk1Id, int Tk2Id);  
+      
       if(BInfo_type[j]==1)
 	{
-	  genBplusFrBplusToK892[typesize] = RecoMatching(j,1,521,0,323,0);    
+	  genBplusFrBplusToK892[typesize] = RecoMatching(j,1,521,0,321,0);    
 	  genBplusFrBplusToK1270[typesize] = RecoMatching(j,1,521,0,10323,0);
 	  genBplusFrBplusToPi[typesize] = RecoMatching(j,1,521,0,211,0);
 	  genBplusFrBzeroToKstar892ToKPi_K[typesize] = RecoMatching(j,-1,511,313,321,211);
@@ -855,7 +938,7 @@ void fillTree(TVector3* bP, TVector3* bVtx, TLorentzVector* b4P, int j, int type
 	  genBplusFrBzeroToKzero1270ToKPi_Pi[typesize] = RecoMatching(j,-1,511,10313,211,321);
 	  //genBplusFrBzeroToKPi_K[typesize] = RecoMatching(j,4,511,0,321,211);
 	  //genBplusFrBzeroToKPi_Pi[typesize] = RecoMatching(j,4,511,0,211,321);
-	}
+	}      
     }
 }
 
@@ -946,7 +1029,6 @@ int signalGen(int Btype, int j)
 bool GenFindisSignal(int j, int nTks, int BId, int Tk1Id, int Tk2Id, int TktkId)
 {
   int flag=false;
-  //tk1
   if(abs(GenInfo_pdgId[j])==BId)
     {
       if((nTks==1||nTks==2) && (GenInfo_nDa[j]==2 && GenInfo_da1[j]>-1 && GenInfo_da2[j]>-1))
@@ -978,7 +1060,8 @@ bool GenFindisSignal(int j, int nTks, int BId, int Tk1Id, int Tk2Id, int TktkId)
 
 
 //int loopNP(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140707_BuJpsiK_pPb.root", string outfile="/export/d00/scratch/jwang/nt_BoostedMC_20140708_BuJpsiK_pPb.root.root", bool REAL=1,bool PbpMC=0,int startEntries=0,int nEntries=0, bool doMuonSelection = 0){
-int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJINGemb_inclBtoPsiMuMu.root", string outfile="/data/bmeson/MC/nt_BoostedMC_20140930_hckim-HIJINGemb_inclBtoPsiMuMu.root", bool REAL=0,bool PbpMC=0,int startEntries=0,int nEntries=0, bool doMuonSelection = 0){
+//int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJINGemb_inclBtoPsiMuMu.root", string outfile="/data/bmeson/MC/nt_BoostedMC_20140930_hckim-HIJINGemb_inclBtoPsiMuMu.root", bool REAL=0,bool PbpMC=0,int startEntries=0,int nEntries=0, bool doMuonSelection = 0){
+int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJINGemb_inclBtoPsiMuMu.root", string outfile="test.root", bool REAL=0,bool PbpMC=0,int startEntries=0,int nEntries=0, bool doMuonSelection = 0){
 //////////////////////////////////////////////////////////Phi
 //   This file has been automatically generated 
 //     (Thu Nov 21 13:34:42 2013 by ROOT version5.27/06b)
@@ -1023,12 +1106,12 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
     
   int ifchannel[7];
   ifchannel[0] = 1; //jpsi+Kp
-  ifchannel[1] = 1; //jpsi+pi
-  ifchannel[2] = 1; //jpsi+Ks(pi+,pi-)
-  ifchannel[3] = 1; //jpsi+K*(K+,pi-)
-  ifchannel[4] = 1; //jpsi+K*(K-,pi+)
-  ifchannel[5] = 1; //jpsi+phi
-  ifchannel[6] = 1; //jpsi+pi pi <= psi', X(3872), Bs->J/psi f0
+  ifchannel[1] = 0; //jpsi+pi
+  ifchannel[2] = 0; //jpsi+Ks(pi+,pi-)
+  ifchannel[3] = 0; //jpsi+K*(K+,pi-)
+  ifchannel[4] = 0; //jpsi+K*(K-,pi+)
+  ifchannel[5] = 0; //jpsi+phi
+  ifchannel[6] = 0; //jpsi+pi pi <= psi', X(3872), Bs->J/psi f0
   
   TTree* nt0 = new TTree("ntKp","");
   buildBranch(nt0);
@@ -1048,7 +1131,7 @@ int loopNP(string infile="/data/bmeson/MC/Bfinder_BoostedMC_20140930_hckim-HIJIN
   cout<<"--- Tree building finished ---"<<endl;
   
   Long64_t nentries = root->GetEntries();
-  nentries = 500000;
+  nentries = root->GetEntries()/20.;
   Long64_t nbytes = 0;
   TVector3* bP = new TVector3;
   TVector3* bVtx = new TVector3;
