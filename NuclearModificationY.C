@@ -48,9 +48,10 @@ Double_t exl[nbins]={0.465,0.465,0.5,0.5,0.465};
 Double_t yPercSigmapPbSystTotHigh[nbins]={0.,0.185,0.158,0.133,0.143};////////////////////////////////////////////////
 Double_t yPercSigmapPbSystTotLow[nbins]={0.,0.185,0.158,0.133,0.143};//////////////////////
 
-Double_t commonErrorP = 0.0555 ;
-Double_t commonErrorN = 0.0555  ;
-Double_t tagandprobcorrection[nbins]={1.17,1.1742287,1.1346129,1.0915380,1.0972000};
+Double_t commonErrorP = 0.0555;
+Double_t commonErrorN = 0.0555;
+//Double_t tagandprobcorrection[nbins]={1.17,1.1742287,1.1346129,1.0915380,1.0972000};
+Double_t tagandprobcorrection[nbins]={1.049,1.049,1.049,1.049,1.049};
 
 void NuclearModificationY(){
 

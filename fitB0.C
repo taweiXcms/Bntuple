@@ -9,11 +9,12 @@ double setparam3=0.03;
 double fixparam2=0.04;
 
 //svmit02
-TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kstar.root";
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kstar.root";
+//TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kstar.root";
 
-
-TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04"; 
+TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
 
 /*
 TString seldata_2y_kpi=Form("((Run>1&&Run<12&&abs(y-0.465)<1.93)||(Run<=1&&abs(y+0.465)<1.93)||(Run>=210498&&Run<=211256&&abs(y+0.465)<1.93)||(Run>=211313&&Run<=211631&&abs(y-0.465)<1.93))&&%s",cut_kpi.Data());
@@ -136,7 +137,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    h->SetYTitle("Entries / (30 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.,"Y");
+   h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
 
  //  hBck->Draw("hist same");
@@ -156,7 +157,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    double yieldErr = mass->Integral(5,6)/0.03*mass->GetParError(0)/mass->GetParameter(0);
    
    // Draw the legend:)   
-   TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
+   TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
@@ -201,6 +202,8 @@ void fitB0(TString infname="",bool doweight = 1)
   
   const int nBins = 3;
   double ptBins[nBins+1] = {10,15,20,60};
+  //const int nBins = 1;
+  //double ptBins[nBins+1] = {10,60};
 
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);

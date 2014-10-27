@@ -8,11 +8,13 @@ double setparam3=0.03;
 double fixparam1=5.279;
 
 //svmithi2
-TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/nt_20140801_mixed_fromQMBFinder_Kp.root";
+//TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
 //tk pt, chi2
-TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
+TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
 //TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
 TString seldata_2y=Form("%s",cut.Data());
@@ -117,7 +119,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
-   h->SetTitleOffset(1.,"Y");
+   h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
    Bkpi->Draw("same");
    background->Draw("same");   
@@ -133,7 +135,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 
 
    // Draw the legend:)   
-   TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
+   TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
@@ -174,8 +176,8 @@ void fitB(TString infname="",bool doweight = 1)
     
   const int nBins = 5;
   double ptBins[nBins+1] = {10,15,20,25,30,60};
-//  const int nBins = 1;
-//  double ptBins[nBins+1] = {10,60};
+  //const int nBins = 1;
+  //double ptBins[nBins+1] = {10,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
   TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
@@ -191,7 +193,7 @@ void fitB(TString infname="",bool doweight = 1)
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
-  
+
   TCanvas *c=  new TCanvas("cResult","",600,600);
   hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
   hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
