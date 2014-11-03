@@ -118,7 +118,7 @@ void cal(int MCflag){
   if(MCflag==1){ ptBins=Bp_ptBins; nBins=Bp_nBins;}
   if(MCflag==2){ ptBins=B0_ptBins; nBins=B0_nBins;}
   if(MCflag==3){ ptBins=Bs_ptBins; nBins=Bs_nBins;}
-/*
+
   TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", nBins,ptBins);
   TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", nEtaBins,yBins);
   TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", nBins,ptBins);
@@ -129,8 +129,8 @@ void cal(int MCflag){
   TH1F* gen_bsig_y2 = new TH1F("gen_bsig_y2", "", nEtaBins,yBins2);
   TH2F* sct_pt_y = new TH2F("sct_pt_y","",nEtaBins, yBins, nBins, ptBins);
   TH2F* sct_pt_y2 = new TH2F("sct_pt_y2","",nEtaBins, yBins2, nBins, ptBins);
-*/
 
+/*
   TH1F* reco_bsig_pt = new TH1F("reco_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
   TH1F* reco_bsig_y = new TH1F("reco_bsig_y", "", 50, yBins[0], yBins[nEtaBins]);
   TH1F* gen_bsig_pt = new TH1F("gen_bsig_pt", "", 50, ptBins[0], ptBins[nBins]);
@@ -141,7 +141,7 @@ void cal(int MCflag){
   TH1F* gen_bsig_y2 = new TH1F("gen_bsig_y2", "", 20, yBins2[0], yBins2[nEtaBins]);
   TH2F* sct_pt_y = new TH2F("sct_pt_y", "", 20, -1.935, 2.865, 20, 10, 60);
   TH2F* sct_pt_y2 = new TH2F("sct_pt_y2", "", 20, -2.865, 1.935, 20, 10, 60);
-
+*/
   reco_bsig_pt->SetMinimum(0);
   reco_bsig_y->SetMinimum(0);
   gen_bsig_pt->SetMinimum(0);
@@ -285,10 +285,11 @@ cout<<reco_gen_eff_y_merge->GetWeight()<<endl;
   }
   cout<<endl;
   cout<<"sum y-------------"<<endl;
-  for(int i = 0; i < reco_bsig_y->GetNbinsX(); i ++){
-      printf("%.3f$\\pm$%.3f & ", _lumi1*reco_gen_eff_y->GetEfficiency(i+1)+_lumi2*reco_gen_eff_y2->GetEfficiency(i+1),
-      max(sqrt(_lumi1*pow(reco_gen_eff_y->GetEfficiencyErrorUp(i+1),2) + _lumi2*pow(reco_gen_eff_y2->GetEfficiencyErrorUp(i+1),2)), 
-          sqrt(_lumi1*pow(reco_gen_eff_y->GetEfficiencyErrorLow(i+1),2) + _lumi2*pow(reco_gen_eff_y2->GetEfficiencyErrorLow(i+1),2))));
+  for(int i = 1; i < reco_bsig_y->GetNbinsX()+1; i ++){
+      //
+      printf("%.3f$\\pm$%.3f & ", _lumi1*reco_gen_eff_y->GetEfficiency(6-i)+_lumi2*reco_gen_eff_y2->GetEfficiency(i),
+      max(sqrt(_lumi1*pow(reco_gen_eff_y->GetEfficiencyErrorUp(6-i),2) + _lumi2*pow(reco_gen_eff_y2->GetEfficiencyErrorUp(i),2)), 
+          sqrt(_lumi1*pow(reco_gen_eff_y->GetEfficiencyErrorLow(6-i),2) + _lumi2*pow(reco_gen_eff_y2->GetEfficiencyErrorLow(i),2))));
   }
   cout<<endl;
 
