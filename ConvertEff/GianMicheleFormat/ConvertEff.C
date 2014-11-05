@@ -45,7 +45,7 @@ double B0_ptBins[B0_nBins+1] = {10,15,20,60};
 const int Bs_nBins = 1;
 double Bs_ptBins[Bs_nBins+1] = {10,60};
 const int Eta_nBins = 5;
-double Eta_ptBins[Eta_nBins+1] = {-2.865,-1.93,-1.0,0,1.0,1.93};
+double Eta_ptBins[Eta_nBins+1] = {-2.865,-1.935,-1.0,0,1.0,1.935};
 /////=======
 
 TString inputdata_kp="/mnt/hadoop/cms/store/user/tawei/Bntuple/nt_20140801_mixed_fromQMBFinder_Kp.root";
