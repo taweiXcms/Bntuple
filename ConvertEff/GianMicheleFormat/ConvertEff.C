@@ -33,18 +33,19 @@ bool UsePOGIDEff = 0;
 //TString _eff_ = "Trk";
 TString _eff_ = "All";
 
-//Specify channel, 0=B+, 1=B0, 2=Bs
 //int _type=0;
 //int _type=1;
-int _type=2;
+//int _type=2;
 
 //Specify B meson pt bin
-const int nBins = 5;
-double ptBins[nBins+1] = {10,15,20,25,30,60};
-//const int nBins = 3;
-//double ptBins[nBins+1] = {10,15,20,60};
-//const int nBins = 1;
-//double ptBins[nBins+1] = {10,60};
+const int Bp_nBins = 5;
+double Bp_ptBins[Bp_nBins+1] = {10,15,20,25,30,60};
+const int B0_nBins = 3;
+double B0_ptBins[B0_nBins+1] = {10,15,20,60};
+const int Bs_nBins = 1;
+double Bs_ptBins[Bs_nBins+1] = {10,60};
+const int Eta_nBins = 5;
+double Eta_ptBins[Eta_nBins+1] = {-2.865,-1.935,-1.0,0,1.0,1.935};
 /////=======
 
 TString inputdata_kp="/mnt/hadoop/cms/store/user/tawei/Bntuple/nt_20140801_mixed_fromQMBFinder_Kp.root";
@@ -76,29 +77,43 @@ TGraphAsymmErrors* TrkMCEtaBin1 = (TGraphAsymmErrors*)TrkinfMCEff->Get("fEff_pt_
 TGraphAsymmErrors* TrkMCEtaBin2 = (TGraphAsymmErrors*)TrkinfMCEff->Get("fEff_pt_etabin1_MC");
 TGraphAsymmErrors* TrkMCEtaBin3 = (TGraphAsymmErrors*)TrkinfMCEff->Get("fEff_pt_etabin2_MC");
 
+void _ConvertEff(int _type, int nBins, double ptBins[], bool InEtaBin);
+void Saving(TCanvas* c1, TString name);
 float GetEff(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin);
 float GetPOGTrgEff(float pt, float eta, float eta2,  bool isData);
 float GetPOGIDEff(float pt, float eta, bool isData);
 void ConvertEff(){
+//Specify channel, 0=B+, 1=B0, 2=Bs
+  _ConvertEff(0, Bp_nBins, Bp_ptBins, false);
+  _ConvertEff(1, B0_nBins, B0_ptBins, false);
+  _ConvertEff(2, Bs_nBins, Bs_ptBins, false);
+  _ConvertEff(0, Eta_nBins, Eta_ptBins, true);
+  _ConvertEff(1, Eta_nBins, Eta_ptBins, true);
+  _ConvertEff(2, Eta_nBins, Eta_ptBins, true);
+}
+void _ConvertEff(int _type, int nBins, double ptBins[], bool InEtaBin){
   TFile *inf;
+  TTree *_nt;
   TTree *nt;
   if(_type==0){
     inf = new TFile(inputdata_kp.Data());
-//    nt = (TTree*) inf->Get("ntKp");
+    _nt = (TTree*) inf->Get("ntKp");
     nt = (TTree*) inf->Get("ntGen");
   }
   if(_type==1){
     inf = new TFile(inputdata_kstar.Data());
-//    nt = (TTree*) inf->Get("ntKstar");
+    _nt = (TTree*) inf->Get("ntKstar");
     nt = (TTree*) inf->Get("ntGen");
   }
   if(_type==2){ 
     inf = new TFile(inputdata_phi.Data());
-//    nt = (TTree*) inf->Get("ntphi");
+    _nt = (TTree*) inf->Get("ntphi");
     nt = (TTree*) inf->Get("ntGen");
   }
+  nt->AddFriend(_nt);
 
   Int_t size;                                                                                                                                                                                               
+  Int_t Run;
   Float_t y[MAX_GEN];
   Float_t eta[MAX_GEN];
   Float_t pt[MAX_GEN];
@@ -119,6 +134,7 @@ void ConvertEff(){
   Float_t tk2eta[MAX_GEN];
   Float_t tk1phi[MAX_GEN];
   Float_t tk2phi[MAX_GEN];
+  nt->SetBranchAddress("Run",&Run);
   nt->SetBranchAddress("size",&size);
   nt->SetBranchAddress("y",&y);
   nt->SetBranchAddress("eta",eta);
@@ -198,26 +214,31 @@ void ConvertEff(){
   if(_type==0)  EffDiff->SetXTitle("B^{+} p_{T} (GeV/c)");
   if(_type==1)  EffDiff->SetXTitle("B0 p_{T} (GeV/c)");
   if(_type==2)  EffDiff->SetXTitle("B_{s} p_{T} (GeV/c)");
-  if(_eff_=="Trg")EffDiff->SetYTitle("Trigger eff. diff., data-MC");
-  if(_eff_=="ID")EffDiff->SetYTitle("MuID eff. diff., data-MC");
-  if(_eff_=="Trk")EffDiff->SetYTitle("Tracking eff. diff., data-MC");
-  if(_eff_=="All")EffDiff->SetYTitle("All eff. diff., data-MC");
+  //if(_eff_=="Trg")EffDiff->SetYTitle("Trigger eff. diff., data-MC");
+  //if(_eff_=="ID")EffDiff->SetYTitle("MuID eff. diff., data-MC");
+  //if(_eff_=="Trk")EffDiff->SetYTitle("Tracking eff. diff., data-MC");
+  //if(_eff_=="All")EffDiff->SetYTitle("All eff. diff., data-MC");
+  if(_eff_=="Trg")EffDiff->SetYTitle("Trigger eff., data/MC");
+  if(_eff_=="ID")EffDiff->SetYTitle("MuID eff., data/MC");
+  if(_eff_=="Trk")EffDiff->SetYTitle("Tracking eff., data/MC");
+  if(_eff_=="All")EffDiff->SetYTitle("All eff., data/MC");
   int tot_=0;
   TLorentzVector mu1;
   TLorentzVector mu2;
   TLorentzVector tk1;
   TLorentzVector tk2;
   TLorentzVector B;
-//  for(int entry=1; entry<10000; entry++){
-  for(int entry=0; entry<nevents_total; entry++){
+  for(int entry=1; entry<10000; entry++){
+//  for(int entry=0; entry<nevents_total; entry++){
     if ((entry%10000) == 0) printf("Loading event #%d of %d.\n",entry,nevents_total);
     nt->GetEntry(entry);
     for(int c=0; c<size; c++){
-//      if(_type==0) if(!((HLT_PAMu3_v1)&&abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.9&& chi2cl[c]>1.32e-02&&(d0[c]/d0Err[c])>3.41&&cos(dtheta[c])>-3.46e-01 &&gen[c]==23333)) continue;
-//      if(_type==1) if(!((HLT_PAMu3_v1)&&abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.7&&trk2Pt[c]>0.7 &&chi2cl[c]>1.65e-01&&(d0[c]/d0Err[c])>4.16&&cos(dtheta[c])>7.50e-01&&abs(tktkmass[c]-0.89594)<2.33e-01 && gen[c]==23333)) continue;
-//      if(_type==2) if(!((HLT_PAMu3_v1)&&abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.7&&trk2Pt[c]>0.7&& chi2cl[c]>3.71e-02&&(d0[c]/d0Err[c])>3.37&&cos(dtheta[c])>2.60e-01&&abs(tktkmass[c]-1.019455)<1.55e-02 &&gen[c]==23333)) continue;
+      //if(_type==0) if(!((HLT_PAMu3_v1)&&abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.9&& chi2cl[c]>1.32e-02&&(d0[c]/d0Err[c])>3.41&&cos(dtheta[c])>-3.46e-01 &&gen[c]==23333)) continue;
+      //if(_type==1) if(!((HLT_PAMu3_v1)&&abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.7&&trk2Pt[c]>0.7 &&chi2cl[c]>1.65e-01&&(d0[c]/d0Err[c])>4.16&&cos(dtheta[c])>7.50e-01&&abs(tktkmass[c]-0.89594)<2.33e-01 && gen[c]==23333)) continue;
+      //if(_type==2) if(!((HLT_PAMu3_v1)&&abs(mumumass[c]-3.096916)<0.15&&mass[c]>5&&mass[c]<6&& isbestchi2[c]&&trk1Pt[c]>0.7&&trk2Pt[c]>0.7&& chi2cl[c]>3.71e-02&&(d0[c]/d0Err[c])>3.37&&cos(dtheta[c])>2.60e-01&&abs(tktkmass[c]-1.019455)<1.55e-02 &&gen[c]==23333)) continue;
       if(isSignal[c]<1) continue;
-      if(pt[c]<10 || pt[c]>60 || fabs(y[c]+0.465)>1.93) continue;
+      //if(pt[c]<10 || pt[c]>60 || fabs(y[c]+0.465)>1.93) continue;
+      if(pt[c]<10 || pt[c]>60 || fabs(y[c]>2.4)) continue;
       //Acc
       if(fabs(mu1eta[c]) < 1.3) {if(mu1pt[c] < 3.3) continue;}
       else if(fabs(mu1eta[c]) > 1.3 && fabs(mu1eta[c]) < 2.2) {if(mu1p[c] < 2.9) continue;}
@@ -227,7 +248,7 @@ void ConvertEff(){
       else if(fabs(mu2eta[c]) > 1.3 && fabs(mu2eta[c]) < 2.2) {if(mu2p[c] < 2.9) continue;}
       else if(fabs(mu2eta[c]) > 2.2 && fabs(mu2eta[c]) < 2.4) {if(mu2pt[c] < 0.8) continue;}
       else {continue;}
-/*
+	  /*
       mu1.SetPtEtaPhiM(mu1pt[c], mu1eta[c], mu1phi[c], MUON_MASS);
       mu2.SetPtEtaPhiM(mu2pt[c], mu2eta[c], mu2phi[c], MUON_MASS);
       if(_type==0){
@@ -251,7 +272,7 @@ void ConvertEff(){
       }
       //cout<<B.Mag()<<endl;
       if(B.Mag() < 4.95 || B.Mag() > 5.55) continue;
-*/
+	  */
       int _etabin = -1;
       int _ptbin = -1;
       float Trgmu1eff_data = GetEff(mu1pt[c], mu1eta[c], true, "Trg", _ptbin, _etabin);
@@ -276,7 +297,6 @@ void ConvertEff(){
       if(Trgmu1eff_data<0 || Trgmu2eff_data<0|| Trgmu1eff_mc<0 || Trgmu2eff_mc<0) continue;
       if(IDmu1eff_data<0 || IDmu2eff_data<0 || IDmu1eff_mc<0 || IDmu2eff_mc<0) continue;
       if(Trkmu1eff_data<0 || Trkmu2eff_data<0 || Trkmu1eff_mc<0 || Trkmu2eff_mc<0) continue;
-      if(pt[c]<10 || pt[c]>60) continue;
       float evtEff_data = 0;
       float evtEff_mc = 0;
       float TrgevtEff_data = 0;
@@ -325,7 +345,9 @@ void ConvertEff(){
       //cout<<mu1eff_data-mu1eff_mc<<"   /   "<<mu1eff_data<<"  /  "<<mu1eff_mc<<endl;
       //cout<<evtEff_data-evtEff_mc<<endl;
       for(int _b=0; _b<nBins; _b++){
-        if(pt[c] > ptBins[_b] && pt[c] < ptBins[_b+1]){
+        if((!InEtaBin && pt[c] > ptBins[_b] && pt[c] < ptBins[_b+1]) ||
+           (InEtaBin && ((Run<=1) && (-y[c]-0.465)>ptBins[_b] && (-y[c]-0.465) < ptBins[_b+1]) || ((Run>1) && (y[c]-0.465)>ptBins[_b] && (y[c]-0.465) < ptBins[_b+1]))
+          ){
           nCand[_b]++;
           effData_tol[_b]+= evtEff_data;
           effMC_tol[_b]+= evtEff_mc;
@@ -345,12 +367,14 @@ void ConvertEff(){
     //cout<<(effData_tol[i]-effMC_tol[i])/effMC_tol[i]<<endl;
     cout<<(_tot_diff[i])/effMC_tol[i]<<endl;
     //EffDiff->SetBinContent(i+1,(effData_tol[i]-effMC_tol[i])/effMC_tol[i]);
-    EffDiff->SetBinContent(i+1,(_tot_diff[i])/effMC_tol[i]);
+    //EffDiff->SetBinContent(i+1,(_tot_diff[i])/effMC_tol[i]);
+    EffDiff->SetBinContent(i+1,(effData_tol[i])/effMC_tol[i]);
     EffDiff->SetBinError(i+1,0.000000001);
   }
   //print a line for AN
   for(int i = 0; i < nBins; i ++){
-    printf(" %.1f &", ((_tot_diff[i])/effMC_tol[i])*100);
+//    printf(" %.1f &", ((_tot_diff[i])/effMC_tol[i])*100);
+    printf(" %.3f &", ((effData_tol[i])/effMC_tol[i]));
   }
   printf("\n");
   EffDiff->SetMaximum(0.1);
@@ -369,90 +393,69 @@ void ConvertEff(){
   //return;
 
   if(_type==0) {
-    if(_eff_=="Trg" && !UsePOGTrgEff)c1->SaveAs("bp_trg.pdf");
-    if(_eff_=="Trg" && UsePOGTrgEff)c1->SaveAs("bp_POG_trg.pdf");
-    if(_eff_=="ID" && !UsePOGIDEff)c1->SaveAs("bp_id.pdf");
-    if(_eff_=="ID" && UsePOGIDEff)c1->SaveAs("bp_POG_id.pdf");
-    if(_eff_=="Trk")c1->SaveAs("bp_trk.pdf");
-    if(_eff_=="All")c1->SaveAs("bp_all.pdf");
-
-    if(_eff_=="Trg" && !UsePOGTrgEff)EffDiff->SaveAs("bp_trg.root");
-    if(_eff_=="Trg" && UsePOGTrgEff)EffDiff->SaveAs("bp_POG_trg.root");
-    if(_eff_=="ID" && !UsePOGIDEff)EffDiff->SaveAs("bp_id.root");
-    if(_eff_=="ID" && UsePOGIDEff)EffDiff->SaveAs("bp_POG_id.root");
-    if(_eff_=="Trk")EffDiff->SaveAs("bp_trk.root");
-    if(_eff_=="All")EffDiff->SaveAs("bp_all.root");
+      if(!InEtaBin) Saving(c1, "PtBinning_bp");
+      if(InEtaBin) Saving(c1, "EtaBinning_bp");
   }
   if(_type==1) {
-    if(_eff_=="Trg" && !UsePOGTrgEff)c1->SaveAs("b0_trg.pdf");
-    if(_eff_=="Trg" && UsePOGTrgEff)c1->SaveAs("b0_POG_trg.pdf");
-    if(_eff_=="ID" && !UsePOGIDEff)c1->SaveAs("b0_id.pdf");
-    if(_eff_=="ID" && UsePOGIDEff)c1->SaveAs("b0_POG_id.pdf");
-    if(_eff_=="Trk")c1->SaveAs("b0_trk.pdf");
-    if(_eff_=="All")c1->SaveAs("b0_all.pdf");
-
-    if(_eff_=="Trg" && !UsePOGTrgEff)EffDiff->SaveAs("b0_trg.root");
-    if(_eff_=="Trg" && UsePOGTrgEff)EffDiff->SaveAs("b0_POG_trg.root");
-    if(_eff_=="ID" && !UsePOGIDEff)EffDiff->SaveAs("b0_id.root");
-    if(_eff_=="ID" && UsePOGIDEff)EffDiff->SaveAs("b0_POG_id.root");
-    if(_eff_=="Trk")EffDiff->SaveAs("b0_trk.root");
-    if(_eff_=="All")EffDiff->SaveAs("b0_all.root");
+      if(!InEtaBin) Saving(c1, "PtBinning_b0");
+      if(InEtaBin) Saving(c1, "EtaBinning_b0");
   }
   if(_type==2) {
-    if(_eff_=="Trg" && !UsePOGTrgEff)c1->SaveAs("bs_trg.pdf");
-    if(_eff_=="Trg" && UsePOGTrgEff)c1->SaveAs("bs_POG_trg.pdf");
-    if(_eff_=="ID" && !UsePOGIDEff)c1->SaveAs("bs_id.pdf");
-    if(_eff_=="ID" && UsePOGIDEff)c1->SaveAs("bs_POG_id.pdf");
-    if(_eff_=="Trk")c1->SaveAs("bs_trk.pdf");
-    if(_eff_=="All")c1->SaveAs("bs_all.pdf");
-
-    if(_eff_=="Trg" && !UsePOGTrgEff)EffDiff->SaveAs("bs_trg.root");
-    if(_eff_=="Trg" && UsePOGTrgEff)EffDiff->SaveAs("bs_POG_trg.root");
-    if(_eff_=="ID" && !UsePOGIDEff)EffDiff->SaveAs("bs_id.root");
-    if(_eff_=="ID" && UsePOGIDEff)EffDiff->SaveAs("bs_POG_id.root");
-    if(_eff_=="Trk")EffDiff->SaveAs("bs_trk.root");
-    if(_eff_=="All")EffDiff->SaveAs("bs_all.root");
+      if(!InEtaBin) Saving(c1, "PtBinning_bs");
+      if(InEtaBin) Saving(c1, "EtaBinning_bs");
   }
 }//Main
+void Saving(TCanvas* c1, TString name){
+    if(_eff_=="Trg" && !UsePOGTrgEff) c1->SaveAs(Form("%s_trg.pdf"    , name.Data()));
+    if(_eff_=="Trg" && UsePOGTrgEff)  c1->SaveAs(Form("%s_POG_trg.pdf", name.Data()));
+    if(_eff_=="ID" && !UsePOGIDEff)   c1->SaveAs(Form("%s_id.pdf"     , name.Data()));
+    if(_eff_=="ID" && UsePOGIDEff)    c1->SaveAs(Form("%s_POG_id.pdf" , name.Data()));
+    if(_eff_=="Trk")                  c1->SaveAs(Form("%s_trk.pdf"    , name.Data()));
+    if(_eff_=="All")                  c1->SaveAs(Form("%s_all.pdf"    , name.Data()));
+
+    if(_eff_=="Trg" && !UsePOGTrgEff) c1->SaveAs(Form("%s_trg.root"    , name.Data()));
+    if(_eff_=="Trg" && UsePOGTrgEff)  c1->SaveAs(Form("%s_POG_trg.root", name.Data()));
+    if(_eff_=="ID" && !UsePOGIDEff)   c1->SaveAs(Form("%s_id.root"     , name.Data()));
+    if(_eff_=="ID" && UsePOGIDEff)    c1->SaveAs(Form("%s_POG_id.root" , name.Data()));
+    if(_eff_=="Trk")                  c1->SaveAs(Form("%s_trk.root"    , name.Data()));
+    if(_eff_=="All")                  c1->SaveAs(Form("%s_all.root"    , name.Data()));
+}
 
 float GetEff(float pt, float eta, bool isData, TString _eff_type, int &_ptbin, int &_etabin){
-double x=0;
-double y=0;
-TGraphAsymmErrors* DataEtaBin1; 
-TGraphAsymmErrors* DataEtaBin2;
-TGraphAsymmErrors* DataEtaBin3;
-TGraphAsymmErrors* MCEtaBin1; 
-TGraphAsymmErrors* MCEtaBin2; 
-TGraphAsymmErrors* MCEtaBin3;
-if(_eff_type=="Trg"){
-DataEtaBin1 = TrgDataEtaBin1;
-DataEtaBin2 = TrgDataEtaBin2;
-DataEtaBin3 = TrgDataEtaBin3;
-MCEtaBin1 = TrgMCEtaBin1;
-MCEtaBin2 = TrgMCEtaBin2;
-MCEtaBin3 = TrgMCEtaBin3;
-}
-if(_eff_type=="ID"){
-DataEtaBin1 = IDDataEtaBin1;
-DataEtaBin2 = IDDataEtaBin2;
-DataEtaBin3 = IDDataEtaBin3;
-MCEtaBin1 = IDMCEtaBin1;
-MCEtaBin2 = IDMCEtaBin2;
-MCEtaBin3 = IDMCEtaBin3;
-}
-if(_eff_type=="Trk"){
-DataEtaBin1 = TrkDataEtaBin1;
-DataEtaBin2 = TrkDataEtaBin2;
-DataEtaBin3 = TrkDataEtaBin3;
-MCEtaBin1 = TrkMCEtaBin1;
-MCEtaBin2 = TrkMCEtaBin2;
-MCEtaBin3 = TrkMCEtaBin3;
-}
+  double x=0;
+  double y=0;
+  TGraphAsymmErrors* DataEtaBin1; 
+  TGraphAsymmErrors* DataEtaBin2;
+  TGraphAsymmErrors* DataEtaBin3;
+  TGraphAsymmErrors* MCEtaBin1; 
+  TGraphAsymmErrors* MCEtaBin2; 
+  TGraphAsymmErrors* MCEtaBin3;
+  if(_eff_type=="Trg"){
+    DataEtaBin1 = TrgDataEtaBin1;
+    DataEtaBin2 = TrgDataEtaBin2;
+    DataEtaBin3 = TrgDataEtaBin3;
+    MCEtaBin1 = TrgMCEtaBin1;
+    MCEtaBin2 = TrgMCEtaBin2;
+    MCEtaBin3 = TrgMCEtaBin3;
+  }
+  if(_eff_type=="ID"){
+    DataEtaBin1 = IDDataEtaBin1;
+    DataEtaBin2 = IDDataEtaBin2;
+    DataEtaBin3 = IDDataEtaBin3;
+    MCEtaBin1 = IDMCEtaBin1;
+    MCEtaBin2 = IDMCEtaBin2;
+    MCEtaBin3 = IDMCEtaBin3;
+  }
+  if(_eff_type=="Trk"){
+    DataEtaBin1 = TrkDataEtaBin1;
+    DataEtaBin2 = TrkDataEtaBin2;
+    DataEtaBin3 = TrkDataEtaBin3;
+    MCEtaBin1 = TrkMCEtaBin1;
+    MCEtaBin2 = TrkMCEtaBin2;
+    MCEtaBin3 = TrkMCEtaBin3;
+  }
 
-        DataEtaBin1->GetPoint(0, x, y);
-//cout<<"binl: "<<x+DataEtaBin1->GetErrorXlow(0)<<endl;
-//cout<<"binl: "<<x<<endl;
-//cout<<"binh: "<<x+DataEtaBin1->GetErrorXhigh(0)<<endl;
+  DataEtaBin1->GetPoint(0, x, y);
   if(-2.4<eta && eta<-0.8){
     _etabin = 1;
     if(isData){
@@ -477,7 +480,6 @@ MCEtaBin3 = TrkMCEtaBin3;
 
 
   else if(-0.8<eta && eta<0.8){
-//  if(-0.8<eta && eta<0.8){
     _etabin = 2;
     if(isData){
       for(int i = 0; i < 5; i++){
