@@ -56,7 +56,7 @@ void NuclearModification(){
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
   
-  TFile*filePPReference=new TFile(Form("../fonll/output%s.root",particle.Data()));  
+  TFile*filePPReference=new TFile(Form("../../../fonll/output%s.root",particle.Data()));  
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
