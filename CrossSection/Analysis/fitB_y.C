@@ -252,7 +252,7 @@ void fitB_y(TString infname="",bool doweight = 1)
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
   hPtSigma->Draw();
   
-  TFile *outf = new TFile("ResultsBplus_y/SigmaBplus.root","recreate");
+  TFile *outf = new TFile("../ResultsBplus_y/SigmaBplus.root","recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();

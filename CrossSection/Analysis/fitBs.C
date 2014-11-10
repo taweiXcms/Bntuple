@@ -225,7 +225,7 @@ void fitBs(TString infname="",bool doweight = 1)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile("ResultsBs/SigmaBs.root","recreate");
+  TFile *outf = new TFile("../ResultsBs/SigmaBs.root","recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();

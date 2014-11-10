@@ -60,7 +60,7 @@ void NuclearModification(){
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
-  TFile*filepPb=new TFile(Form("Results%s/Sigma%s.root",particle.Data(),particle.Data()));
+  TFile*filepPb=new TFile(Form("../Results%s/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   TH1F*hPt=(TH1F*)filepPb->Get("hPt");
   TH1F*hEff=(TH1F*)filepPb->Get("hEff");
@@ -337,7 +337,7 @@ void NuclearModification(){
   tlatex3->Draw();
   
 
-  canvasSigma->SaveAs(Form("Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
+  canvasSigma->SaveAs(Form("../Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
   //TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
@@ -484,9 +484,9 @@ void NuclearModification(){
   tlatex3->Draw();
 
 //  l->Draw();  
-  canvasRpA->SaveAs(Form("Results%s/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+  canvasRpA->SaveAs(Form("../Results%s/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
   
-  TFile *fout=new TFile(Form("Results%s/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
+  TFile *fout=new TFile(Form("../Results%s/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
   fout->cd();
   gSigmasyst->SetName("gSigmasyst");
   gSigmasyst->Write();
