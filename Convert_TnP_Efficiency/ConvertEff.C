@@ -372,11 +372,13 @@ void _ConvertEff(int _type, int nBins, double ptBins[], bool InEtaBin){
     EffDiff->SetBinError(i+1,0.000000001);
   }
   //print a line for AN
+  for(int i = 0; i < nBins; i ++){printf(" %.3f &", ((effData_tol[i]/nCand[i])));}printf("\n");
+  for(int i = 0; i < nBins; i ++){printf(" %.3f &", (effMC_tol[i]/nCand[i]));}printf("\n");
   for(int i = 0; i < nBins; i ++){
 //    printf(" %.1f &", ((_tot_diff[i])/effMC_tol[i])*100);
     printf(" %.3f &", ((effData_tol[i])/effMC_tol[i]));
-  }
-  printf("\n");
+  }printf("\n");
+  for(int i = 0; i < nBins; i ++){printf(" %.3f &", (fabs(effData_tol[i]/effMC_tol[i]) - 1));}printf("\n");
   EffDiff->SetMaximum(0.1);
   EffDiff->SetTitleOffset(1.2,"Y");
   EffDiff->SetMarkerColor(2);
