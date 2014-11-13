@@ -9,10 +9,12 @@ double setparam3=0.03;
 double fixparam2=0.04;
 
 //svmit02
-TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kstar.root";
 //TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
 //TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kstar.root";
+
+//lxplus
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kstar.root";
 
 TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04"; 
 
@@ -122,13 +124,14 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    Bkpi->SetFillStyle(3005);
 
    // function for signal shape plotting. take the fit result from f
-   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
-   mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
+   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2]*(1+[5]))/(sqrt(2*3.14159)*([2]*(1+[5])))+(1-[3])*Gaus(x,[1],[4]*(1+[5]))/(sqrt(2*3.14159)*([4]*(1+[5]))))");
+   mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8),f->GetParameter(5));
    mass->SetParError(0,f->GetParError(0));
    mass->SetParError(1,f->GetParError(1));
    mass->SetParError(2,f->GetParError(2));
-   mass->SetParError(7,f->GetParError(7));
-   mass->SetParError(8,f->GetParError(8));
+   mass->SetParError(3,f->GetParError(7));
+   mass->SetParError(4,f->GetParError(8));
+   mass->SetParError(5,f->GetParError(5));
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
 

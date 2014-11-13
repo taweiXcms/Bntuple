@@ -8,10 +8,12 @@ double setparam3=0.03;
 double fixparam1=5.279;
 
 //svmithi2
-TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/afs/cern.ch/work/w/wangj/nt_20140801_mixed_fromQMBFinder_Kp.root";
 //TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
 //TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+
+//lxplus
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
 //tk pt, chi2
 TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
@@ -112,13 +114,14 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    Bkpi->SetFillStyle(3004);
 
    // function for signal shape plotting. take the fit result from f
-   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
-   mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
+   TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2]*(1+[5]))/(sqrt(2*3.14159)*([2]*(1+[5])))+(1-[3])*Gaus(x,[1],[4]*(1+[5]))/(sqrt(2*3.14159)*([4]*(1+[5]))))");
+   mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8),f->GetParameter(6));
    mass->SetParError(0,f->GetParError(0));
    mass->SetParError(1,f->GetParError(1));
    mass->SetParError(2,f->GetParError(2));
-   mass->SetParError(7,f->GetParError(7));
-   mass->SetParError(8,f->GetParError(8));
+   mass->SetParError(3,f->GetParError(7));
+   mass->SetParError(4,f->GetParError(8));
+   mass->SetParError(5,f->GetParError(6));
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
 
@@ -182,25 +185,11 @@ void fitBss(TString infname="",bool doweight = 1)
   ntGen->AddFriend(ntMC);
   ntGen2->AddFriend(ntMC);
     
-  //const int nBins = 5;
-  //double ptBins[nBins+1] = {10,15,20,25,30,60};
   const int nBins = 1;
   double ptBins[nBins+1] = {10,60};
-  /*
-  TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
-  TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
-  TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
-  TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
-  TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
-  TH1D *hPtGen2 = new TH1D("hPtGen2","",nBins,ptBins);
-  */
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
-      //double yield = f->Integral(5,6)/0.02;
-      //double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
-      //hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
-      //hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }
   
 }
