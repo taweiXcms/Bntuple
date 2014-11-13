@@ -6,47 +6,78 @@
 #include <TCanvas.h>
 #include <TF1.h>
 #include <TLegend.h>
+#include <iostream>
+#include <TMath.h>
+#include "NoCandidate.h"
 
 TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
 TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
-TString cut="((HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01)&&mu1pt>1.5&&mu2pt>1.5&&abs(mass-5.279)<0.04";
+TString cut="((HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e-01)&&mu1pt>1.5&&mu2pt>1.5";
 TString particle="B^{+}";
-
-/*
-double norm(TH1D* h,double low,double high)
-{
-    TF1 *f = new TF1("f","[0]+[1]*x");
-    h->Fit("f","L","",5.4,6);
-    double val = f->Integral(low,high);
-    delete f;
-    return val;
-}
-*/
 
 void dimuonLoop(float ptmin, float ptmax, float ymin, float ymax, int i)
 {
-  TFile *infData = new TFile(inputdata);
   TFile *infMC = new TFile(inputmc);
-  TTree *ntData = (TTree*) infData->Get("ntKp");
   TTree *ntMC = (TTree*) infMC->Get("ntKp");
+
+  setBranch(ntMC);
 
   TCanvas *c = new TCanvas(Form("c%i",i),"",600,600);
   //if (logy) c->SetLogy();
-  
-  TH1D* hData = new TH1D("hData","",10,1,11);
-  TH1D* hMC = new TH1D("hMC","",10,1,11);
 
-  ntData->Project("hData","size",Form("%s&&(pt>%f&&pt<%f)&&(y>%f&&y<%f)",cut.Data(),ptmin,ptmax,ymin,ymax));
-  ntMC->Project("hMC","size",Form("%s&&(pt>%f&&pt<%f)&&(y>%f&&y<%f)",cut.Data(),ptmin,ptmax,ymin,ymax));
-
-  double normData=0,normMC=0;
-  normData = hData->GetEntries();
-  normMC = hMC->GetEntries();
-  cout<<normData<<" "<<normMC<<endl;
+  int bins=10;  
+  TH1D* hMCTruth = new TH1D("hMCTruth","",bins-1,1,bins);
+  TH1D* hMC = new TH1D("hMC","",bins-1,1,bins);
+  //TH1D* hMCProb = new TH1D("hMCProb","",bins-1,1,bins);
   
-  hData->Scale(1./normData);
-  hMC->Scale(1./normMC); 
+  int j=0,k=0;
+  int nentries = ntMC->GetEntries();
+  int realsize=0;
+  int ifmatching=0;
+  for(j=0;j<nentries;j++)
+    {
+      if(j%100000==0) cout<<"Processing: "<<j<<" / "<<nentries<<endl;
+      ntMC->GetEntry(j);
+      realsize=0;
+      ifmatching=0;
+      for(k=0;k<size;k++)
+	{
+	  if(pt[k]>ptmin&&pt[k]<ptmax&&y[k]>ymin&&y[k]<ymax&&(HLT_PAMu3_v1)&&abs(mumumass[k]-3.096916)<0.15&&mass[k]>5&&mass[k]<6&&trk1Pt[k]>0.9&&chi2cl[k]>1.32e-02&&(d0[k]/d0Err[k])>3.41&&cos(dtheta[k])>-3.46e-01&&mu1pt[k]>1.5&&mu2pt[k]>1.5)
+	    {
+	      realsize++;
+	      if(gen[k]==23333 && isbestchi2[k]==1)
+		{
+		  ifmatching=1;
+		}
+	    }
+	}
+
+      if(realsize!=0)
+	{
+	  hMC->Fill(realsize);
+	  if(ifmatching!=0)
+	    {
+	      hMCTruth->Fill(realsize);
+	    }
+	}
+    }
+
+  hMC->Sumw2();
+  hMCTruth->Sumw2();
+  hMCTruth->Divide(hMC);
+  hMCTruth->Sumw2();
+
+  hMCTruth->SetXTitle("# of candidate");
+  hMCTruth->SetYTitle("Matching Probability");
+  hMCTruth->SetTitleOffset(1.5,"Y");
+  hMCTruth->SetStats(0);
+
+  hMCTruth->Draw();
+
+  c->SaveAs("CandidateResult/Bplus_candidates_compare_sigreg.pdf");
+
+  /*
 
   hData->SetXTitle("# of candidate");
   hData->SetYTitle("#Probability");
@@ -84,9 +115,10 @@ void dimuonLoop(float ptmin, float ptmax, float ymin, float ymax, int i)
   leg1->Draw("same");
 
   c->SaveAs("CandidateResult/Bplus_candidates_compare_sigreg.pdf");
+  */
 }
 
-void NoCandidate()
+void NoCandidateMP()
 {
   const int nBins = 1;
   double ptBins[nBins+1] = {10,60};
@@ -101,10 +133,3 @@ void NoCandidate()
       //dimuonLoop(10.,60.,yBins[i],yBins[i+1],i+1);
     }
 }
-
-/*
-.x dataMC.C+("d0/d0Err","d0/#sigma(d0)","d0D0err",40,0,200,1)
-.x dataMC.C+("chi2cl","Vertex #chi^{2} Probability","ProbChi2",20,0,1)
-.x dataMC.C+("cos(dtheta)","cos(#Delta#theta)","cosdtheta",20,-1,1)
-.x dataMC.C+("abs(trk1Dxy/trk1D0Err)","|trk1Dxy/trk1D0Err|","trk1DxyDerr",40,0,200,1)
-*/

@@ -10,7 +10,8 @@
 TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
 TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Phi.root";
 
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02&&mu1pt>1.5&&mu2pt>1.5&&abs(mass-5.367)<0.03";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02&&mu1pt>1.5&&mu2pt>1.5&&abs(mass-5.367)<0.04";
+//TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02&&mu1pt>1.5&&mu2pt>1.5";
 TString particle="B^{0}_{s}";
 
 /*
@@ -33,9 +34,10 @@ void dimuonLoop(float ptmin, float ptmax, float ymin, float ymax, int i)
 
   TCanvas *c = new TCanvas(Form("c%i",i),"",600,600);
   //if (logy) c->SetLogy();
-  
-  TH1D* hData = new TH1D("hData","",20,1,21);
-  TH1D* hMC = new TH1D("hMC","",20,1,21);
+
+  int bins=15;
+  TH1D* hData = new TH1D("hData","",bins-1,1,bins);
+  TH1D* hMC = new TH1D("hMC","",bins-1,1,bins);
 
   ntData->Project("hData","size",Form("%s&&(pt>%f&&pt<%f)&&(y>%f&&y<%f)",cut.Data(),ptmin,ptmax,ymin,ymax));
   ntMC->Project("hMC","size",Form("%s&&(pt>%f&&pt<%f)&&(y>%f&&y<%f)",cut.Data(),ptmin,ptmax,ymin,ymax));
@@ -47,6 +49,20 @@ void dimuonLoop(float ptmin, float ptmax, float ymin, float ymax, int i)
   
   hData->Scale(1./normData);
   hMC->Scale(1./normMC); 
+
+  float j=0,njData=0,njMC=0,jData=0,jMC=0,ajData=0,ajMC=0;
+  for(j=0;j<bins;j++)
+    {
+      njData+=hData->GetBinContent(j+1)*(j+1);
+      njMC+=hMC->GetBinContent(j+1)*(j+1);
+      jData+=hData->GetBinContent(j+1);
+      jMC+=hMC->GetBinContent(j+1);
+    }
+  ajData = njData/jData;
+  ajMC = njMC/jMC;
+  cout<<"average Data: "<<ajData<<endl;
+  cout<<"average MC: "<<ajMC<<endl;
+  cout<<jData<<"  "<<jMC<<endl;
 
   hData->SetXTitle("# of candidate");
   hData->SetYTitle("#Probability");
@@ -83,7 +99,7 @@ void dimuonLoop(float ptmin, float ptmax, float ymin, float ymax, int i)
   leg1->SetFillStyle(0);
   leg1->Draw("same");
 
-  c->SaveAs("CandidateResult/Bs_candidates_compare_segreg.pdf");
+  c->SaveAs("CandidateResult/Bs_candidates_compare_sigreg.pdf");
 }
 
 void NoCandidateBs()
