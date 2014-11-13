@@ -1,8 +1,10 @@
-#include "utilities.h"
+#include "../CodeForNtupleProduction/utilities.h"
 
 //Look at me!!!!////////////////////////////////////////////
-//float RatioOfArea=75.3808/28.7983;
-float RatioOfArea=(75.3808/28.7983)*(1-0.0400804);
+float Ratio=72.9755/27.9381;
+//float Change=0;
+float Change=0.041;
+//float Change=-0.041;
 ///////////////////////////////////////////////////////////
 
 double luminosity=34.8*1e-3;
@@ -13,11 +15,14 @@ double setparam3=0.03;
 double fixparam1=5.279;
 
 //svmithi2
-TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+//TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+//lxplus
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
 //tk pt, chi2
-TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
+TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
 //TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
 TString seldata_2y=Form("%s",cut.Data());
@@ -45,7 +50,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TF1* fNP = new TF1("fNP",iNP);
    float normNP = fNP->Integral(5,6);
    TString signal = "([5]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[5])*Gaus(x,[1],[6])/(sqrt(2*3.14159)*[6]))";
-   TF1 *f = new TF1(Form("f%d",count),Form("[0]*%s+[3]+[4]*x+(%s/%f)*([0]/%f)",signal.Data(),iNP.Data(),RatioOfArea,normNP));
+   TF1 *f = new TF1(Form("f%d",count),Form("[0]*%s+[3]+[4]*x+(%s/%f)*([0]/%f)",signal.Data(),iNP.Data(),Ratio*(1+Change),normNP));
 
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
@@ -97,7 +102,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    
    //cout<<"======="<<normNP<<"======="<<endl;
    // function for signal shape plotting. take the fit result from f
-   TF1 *Bkpi = new TF1(Form("fBkpi",count),Form("([0]/(%f*%f))*%s",RatioOfArea,normNP,iNP.Data()));
+   TF1 *Bkpi = new TF1(Form("fBkpi",count),Form("([0]/(%f*%f))*%s",Ratio*(1+Change),normNP,iNP.Data()));
    Bkpi->SetParameter(0,f->GetParameter(0));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
@@ -123,7 +128,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 //   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
    h->SetMarkerStyle(24);
    h->SetStats(0);
-   h->Draw("e");
+   h->Draw("e");   
    h->SetXTitle("M_{B} (GeV/c^{2})");
    h->SetYTitle("Entries / (20 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
@@ -156,13 +161,13 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
    TLegend *leg3 = myLegend(0.02,0.83,0.37,0.92);
-   leg3->AddEntry((TObject*)0,Form("Ratio=%.2f(-4.0%)",RatioOfArea),"");
+   if(Change==0) leg3->AddEntry((TObject*)0,Form("Ratio=%.2f",Ratio),"");
+   else leg3->AddEntry((TObject*)0,Form("Ratio=%.2f(%.1f%)",Ratio*(1+Change),Change*100),"");
    leg3->Draw();
 
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
+   if(Change==0) c->SaveAs("BplusApplyRatio.pdf");
+   if(Change>0) c->SaveAs("BplusApplyRatioPlus.pdf");
+   if(Change<0) c->SaveAs("BplusApplyRatioMinus.pdf");
 
    return mass;
 }
@@ -187,11 +192,6 @@ void fitBarea(TString infname="",bool doweight = 1)
 //  const int nBins = 1;
 //  double ptBins[nBins+1] = {10,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
-  TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
-  TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
-  TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
-  TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
-  TH1D *hPtGen2 = new TH1D("hPtGen2","",nBins,ptBins);
 
   for (int i=0;i<nBins;i++)
     {
@@ -202,55 +202,4 @@ void fitBarea(TString infname="",bool doweight = 1)
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }
   
-  /*  
-  TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
-  hPt->Sumw2();
-  hPt->Draw();
-  
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
-  nt->Project("hPtRecoTruth","pt",TCut(seldata_2y.Data())&&"gen==23333");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
-  ntGen2->Project("hPtGen2","pt",(TCut(selmcgen.Data())));
-  divideBinWidth(hPtRecoTruth);
-  
-  hPtRecoTruth->Draw("same hist");
-  divideBinWidth(hPtMC);
-  divideBinWidth(hPtGen);
-  divideBinWidth(hPtGen2);
-  
-  hPtMC->Sumw2();
-  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-  hPtMC->Sumw2();
-  hEff->Divide(hPtGen);
-  
-  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-  hPtCor->Divide(hEff);
-  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
-  hPtCor->Draw();
-  hPtGen->Draw("same hist");
-  hPtGen2->Draw("same hist");
-
-  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double BRchain=6.09604e-5;
-
-  hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
-
-  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
-  hPtSigma->Draw();
-  
-  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
-  outf->cd();
-  hPt->Write();
-  hEff->Write();
-  hPtGen->Write();
-  hPtCor->Write();
-  hPtSigma->Write();
-  outf->Close();
-  delete outf;
-  */
 }

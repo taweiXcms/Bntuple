@@ -1,4 +1,4 @@
-#include "utilities.h"
+#include "../CodeForNtupleProduction/utilities.h"
 #include <iomanip>
 
 double luminosity=34.8*1e-3;
@@ -10,11 +10,14 @@ double setparam3=0.03;
 double fixparam2=0.04;
 
 //svmit02
-//TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputdata="/data/bmeson/MC/nt_BoostedMC_20140717_NonPromptJpsi.root";
-TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kstar.root";
+//TString inputdata="/data/bmeson/MC/nt_BoostedMC_20140717_NonPromptJpsi.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kstar.root";
 
-TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04"; 
+//lxplus
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_BoostedMC_20140717_NonPromptJpsi.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kstar.root";
+
+TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
 
 TString seldata_2y_kpi=Form("%s",cut_kpi.Data());
 TString selmc_kpi=Form("abs(y)<2.4&&(gen==23333||gen==41000)&&%s",cut_kpi.Data());
@@ -122,6 +125,9 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    cout<<"======================================================"<<endl;
    cout<<"NP Area:"<<setw(8)<<Bkpi->Integral(5,6)<<setw(25)<<"NP Parameter:"<<setw(8)<<f->GetParameter(6)<<endl;
    cout<<"Sg Area:"<<setw(8)<<mass->Integral(5,6)<<setw(25)<<"Signal Parameter:"<<setw(8)<<f->GetParameter(0)<<endl;
+   cout<<"   ------------------------------------------------   "<<endl;
+   cout<<"Ratio (Signal/NP) : "<<f->GetParameter(0)<<"/"<<f->GetParameter(6)<<" = "<<f->GetParameter(0)/f->GetParameter(6)<<endl;
+   cout<<"Systematic Uncer of "<<sqrt( (f->GetParError(0)/f->GetParameter(0))*(f->GetParError(0)/f->GetParameter(0)) + (f->GetParError(6)/f->GetParameter(6))*(f->GetParError(6)/f->GetParameter(6)) )<<endl;
    cout<<"======================================================"<<endl;
 
 //   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
@@ -168,11 +174,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",yield,yieldErr),"");
    leg2->Draw();
 
-
-   //c->SaveAs(Form("ResultsBzero/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBzero/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBzero/BMass-%d.eps",count));
-   c->SaveAs(Form("ResultsBzero/BMass-%d.pdf",count));
+   c->SaveAs("BzeroFindRatio.pdf");
 
    return mass;
 }
@@ -189,21 +191,11 @@ void fitB0normArea(TString infname="",bool doweight = 1)
   TTree *ntMC = (TTree*)infMC->Get("ntKstar");
 
   ntGen->AddFriend(ntMC);
-  //nt->SetAlias("LD",LDalias.Data());
-  //nt2->SetAlias("LD",LDalias.Data());
 
-  //ntMC->SetAlias("LD",LDalias.Data());
-  //ntMC2->SetAlias("LD",LDalias.Data());
-  
-  //const int nBins = 3;
-  //double ptBins[nBins+1] = {10,15,20,60};
   const int nBins = 1;
   double ptBins[nBins+1] = {10,60};
 
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
-  TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
-  TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
-  TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
@@ -213,56 +205,4 @@ void fitB0normArea(TString infname="",bool doweight = 1)
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i])); 
     }  
 
-  /*  
-  TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{0} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{0} dN/dp_{T}");
-  hPt->Sumw2();
-  hPt->Draw();
-
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)"));
-
-  nt->Project("hRecoTruth","pt",TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
-  divideBinWidth(hRecoTruth);
-  
-  hRecoTruth->Draw("same hist");
-  divideBinWidth(hPtMC);
-  divideBinWidth(hPtGen);
-  
-  hPtMC->Sumw2();
-  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-  hPtMC->Sumw2();
-  hEff->Divide(hPtGen);
-  
-  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-  hPtCor->Divide(hEff);
-  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Correctd B^{0} dN/dp_{T}");
-  hPtCor->Draw();
-  hPtGen->Draw("same hist");
-
-  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-
-  // B0->J/psi K*0(892) = 1.34 +- 0.06 x 10^-3
-  // J/psi -> mumu = 5.93 +- 0.06 x 10^-2
-  // K*0(892) -> K+ pi- = 66%
-  double BRchain=5.244e-5;
-
-  hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma/dp_{T} (B^{0}) ");
-
-  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
-  hPtSigma->Draw();
-  
-  TFile *outf = new TFile("ResultsBzero/SigmaBzero.root","recreate");
-  outf->cd();
-  hPt->Write();
-  hEff->Write();
-  hPtCor->Write();
-  hPtSigma->Write();
-  outf->Close();
-  delete outf;
-  */
 }

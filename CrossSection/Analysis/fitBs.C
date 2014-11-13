@@ -8,6 +8,10 @@ double setparam3=0.03;
 double fixparam1=5.367;
 
 //svmit02
+//TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Phi.root";
+
+//lxplus
 TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
 TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Phi.root";
 
@@ -154,7 +158,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   c->SaveAs(Form("ResultsBs/BMass-%d.pdf",count));
+   c->SaveAs(Form("../ResultsBs/BMass-%d.pdf",count));
 
    return mass;
 }

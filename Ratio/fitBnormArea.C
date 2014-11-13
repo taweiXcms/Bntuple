@@ -1,5 +1,6 @@
-#include "utilities.h"
+#include "../CodeForNtupleProduction/utilities.h"
 #include <iomanip>
+#include <TMath.h>
 
 double luminosity=34.8*1e-3;
 double setparam0=100.;
@@ -9,13 +10,15 @@ double setparam3=0.03;
 double fixparam1=5.279;
 
 //svmithi2
-TString inputdata="/data/bmeson/MC/nt_BoostedMC_20140717_NonPromptJpsi.root";
-//TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+//TString inputdata="/data/bmeson/MC/nt_BoostedMC_20140717_NonPromptJpsi.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+
+//lxplus
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_BoostedMC_20140717_NonPromptJpsi.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
 //tk pt, chi2
-TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
-//TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
+TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
 
 TString seldata_2y=Form("%s",cut.Data());
 TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
@@ -41,10 +44,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    TF1 *fNP = new TF1("fNP",iNP);
    float normNP=fNP->Integral(5,6);//"203.577";
    cout<<"NormNP  "<<normNP<<endl;
-
-   //TString normSignal="(([7]*[8]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[7])*(TMath::Erf((-6+[1])/(sqrt(2)*[8]))-TMath::Erf((-5+[1])/(sqrt(2)*[8])))/2)";
-   //TF1 *fsignal = new TF1("fsignal","([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))");
-   //TString normSignal="fsingal->Integral(5,6)";
 
    //TString normNP="fNP->Integral(5,6)";
    TF1 *f = new TF1(Form("f%d",count),Form("[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+([5]/%f)*%s",normNP,iNP.Data()));
@@ -114,8 +113,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    Bkpi->SetFillStyle(3004);
    
    // function for signal shape plotting. take the fit result from f
-   //TString normSignalDraw="((-0.199471)*([3]*[4]*(TMath::Erf((-6+[1])/(sqrt(2)*[2]))-TMath::Erf((-5+[1])/(sqrt(2)*[2])))+[2]*(1-[3])*(TMath::Erf((-6+[1])/(sqrt(2)*[4]))-TMath::Erf((-5+[1])/(sqrt(2)*[4]))))/([2]*[4]))";
-
    TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
    mass->SetParError(0,f->GetParError(0));
@@ -129,6 +126,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    cout<<"======================================================"<<endl;
    cout<<"NP Area:"<<setw(8)<<Bkpi->Integral(5,6)<<setw(25)<<"NP Parameter:"<<setw(8)<<f->GetParameter(5)<<endl;
    cout<<"Sg Area:"<<setw(8)<<mass->Integral(5,6)<<setw(25)<<"Signal Parameter:"<<setw(8)<<f->GetParameter(0)<<endl;
+   cout<<"   ------------------------------------------------   "<<endl;
+   cout<<"Ratio (Signal/NP) : "<<f->GetParameter(0)<<"/"<<f->GetParameter(5)<<" = "<<f->GetParameter(0)/f->GetParameter(5)<<endl;
+   cout<<"Systematic Uncer of "<<sqrt( (f->GetParError(0)/f->GetParameter(0))*(f->GetParError(0)/f->GetParameter(0)) + (f->GetParError(5)/f->GetParameter(5))*(f->GetParError(5)/f->GetParameter(5)) )<<endl;
    cout<<"======================================================"<<endl;
 
 //   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
@@ -152,24 +152,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
 
    double yield = mass->Integral(5,6)/0.02;
    double yieldErr = mass->Integral(5,6)/0.02*mass->GetParError(0)/mass->GetParameter(0);
-   /*
-   TF1 *fsignal = new TF1("fsignal","([2]*Gaus(x,[0],[1])/(sqrt(2*3.14159)*[1])+(1-[2])*Gaus(x,[0],[3])/(sqrt(2*3.14159)*[3]))");
-   fsignal->SetParameters(mass->GetParameter(1),mass->GetParameter(2),mass->GetParameter(3),mass->GetParameter(4));
-   double par0=mass->GetParameter(1);
-   double par1=mass->GetParameter(2);
-   double par2=mass->GetParameter(3);
-   double par3=mass->GetParameter(4);
-   double fnormsignal = ((-0.199471)*(par2*par3*(TMath::Erf((-6+par0)/(sqrt(2)*par1))-TMath::Erf((-5+par0)/(sqrt(2)*par1)))+par1*(1-par2)*(TMath::Erf((-6+par0)/(sqrt(2)*par3))-TMath::Erf((-5+par0)/(sqrt(2)*par3))))/(par1*par3));
-
-   cout<<endl;
-   cout<<"==========================="<<endl;
-   cout<<"First parameter: "<<mass->GetParameter(0)<<endl;
-   cout<<"Integral: "<<mass->Integral(5,6)<<endl;
-   cout<<"Signal Integral: "<<fsignal->Integral(5,6)<<endl;
-   cout<<"Signal Normalization: "<<fnormsignal<<endl;
-   cout<<"==========================="<<endl;
-   cout<<endl;
-   */
 
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
@@ -188,10 +170,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
-   c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
+   c->SaveAs("BplusFindRatio.pdf");
 
    return mass;
 }
@@ -231,55 +210,4 @@ void fitBnormArea(TString infname="",bool doweight = 1)
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
 
-  /*  
-  TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
-  hPt->Sumw2();
-  hPt->Draw();
-  
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
-  nt->Project("hPtRecoTruth","pt",TCut(seldata_2y.Data())&&"gen==23333");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
-  ntGen2->Project("hPtGen2","pt",(TCut(selmcgen.Data())));
-  divideBinWidth(hPtRecoTruth);
-  
-  hPtRecoTruth->Draw("same hist");
-  divideBinWidth(hPtMC);
-  divideBinWidth(hPtGen);
-  divideBinWidth(hPtGen2);
-  
-  hPtMC->Sumw2();
-  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-  hPtMC->Sumw2();
-  hEff->Divide(hPtGen);
-  
-  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-  hPtCor->Divide(hEff);
-  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
-  hPtCor->Draw();
-  hPtGen->Draw("same hist");
-  hPtGen2->Draw("same hist");
-
-  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double BRchain=6.09604e-5;
-
-  hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
-
-  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
-  hPtSigma->Draw();
-  
-  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
-  outf->cd();
-  hPt->Write();
-  hEff->Write();
-  hPtGen->Write();
-  hPtCor->Write();
-  hPtSigma->Write();
-  outf->Close();
-  delete outf;
-  */
 }
