@@ -171,10 +171,10 @@ void fitB(TString infname="",bool doweight = 1)
   ntGen->AddFriend(ntMC);
   ntGen2->AddFriend(ntMC);
     
-  //const int nBins = 5;
-  //double ptBins[nBins+1] = {10,15,20,25,30,60};
-  const int nBins = 1;
-  double ptBins[nBins+1] = {10,60};
+  const int nBins = 5;
+  double ptBins[nBins+1] = {10,15,20,25,30,60};
+  //const int nBins = 1;
+  //double ptBins[nBins+1] = {10,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
   TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
