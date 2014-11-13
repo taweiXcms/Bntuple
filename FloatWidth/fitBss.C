@@ -162,7 +162,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
    c->SaveAs("signalWidth/BMass-Bp-AllPt-FloatWidth.pdf");
 
    return mass;
@@ -204,55 +203,4 @@ void fitBss(TString infname="",bool doweight = 1)
       //hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }
   
-  /*
-  TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
-  hPt->Sumw2();
-  hPt->Draw();
-  
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
-  nt->Project("hPtRecoTruth","pt",TCut(seldata_2y.Data())&&"gen==23333");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
-  ntGen2->Project("hPtGen2","pt",(TCut(selmcgen.Data())));
-  divideBinWidth(hPtRecoTruth);
-  
-  hPtRecoTruth->Draw("same hist");
-  divideBinWidth(hPtMC);
-  divideBinWidth(hPtGen);
-  divideBinWidth(hPtGen2);
-  
-  hPtMC->Sumw2();
-  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-  hPtMC->Sumw2();
-  hEff->Divide(hPtGen);
-  
-  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-  hPtCor->Divide(hEff);
-  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
-  hPtCor->Draw();
-  hPtGen->Draw("same hist");
-  hPtGen2->Draw("same hist");
-
-  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double BRchain=6.09604e-5;
-
-  hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
-
-  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
-  hPtSigma->Draw();
-  
-  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
-  outf->cd();
-  hPt->Write();
-  hEff->Write();
-  hPtGen->Write();
-  hPtCor->Write();
-  hPtSigma->Write();
-  outf->Close();
-  delete outf;
-  */
 }
