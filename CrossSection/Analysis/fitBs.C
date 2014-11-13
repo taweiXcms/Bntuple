@@ -155,7 +155,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    leg2->Draw();
 
    c->SaveAs(Form("ResultsBs/BMass-%d.pdf",count));
-   //c->SaveAs("../default_Bs_incl.pdf");
 
    return mass;
 }
