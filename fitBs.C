@@ -12,7 +12,7 @@ TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013
 TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Phi.root";
 
 //Bs tkpt chi2
-TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&& chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02&&mu1pt>1.5&&mu2pt>1.5";
+TString cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>3.71e-02&&(d0/d0Err)>3.37&&cos(dtheta)>2.60e-01&&abs(tktkmass-1.019455)<1.55e-02&&mu1pt>1.5&&mu2pt>1.5";
 
 TString seldata_2y=Form("%s",cut.Data());
 TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
@@ -39,7 +39,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",24,5.03,5.99);
    // Fit function
    TString iNP="Gaus(x,5.36800e+00,5.77122e-02)/(sqrt(2*3.14159)*abs(5.77122e-02))";
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2]*(1+[9]))/(sqrt(2*3.14159)*[2]*(1+[9]))+(1-[7])*Gaus(x,[1],[8]*(1+[9]))/(sqrt(2*3.14159)*[8]*(1+[9])))+ [3]+[4]*x+[5]*x*x + [11]*("+iNP+")");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+ [3]+[4]*x+[5]*x*x + [11]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    clean0(h);
@@ -154,10 +154,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBs/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBs/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBs/BMass-%d.eps",count));
    c->SaveAs(Form("ResultsBs/BMass-%d.pdf",count));
+   //c->SaveAs("../default_Bs_incl.pdf");
 
    return mass;
 }
@@ -233,4 +231,5 @@ void fitBs(TString infname="",bool doweight = 1)
   hPtSigma->Write();
   outf->Close();
   delete outf;
+
 }
