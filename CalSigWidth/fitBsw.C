@@ -15,7 +15,6 @@ TString inputmc="/afs/cern.ch/work/w/wangj/nt_20140801_mixed_fromQMBFinder_Kp.ro
 
 //tk pt, chi2
 TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
-//TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
 
 TString seldata_2y=Form("%s",cut.Data());
 TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
@@ -156,8 +155,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.pdf",count));
-   c->SaveAs("ResultsBplus/BplusNoRatio.pdf");
+   c->SaveAs("BplusSignalWidth.pdf");
 
    return mass;
 }
@@ -197,55 +195,4 @@ void fitBsw(TString infname="",bool doweight = 1)
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }
   
-  /*
-  TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
-  hPt->Sumw2();
-  hPt->Draw();
-  
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
-  nt->Project("hPtRecoTruth","pt",TCut(seldata_2y.Data())&&"gen==23333");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
-  ntGen2->Project("hPtGen2","pt",(TCut(selmcgen.Data())));
-  divideBinWidth(hPtRecoTruth);
-  
-  hPtRecoTruth->Draw("same hist");
-  divideBinWidth(hPtMC);
-  divideBinWidth(hPtGen);
-  divideBinWidth(hPtGen2);
-  
-  hPtMC->Sumw2();
-  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-  hPtMC->Sumw2();
-  hEff->Divide(hPtGen);
-  
-  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-  hPtCor->Divide(hEff);
-  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
-  hPtCor->Draw();
-  hPtGen->Draw("same hist");
-  hPtGen2->Draw("same hist");
-
-  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double BRchain=6.09604e-5;
-
-  hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
-
-  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
-  hPtSigma->Draw();
-  
-  TFile *outf = new TFile("ResultsBplus/SigmaBplus.root","recreate");
-  outf->cd();
-  hPt->Write();
-  hEff->Write();
-  hPtGen->Write();
-  hPtCor->Write();
-  hPtSigma->Write();
-  outf->Close();
-  delete outf;
-  */
 }
