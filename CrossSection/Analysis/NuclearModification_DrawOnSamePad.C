@@ -68,7 +68,7 @@ const Float_t edge=0.05
 
 void NuclearModification(
   TString  particle,
-  int      nbins,
+  const int      nbins,
   Double_t xbins[],
   Double_t exl[],
   Double_t exl0[],
