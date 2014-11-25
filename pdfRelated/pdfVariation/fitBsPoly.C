@@ -39,7 +39,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    TH1D *hMC = new TH1D(Form("hMC%d",count),"",24,5.03,5.99);
    // Fit function
    TString iNP="Gaus(x,5.36800e+00,5.77122e-02)/(sqrt(2*3.14159)*abs(5.77122e-02))";
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+ [3]+[4]*x++[11]*("+iNP+")");
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8])) + [3]+[4]*x + [11]*("+iNP+")");
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    clean0(h);
@@ -136,7 +136,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
 
 
    // Draw the legend:)   
-   TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
+   TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
@@ -152,9 +152,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBs/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBs/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBs/BMass-%d.eps",count));
    c->SaveAs(Form("PDFVariation/data/PolyChange/ResultsBs/BMass-%d.pdf",count));
 
    return mass;
