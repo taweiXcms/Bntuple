@@ -166,11 +166,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",yield,yieldErr),"");
    leg2->Draw();
 
-
-   //c->SaveAs(Form("ResultsBzero/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBzero/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBzero/BMass-%d.eps",count));
    c->SaveAs(Form("PDFVariation/data/2Gto1G/ResultsBzero/BMass-%d.pdf",count));
+   //c->SaveAs(Form("PDFVariation1Bin/data/2Gto1G/ResultsBzero/BMass-%d.pdf",count));
 
    return mass;
 }
@@ -187,7 +184,7 @@ void fitB0SingGau(TString infname="",bool doweight = 1)
   TTree *ntMC = (TTree*)infMC->Get("ntKstar");
 
   ntGen->AddFriend(ntMC);
-  
+
   const int nBins = 3;
   double ptBins[nBins+1] = {10,15,20,60};
   //const int nBins = 1;
@@ -204,58 +201,6 @@ void fitB0SingGau(TString infname="",bool doweight = 1)
       double yieldErr = f->Integral(5,6)/0.03*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i])); 
-    }  
+    }
   
-  /*
-  TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{0} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{0} dN/dp_{T}");
-  hPt->Sumw2();
-  hPt->Draw();
-  
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)"));
-
-  nt->Project("hRecoTruth","pt",TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
-  divideBinWidth(hRecoTruth);
-  
-  hRecoTruth->Draw("same hist");
-  divideBinWidth(hPtMC);
-  divideBinWidth(hPtGen);
-  
-  hPtMC->Sumw2();
-  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
-  hPtMC->Sumw2();
-  hEff->Divide(hPtGen);
-  
-  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
-  hPtCor->Divide(hEff);
-  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Correctd B^{0} dN/dp_{T}");
-  hPtCor->Draw();
-  hPtGen->Draw("same hist");
-
-  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-
-  // B0->J/psi K*0(892) = 1.34 +- 0.06 x 10^-3
-  // J/psi -> mumu = 5.93 +- 0.06 x 10^-2
-  // K*0(892) -> K+ pi- = 66%
-  double BRchain=5.244e-5;
-
-  hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma/dp_{T} (B^{0}) ");
-
-  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
-
-  hPtSigma->Draw();
-  
-  TFile *outf = new TFile("ResultsBzero/SigmaBzero.root","recreate");
-  outf->cd();
-  hPt->Write();
-  hEff->Write();
-  hPtCor->Write();
-  hPtSigma->Write();
-  outf->Close();
-  delete outf;
-  */
 }

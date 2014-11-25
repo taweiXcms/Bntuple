@@ -150,10 +150,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBplus/BMass-%d.eps",count));
-   c->SaveAs(Form("PDFVariation/data/PolyChange/ResultsBplus/BMass-%d.pdf",count));
+   //c->SaveAs(Form("PDFVariation/data/PolyChange/ResultsBplus/BMass-%d.pdf",count));
+   c->SaveAs(Form("PDFVariation1Bin/data/PolyChange/ResultsBplus/BMass-%d.pdf",count));
 
    return mass;
 }
@@ -173,10 +171,10 @@ void fitBPoly(TString infname="",bool doweight = 1)
   ntGen->AddFriend(ntMC);
   ntGen2->AddFriend(ntMC);
     
-  const int nBins = 5;
-  double ptBins[nBins+1] = {10,15,20,25,30,60};
-  //const int nBins = 1;
-  //double ptBins[nBins+1] = {10,60};
+  //const int nBins = 5;
+  //double ptBins[nBins+1] = {10,15,20,25,30,60};
+  const int nBins = 1;
+  double ptBins[nBins+1] = {10,60};
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
   TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);

@@ -130,7 +130,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
 
 
    // Draw the legend:)   
-   TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
+   TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
    leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
@@ -146,9 +146,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("ResultsBs/BMass-%d.C",count));
-   //c->SaveAs(Form("ResultsBs/BMass-%d.gif",count));
-   //c->SaveAs(Form("ResultsBs/BMass-%d.eps",count));
    c->SaveAs(Form("PDFVariation/data/2Gto1G/ResultsBs/BMass-%d.pdf",count));
 
    return mass;
