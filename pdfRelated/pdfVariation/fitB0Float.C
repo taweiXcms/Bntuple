@@ -114,7 +114,6 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    Bkpi->SetLineStyle(1);
    Bkpi->SetFillStyle(3005);
 
-   // function for signal shape plotting. take the fit result from f
    TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
    mass->SetParError(0,f->GetParError(0));
@@ -125,7 +124,6 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
 
-//   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
    h->SetMarkerStyle(24);
    h->SetStats(0);
    h->Draw("e");
@@ -135,8 +133,6 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    h->GetYaxis()->CenterTitle();
    h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
-
- //  hBck->Draw("hist same");
 
    Bkpi->Draw("same");
    background->Draw("same");   
@@ -152,7 +148,6 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    double yield = mass->Integral(5,6)/0.03;
    double yieldErr = mass->Integral(5,6)/0.03*mass->GetParError(0)/mass->GetParameter(0);
    
-   // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
@@ -170,6 +165,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    leg2->Draw();
 
    c->SaveAs(Form("PDFVariation/data/width-float/ResultsBzero/BMass-%d.pdf",count));
+   //c->SaveAs(Form("PDFVariation1Bin/data/width-float/ResultsBzero/BMass-%d.pdf",count));
 
    return mass;
 }
@@ -186,7 +182,7 @@ void fitB0Float(TString infname="",bool doweight = 1)
   TTree *ntMC = (TTree*)infMC->Get("ntKstar");
 
   ntGen->AddFriend(ntMC);
-  
+
   const int nBins = 3;
   double ptBins[nBins+1] = {10,15,20,60};
   //const int nBins = 1;
