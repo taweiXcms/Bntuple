@@ -94,7 +94,7 @@ void NuclearModificationY(){
   Double_t yRFBSystTotLow[nbinsRFB];
 
   double x,y;
-  cout<<"hello"<<endl;
+
   for (Int_t i=0;i<nbins;i++) {
     gaeBplusReference->GetPoint(i,xRefPP[i],yRefPP[i]);
     yPPsystFONLLhigh[i]=gaeBplusReference->GetEYhigh()[i];
@@ -121,7 +121,6 @@ void NuclearModificationY(){
     yRpAsystFONLLlow[i]=yPercRpAsystFONLLlow[i]*yRpA[i];
     yRpPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*yRpA[i];
     yRpPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*yRpA[i];
-    //cout<<yRpPbSystTotLow[i]<<endl;
   }
 
   //RFB stuff
@@ -134,7 +133,7 @@ void NuclearModificationY(){
   //Syst.
 
   yRFBSystTotHigh[0] = yRFB[0]*yRFBSystTotHighRel[0];
-  yRFBSystTotLow[0] = yRFB[0]*yRFBSystTotLowRel[0];////////////////////////////////////////////////
+  yRFBSystTotLow[0] = yRFB[0]*yRFBSystTotLowRel[0];
   yRFBSystTotHigh[1] = yRFB[1]*yRFBSystTotHighRel[1];
   yRFBSystTotLow[1] = yRFB[1]*yRFBSystTotLowRel[1];
     
@@ -142,7 +141,7 @@ void NuclearModificationY(){
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
-  gSigmasyst->SetLineWidth(2);   
+  gSigmasyst->SetLineWidth(1);   
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
@@ -180,40 +179,39 @@ void NuclearModificationY(){
   
 
   hempty->GetXaxis()->SetTitleOffset(1.);
-  hempty->GetYaxis()->SetTitleOffset(1.32);
+  hempty->GetYaxis()->SetTitleOffset(1.34);
   hempty->GetXaxis()->SetTitleSize(0.045);
   hempty->GetYaxis()->SetTitleSize(0.045);
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.04);
-  hempty->GetYaxis()->SetLabelSize(0.04);  
+  hempty->GetXaxis()->SetLabelSize(0.037);
+  hempty->GetYaxis()->SetLabelSize(0.037);  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
     
-  
+  /*
   gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(25);  
   gaeBplusReference->SetFillColor(5);
   gaeBplusReference->SetFillStyle(1001);
   gaeBplusReference->SetLineColor(5);
   gaeBplusReference->SetLineWidth(1);
-  
+  gaeBplusReference->Draw("2psame");
+  */
   
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
   gSigmastat->SetLineWidth(2);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
-
-  gaeBplusReference->Draw("2psame");
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
   
   
-  TLegend *legendSigma=new TLegend(0.233871,0.6419492,0.5322581,0.815678,"");
+  TLegend *legendSigma=new TLegend(0.233871,0.6701903,0.5322581,0.7526427,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -230,17 +228,14 @@ void NuclearModificationY(){
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
   ent_SigmapPb->SetMarkerColor(1);
-    
+  /*
   TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","fp");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
   ent_Sigmapp->SetMarkerColor(1);
   ent_Sigmapp->SetMarkerStyle(25);
+  */
   legendSigma->Draw("psame");
-  
-  gSigmasyst->SetFillColor(0);
-  gSigmasyst->SetFillStyle(0);
-
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   gSigmasyst->Draw("2same");
@@ -252,7 +247,7 @@ void NuclearModificationY(){
 
 
     
-  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     pPb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS                 pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
@@ -311,7 +306,7 @@ void NuclearModificationY(){
   gRpAsystFONLL->SetMarkerStyle(21);
   gRpAsystFONLL->SetMarkerColor(2);
 
-/*
+
 
   TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",500,500);   
   
@@ -397,7 +392,7 @@ void NuclearModificationY(){
   ent_RpAsystFONLL->SetLineColor(5);
   ent_RpAsystFONLL->SetMarkerColor(5);
   
-  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS Preliminary");
+  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS            ");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
@@ -418,7 +413,6 @@ void NuclearModificationY(){
   tlatex2->SetTextSize(0.04);
   tlatex2->Draw();
 
-*/
 
   TCanvas *canvasRFB=new TCanvas("canvasRFB","canvasRFB",500,500);   
   canvasRFB->cd();
@@ -503,7 +497,7 @@ void NuclearModificationY(){
   ent_RFB->SetLineColor(4);
   // ent_RFB->SetMarkerColor(2);
 
-  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     pPb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS                 pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
