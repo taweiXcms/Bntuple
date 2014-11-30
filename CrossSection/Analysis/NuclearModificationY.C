@@ -9,8 +9,8 @@ const int nbins = 5;
 Double_t xbins[nbins]={-2.4,-1.465,-0.5,0.5,1.465};
 Double_t exl[nbins]={0.465,0.465,0.5,0.5,0.465};
 
-Double_t yPercSigmapPbSystTotHigh[nbins]={0.,0.185,0.158,0.133,0.143};
-Double_t yPercSigmapPbSystTotLow[nbins]={0.,0.185,0.158,0.133,0.143};
+Double_t yPercSigmapPbSystTotHigh[nbins]={0.185,0.185,0.158,0.133,0.143};
+Double_t yPercSigmapPbSystTotLow[nbins]={0.185,0.185,0.158,0.133,0.143};
 
 Double_t commonErrorP = 0.0455;
 Double_t commonErrorN = 0.0455;
