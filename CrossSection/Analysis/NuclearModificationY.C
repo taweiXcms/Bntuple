@@ -277,28 +277,28 @@ void NuclearModificationY(){
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
+  gRpAstat->SetMarkerStyle(21);
   gRpAstat->SetMarkerColor(1);
   gRpAstat->SetLineColor(1);
-  gRpAstat->SetLineWidth(2);   
-  gRpAstat->SetMarkerStyle(22);
-  gRpAstat->SetMarkerColor(1);
+  gRpAstat->SetLineWidth(2);  
+  gRpAstat->SetFillColor(0);
   
   TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
   gRpAsyst->SetTitle("RpA syst uncertainty from pPb");
-  gRpAsyst->SetMarkerColor(1);
+  gRpAsyst->SetFillColor(0);
+  gRpAsyst->SetMarkerSize(0);
   gRpAsyst->SetLineColor(1);
-  gRpAsyst->SetLineWidth(2);   
-  gRpAsyst->SetMarkerStyle(21);
-  gRpAsyst->SetMarkerColor(1);
+  gRpAsyst->SetLineWidth(2);
+  gRpAsyst->SetFillStyle(0);
 
    
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
-  gRpAsystFONLL->SetMarkerColor(2);
-  gRpAsystFONLL->SetLineColor(2);
-  gRpAsystFONLL->SetLineWidth(2);   
-  gRpAsystFONLL->SetMarkerStyle(21);
-  gRpAsystFONLL->SetMarkerColor(1);
+  gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
+  gRpAsystFONLL->SetFillColor(5);
+  gRpAsystFONLL->SetLineColor(5);//kAzure-3);
+  gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
+
 
 
 
@@ -350,16 +350,9 @@ void NuclearModificationY(){
   gRpAstat->SetLineColor(1);
   gRpAstat->SetMarkerColor(1);
 
-  gRpAsystFONLL->SetLineStyle(3);
-  gRpAsystFONLL->SetLineWidth(3);
-  gRpAsystFONLL->SetFillColor(5);
-  gRpAsystFONLL->SetLineColor(5);//kAzure-3);
-  gRpAsystFONLL->SetMarkerColor(5);//kAzure-3);
   gRpAsystFONLL->Draw("2same");
+  gRpAsyst->Draw("2esame");
   gRpAstat->Draw("psame");
-  gRpAsyst->SetFillColor(0);
-  gRpAsyst->SetFillStyle(0);
-  gRpAsyst->Draw("2same");
   
 
   TBox *b = new TBox(-3.3,1-commonErrorN,-2.9,1+commonErrorP);
@@ -386,6 +379,8 @@ void NuclearModificationY(){
   
   tlatex1->Draw();
   tlatexlumi->Draw();
+  canvasRpA->SaveAs(Form("../Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+
 /*
   TCanvas *canvasRFB=new TCanvas("canvasRFB","canvasRFB",500,500);   
   canvasRFB->cd();
