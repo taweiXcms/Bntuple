@@ -1,56 +1,19 @@
-/*
-
-  TString particle="Bs";
-  const int nbins=1;
-  Double_t xbins[nbins]={35};
-  Double_t exl[nbins]={25};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.089};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.089};
-
-  //Double_t commonErrorP = 0.22; // +0.6/10.4 in quadrature
-  //Double_t commonErrorN = 0.24;//  +0.6/10.4 in quadrature
-    
-  TString particle="Bzero";
-  const int nbins=3;
-  Double_t xbins[nbins]={12.5,17.5,40};
-  Double_t exl[nbins]={2.5,2.5,20};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};
-
-  Double_t commonErrorP = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
-  Double_t commonErrorN = TMath::Sqrt(0.0555*0.0555+ (0.7/40.2)*(0.7/40.2));
-
-
-   TString particle="Bplus";
-  const int nbins=5;
-  Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
-  Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t yPercSigmapPbSystTotHigh[nbins]={0.117,0.116,0.113,0.143,0.120};
-  Double_t yPercSigmapPbSystTotLow[nbins]={0.117,0.116,0.113,0.143,0.120};
-
-  Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
-  Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445+ (0.7/40.2)*(0.7/40.2));
-
-*/
-
-
 TString particle="Bplus";
 const int nbinsRFB = 2;
 Double_t xbinsRFB[nbinsRFB]={0.5,1.465};
 Double_t exlRFB[nbinsRFB]={0.5,0.465};
-Double_t yRFBSystTotHighRel[nbinsRFB]= {0.162,0.196};////////////////////////////////////////////////
-Double_t yRFBSystTotLowRel[nbinsRFB]= {0.162,0.196};//////////////////////
+Double_t yRFBSystTotHighRel[nbinsRFB]= {0.162,0.196};
+Double_t yRFBSystTotLowRel[nbinsRFB]= {0.162,0.196};
+
 const int nbins = 5;
 Double_t xbins[nbins]={-2.4,-1.465,-0.5,0.5,1.465};
 Double_t exl[nbins]={0.465,0.465,0.5,0.5,0.465};
-//Double_t yPercSigmapPbSystTotHigh[nbins]={0.145,0.144,0.144};////////////////////////////////////////////////
-//Double_t yPercSigmapPbSystTotLow[nbins]={0.145,0.144,0.144};/////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotHigh[nbins]={0.,0.185,0.158,0.133,0.143};////////////////////////////////////////////////
-Double_t yPercSigmapPbSystTotLow[nbins]={0.,0.185,0.158,0.133,0.143};//////////////////////
 
-Double_t commonErrorP = 0.0555;
-Double_t commonErrorN = 0.0555;
-//Double_t tagandprobcorrection[nbins]={1.17,1.1742287,1.1346129,1.0915380,1.0972000};
+Double_t yPercSigmapPbSystTotHigh[nbins]={0.,0.185,0.158,0.133,0.143};
+Double_t yPercSigmapPbSystTotLow[nbins]={0.,0.185,0.158,0.133,0.143};
+
+Double_t commonErrorP = 0.0455;
+Double_t commonErrorN = 0.0455;
 Double_t tagandprobcorrection[nbins]={1.049,1.049,1.049,1.049,1.049};
 
 void NuclearModificationY(){
@@ -63,14 +26,10 @@ void NuclearModificationY(){
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
-//  TFile*filepPb=new TFile(Form("../Results%sY/Sigma%s.root",particle.Data(),particle.Data()));
   TFile*filepPb=new TFile(Form("../Results%s_y/Sigma%s.root",particle.Data(),particle.Data()));
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   
-  
-    double scalingfactor=1e-6;
-  
-  
+  double scalingfactor=1e-6;
   double yvalue,xvalue,yerrorhigh,yerrorlow;
   
   for (int i=0;i<nbins;i++){
@@ -131,8 +90,8 @@ void NuclearModificationY(){
 
   Double_t yRFB[nbinsRFB];
   Double_t yRFBStat[nbinsRFB];
-Double_t yRFBSystTotHigh[nbinsRFB];////////////////////////////////////////////////
-Double_t yRFBSystTotLow[nbinsRFB];
+  Double_t yRFBSystTotHigh[nbinsRFB];
+  Double_t yRFBSystTotLow[nbinsRFB];
 
   double x,y;
   cout<<"hello"<<endl;
@@ -167,21 +126,18 @@ Double_t yRFBSystTotLow[nbinsRFB];
 
   //RFB stuff
   //central value
- yRFB[0] =  ySigmapPb[3]/ySigmapPb[2];
- yRFB[1] =  ySigmapPb[4]/ySigmapPb[1];
- //Stat.
- yRFBStat[0] =  yRFB[0]*sqrt(pow(ySigmapPbStat[2]/ySigmapPb[2],2)+pow(ySigmapPbStat[3]/ySigmapPb[3],2));
- yRFBStat[1] =  yRFB[1]*sqrt(pow(ySigmapPbStat[4]/ySigmapPb[4],2)+pow(ySigmapPbStat[1]/ySigmapPb[1],2));
- //Syst.
+  yRFB[0] =  ySigmapPb[3]/ySigmapPb[2];
+  yRFB[1] =  ySigmapPb[4]/ySigmapPb[1];
+  //Stat.
+  yRFBStat[0] =  yRFB[0]*sqrt(pow(ySigmapPbStat[2]/ySigmapPb[2],2)+pow(ySigmapPbStat[3]/ySigmapPb[3],2));
+  yRFBStat[1] =  yRFB[1]*sqrt(pow(ySigmapPbStat[4]/ySigmapPb[4],2)+pow(ySigmapPbStat[1]/ySigmapPb[1],2));
+  //Syst.
 
   yRFBSystTotHigh[0] = yRFB[0]*yRFBSystTotHighRel[0];
   yRFBSystTotLow[0] = yRFB[0]*yRFBSystTotLowRel[0];////////////////////////////////////////////////
   yRFBSystTotHigh[1] = yRFB[1]*yRFBSystTotHighRel[1];
   yRFBSystTotLow[1] = yRFB[1]*yRFBSystTotLowRel[1];
-  
-cout<<yRFBStat[0]<<endl;
-cout<<yRFBStat[1]<<endl;
-  
+    
   TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
@@ -217,14 +173,9 @@ cout<<yRFBStat[1]<<endl;
   
   TH2F* hempty=new TH2F("hempty","",10,-3.5,2.5,10,0,650.);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
-  //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
-  //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
-  //if(particle=="Bs") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B_{s}) (pb GeV^{-1}c)");
   
-    hempty->GetXaxis()->CenterTitle();
-    hempty->GetYaxis()->CenterTitle();
-
-  
+  hempty->GetXaxis()->CenterTitle();
+  hempty->GetYaxis()->CenterTitle();
   hempty->GetYaxis()->SetTitle("d#sigma / dy_{CM}(#mub GeV^{-1}c)");
   
 
@@ -262,9 +213,6 @@ cout<<yRFBStat[1]<<endl;
   gSigmastat->Draw("epsame");
   
   
-
- 
-  //TLegend *legendSigma=new TLegend(0.5745968,0.564482,0.8729839,0.7378436,"");
   TLegend *legendSigma=new TLegend(0.233871,0.6419492,0.5322581,0.815678,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
@@ -277,45 +225,26 @@ cout<<yRFBStat[1]<<endl;
   c->SetLineColor(5);
   c->SetFillColor(5);
   c->Draw();
-
-  
-  //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
   
   TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pPb","pf");
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
-  //ent_SigmapPb->SetFillColor(0);
   ent_SigmapPb->SetMarkerColor(1);
-  
-  //TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb","f");
-  //ent_SigmapPbSyst->SetTextFont(42);
-  //ent_SigmapPbSyst->SetLineColor(1);
-  //ent_SigmapPbSyst->SetMarkerColor(1);
-  
+    
   TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","fp");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
   ent_Sigmapp->SetMarkerColor(1);
   ent_Sigmapp->SetMarkerStyle(25);
   legendSigma->Draw("psame");
-
-
-
-  
-
-  
   
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
-  
-  //hSigmapPbStat->Draw("same");
+
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   gSigmasyst->Draw("2same");
   
-  
-  
-
   TBox *d = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   d->SetLineColor(1);
   d->SetFillColor(0);
@@ -514,8 +443,6 @@ cout<<yRFBStat[1]<<endl;
 
   TH2F* hempty=new TH2F("hempty","",4,-0.1,2.,10.,0.,2.5);  
   hempty->GetXaxis()->SetTitle("|y_{CM}|");
- //  if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{+})");
-//   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
   hempty->GetYaxis()->SetTitle("R_{FB}");
   hempty->GetXaxis()->SetTitleOffset(1.1);
   hempty->GetYaxis()->SetTitleOffset(1.3);
