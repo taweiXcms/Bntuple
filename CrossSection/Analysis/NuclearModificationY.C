@@ -245,8 +245,6 @@ void NuclearModificationY(){
   d->SetFillColor(0);
   d->Draw();
 
-
-    
   TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS                 pPb #sqrt{s_{NN}}= 5.02 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
@@ -255,11 +253,7 @@ void NuclearModificationY(){
   tlatex1->Draw();
   
 
-  TString mypar;
-  if(particle=="Bplus") mypar="B^{+}";
-  if(particle=="Bzero") mypar="B^{0}";
-  if(particle=="Bs") mypar="B_{s}";
-  
+  TString mypar="B^{+}";
   
   TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
   tlatexlumi->SetNDC();
@@ -268,8 +262,8 @@ void NuclearModificationY(){
   tlatexlumi->SetTextSize(0.045);
   tlatexlumi->Draw();
 
- double xpos=0.8528226;
- double ypos=0.6849894;
+  double xpos=0.8528226;
+  double ypos=0.6849894;
   
   TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
    tlatex3->SetNDC();
@@ -291,11 +285,11 @@ void NuclearModificationY(){
   
   TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
   gRpAsyst->SetTitle("RpA syst uncertainty from pPb");
-  gRpAsyst->SetMarkerColor(4);
-  gRpAsyst->SetLineColor(4);
+  gRpAsyst->SetMarkerColor(1);
+  gRpAsyst->SetLineColor(1);
   gRpAsyst->SetLineWidth(2);   
   gRpAsyst->SetMarkerStyle(21);
-  gRpAsyst->SetMarkerColor(4);
+  gRpAsyst->SetMarkerColor(1);
 
    
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
@@ -304,7 +298,7 @@ void NuclearModificationY(){
   gRpAsystFONLL->SetLineColor(2);
   gRpAsystFONLL->SetLineWidth(2);   
   gRpAsystFONLL->SetMarkerStyle(21);
-  gRpAsystFONLL->SetMarkerColor(2);
+  gRpAsystFONLL->SetMarkerColor(1);
 
 
 
@@ -329,7 +323,7 @@ void NuclearModificationY(){
   legendRpA->SetTextFont(42);
   legendRpA->SetTextSize(0.04);
 
-  TH2F* hempty=new TH2F("hempty","",4,-2.7,2.7,10.,0.,3.5);  
+  TH2F* hempty=new TH2F("hempty","",4,-3.5,2.7,10.,0.,3.5);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
@@ -368,52 +362,31 @@ void NuclearModificationY(){
   gRpAsyst->Draw("2same");
   
 
-  TBox *b = new TBox(-2.5,1-commonErrorN,-2.1,1+commonErrorP);
+  TBox *b = new TBox(-3.3,1-commonErrorN,-2.9,1+commonErrorP);
   b->SetLineColor(1);
   b->SetFillColor(kGray);
   b->Draw();
-
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}  stat unc","P");
+  
+  
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}","pf");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"Syst err pPb data","P");
-  ent_RpAsystData->SetTextFont(42);
-  ent_RpAsystData->SetLineColor(4);
-  ent_RpAsystData->SetMarkerColor(1);
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst Lumi+BR","f");
+  
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. L+BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
-
   
-  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst err from FONLL pp ref","P");
+  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. err. from FONLL pp ref.","f");
   ent_RpAsystFONLL->SetTextFont(42);
   ent_RpAsystFONLL->SetLineColor(5);
+  ent_RpAsystFONLL->SetLineStyle(1);
   ent_RpAsystFONLL->SetMarkerColor(5);
   
-  TLatex * tlatex1=new TLatex(0.1693548,0.8562368,"CMS            ");
-  tlatex1->SetNDC();
-  tlatex1->SetTextColor(1);
-  tlatex1->SetTextFont(42);
-  tlatex1->SetTextSize(0.04);
   tlatex1->Draw();
-  
-  TLatex * tlatex2=new TLatex(0.5564516,0.8498943,"pPb #sqrt{s_{NN}}= 5.02 TeV");
-  tlatex2->SetNDC();
-  tlatex2->SetTextColor(1);
-  tlatex2->SetTextFont(42);
-  tlatex2->SetTextSize(0.04);
-  tlatex2->Draw();
-
-  TLatex * tlatex2=new TLatex(0.5564516,0.8,"L = 34.8 nb^{-1}");
-  tlatex2->SetNDC();
-  tlatex2->SetTextColor(1);
-  tlatex2->SetTextFont(42);
-  tlatex2->SetTextSize(0.04);
-  tlatex2->Draw();
-
-
+  tlatexlumi->Draw();
+/*
   TCanvas *canvasRFB=new TCanvas("canvasRFB","canvasRFB",500,500);   
   canvasRFB->cd();
   canvasRFB->Range(-1.989924,-0.2917772,25.49622,2.212202);
@@ -523,7 +496,7 @@ void NuclearModificationY(){
   tlatex3->Draw();
   canvasRFB->SaveAs(Form("../Results%s_y/CanvasRDFB.pdf",particle.Data(),particle.Data()));
 
-
+  */
 
 
 //  l->Draw();  
