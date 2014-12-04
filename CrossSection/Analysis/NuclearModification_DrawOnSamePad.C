@@ -39,7 +39,6 @@ using namespace std;
   Double_t  B0_commonErrorP = TMath::Sqrt(0.0555*0.0555);
   Double_t  B0_commonErrorN = TMath::Sqrt(0.0555*0.0555);
   Double_t  B0_FFsysterror=0.7/40.2;
-//Double_t  B0_tagandprobcorrection[B0_nbins]={1.1763037,1.1183703,1.0768526};
   Double_t  B0_tagandprobcorrection[B0_nbins]={1.052,1.032,1.016};
 
   TString   Bp_particle="Bplus";
@@ -52,17 +51,16 @@ using namespace std;
   Double_t  Bp_commonErrorP = TMath::Sqrt(0.0445*0.0445);
   Double_t  Bp_commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t  Bp_FFsysterror=0.7/40.1;
-//Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.1619729,1.1108355,1.0873732,1.0705551,1.0518101};
   Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.049,1.030,1.019,1.012,1.006};
 
 void makeMultiPanelCanvas(TCanvas*& canv, 
 const Int_t columns,
 const Int_t rows,
 bool  setlogy,
-const Float_t leftOffset=0.,
-const Float_t bottomOffset=0.,
-const Float_t leftMargin=0.2,
-const Float_t bottomMargin=0.2,
+const Float_t leftOffset= 0.,
+const Float_t bottomOffset= 0.,
+const Float_t leftMargin= 0.16,
+const Float_t bottomMargin= 0.16,
 const Float_t edge=0.05
 );
 
@@ -183,9 +181,7 @@ void NuclearModification(
     yRpAsystFONLLlow[i]=yPercRpAsystFONLLlow[i]*yRpA[i];
 
     yRpPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*yRpA[i];
-    yRpPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*yRpA[i];
-    //cout<<yRpPbSystTot[i]<<endl;
-    
+    yRpPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*yRpA[i];   
   }
   
   TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
@@ -206,9 +202,8 @@ void NuclearModification(
   
   gSigmastat->SetFillColor(0);
   gSigmastat->SetFillStyle(0);
-
-
-//  TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
+  gSigmastat->SetFillStyle(0);
+ 
   canvasSigma->cd(PadNum);
   canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasSigma->SetFillColor(0);
@@ -222,7 +217,7 @@ void NuclearModification(
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.1,1e3);  
+  TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.1, 1e3);    
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
@@ -232,14 +227,14 @@ void NuclearModification(
   hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}( #mub GeV^{-1}c)");
   hempty->GetXaxis()->SetTitleOffset(1.);
   hempty->GetYaxis()->SetTitleOffset(1.3);
-  hempty->GetXaxis()->SetTitleSize(0.045);
-  hempty->GetYaxis()->SetTitleSize(0.045);
+  hempty->GetXaxis()->SetTitleSize(0.055);
+  hempty->GetYaxis()->SetTitleSize(0.055);
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.04);
-  hempty->GetYaxis()->SetLabelSize(0.04);  
+  hempty->GetXaxis()->SetLabelSize(0.055);
+  hempty->GetYaxis()->SetLabelSize(0.055);  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
@@ -262,13 +257,8 @@ void NuclearModification(
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
   
-  
-  //coord. for B+ and B0
-  //TLegend *legendSigma=new TLegend(0.5745968,0.4756871,0.8729839,0.6490486,"");
-  //coord.  B0
-  TLegend *legendSigma=new TLegend(0.5100806,0.5868644,0.8084677,0.7605932,"");
-  //coord. for B_s
-  //TLegend *legendSigma=new TLegend(0.2580645,0.6122881,0.5564516,0.7860169,"");
+  //coord.  for legend for sigma in the B+ pannel 
+  TLegend *legendSigma=new TLegend(0.468298,0.7045614,0.7678185,0.8757895,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -281,19 +271,11 @@ void NuclearModification(
   c->SetFillColor(5);
   c->Draw();
 
-  //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
-  
   TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pPb","pf");
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
-  //ent_SigmapPb->SetFillColor(0);
   ent_SigmapPb->SetMarkerColor(1);
-  
-  //TLegendEntry *ent_SigmapPbSyst=legendSigma->AddEntry(gSigmasyst,"pPb","f");
-  //ent_SigmapPbSyst->SetTextFont(42);
-  //ent_SigmapPbSyst->SetLineColor(1);
-  //ent_SigmapPbSyst->SetMarkerColor(1);
-  
+
   TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"FONLL pp ref.","f");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
@@ -302,27 +284,26 @@ void NuclearModification(
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   
-  //hSigmapPbStat->Draw("same");
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
   gSigmasyst->Draw("2same");
-
+  
   TBox *d = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   d->SetLineColor(1);
   d->SetFillColor(0);
   d->Draw();
-
+  
   if(PadNum==0 || PadNum==1){
     legendSigma->Draw("same");
-  
-    TLatex * tlatex1=new TLatex(0.23,0.8625793,"CMS Preliminary   pPb #sqrt{s_{NN}}= 5.02 TeV");
+    
+    TLatex * tlatex1=new TLatex(0.21,0.88801268,"CMS");
     tlatex1->SetNDC();
     tlatex1->SetTextColor(1);
     tlatex1->SetTextFont(42);
     tlatex1->SetTextSize(0.045);
     tlatex1->Draw();
     
-    TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
+    TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     tlatexlumi->SetNDC();
     tlatexlumi->SetTextColor(1);
     tlatexlumi->SetTextFont(42);
@@ -332,7 +313,7 @@ void NuclearModification(
 
   double xpos=0.8528226;
   double ypos=0.6849894;
-
+  
   TString mypar;
   if(particle=="Bplus") mypar="B^{+}";
   if(particle=="Bzero") mypar="B^{0}";
@@ -345,34 +326,31 @@ void NuclearModification(
   tlatex3->SetTextSize(0.06);
   tlatex3->Draw();
   
-  //canvasSigma->SaveAs(Form("../Results%s/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
-  
-  //TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
-  gRpAstat->SetMarkerColor(1);
-  gRpAstat->SetLineColor(1);
-  gRpAstat->SetLineWidth(2);   
   gRpAstat->SetMarkerStyle(21);
   gRpAstat->SetMarkerColor(1);
-  
+  gRpAstat->SetLineColor(1);
+  gRpAstat->SetLineWidth(2);  
+  gRpAstat->SetFillColor(0);
+
+
   TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
   gRpAsyst->SetTitle("RpA syst uncertainty from pPb");
-  gRpAsyst->SetMarkerColor(1);
+  gRpAsyst->SetName("gRpAsyst");
+  gRpAsyst->SetFillColor(0);
+  gRpAsyst->SetMarkerSize(0);
   gRpAsyst->SetLineColor(1);
-  gRpAsyst->SetLineWidth(2);   
-  gRpAsyst->SetMarkerStyle(21);
-  gRpAsyst->SetMarkerColor(1);
-   
+  gRpAsyst->SetLineWidth(2);
+  gRpAsyst->SetFillStyle(0);
+  
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
-  gRpAsystFONLL->SetMarkerColor(2);
-  gRpAsystFONLL->SetLineColor(2);
-  gRpAsystFONLL->SetLineWidth(2); 
-  gRpAsystFONLL->SetMarkerStyle(21);
-  gRpAsystFONLL->SetMarkerColor(2);
+  gRpAsystFONLL->SetFillColor(5);
+  gRpAsystFONLL->SetLineColor(5);//kAzure-3);
+  gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
 
-  //TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",500,500);   
+
   canvasRpA->cd(PadNum);
   canvasRpA->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasRpA->SetFillColor(0);
@@ -393,45 +371,32 @@ void NuclearModification(
   legendRpA->SetTextFont(42);
   legendRpA->SetTextSize(0.045);
 
-  hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
+  hempty=new TH2F("hempty","",10,0.1, 62. ,10.,0.,2.5);  
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}");
-  hempty->GetXaxis()->SetTitleOffset(1.1);
+  hempty->GetXaxis()->SetTitleOffset(1.3);
   hempty->GetYaxis()->SetTitleOffset(1.1);
-  hempty->GetXaxis()->SetTitleSize(0.045);
-  hempty->GetYaxis()->SetTitleSize(0.045);
+  hempty->GetXaxis()->SetTitleSize(0.055);
+  hempty->GetYaxis()->SetTitleSize(0.055);
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.045);
-  hempty->GetYaxis()->SetLabelSize(0.045);  
+  hempty->GetXaxis()->SetLabelSize(0.055);
+  hempty->GetYaxis()->SetLabelSize(0.055);  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
   
-  TLine *l = new TLine(0,1,70,1);
+  TLine *l = new TLine(0,1, 65.,1);
   l->SetLineStyle(2);
-  
-  gRpAstat->SetMarkerStyle(21);
-  gRpAstat->SetLineColor(1);
-  gRpAstat->SetMarkerColor(1);
 
-  gRpAsystFONLL->SetLineStyle(3);
-  gRpAsystFONLL->SetLineWidth(3);
-  gRpAsystFONLL->SetFillColor(5);
-  gRpAsystFONLL->SetLineColor(5);//kAzure-3);
-  gRpAsystFONLL->SetMarkerColor(5);//kAzure-3);
   gRpAsystFONLL->Draw("2same");
+  gRpAsyst->Draw("2esame");
   gRpAstat->Draw("psame");
-  gRpAsyst->SetFillColor(0);
-  gRpAsyst->SetFillStyle(0);
   
-  gRpAstat->SetFillColor(0);
-  gRpAstat->SetFillStyle(0);
-  gRpAsyst->Draw("2same");
   
   TBox *a = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   a->SetLineColor(1);
@@ -447,10 +412,7 @@ void NuclearModification(
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
-  //TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(gRpAsyst,"            syst. unc.","f");
-  //ent_RpAsystData->SetTextFont(42);
-  //ent_RpAsystData->SetLineColor(1);
-  //ent_RpAsystData->SetMarkerColor(1);
+  
   TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. L+BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
@@ -465,26 +427,23 @@ void NuclearModification(
   if(PadNum==1||PadNum==0){
     legendRpA->Draw();
 
-    TLatex * tlatex4=new TLatex(0.25,0.8625793,"CMS Preliminary     pPb #sqrt{s_{NN}}= 5.02 TeV");
+    TLatex * tlatex4=new TLatex(0.21,0.88801268,"CMS");
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(42);
     tlatex4->SetTextSize(0.045);
     tlatex4->Draw();
     
-    TLatex * tlatex2=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
+    TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     tlatex2->SetNDC();
     tlatex2->SetTextColor(1);
     tlatex2->SetTextFont(42);
     tlatex2->SetTextSize(0.045);
-    tlatex2->Draw();
+   tlatex2->Draw();
   }
-  
+   
   tlatex3->Draw();
 
-  //l->Draw();  
-  //canvasRpA->SaveAs(Form("../Results%s/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
-  
   TFile *fout=new TFile(Form("../Results%s/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
   fout->cd();
   gSigmasyst->SetName("gSigmasyst");
@@ -494,8 +453,8 @@ void NuclearModification(
 }
 
 void NuclearModification_DrawOnSamePad(){
-  TCanvas *cSigma=new TCanvas("canvasSigma","canvasSigma",900,400);
-  TCanvas *cRpA=new TCanvas("canvasRpA","canvasRpA",900,400);
+  TCanvas *cSigma=new TCanvas("canvasSigma","canvasSigma",1150,400);
+  TCanvas *cRpA=new TCanvas("canvasRpA","canvasRpA",1150,400);
   makeMultiPanelCanvas(cSigma, 3, 1, true);
   makeMultiPanelCanvas(cRpA, 3, 1, false);
   NuclearModification(
@@ -566,6 +525,10 @@ const Float_t edge
     return;
   }
   canv->Clear();
+ //  Float_t pad_width  = 0.;
+//   Float_t   pad_height = 0.;
+//    Float_t charheight = 0.05;
+//   Float_t textsize= 0.05;
   TPad* pad[columns][rows];
   Float_t Xlow[columns];
   Float_t Xup[columns];
@@ -613,3 +576,6 @@ const Float_t edge
     }
   }
 }
+
+
+      
