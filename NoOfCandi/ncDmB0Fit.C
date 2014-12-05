@@ -3,63 +3,68 @@
 double luminosity=34.8*1e-3;
 double setparam0=100.;
 double setparam1=5.28;
-double setparam2=0.05;
-double setparam3=0.03;
+double setparam2=0.03;
 double fixparam1=5.279;
+double setparam3=0.03;
+double fixparam2=0.04;
 
-//svmithi2
+//svmit02
 //TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kstar.root";
 
 //lxplus
 TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kstar.root";
 
-//tk pt, chi2
-TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
-//TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
+TString cut_kpi="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04"; 
 
-TString seldata_2y=Form("%s",cut.Data());
-TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
-TString selmcgen="abs(y)<2.4&&abs(pdgId)==521&&isSignal==1";
+TString seldata_2y_kpi=Form("%s",cut_kpi.Data());
+TString selmc_kpi=Form("abs(y)<2.4&&(gen==23333||gen==41000)&&%s",cut_kpi.Data());
+TString selmcgen="abs(y)<2.4&&abs(pdgId)==511&&isSignal!=0";
 
-TString weight = "(27.493+pt*(-0.218769))";
+TString weight = "27.493+pt*(-0.218769)";
 
-TString particle="B^{+}";
+TString particle = "B^{0}";
 
-void clean0(TH1D *h){
-  for (int i=1;i<=h->GetNbinsX();i++){
-    if (h->GetBinContent(i)==0) h->SetBinError(i,1);
-  }
+void clean0(TH1D *h)
+{
+   for (int i=1;i<=h->GetNbinsX();i++)
+   {
+      if (h->GetBinContent(i)==0) h->SetBinError(i,1);
+   }
 }
 
-TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, float mupt, bool ifmc)
+TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax,float mupt,bool ifmc)
 {
    //cout<<cut.Data()<<endl;
    static int count=0;
    count++;
    TCanvas *c= new TCanvas(Form("c%d",count),"",600,600);
-   TH1D *h = new TH1D(Form("h%d",count),"",50,5,6);
-   TH1D *hMC = new TH1D(Form("hMC%d",count),"",50,5,6);
+   TH1D *h = new TH1D(Form("h%d",count),"",30,5.03,5.93);
+//   TH1D *hBck = new TH1D(Form("hBck%d",count),"",40,5,6);
+   
+   TH1D *hMC = new TH1D(Form("hMC%d",count),"",30,5.03,5.93);
+   // Fit function
+   TString iNP="2.28629e1*Gaus(x,5.02606,6.84e-2)/(sqrt(2*3.14159)*(6.84e-2))+3.85695*Gaus(x,5.27701,0.04305)/(sqrt(2*3.14159)*(0.04305))";
+   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[6]*("+iNP+")");
 
-   TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
-   TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
-   //if(ifmc) nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&mu1pt>%f&&mu2pt>%f&&gen==23333",seldata_2y.Data(),ptmin,ptmax,mupt,mupt));
-   nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&mu1pt>%f&&mu2pt>%f",seldata_2y.Data(),ptmin,ptmax,mupt,mupt));
-   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&mu1pt>%f&&mu2pt>%f",seldata_2y.Data(),ptmin,ptmax,mupt,mupt));   
+   nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&mu1pt>%f&&mu2pt>%f",seldata_2y_kpi.Data(),ptmin,ptmax,mupt,mupt));
+   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f&&mu1pt>%f&&mu2pt>%f",seldata_2y_kpi.Data(),ptmin,ptmax,mupt,mupt));
+
    clean0(h);
    h->Draw();
    f->SetParLimits(4,-1000,0);
-   f->SetParLimits(2,0.01,0.05);
-   f->SetParLimits(8,0.01,0.05);
+   f->SetParLimits(2,0.01,0.08);
+   f->SetParLimits(8,0.01,0.1);
    f->SetParLimits(7,0,1);
-   f->SetParLimits(5,0,1000);
+   f->SetParLimits(6,0,1000);
 
    f->SetParameter(0,setparam0);
    f->SetParameter(1,setparam1);
    f->SetParameter(2,setparam2);
    f->SetParameter(8,setparam3);
    f->FixParameter(1,fixparam1);
+   f->FixParameter(6,0);
    h->GetEntries();
 
    hMC->Fit(Form("f%d",count),"q","",5,6);
@@ -74,6 +79,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, float mupt, bool ifmc)
    f->FixParameter(2,f->GetParameter(2));
    f->FixParameter(7,f->GetParameter(7));
    f->FixParameter(8,f->GetParameter(8));
+   f->ReleaseParameter(6);
    
    h->Fit(Form("f%d",count),"q","",5,6);
    h->Fit(Form("f%d",count),"q","",5,6);
@@ -90,21 +96,18 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, float mupt, bool ifmc)
    TF1 *background = new TF1(Form("background%d",count),"[0]+[1]*x");
    background->SetParameter(0,f->GetParameter(3));
    background->SetParameter(1,f->GetParameter(4));
-   background->SetParameter(2,f->GetParameter(5));
-   background->SetParameter(3,f->GetParameter(6));
    background->SetLineColor(4);
    background->SetRange(5,6);
    background->SetLineStyle(2);
    
    // function for signal shape plotting. take the fit result from f
    TF1 *Bkpi = new TF1(Form("fBkpi",count),"[0]*("+iNP+")");
-   Bkpi->SetParameter(0,f->GetParameter(5));
+   Bkpi->SetParameter(0,f->GetParameter(6));
    Bkpi->SetLineColor(kGreen+1);
    Bkpi->SetFillColor(kGreen+1);
-//   Bkpi->SetRange(5.00,5.28);
    Bkpi->SetRange(5.00,6.00);
    Bkpi->SetLineStyle(1);
-   Bkpi->SetFillStyle(3004);
+   Bkpi->SetFillStyle(3005);
 
    // function for signal shape plotting. take the fit result from f
    TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
@@ -122,11 +125,14 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, float mupt, bool ifmc)
    h->SetStats(0);
    h->Draw("e");
    h->SetXTitle("M_{B} (GeV/c^{2})");
-   h->SetYTitle("Entries / (20 MeV/c^{2})");
+   h->SetYTitle("Entries / (30 MeV/c^{2})");
    h->GetXaxis()->CenterTitle();
    h->GetYaxis()->CenterTitle();
    h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
+
+ //  hBck->Draw("hist same");
+
    Bkpi->Draw("same");
    background->Draw("same");   
    mass->SetRange(5,6);
@@ -136,16 +142,17 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, float mupt, bool ifmc)
    mass->SetFillColor(2);
    f->Draw("same");
 
-   double yield = mass->Integral(5,6)/0.02;
-   double yieldErr = mass->Integral(5,6)/0.02*mass->GetParError(0)/mass->GetParameter(0);
+   cout <<"fit result:"<<f->GetParameter(0)*2.5<<" "<<f->Integral(5,6)/h->GetBinWidth(1)<<endl;
 
-
+   double yield = mass->Integral(5,6)/0.03;
+   double yieldErr = mass->Integral(5,6)/0.03*mass->GetParError(0)/mass->GetParameter(0);
+   
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
-   leg->AddEntry(h,Form("#mu p_{T} > %.1f GeV/c",mupt),"");
    //leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
+   leg->AddEntry(h,Form("#mu p_{T}>%.1f GeV/c",mupt),"");
    leg->AddEntry(h,"Data","pl");
    leg->AddEntry(f,"Fit","l");
    leg->AddEntry(mass,"Signal","f");
@@ -154,30 +161,29 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, float mupt, bool ifmc)
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
    leg2->AddEntry(h,"B meson","");
-   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
-   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
+   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
+   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",yield,yieldErr),"");
    leg2->Draw();
 
-   if(ifmc) c->SaveAs(Form("MuonPt/Bplus/BMassMC-%d.pdf",count));
-   else c->SaveAs(Form("MuonPt/Bplus/BMass-%d.pdf",count));
+   if(ifmc) c->SaveAs(Form("MuonPt/Bzero/BMassMC-%d.pdf",count));
+   else c->SaveAs(Form("MuonPt/Bzero/BMass-%d.pdf",count));
+
 
    return mass;
 }
 
-void ncDmFit(TString infname="",bool doweight = 1)
+void ncDmB0Fit(TString infname="",bool doweight = 1)
 {
   if (doweight==0) weight="1";
   if (infname=="") infname=inputdata.Data();
   TFile *inf = new TFile(infname.Data());
-  TTree *nt = (TTree*) inf->Get("ntKp");
+  TTree *nt = (TTree*) inf->Get("ntKstar");
 
   TFile *infMC = new TFile(inputmc.Data());
   TTree *ntGen = (TTree*)infMC->Get("ntGen");
-  TTree *ntGen2 = (TTree*)inf->Get("ntGen");
-  TTree *ntMC = (TTree*)infMC->Get("ntKp");
-    
+  TTree *ntMC = (TTree*)infMC->Get("ntKstar");
+
   ntGen->AddFriend(ntMC);
-  ntGen2->AddFriend(ntMC);
   
   const int nBins = 6;
   double ptBins[nBins+1] = {0.5,1.0,1.5,2.0,2.5,3.0,3.5};
@@ -186,6 +192,8 @@ void ncDmFit(TString infname="",bool doweight = 1)
   TH1D *hPtBase = new TH1D("hPtBase","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtMCBase = new TH1D("hPtMCBase","",nBins,ptBins);
+
+  TCanvas *cfinal = new TCanvas("cfinal","",600,600);
 
   TF1 *fbase = fit(nt,ntMC,10,60,0,false);
   double yieldBase = fbase->Integral(5,6)/0.02;
@@ -229,8 +237,6 @@ void ncDmFit(TString infname="",bool doweight = 1)
   hPtMC->SetYTitle("Probability of losing candidate");
   hPtMC->SetTitleOffset(1.5,"Y");
   hPtMC->SetMaximum(0.35);
-  //  if(hPt->GetMaximum()>hPtMC->GetMaximum()) hPtMC->SetMaximum(hPt->GetMaximum()*1.03);
-  //  else hPtMC->SetMaximum(hPtMC->GetMaximum()*1.03);
 
   hPt->SetMarkerStyle(8);
   hPt->SetStats(0);
@@ -239,14 +245,12 @@ void ncDmFit(TString infname="",bool doweight = 1)
   hPtMC->SetFillColor(kRed);
   hPtMC->SetLineWidth(3);
   hPtMC->SetStats(0);
-
-  TCanvas *cfinal = new TCanvas("cfinal","",600,600);
   
   hPtMC->Draw();
   hPt->Draw("same lep");
 
   TLegend *legi = new TLegend(0.13,0.72,0.33,0.84);
-  legi->AddEntry(hPt,"data","ple");
+  legi->AddEntry(hPt,"data","pl");
   legi->AddEntry(hPtMC,"MC","f");
   legi->SetBorderSize(0);
   legi->SetFillStyle(0);
@@ -259,25 +263,26 @@ void ncDmFit(TString infname="",bool doweight = 1)
   leg1i->SetFillStyle(0);
   leg1i->Draw("same");
 
-  cfinal->SaveAs("MuonPt/Bplus/muonpt.pdf");
+  cfinal->SaveAs("MuonPt/Bzero/muonpt.pdf");
 
-  /*
+
+  /*  
   TCanvas *c=  new TCanvas("cResult","",600,600);
-  hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
-  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
+  hPt->SetXTitle("B^{0} p_{T} (GeV/c)");
+  hPt->SetYTitle("Uncorrected B^{0} dN/dp_{T}");
   hPt->Sumw2();
   hPt->Draw();
   
-  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
-  nt->Project("hPtRecoTruth","pt",TCut(seldata_2y.Data())&&"gen==23333");
-  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
-  ntGen2->Project("hPtGen2","pt",(TCut(selmcgen.Data())));
-  divideBinWidth(hPtRecoTruth);
+
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)"));
+
+  nt->Project("hRecoTruth","pt",TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)");
+  ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
+  divideBinWidth(hRecoTruth);
   
-  hPtRecoTruth->Draw("same hist");
+  hRecoTruth->Draw("same hist");
   divideBinWidth(hPtMC);
   divideBinWidth(hPtGen);
-  divideBinWidth(hPtGen2);
   
   hPtMC->Sumw2();
   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
@@ -287,26 +292,28 @@ void ncDmFit(TString infname="",bool doweight = 1)
   TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
   hPtCor->Divide(hEff);
   TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
-  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
+  hPtCor->SetYTitle("Correctd B^{0} dN/dp_{T}");
   hPtCor->Draw();
   hPtGen->Draw("same hist");
-  hPtGen2->Draw("same hist");
 
   TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
-  double BRchain=6.09604e-5;
+
+  // B0->J/psi K*0(892) = 1.34 +- 0.06 x 10^-3
+  // J/psi -> mumu = 5.93 +- 0.06 x 10^-2
+  // K*0(892) -> K+ pi- = 66%
+  double BRchain=5.244e-5;
 
   hPtSigma->Scale(1./(2*luminosity*BRchain));
-  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
+  hPtSigma->SetYTitle("d#sigma/dp_{T} (B^{0}) ");
 
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile("../ResultsBplus/SigmaBplus.root","recreate");
+  TFile *outf = new TFile("../ResultsBzero/SigmaBzero.root","recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
-  hPtGen->Write();
   hPtCor->Write();
   hPtSigma->Write();
   outf->Close();
