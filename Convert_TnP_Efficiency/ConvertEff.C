@@ -30,8 +30,8 @@ bool UsePOGIDEff = 0;
 //Specify eff., Trg=Mu trigger, ID=Mu ID, Trk=Mu tracking
 //TString _eff_ = "Trg";
 //TString _eff_ = "ID"; 
-//TString _eff_ = "Trk";
-TString _eff_ = "All";
+TString _eff_ = "Trk";
+//TString _eff_ = "All";
 
 //int _type=0;
 //int _type=1;
@@ -379,7 +379,8 @@ void _ConvertEff(int _type, int nBins, double ptBins[], bool InEtaBin){
     printf(" %.3f &", ((effData_tol[i])/effMC_tol[i]));
   }printf("\n");
   for(int i = 0; i < nBins; i ++){printf(" %.3f &", (fabs(effData_tol[i]/effMC_tol[i]) - 1));}printf("\n");
-  EffDiff->SetMaximum(0.1);
+  EffDiff->SetMinimum(0);
+  EffDiff->SetMaximum(1.3);
   EffDiff->SetTitleOffset(1.2,"Y");
   EffDiff->SetMarkerColor(2);
   EffDiff->SetMarkerSize(1.2);
