@@ -388,12 +388,19 @@ void NuclearModification(
   hempty->GetYaxis()->SetLabelSize(0.055);  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
+
   hempty->Draw();
   
   TLine *l = new TLine(0,1, 65.,1);
   l->SetLineStyle(2);
 
+  TLine *line = new TLine(8.740882,1.017445,61,1.008586);
+  line->SetLineColor(1);
+  line->SetLineStyle(2);  
+  line->SetLineWidth(2);
+  
   gRpAsystFONLL->Draw("2same");
+  line->Draw();
   gRpAsyst->Draw("2esame");
   gRpAstat->Draw("psame");
   
@@ -443,7 +450,9 @@ void NuclearModification(
   }
    
   tlatex3->Draw();
-
+  
+  
+  
   TFile *fout=new TFile(Form("../Results%s/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
   fout->cd();
   gSigmasyst->SetName("gSigmasyst");
