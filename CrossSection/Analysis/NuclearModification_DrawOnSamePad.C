@@ -319,7 +319,7 @@ void NuclearModification(
   TString mypar;
   if(particle=="Bplus") mypar="B^{+}";
   if(particle=="Bzero") mypar="B^{0}";
-  if(particle=="Bs") mypar="B_{s}";  
+  if(particle=="Bs") mypar="B_{s}^{0}";  
   
   TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
   tlatex3->SetNDC();
