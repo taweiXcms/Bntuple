@@ -303,7 +303,9 @@ void NuclearModification(
     tlatex1->SetTextSize(0.045);
     tlatex1->Draw();
     
-    TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
+
     tlatexlumi->SetNDC();
     tlatexlumi->SetTextColor(1);
     tlatexlumi->SetTextFont(42);
@@ -441,7 +443,10 @@ void NuclearModification(
     tlatex4->SetTextSize(0.045);
     tlatex4->Draw();
     
-    TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
+
+
     tlatex2->SetNDC();
     tlatex2->SetTextColor(1);
     tlatex2->SetTextFont(42);
