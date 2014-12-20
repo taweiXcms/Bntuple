@@ -8,6 +8,10 @@ double setparam3=0.03;
 double fixparam1=5.367;
 
 //svmit02
+//TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+//TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Phi.root";
+
+//lxplus
 TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
 TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Phi.root";
 
@@ -68,9 +72,9 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    hMC->Fit(Form("f%d",count),"L m","",5,6);
 
    f->FixParameter(1,f->GetParameter(1));
-   f->FixParameter(2,f->GetParameter(2)*0.80);
+   f->FixParameter(2,f->GetParameter(2));
    f->FixParameter(7,f->GetParameter(7));
-   f->FixParameter(8,f->GetParameter(8)*0.80);
+   f->FixParameter(8,f->GetParameter(8));
    
    h->Fit(Form("f%d",count),"q","",5,6);
    h->Fit(Form("f%d",count),"q","",5,6);
@@ -158,12 +162,13 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   c->SaveAs(Form("PDFVariation/data/width0p8/ResultsBs/BMass-%d.pdf",count));
+   //c->SaveAs(Form("../ResultsBs/BMass-%d.pdf",count));
+   c->SaveAs("../../../BsDefault.pdf");
 
    return mass;
 }
 
-void fitBsDecWidth(TString infname="",bool doweight = 1)
+void fitBs(TString infname="",bool doweight = 1)
 {
    if (doweight==0) weight="1";
    if (infname=="") infname=inputdata.Data();
@@ -196,4 +201,44 @@ void fitBsDecWidth(TString infname="",bool doweight = 1)
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
    }  
 
+   /*
+   divideBinWidth(hPtMC);
+   divideBinWidth(hPtGen);
+
+   TCanvas *c=  new TCanvas("cResult","",600,600);
+   hPt->SetXTitle("B_{s} p_{T} (GeV/c)");
+   hPt->SetYTitle("Uncorrected B_{s} dN/dp_{T}");
+   hPt->Draw();
+   hRecoTruth->Draw("same hist");
+   
+   hPtMC->Sumw2();
+   TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
+   hPtMC->Sumw2();
+   hEff->Divide(hPtGen);
+  
+  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
+  hPtCor->Divide(hEff);
+  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
+  hPtCor->SetYTitle("Correctd B_{s} dN/dp_{T}");
+  hPtCor->Draw();
+  hPtGen->Draw("same");
+
+  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
+  double BRchain=2.89977e-5;
+  hPtSigma->Scale(1./(2*luminosity*BRchain));
+  hPtSigma->SetYTitle("d#sigma/dp_{T} (B_{s})");
+
+  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
+
+  hPtSigma->Draw();
+  
+  TFile *outf = new TFile("../ResultsBs/SigmaBs.root","recreate");
+  outf->cd();
+  hPt->Write();
+  hEff->Write();
+  hPtCor->Write();
+  hPtSigma->Write();
+  outf->Close();
+  delete outf;
+  */
 }

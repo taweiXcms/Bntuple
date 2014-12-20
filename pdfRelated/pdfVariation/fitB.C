@@ -1,8 +1,5 @@
 #include "utilities.h"
 
-//int inclusive=0;
-int inclusive=1;
-
 double luminosity=34.8*1e-3;
 double setparam0=100.;
 double setparam1=5.28;
@@ -11,10 +8,12 @@ double setparam3=0.03;
 double fixparam1=5.279;
 
 //svmithi2
-TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/afs/cern.ch/work/w/wangj/nt_20140801_mixed_fromQMBFinder_Kp.root";
 //TString inputdata="/data/bmeson/data/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
 //TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
+
+//lxplus
+TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
 //tk pt, chi2
 TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
@@ -67,15 +66,10 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    hMC->Fit(Form("f%d",count),"L q","",5,6);
    hMC->Fit(Form("f%d",count),"L m","",5,6);
 
-   cout<<"======= MC ======="<<endl;
-   cout<<f->GetParameter(2)<<"  "<<f->GetParameter(8)<<endl;
-   cout<<"===== MC end ====="<<endl;
-   cout<<endl;
-
    f->FixParameter(1,f->GetParameter(1));
-   //f->FixParameter(2,f->GetParameter(2));
+   f->FixParameter(2,f->GetParameter(2));
    f->FixParameter(7,f->GetParameter(7));
-   //f->FixParameter(8,f->GetParameter(8));
+   f->FixParameter(8,f->GetParameter(8));
    
    h->Fit(Form("f%d",count),"q","",5,6);
    h->Fit(Form("f%d",count),"q","",5,6);
@@ -88,10 +82,6 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    h->SetMarkerStyle(20);
    cout <<h->GetEntries()<<endl;
 
-   cout<<"======= data ======="<<endl;
-   cout<<f->GetParameter(2)<<"  "<<f->GetParameter(8)<<endl;
-   cout<<"===== data end ====="<<endl;
-   cout<<endl;
    cout<<"======= chi2 ======="<<endl;
    cout<<f->GetChisquare()<<endl;
    cout<<"===== chi2 end ====="<<endl;
@@ -167,13 +157,13 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   if(inclusive==0) c->SaveAs(Form("PDFVariation/data/width-float/ResultsBplus/BMass-%d.pdf",count));
-   else c->SaveAs(Form("PDFVariation1Bin/data/width-float/ResultsBplus/BMass-%d.pdf",count));
+   //c->SaveAs(Form("../ResultsBplus/BMass-%d.pdf",count));
+   c->SaveAs("../../../BplusDefault.pdf");
 
    return mass;
 }
 
-void fitBFloat(TString infname="",bool doweight = 1)
+void fitB(TString infname="",bool doweight = 1)
 {
   if (doweight==0) weight="1";
   if (infname=="") infname=inputdata.Data();
@@ -187,12 +177,11 @@ void fitBFloat(TString infname="",bool doweight = 1)
     
   ntGen->AddFriend(ntMC);
   ntGen2->AddFriend(ntMC);
-
+  
   //const int nBins = 5;
   //double ptBins[nBins+1] = {10,15,20,25,30,60};
   const int nBins = 1;
   double ptBins[nBins+1] = {10,60};
-
   TH1D *hPt = new TH1D("hPt","",nBins,ptBins);
   TH1D *hPtRecoTruth = new TH1D("hPtRecoTruth","",nBins,ptBins);
   TH1D *hGenPtSelected = new TH1D("hGenPtSelected","",nBins,ptBins);
@@ -208,5 +197,55 @@ void fitBFloat(TString infname="",bool doweight = 1)
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i]));
     }  
+  /*
+  TCanvas *c=  new TCanvas("cResult","",600,600);
+  hPt->SetXTitle("B^{+} p_{T} (GeV/c)");
+  hPt->SetYTitle("Uncorrected B^{+} dN/dp_{T}");
+  hPt->Sumw2();
+  hPt->Draw();
+  
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(selmc.Data())&&"gen==23333"));
+  nt->Project("hPtRecoTruth","pt",TCut(seldata_2y.Data())&&"gen==23333");
+  ntGen->Project("hPtGen","pt",TCut(weight)*(TCut(selmcgen.Data())));
+  ntGen2->Project("hPtGen2","pt",(TCut(selmcgen.Data())));
+  divideBinWidth(hPtRecoTruth);
+  
+  hPtRecoTruth->Draw("same hist");
+  divideBinWidth(hPtMC);
+  divideBinWidth(hPtGen);
+  divideBinWidth(hPtGen2);
+  
+  hPtMC->Sumw2();
+  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
+  hPtMC->Sumw2();
+  hEff->Divide(hPtGen);
+  
+  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
+  hPtCor->Divide(hEff);
+  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
+  hPtCor->SetYTitle("Corrected B^{+} dN/dp_{T}");
+  hPtCor->Draw();
+  hPtGen->Draw("same hist");
+  hPtGen2->Draw("same hist");
 
+  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
+  double BRchain=6.09604e-5;
+
+  hPtSigma->Scale(1./(2*luminosity*BRchain));
+  hPtSigma->SetYTitle("d#sigma (B^{+})/dp_{T}");
+
+  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
+
+  hPtSigma->Draw();
+  
+  TFile *outf = new TFile("../ResultsBplus/SigmaBplus.root","recreate");
+  outf->cd();
+  hPt->Write();
+  hEff->Write();
+  hPtGen->Write();
+  hPtCor->Write();
+  hPtSigma->Write();
+  outf->Close();
+  delete outf;
+  */
 }

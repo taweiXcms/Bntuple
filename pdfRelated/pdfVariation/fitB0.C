@@ -81,9 +81,9 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    hMC->Fit(Form("f%d",count),"L m","",5,6);
 
    f->FixParameter(1,f->GetParameter(1));
-   f->FixParameter(2,f->GetParameter(2)*0.80);
+   f->FixParameter(2,f->GetParameter(2));
    f->FixParameter(7,f->GetParameter(7));
-   f->FixParameter(8,f->GetParameter(8)*0.80);
+   f->FixParameter(8,f->GetParameter(8));
    f->ReleaseParameter(6);
    
    h->Fit(Form("f%d",count),"q","",5,6);
@@ -118,6 +118,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    Bkpi->SetLineStyle(1);
    Bkpi->SetFillStyle(3005);
 
+   // function for signal shape plotting. take the fit result from f
    TF1 *mass = new TF1(Form("fmass",count),"[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))");
    mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
    mass->SetParError(0,f->GetParError(0));
@@ -128,6 +129,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    mass->SetLineColor(2);
    mass->SetLineStyle(2);
 
+//   cout <<mass->Integral(0,1.2)<<" "<<mass->IntegralError(0,1.2)<<endl;
    h->SetMarkerStyle(24);
    h->SetStats(0);
    h->Draw("e");
@@ -137,6 +139,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    h->GetYaxis()->CenterTitle();
    h->SetTitleOffset(1.5,"Y");
    h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
+
+ //  hBck->Draw("hist same");
 
    Bkpi->Draw("same");
    background->Draw("same");   
@@ -152,6 +156,7 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    double yield = mass->Integral(5,6)/0.03;
    double yieldErr = mass->Integral(5,6)/0.03*mass->GetParError(0)/mass->GetParameter(0);
    
+   // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
    leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
@@ -168,13 +173,13 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",yield,yieldErr),"");
    leg2->Draw();
 
-   //c->SaveAs(Form("PDFVariation/data/width0p8/ResultsBzero/BMass-%d.pdf",count));
-   c->SaveAs(Form("PDFVariation1Bin/data/width0p8/ResultsBzero/BMass-%d.pdf",count));
+   //c->SaveAs(Form("../ResultsBzero/BMass-%d.pdf",count));
+   c->SaveAs("../../../BzeroDefault.pdf");
 
    return mass;
 }
 
-void fitB0DecWidth(TString infname="",bool doweight = 1)
+void fitB0(TString infname="",bool doweight = 1)
 {
   if (doweight==0) weight="1";
   if (infname=="") infname=inputdata.Data();
@@ -186,7 +191,7 @@ void fitB0DecWidth(TString infname="",bool doweight = 1)
   TTree *ntMC = (TTree*)infMC->Get("ntKstar");
 
   ntGen->AddFriend(ntMC);
-
+  
   //const int nBins = 3;
   //double ptBins[nBins+1] = {10,15,20,60};
   const int nBins = 1;
@@ -205,4 +210,57 @@ void fitB0DecWidth(TString infname="",bool doweight = 1)
       hPt->SetBinError(i+1,yieldErr/(ptBins[i+1]-ptBins[i])); 
     }  
 
+  /*  
+  TCanvas *c=  new TCanvas("cResult","",600,600);
+  hPt->SetXTitle("B^{0} p_{T} (GeV/c)");
+  hPt->SetYTitle("Uncorrected B^{0} dN/dp_{T}");
+  hPt->Sumw2();
+  hPt->Draw();
+  
+
+  ntMC->Project("hPtMC","pt",TCut(weight)*(TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)"));
+
+  nt->Project("hRecoTruth","pt",TCut(seldata_2y_kpi.Data())&&"(gen==23333||gen==41000)");
+  ntGen->Project("hPtGen","pt",TCut(weight)*(selmcgen.Data()));
+  divideBinWidth(hRecoTruth);
+  
+  hRecoTruth->Draw("same hist");
+  divideBinWidth(hPtMC);
+  divideBinWidth(hPtGen);
+  
+  hPtMC->Sumw2();
+  TH1D *hEff = (TH1D*)hPtMC->Clone("hEff");
+  hPtMC->Sumw2();
+  hEff->Divide(hPtGen);
+  
+  TH1D *hPtCor = (TH1D*)hPt->Clone("hPtCor");
+  hPtCor->Divide(hEff);
+  TCanvas *cCor=  new TCanvas("cCorResult","",600,600);
+  hPtCor->SetYTitle("Correctd B^{0} dN/dp_{T}");
+  hPtCor->Draw();
+  hPtGen->Draw("same hist");
+
+  TH1D *hPtSigma= (TH1D*)hPtCor->Clone("hPtSigma");
+
+  // B0->J/psi K*0(892) = 1.34 +- 0.06 x 10^-3
+  // J/psi -> mumu = 5.93 +- 0.06 x 10^-2
+  // K*0(892) -> K+ pi- = 66%
+  double BRchain=5.244e-5;
+
+  hPtSigma->Scale(1./(2*luminosity*BRchain));
+  hPtSigma->SetYTitle("d#sigma/dp_{T} (B^{0}) ");
+
+  TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
+
+  hPtSigma->Draw();
+  
+  TFile *outf = new TFile("../ResultsBzero/SigmaBzero.root","recreate");
+  outf->cd();
+  hPt->Write();
+  hEff->Write();
+  hPtCor->Write();
+  hPtSigma->Write();
+  outf->Close();
+  delete outf;
+  */
 }
