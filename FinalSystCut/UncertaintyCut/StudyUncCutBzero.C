@@ -277,7 +277,7 @@ void StudyUncCutBzero(int variationoption=1){
     }
 
      if(variationoption==5){
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>0.&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.15&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>0.&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
       //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>0.8&&(d0/d0Err)>0.&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.5e-01"; 
       selmc=Form("abs(y)<2.4&&(gen==23333||gen==41000)&&%s",cut.Data());
       selmcgen="abs(y)<2.4&&abs(pdgId)==511&&isSignal!=0";
@@ -286,7 +286,7 @@ void StudyUncCutBzero(int variationoption=1){
     }
     
       if(variationoption==6){
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.15&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>6.08&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
       //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>0.8&&(d0/d0Err)>4.16&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.5e-01"; 
       selmc=Form("abs(y)<2.4&&(gen==23333||gen==41000)&&%s",cut.Data());
       selmcgen="abs(y)<2.4&&abs(pdgId)==511&&isSignal!=0";
@@ -295,7 +295,7 @@ void StudyUncCutBzero(int variationoption=1){
     }
     
     if(variationoption==7){
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.&&trk2Pt>0.&&chi2cl>9.94e-02&&(d0/d0Err)>10.&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.&&trk2Pt>0.&&chi2cl>0.8&&(d0/d0Err)>10.&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
       //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.&&trk2Pt>0.&&chi2cl>0.8&&(d0/d0Err)>4.16&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.5e-01"; 
       selmc=Form("abs(y)<2.4&&(gen==23333||gen==41000)&&%s",cut.Data());
       selmcgen="abs(y)<2.4&&abs(pdgId)==511&&isSignal!=0";
@@ -304,7 +304,7 @@ void StudyUncCutBzero(int variationoption=1){
     }
    
     if(variationoption==8){
-      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>9.94e-02&&(d0/d0Err)>10.&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
+      cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>0.8&&(d0/d0Err)>10.&&cos(dtheta)>7.93e-01&&abs(tktkmass-0.89594)<0.10&&tktkmassKK>1.04&&mu1pt>1.5&&mu2pt>1.5"; 
       //cut="(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.7&&trk2Pt>0.7&&chi2cl>0.8&&(d0/d0Err)>4.16&&cos(dtheta)>0.999&&abs(tktkmass-0.89594)<0.5e-01"; 
       selmc=Form("abs(y)<2.4&&(gen==23333||gen==41000)&&%s",cut.Data());
       selmcgen="abs(y)<2.4&&abs(pdgId)==511&&isSignal!=0";
