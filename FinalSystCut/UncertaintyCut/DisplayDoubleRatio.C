@@ -10,8 +10,8 @@ void DisplayDoubleRatio(){
   TFile*file_Data_chi2cl_Cut=new TFile("Results/CutId6/SigmaBplusCutId6_isData1.root");
   TFile*file_Data_costheta_NoCut=new TFile("Results/CutId7/SigmaBplusCutId7_isData1.root");
   TFile*file_Data_costheta_Cut=new TFile("Results/CutId8/SigmaBplusCutId8_isData1.root");
-  TFile*file_Data_muonpt_NoCut=new TFile("Results/CutId7/SigmaBplusCutId9_isData1.root");
-  TFile*file_Data_muonpt_Cut=new TFile("Results/CutId8/SigmaBplusCutId10_isData1.root");
+  TFile*file_Data_muonpt_NoCut=new TFile("Results/CutId9/SigmaBplusCutId9_isData1.root");
+  TFile*file_Data_muonpt_Cut=new TFile("Results/CutId10/SigmaBplusCutId10_isData1.root");
 
   
   TFile*file_MC_D0err_NoCut=new TFile("Results/CutId1/SigmaBplusCutId1_isData0.root");
@@ -22,8 +22,8 @@ void DisplayDoubleRatio(){
   TFile*file_MC_chi2cl_Cut=new TFile("Results/CutId6/SigmaBplusCutId6_isData0.root");
   TFile*file_MC_costheta_NoCut=new TFile("Results/CutId7/SigmaBplusCutId7_isData0.root");
   TFile*file_MC_costheta_Cut=new TFile("Results/CutId8/SigmaBplusCutId8_isData0.root");
-  TFile*file_MC_muonpt_NoCut=new TFile("Results/CutId7/SigmaBplusCutId9_isData0.root");
-  TFile*file_MC_muonpt_Cut=new TFile("Results/CutId8/SigmaBplusCutId10_isData0.root");
+  TFile*file_MC_muonpt_NoCut=new TFile("Results/CutId9/SigmaBplusCutId9_isData0.root");
+  TFile*file_MC_muonpt_Cut=new TFile("Results/CutId10/SigmaBplusCutId10_isData0.root");
 
   
   
