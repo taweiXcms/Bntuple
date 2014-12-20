@@ -187,8 +187,6 @@ void ncDmBsFit(TString infname="",bool doweight = 1)
    TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
    TH1D *hPtMCBase = new TH1D("hPtMCBase","",nBins,ptBins);
 
-   TCanvas *cfinal = new TCanvas("cfinal","",600,600);
-
    TF1 *fbase = fit(nt,ntMC,10,60,0,false);
    double yieldBase = fbase->Integral(5,6)/0.02;
    double yieldErrBase = fbase->Integral(5,6)/0.02*fbase->GetParError(0)/fbase->GetParameter(0);
@@ -212,10 +210,9 @@ void ncDmBsFit(TString infname="",bool doweight = 1)
        hPtMCBase->SetBinContent(i+1,yieldMCBase);
      }  
 
-   //hPt->Sumw2();
-   //hPtBase->Sumw2();
-   hPt->Divide(hPtBase);
-   //hPt->Sumw2();
+   hPt->Sumw2();
+   hPtBase->Sumw2();
+   hPt->Divide(hPt,hPtBase,1,1,"B");
    hPtMC->Divide(hPtMCBase);
 
    for(int i=0;i<nBins;i++)
@@ -228,9 +225,9 @@ void ncDmBsFit(TString infname="",bool doweight = 1)
      }
 
    hPtMC->SetXTitle("#mu p_{T} larger than (GeV)");
-   hPtMC->SetYTitle("Probability of losing candidate");
+   hPtMC->SetYTitle("Candidate losing fraction");
    hPtMC->SetTitleOffset(1.5,"Y");
-   hPtMC->SetMaximum(0.35);
+   hPtMC->SetMaximum(0.5);
    //  if(hPt->GetMaximum()>hPtMC->GetMaximum()) hPtMC->SetMaximum(hPt->GetMaximum()*1.03);
    //  else hPtMC->SetMaximum(hPtMC->GetMaximum()*1.03);
 
@@ -242,6 +239,8 @@ void ncDmBsFit(TString infname="",bool doweight = 1)
    hPtMC->SetLineWidth(3);
    hPtMC->SetStats(0);
   
+   TCanvas *cfinal = new TCanvas("cfinal","",600,600);
+
    hPtMC->Draw();
    hPt->Draw("same lep");
 

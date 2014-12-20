@@ -210,10 +210,9 @@ void ncDmFit(TString infname="",bool doweight = 1)
       hPtMCBase->SetBinContent(i+1,yieldMCBase);
     }  
 
-  //hPt->Sumw2();
-  //hPtBase->Sumw2();
-  hPt->Divide(hPtBase);
-  //hPt->Sumw2();
+  hPt->Sumw2();
+  hPtBase->Sumw2();
+  hPt->Divide(hPt,hPtBase,1.,1.,"B");
   hPtMC->Divide(hPtMCBase);
 
   for(int i=0;i<nBins;i++)
@@ -226,7 +225,7 @@ void ncDmFit(TString infname="",bool doweight = 1)
     }
 
   hPtMC->SetXTitle("#mu p_{T} larger than (GeV)");
-  hPtMC->SetYTitle("Probability of losing candidate");
+  hPtMC->SetYTitle("Candidate losing fraction");
   hPtMC->SetTitleOffset(1.5,"Y");
   hPtMC->SetMaximum(0.35);
   //  if(hPt->GetMaximum()>hPtMC->GetMaximum()) hPtMC->SetMaximum(hPt->GetMaximum()*1.03);
