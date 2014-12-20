@@ -10,6 +10,9 @@ void DisplayDoubleRatio(){
   TFile*file_Data_chi2cl_Cut=new TFile("Results/CutId6/SigmaBplusCutId6_isData1.root");
   TFile*file_Data_costheta_NoCut=new TFile("Results/CutId7/SigmaBplusCutId7_isData1.root");
   TFile*file_Data_costheta_Cut=new TFile("Results/CutId8/SigmaBplusCutId8_isData1.root");
+  TFile*file_Data_muonpt_NoCut=new TFile("Results/CutId7/SigmaBplusCutId9_isData1.root");
+  TFile*file_Data_muonpt_Cut=new TFile("Results/CutId8/SigmaBplusCutId10_isData1.root");
+
   
   TFile*file_MC_D0err_NoCut=new TFile("Results/CutId1/SigmaBplusCutId1_isData0.root");
   TFile*file_MC_D0err_Cut=new TFile("Results/CutId2/SigmaBplusCutId2_isData0.root");
@@ -19,6 +22,9 @@ void DisplayDoubleRatio(){
   TFile*file_MC_chi2cl_Cut=new TFile("Results/CutId6/SigmaBplusCutId6_isData0.root");
   TFile*file_MC_costheta_NoCut=new TFile("Results/CutId7/SigmaBplusCutId7_isData0.root");
   TFile*file_MC_costheta_Cut=new TFile("Results/CutId8/SigmaBplusCutId8_isData0.root");
+  TFile*file_MC_muonpt_NoCut=new TFile("Results/CutId7/SigmaBplusCutId9_isData0.root");
+  TFile*file_MC_muonpt_Cut=new TFile("Results/CutId8/SigmaBplusCutId10_isData0.root");
+
   
   
   TH1F*hPtYield_Data_D0err_NoCut=(TH1F*)file_Data_D0err_NoCut->Get("hPt");
@@ -29,6 +35,9 @@ void DisplayDoubleRatio(){
   TH1F*hPtYield_Data_chi2cl_Cut=(TH1F*)file_Data_chi2cl_Cut->Get("hPt");
   TH1F*hPtYield_Data_costheta_NoCut=(TH1F*)file_Data_costheta_NoCut->Get("hPt");
   TH1F*hPtYield_Data_costheta_Cut=(TH1F*)file_Data_costheta_Cut->Get("hPt");  
+  TH1F*hPtYield_Data_muonpt_NoCut=(TH1F*)file_Data_muonpt_NoCut->Get("hPt");
+  TH1F*hPtYield_Data_muonpt_Cut=(TH1F*)file_Data_muonpt_Cut->Get("hPt");  
+
 
   TH1F*hPtYield_MC_D0err_NoCut=(TH1F*)file_MC_D0err_NoCut->Get("hPt");
   TH1F*hPtYield_MC_D0err_Cut=(TH1F*)file_MC_D0err_Cut->Get("hPt");
@@ -38,6 +47,9 @@ void DisplayDoubleRatio(){
   TH1F*hPtYield_MC_chi2cl_Cut=(TH1F*)file_MC_chi2cl_Cut->Get("hPt");
   TH1F*hPtYield_MC_costheta_NoCut=(TH1F*)file_MC_costheta_NoCut->Get("hPt");
   TH1F*hPtYield_MC_costheta_Cut=(TH1F*)file_MC_costheta_Cut->Get("hPt");  
+  TH1F*hPtYield_MC_muonpt_NoCut=(TH1F*)file_MC_muonpt_NoCut->Get("hPt");
+  TH1F*hPtYield_MC_muonpt_Cut=(TH1F*)file_MC_muonpt_Cut->Get("hPt");  
+
   
   hPtYield_Data_D0err_NoCut->Scale(50);
   hPtYield_Data_D0err_Cut->Scale(50);
@@ -47,6 +59,9 @@ void DisplayDoubleRatio(){
   hPtYield_Data_chi2cl_Cut->Scale(50);
   hPtYield_Data_costheta_NoCut->Scale(50);
   hPtYield_Data_costheta_Cut->Scale(50);
+  hPtYield_Data_muonpt_NoCut->Scale(50);
+  hPtYield_Data_muonpt_Cut->Scale(50);
+
   
   hPtYield_MC_D0err_NoCut->Scale(50);
   hPtYield_MC_D0err_Cut->Scale(50);
@@ -56,6 +71,9 @@ void DisplayDoubleRatio(){
   hPtYield_MC_chi2cl_Cut->Scale(50);
   hPtYield_MC_costheta_NoCut->Scale(50);
   hPtYield_MC_costheta_Cut->Scale(50);
+  hPtYield_MC_muonpt_NoCut->Scale(50);
+  hPtYield_MC_muonpt_Cut->Scale(50);
+
   
     
   double yield_Data_D0err_Cut=hPtYield_Data_D0err_Cut->GetBinContent(1);
@@ -117,6 +135,21 @@ void DisplayDoubleRatio(){
   errdratiocostheta=errdratiocostheta+relerryield_MC_costheta_Cut*relerryield_MC_costheta_Cut+relerryield_MC_costheta_NoCut*relerryield_MC_costheta_NoCut;
   errdratiocostheta=dratiocostheta*TMath::Sqrt(errdratiocostheta);
   
+
+  double yield_Data_muonpt_Cut=hPtYield_Data_muonpt_Cut->GetBinContent(1);
+  double yield_Data_muonpt_NoCut=hPtYield_Data_muonpt_NoCut->GetBinContent(1);
+  double yield_MC_muonpt_Cut=hPtYield_MC_muonpt_Cut->GetBinContent(1);
+  double yield_MC_muonpt_NoCut=hPtYield_MC_muonpt_NoCut->GetBinContent(1);
+  double relerryield_Data_muonpt_Cut=hPtYield_Data_muonpt_Cut->GetBinError(1)/hPtYield_Data_muonpt_Cut->GetBinContent(1);
+  double relerryield_Data_muonpt_NoCut=hPtYield_Data_muonpt_NoCut->GetBinError(1)/hPtYield_Data_muonpt_NoCut->GetBinContent(1);
+  double relerryield_MC_muonpt_Cut=hPtYield_MC_muonpt_Cut->GetBinError(1)/hPtYield_MC_muonpt_Cut->GetBinContent(1);
+  double relerryield_MC_muonpt_NoCut=hPtYield_MC_muonpt_NoCut->GetBinError(1)/hPtYield_MC_muonpt_NoCut->GetBinContent(1);
+  double dratiomuonpt=(yield_Data_muonpt_Cut/yield_Data_muonpt_NoCut)/(yield_MC_muonpt_Cut/yield_MC_muonpt_NoCut);
+
+  double errdratiomuonpt=relerryield_Data_muonpt_Cut*relerryield_Data_muonpt_Cut+relerryield_Data_muonpt_NoCut*relerryield_Data_muonpt_NoCut;
+  errdratiomuonpt=errdratiomuonpt+relerryield_MC_muonpt_Cut*relerryield_MC_muonpt_Cut+relerryield_MC_muonpt_NoCut*relerryield_MC_muonpt_NoCut;
+  errdratiomuonpt=dratiomuonpt*TMath::Sqrt(errdratiomuonpt);
+
   
   //__________________________________
   
@@ -157,7 +190,16 @@ void DisplayDoubleRatio(){
   cout<<"eff Data with error = "<<myeffdataTrkpt<<" +- "<<myerreffdataTrkpt<<endl;
   cout<<"eff MC with error = "<<myeffmcTrkpt<<" +- "<<myerreffmcTrkpt<<endl;
   cout<<"double ratio with bin error = "<<dratioTrkpt<<" +- "<<errdratioTrkptBINObis<<endl;
+
+   //__________________________________
   
+  double myeffdatamuonpt,myerreffdatamuonpt,myeffmcmuonpt,myerreffmcmuonpt;
+  double errdratiomuonptBINObis=DoubleRatioError(yield_Data_muonpt_Cut,yield_Data_muonpt_NoCut,yield_MC_muonpt_Cut,yield_MC_muonpt_NoCut,myeffdatamuonpt,myerreffdatamuonpt,myeffmcmuonpt,myerreffmcmuonpt);
+  
+  cout<<"******* muonpt *******"<<endl;
+  cout<<"eff Data with error = "<<myeffdatamuonpt<<" +- "<<myerreffdatamuonpt<<endl;
+  cout<<"eff MC with error = "<<myeffmcmuonpt<<" +- "<<myerreffmcmuonpt<<endl;
+  cout<<"double ratio with bin error = "<<dratiomuonpt<<" +- "<<errdratiomuonptBINObis<<endl;
 }
 
 

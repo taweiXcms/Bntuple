@@ -49,3 +49,15 @@ time root -b > an.log 2>&1 <<EOI
 .x StudyUncCut.C+(8)
 .q
 EOI
+
+time root -b > an.log 2>&1 <<EOI
+.x StudyUncCut.C+(9)
+.q
+EOI
+
+
+
+time root -b > an.log 2>&1 <<EOI
+.x StudyUncCut.C+(10)
+.q
+EOI
