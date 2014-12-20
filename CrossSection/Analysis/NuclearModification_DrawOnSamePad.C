@@ -303,7 +303,9 @@ void NuclearModification(
     tlatex1->SetTextSize(0.045);
     tlatex1->Draw();
     
-    TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
+
     tlatexlumi->SetNDC();
     tlatexlumi->SetTextColor(1);
     tlatexlumi->SetTextFont(42);
@@ -317,7 +319,7 @@ void NuclearModification(
   TString mypar;
   if(particle=="Bplus") mypar="B^{+}";
   if(particle=="Bzero") mypar="B^{0}";
-  if(particle=="Bs") mypar="B_{s}";  
+  if(particle=="Bs") mypar="B_{s}^{0}";  
   
   TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
   tlatex3->SetNDC();
@@ -388,12 +390,19 @@ void NuclearModification(
   hempty->GetYaxis()->SetLabelSize(0.055);  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
+
   hempty->Draw();
   
   TLine *l = new TLine(0,1, 65.,1);
   l->SetLineStyle(2);
 
+  TLine *line = new TLine(8.740882,1.017445,61,1.008586);
+  line->SetLineColor(1);
+  line->SetLineStyle(2);  
+  line->SetLineWidth(2);
+  
   gRpAsystFONLL->Draw("2same");
+  line->Draw();
   gRpAsyst->Draw("2esame");
   gRpAstat->Draw("psame");
   
@@ -434,7 +443,10 @@ void NuclearModification(
     tlatex4->SetTextSize(0.045);
     tlatex4->Draw();
     
-    TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
+
+
     tlatex2->SetNDC();
     tlatex2->SetTextColor(1);
     tlatex2->SetTextFont(42);
@@ -443,7 +455,9 @@ void NuclearModification(
   }
    
   tlatex3->Draw();
-
+  
+  
+  
   TFile *fout=new TFile(Form("../Results%s/fileRpA%s.root",particle.Data(),particle.Data()),"recreate");  
   fout->cd();
   gSigmasyst->SetName("gSigmasyst");

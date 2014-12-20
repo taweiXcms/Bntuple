@@ -9,6 +9,7 @@
 #include <TLegend.h>
 #include <TLatex.h>
 #include <TColor.h>
+#include <TLine.h>
 
 double luminosity=34.8*1e-3;
 double setparam0=100.;
@@ -30,29 +31,33 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   h->SetXTitle("M_{B} (GeV/c^{2})");
   h->GetXaxis()->CenterTitle();
   h->GetXaxis()->SetLabelFont(42);
-  h->GetXaxis()->SetLabelSize(0.05);
-  h->GetXaxis()->SetTitleSize(0.055);
+  h->GetXaxis()->SetLabelSize(0.060);//0.05
+  h->GetXaxis()->SetTitleSize(0.070);//0.055
   h->GetXaxis()->SetTitleFont(42);
-  h->GetXaxis()->SetTitleOffset(0.95);//0.9
+  h->GetXaxis()->SetTitleOffset(0.90);//0.95
   if (str=="B^{+}") h->SetYTitle("Entries / (20 MeV/c^{2})");
   else if (str=="B^{0}") h->SetYTitle("Entries / (30 MeV/c^{2})");
-  else if (str=="B_{s}") h->SetYTitle("Entries / (40 MeV/c^{2})");
+  else if (str=="B_{s}^{0}") h->SetYTitle("Entries / (40 MeV/c^{2})");
   h->GetYaxis()->CenterTitle();
   h->GetYaxis()->SetLabelFont(42);
-  h->GetYaxis()->SetLabelSize(0.05);
-  h->GetYaxis()->SetTitleSize(0.055);
+  h->GetYaxis()->SetLabelSize(0.060);//0.05
+  h->GetYaxis()->SetTitleSize(0.070);//0.055
   h->GetYaxis()->SetTitleFont(42);
-  h->GetYaxis()->SetTitleOffset(1.30);//1.3
+  if (str=="B^{+}") h->GetYaxis()->SetTitleOffset(1.140);//1.30
+  else h->GetYaxis()->SetTitleOffset(0.95);//1.30
   h->SetStats(0);
   //h->SetTitleOffset(1.5,"Y");
   //h->SetTitleOffset(1.10,"Y");
-  h->SetAxisRange(0,h->GetMaximum()*1.2,"Y");
+  double axisymin=-0.05;
+  h->SetAxisRange(axisymin,h->GetMaximum()*1.2,"Y");
   h->Draw("e");
 
-  fBkpi->SetFillColor(kGreen+1);
+//###  fBkpi->SetFillColor(kGreen+1);
+  fBkpi->SetFillColor(kGreen+4);
   //fBkpi->SetFillStyle(3004);
   fBkpi->SetFillStyle(3005);
-  fBkpi->SetLineColor(kGreen+1);
+//###  fBkpi->SetLineColor(kGreen+1);
+  fBkpi->SetLineColor(kGreen+4);
   fBkpi->SetLineWidth(3);
   //fBkpi->SetRange(5.00,5.28);
   fBkpi->SetRange(5.00,6.00);
@@ -79,6 +84,15 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   f->Draw("same");
 
   hraw->Draw("samee");
+  TLine* line0;
+  if (str=="B^{+}") line0 = new TLine(5.000,axisymin,6.000,axisymin);
+  else if (str=="B^{0}") line0 = new TLine(5.030,axisymin,5.930,axisymin);
+  else if (str=="B_{s}^{0}") line0 = new TLine(5.030,axisymin,5.990,axisymin);
+  line0->SetLineColor(kBlack);
+  line0->SetLineWidth(2.5);
+  line0->Draw("same");
+  //h->Draw("samee");
+
 /*
   TPaveText *tx = new TPaveText(0.20,0.70,0.50,0.80);
   tx->AddText("CMS p+Pb #sqrt{s_{NN}}= 5.02 TeV");
@@ -87,13 +101,17 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   tx->Draw("same");
 */
 
-  TLegend *leg = new TLegend(0.54,0.38,0.82,0.65,NULL,"brNDC");
+//###  TLegend *leg = new TLegend(0.54,0.38,0.82,0.65,NULL,"brNDC");
+//###  TLegend *leg = new TLegend(0.525,0.335,0.85,0.65,NULL,"brNDC");
+  TLegend *leg = new TLegend(0.525,0.38,0.85,0.70,NULL,"brNDC");
+
+
 
   //leg->AddEntry(h0_Bplus,"CMS","");
   //leg->AddEntry(h0_Bplus,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
   //leg->AddEntry(h0_Bplus,Form("%.0f<p_{T}^{B}<%.0f GeV/c",10.0,15.0),"");
   leg->SetBorderSize(0);
-  leg->SetTextSize(0.050);//0.055
+  leg->SetTextSize(0.060);//0.050
   leg->SetTextFont(42);
   leg->SetFillStyle(0);
   leg->AddEntry(hraw,"Data","pl");
@@ -109,48 +127,63 @@ void drawtex(std::string str, int ptmin, int ptmax)
 {
 //      tex = new TLatex(0.4552936,0.9418305,"34.8 nb^{-1} (pPb 5.02 TeV)");
    //tex = new TLatex(0.50,0.94,"34.8 nb^{-1} (pPb 5.02 TeV)");
-   tex = new TLatex(0.49,0.94,"34.8 nb^{-1} (pPb 5.02 TeV)");
+   //###tex = new TLatex(0.49,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
+   if (str=="B^{+}") tex = new TLatex(0.41,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
+   else tex = new TLatex(0.39,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
+
 tex->SetNDC();
    tex->SetTextFont(42);
 //   tex->SetTextSize(0.05266854);
-   tex->SetTextSize(0.05);
+   tex->SetTextSize(0.06);//0.05
    tex->SetLineWidth(2);
    tex->Draw();
    //TLatex *   tex = new TLatex(0.1837838,0.8523297,"CMS");
    //tex = new TLatex(0.19,0.84,"CMS");
-   tex = new TLatex(0.18,0.84,"CMS");
+   tex = new TLatex(0.19,0.84,"CMS");
    tex->SetNDC();
    //tex->SetTextSize(0.06379928);
-   tex->SetTextSize(0.06);
+   tex->SetTextSize(0.07);//0.06
    tex->SetLineWidth(2);
    tex->SetTextFont(62);
    tex->Draw();
 //      tex = new TLatex(0.1891892,0.771261,"B^{+}");
 //      tex = new TLatex(0.19,0.75,str.c_str());
-      tex = new TLatex(0.18,0.75,str.c_str());
+      tex = new TLatex(0.19,0.75,str.c_str());
 
 
 tex->SetNDC();
    tex->SetTextFont(42);
 //   tex->SetTextSize(0.0585206);
-   tex->SetTextSize(0.06);
+   tex->SetTextSize(0.07);//0.06
    tex->SetLineWidth(2);
    tex->Draw();
 //      tex = new TLatex(0.5581628,0.7721208,"10<p_{T}^{B}<60 GeV/c");
-      tex = new TLatex(0.605,0.75,Form("%i<p_{T}^{B}<%i GeV/c",ptmin,ptmax));
+//###      tex = new TLatex(0.605,0.75,Form("%i<p_{T}^{B}<%i GeV/c",ptmin,ptmax));
+
+//###    if (str=="B^{+}") tex = new TLatex(0.488,0.75,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+//###    else tex = new TLatex(0.480,0.75,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+    if (str=="B^{+}") tex = new TLatex(0.488,0.84,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+    else tex = new TLatex(0.480,0.84,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+
+
 
 tex->SetNDC();
    tex->SetTextFont(42);
 //   tex->SetTextSize(0.05266854);
-   tex->SetTextSize(0.05);
+   tex->SetTextSize(0.06);//0.05
    tex->SetLineWidth(2);
    tex->Draw();
 //      tex = new TLatex(0.6804938,0.696044,"|y_{LAB}| < 2.4");
-      tex = new TLatex(0.72,0.68,"|y_{LAB}| < 2.4");
+//###      tex = new TLatex(0.72,0.68,"|y_{LAB}| < 2.4");
+//###      tex = new TLatex(0.685,0.68,"|y_{LAB}| < 2.4");
+      tex = new TLatex(0.685,0.77,"|y_{LAB}| < 2.4");
+
+
+
 tex->SetNDC();
    tex->SetTextFont(42);
 //   tex->SetTextSize(0.05266854);
-   tex->SetTextSize(0.05);
+   tex->SetTextSize(0.06);//0.05
    tex->SetLineWidth(2);
    tex->Draw();
 }
@@ -166,9 +199,11 @@ void paperfig_fitplot()
   gStyle->SetTextFont(42);
   //gStyle->SetPadRightMargin(0.000);
   //gStyle->SetPadLeftMargin(0.000);
-  gStyle->SetPadRightMargin(0.030);
-  gStyle->SetPadLeftMargin(0.145);//0.130
+  gStyle->SetPadRightMargin(0.020);
+  gStyle->SetPadLeftMargin(0.165);//0.145
   gStyle->SetPadTopMargin(0.075);
+  gStyle->SetPadBottomMargin(0.145);
+
 
   TFile *infBplus = new TFile("../ResultsBplus/SigmaBplus.root");
   TFile *infBzero = new TFile("../ResultsBzero/SigmaBzero.root");
@@ -224,7 +259,9 @@ void paperfig_fitplot()
   //TCanvas *cSigma=  new TCanvas("cSigma","",900,400);
   //TCanvas *cSigma=  new TCanvas("cSigma","",1000,400);
   //TCanvas *cSigma=  new TCanvas("cSigma","",940,320);
-  TCanvas *cSigma=  new TCanvas("cSigma","",1128,384);
+  //###TCanvas *cSigma=  new TCanvas("cSigma","",1128,384);
+  TCanvas *cSigma=  new TCanvas("cSigma","",1128,390);
+
 
   cSigma->Clear();
   //makeMultiPanelCanvasWithGap(cSigma,3,1,0.05,0.05,0.05,0.05,0.05,0.05);
@@ -239,9 +276,14 @@ void paperfig_fitplot()
   TPad *pad2 = new TPad("pad2","",0.34,0.02,0.66,0.98);
   TPad *pad3 = new TPad("pad3","",0.67,0.02,0.99,0.98);
 */
+/*
   TPad *pad1 = new TPad("pad1","",0.005,0.02,0.330,0.98);
   TPad *pad2 = new TPad("pad2","",0.335,0.02,0.670,0.98);
   TPad *pad3 = new TPad("pad3","",0.675,0.02,1.000,0.98);
+*/
+  TPad *pad1 = new TPad("pad1","",0.000,0.01,0.342,0.99);
+  TPad *pad2 = new TPad("pad2","",0.342,0.01,0.671,0.99);
+  TPad *pad3 = new TPad("pad3","",0.671,0.01,1.000,0.99);
 
   pad1->Draw();
   pad2->Draw();
@@ -268,15 +310,24 @@ void paperfig_fitplot()
 
   pad3->cd();
   //cSigma->cd(3);
-  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}");
-  drawtex("B_{s}",10,60);
+  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{0}");
+  drawtex("B_{s}^{0}",10,60);
 
   cSigma->SaveAs("paperfig_fitplot_lowestptbin.pdf");
 ////////////////////////////////////////////////////////////////
+/*
   pad1->cd();
-  //cSigma->cd(1);
+  drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}");
+  drawtex("B^{+}",10,60);
+  pad2->cd();
+  drawplots(h3_Bzero, hMC3_Bzero, f3_Bzero, background3_Bzero, Bkpi3_Bzero, mass3_Bzero, hraw3_Bzero, "B^{0}");
+  drawtex("B^{0}",10,60);
+  pad3->cd();
+  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{0}");
+  drawtex("B_{s}^{0}",10,60);
 
-
+  cSigma->SaveAs("paperfig_fitplot_integptbin.pdf");
+*/
 /*
   TPaveText *tx = new TPaveText(0.20,0.70,0.50,0.80);
   tx->AddText("CMS p+Pb #sqrt{s_{NN}}= 5.02 TeV");
@@ -285,8 +336,8 @@ void paperfig_fitplot()
   tx->Draw("same");
 */
 
-  drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}");
-  drawtex("B^{+}",10,60);
+//###  drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}");
+//###  drawtex("B^{+}",10,60);
 /*
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
    leg2->AddEntry(h0_Bplus,"B meson","");
@@ -295,15 +346,16 @@ void paperfig_fitplot()
    leg2->Draw();
 */
   //cSigma->cd(2); 
+/*
   pad2->cd();
   drawplots(h3_Bzero, hMC3_Bzero, f3_Bzero, background3_Bzero, Bkpi3_Bzero, mass3_Bzero, hraw3_Bzero, "B^{0}");
   drawtex("B^{0}",10,60);
 
   //cSigma->cd(3);
   pad3->cd();
-  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}");
-  drawtex("B_{s}",10,60);
+  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{0}");
+  drawtex("B_{s}^{0}",10,60);
 
   cSigma->SaveAs("paperfig_fitplot_integptbin.pdf");
-
+*/
 }
