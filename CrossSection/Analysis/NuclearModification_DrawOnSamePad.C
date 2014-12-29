@@ -24,8 +24,8 @@ using namespace std;
   Double_t  Bs_exl0[Bs_nbins]={0.};
   Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.212};
   Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.212};
-  Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22);
-  Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24);
+  Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22+0.035*0.035);
+  Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24+0.035*0.035);
   Double_t  Bs_FFsysterror=0.6/10.4;
   Double_t  Bs_tagandprobcorrection[Bs_nbins]={1.041};
 
@@ -36,8 +36,8 @@ using namespace std;
   Double_t  B0_exl0[B0_nbins]={0.,0.,0.};
   Double_t  B0_yPercSigmapPbSystTotHigh[B0_nbins]={0.178,0.174,0.172};
   Double_t  B0_yPercSigmapPbSystTotLow[B0_nbins]={0.178,0.174,0.172};
-  Double_t  B0_commonErrorP = TMath::Sqrt(0.0555*0.0555);
-  Double_t  B0_commonErrorN = TMath::Sqrt(0.0555*0.0555);
+  Double_t  B0_commonErrorP = TMath::Sqrt(0.035*0.035+0.046*0.046);
+  Double_t  B0_commonErrorN = TMath::Sqrt(0.035*0.035+0.046*0.046);
   Double_t  B0_FFsysterror=0.7/40.2;
   Double_t  B0_tagandprobcorrection[B0_nbins]={1.052,1.032,1.016};
 
@@ -48,8 +48,8 @@ using namespace std;
   Double_t  Bp_exl0[Bp_nbins]={0.,0.,0.,0.,0.};
   Double_t  Bp_yPercSigmapPbSystTotHigh[Bp_nbins]={0.143,0.137,0.136,0.134,0.134};
   Double_t  Bp_yPercSigmapPbSystTotLow[Bp_nbins]={0.143,0.137,0.136,0.134,0.134};
-  Double_t  Bp_commonErrorP = TMath::Sqrt(0.0445*0.0445);
-  Double_t  Bp_commonErrorN = TMath::Sqrt(0.0445*0.0445);
+  Double_t  Bp_commonErrorP = TMath::Sqrt(0.035*0.035+0.032*0.032);
+  Double_t  Bp_commonErrorN = TMath::Sqrt(0.035*0.035+0.032*0.032);
   Double_t  Bp_FFsysterror=0.7/40.1;
   Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.049,1.030,1.019,1.012,1.006};
 
