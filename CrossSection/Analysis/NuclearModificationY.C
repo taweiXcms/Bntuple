@@ -21,8 +21,16 @@ void NuclearModificationY(){
   gROOT->SetStyle("Plain");
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
-  
+/*
+  gStyle->SetPadRightMargin(0.010);//###0.020
+  gStyle->SetPadLeftMargin(0.165);
+  gStyle->SetPadTopMargin(0.075);
+  gStyle->SetPadBottomMargin(0.145);
+*/
+
+    
   TFile*filePPReference=new TFile(Form("../../../fonll/output%sY.root",particle.Data()));  
+  //###TFile*filePPReference=new TFile(Form("../../fonll/output%sY.root",particle.Data()));  
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
@@ -163,31 +171,27 @@ void NuclearModificationY(){
   canvasSigma->SetFillColor(0);
   canvasSigma->SetBorderMode(0);
   canvasSigma->SetBorderSize(2);
-  canvasSigma->SetLeftMargin(0.1451613);
-  canvasSigma->SetRightMargin(0.05443548);
-  canvasSigma->SetTopMargin(0.08474576);
-  canvasSigma->SetBottomMargin(0.1165254);
-  canvasSigma->SetFrameBorderMode(0);
+  canvasSigma->SetLeftMargin(0.200);
+  canvasSigma->SetRightMargin(0.025);
+  canvasSigma->SetTopMargin(0.080);
+  canvasSigma->SetBottomMargin(0.150);
   canvasSigma->SetFrameBorderMode(0);
   
   TH2F* hempty=new TH2F("hempty","",10,-3.5,2.5,10,0,650.);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
-  
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
   hempty->GetYaxis()->SetTitle("d#sigma / dy_{CM}(#mub GeV^{-1}c)");
-  
-
-  hempty->GetXaxis()->SetTitleOffset(1.);
+  hempty->GetXaxis()->SetTitleOffset(0.90);
   hempty->GetYaxis()->SetTitleOffset(1.34);
-  hempty->GetXaxis()->SetTitleSize(0.045);
-  hempty->GetYaxis()->SetTitleSize(0.045);
+  hempty->GetXaxis()->SetTitleSize(0.070);//###0.045
+  hempty->GetYaxis()->SetTitleSize(0.070);//###0.045
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.037);
-  hempty->GetYaxis()->SetLabelSize(0.037);  
+  hempty->GetXaxis()->SetLabelSize(0.060);//###0.037
+  hempty->GetYaxis()->SetLabelSize(0.060);//###0.037  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
@@ -211,13 +215,14 @@ void NuclearModificationY(){
   gSigmastat->Draw("epsame");
   
   
-  TLegend *legendSigma=new TLegend(0.233871,0.6701903,0.5322581,0.7526427,"");
+  //###TLegend *legendSigma=new TLegend(0.233871,0.6701903,0.5322581,0.7526427,"");
+  TLegend *legendSigma=new TLegend(0.50,0.60,0.80,0.68,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
   legendSigma->SetFillStyle(1001);
   legendSigma->SetTextFont(42);
-  legendSigma->SetTextSize(0.045);
+  legendSigma->SetTextSize(0.055);//###0.045
 
   TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   c->SetLineColor(5);
@@ -245,34 +250,44 @@ void NuclearModificationY(){
   d->SetFillColor(0);
   d->Draw();
 
-  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS                 pPb #sqrt{s_{NN}}= 5.02 TeV");
+  //###TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS                 pPb #sqrt{s_{NN}}= 5.02 TeV");
+  TLatex * tlatex1=new TLatex(0.23,0.84,"CMS");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
-  tlatex1->SetTextFont(42);
-  tlatex1->SetTextSize(0.045);
+  tlatex1->SetTextFont(62);//###42
+  tlatex1->SetTextSize(0.07);//###0.045
   tlatex1->Draw();
   
 
   TString mypar="B^{+}";
   
-  TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
+  //###TLatex * tlatexlumi=new TLatex(0.671371,0.7801268,"L = 34.8 nb^{-1}");
+  TLatex * tlatexlumi=new TLatex(0.40,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
   tlatexlumi->SetNDC();
   tlatexlumi->SetTextColor(1);
   tlatexlumi->SetTextFont(42);
-  tlatexlumi->SetTextSize(0.045);
+  tlatexlumi->SetTextSize(0.06);//###0.045
   tlatexlumi->Draw();
 
-  double xpos=0.8528226;
-  double ypos=0.6849894;
+  //###double xpos=0.8528226;
+  //###double ypos=0.6849894;
+  double xpos=0.85;
+  double ypos=0.75;
   
   TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
    tlatex3->SetNDC();
   tlatex3->SetTextColor(1);
   tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
+  tlatex3->SetTextSize(0.07);//###0.06
   tlatex3->Draw();
   
-
+  TLatex * tlatex4=new TLatex(0.51,0.84,"10 < p_{T}^{B} < 60 GeV/c");
+  tlatex4->SetNDC();
+  tlatex4->SetTextColor(1);
+  tlatex4->SetTextFont(42);
+  tlatex4->SetTextSize(0.06);
+  tlatex4->Draw();
+ 
   canvasSigma->SaveAs(Form("../Results%s_y/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
@@ -308,36 +323,38 @@ void NuclearModificationY(){
   canvasRpA->SetFillColor(0);
   canvasRpA->SetBorderMode(0);
   canvasRpA->SetBorderSize(2);
-  canvasRpA->SetLeftMargin(0.1451613);
-  canvasRpA->SetRightMargin(0.05443548);
-  canvasRpA->SetTopMargin(0.08474576);
-  canvasRpA->SetBottomMargin(0.1165254);
+  canvasRpA->SetLeftMargin(0.200);
+  canvasRpA->SetRightMargin(0.025);
+  canvasRpA->SetTopMargin(0.080);
+  canvasRpA->SetBottomMargin(0.150);
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.3145161,0.5804503,0.5604839,0.770252,"");
+  TLegend *legendRpA=new TLegend(0.23,0.56,0.57,0.75,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
   legendRpA->SetFillStyle(1001);
   legendRpA->SetTextFont(42);
-  legendRpA->SetTextSize(0.04);
+  legendRpA->SetTextSize(0.055);//###0.04
 
   TH2F* hempty=new TH2F("hempty","",4,-3.5,2.7,10.,0.,3.5);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
   if(particle=="Bs") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B_{s})");
-  hempty->GetXaxis()->SetTitleOffset(1.1);
-  hempty->GetYaxis()->SetTitleOffset(1.3);
-  hempty->GetXaxis()->SetTitleSize(0.045);
-  hempty->GetYaxis()->SetTitleSize(0.045);
+  hempty->GetXaxis()->CenterTitle();
+  hempty->GetYaxis()->CenterTitle();
+  hempty->GetXaxis()->SetTitleOffset(0.90);
+  hempty->GetYaxis()->SetTitleOffset(1.34);
+  hempty->GetXaxis()->SetTitleSize(0.070);//###0.045
+  hempty->GetYaxis()->SetTitleSize(0.070);//###0.045
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.04);
-  hempty->GetYaxis()->SetLabelSize(0.04);  
+  hempty->GetXaxis()->SetLabelSize(0.060);//###0.040
+  hempty->GetYaxis()->SetLabelSize(0.060);//###0.040  
   hempty->SetMaximum(3);
   hempty->SetMinimum(0.);
   hempty->Draw();
@@ -366,7 +383,7 @@ void NuclearModificationY(){
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
   
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. L+BR","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. Lumi+BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
@@ -379,6 +396,8 @@ void NuclearModificationY(){
   
   tlatex1->Draw();
   tlatexlumi->Draw();
+  tlatex3->Draw();
+  tlatex4->Draw();
   canvasRpA->SaveAs(Form("../Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
 
 /*
