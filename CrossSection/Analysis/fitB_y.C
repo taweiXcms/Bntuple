@@ -1,7 +1,7 @@
 #include "utilities.h"
 #include "TLegendEntry.h"
 
-double luminosity=34.8*1e-3;
+double luminosity=34.6*1e-3;
 double setparam0=100.;
 double setparam1=5.28;
 double setparam2=0.05;
