@@ -85,6 +85,7 @@ void NuclearModification(
   gStyle->SetOptStat(0);
   
   TFile*filePPReference=new TFile(Form("../../../fonll/output%s.root",particle.Data()));  
+  //###TFile*filePPReference=new TFile(Form("../../fonll/output%s.root",particle.Data()));  
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
@@ -211,7 +212,7 @@ void NuclearModification(
   canvasSigma->SetBorderSize(2);
   canvasSigma->SetLeftMargin(0.1451613);
   canvasSigma->SetRightMargin(0.05443548);
-  canvasSigma->SetTopMargin(0.08474576);
+  canvasSigma->SetTopMargin(0.01474576);//0.08474576
   canvasSigma->SetBottomMargin(0.1165254);
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetFrameBorderMode(0);
@@ -296,20 +297,22 @@ void NuclearModification(
   if(PadNum==0 || PadNum==1){
     legendSigma->Draw("same");
     
-    TLatex * tlatex1=new TLatex(0.21,0.88801268,"CMS");
+    //TLatex * tlatex1=new TLatex(0.21,0.88801268,"CMS");
+    TLatex * tlatex1=new TLatex(0.19,0.88,"CMS");
     tlatex1->SetNDC();
     tlatex1->SetTextColor(1);
-    tlatex1->SetTextFont(42);
-    tlatex1->SetTextSize(0.045);
+    tlatex1->SetTextFont(62);//42
+    tlatex1->SetTextSize(0.07);//0.045
     tlatex1->Draw();
     
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatexlumi=new TLatex(0.475,0.965,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
     tlatexlumi->SetNDC();
     tlatexlumi->SetTextColor(1);
     tlatexlumi->SetTextFont(42);
-    tlatexlumi->SetTextSize(0.045);
+    tlatexlumi->SetTextSize(0.06);//0.045
     tlatexlumi->Draw();
   }
 
@@ -422,7 +425,7 @@ void NuclearModification(
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
   
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. L+BR","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. Lumi + BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
@@ -436,21 +439,23 @@ void NuclearModification(
   if(PadNum==1||PadNum==0){
     legendRpA->Draw();
 
-    TLatex * tlatex4=new TLatex(0.21,0.88801268,"CMS");
+    //TLatex * tlatex4=new TLatex(0.21,0.88801268,"CMS");
+    TLatex * tlatex4=new TLatex(0.19,0.88,"CMS");
+
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
-    tlatex4->SetTextFont(42);
-    tlatex4->SetTextSize(0.045);
+    tlatex4->SetTextFont(62);//42
+    tlatex4->SetTextSize(0.07);//0.045
     tlatex4->Draw();
-    
+ 
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
-
+    //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatex2=new TLatex(0.475,0.965,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
     tlatex2->SetNDC();
     tlatex2->SetTextColor(1);
     tlatex2->SetTextFont(42);
-    tlatex2->SetTextSize(0.045);
+    tlatex2->SetTextSize(0.06);//0.045
    tlatex2->Draw();
   }
    
