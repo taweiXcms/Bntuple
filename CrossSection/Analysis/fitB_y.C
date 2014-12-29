@@ -160,7 +160,7 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   c->SaveAs(Form("ResultsBplus_y/BMass-%d.pdf",count));
+   c->SaveAs(Form("../ResultsBplus_y/BMass-%d.pdf",count));
 
    return mass;
 }
