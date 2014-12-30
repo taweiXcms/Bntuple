@@ -165,7 +165,7 @@ void NuclearModificationY(){
   gSigmastat->SetFillStyle(0);
 
 
-  TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
+  TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",600,500);   
   canvasSigma->cd();
   canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasSigma->SetFillColor(0);
@@ -317,7 +317,7 @@ void NuclearModificationY(){
 
 
 
-  TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",500,500);   
+  TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",600,500);   
   
   canvasRpA->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasRpA->SetFillColor(0);
