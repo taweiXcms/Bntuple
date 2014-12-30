@@ -22,10 +22,10 @@ using namespace std;
   Double_t  Bs_xbins[Bs_nbins]={35};
   Double_t  Bs_exl[Bs_nbins]={25};
   Double_t  Bs_exl0[Bs_nbins]={0.};
-  Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.212};
-  Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.212};
-  Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22+0.035*0.035);
-  Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24+0.035*0.035);
+  Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.199};
+  Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.199};
+  Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22);
+  Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24);
   Double_t  Bs_FFsysterror=0.6/10.4;
   Double_t  Bs_tagandprobcorrection[Bs_nbins]={1.041};
 
@@ -34,10 +34,10 @@ using namespace std;
   Double_t  B0_xbins[B0_nbins]={12.5,17.5,40};
   Double_t  B0_exl[B0_nbins]={2.5,2.5,20};
   Double_t  B0_exl0[B0_nbins]={0.,0.,0.};
-  Double_t  B0_yPercSigmapPbSystTotHigh[B0_nbins]={0.178,0.174,0.172};
-  Double_t  B0_yPercSigmapPbSystTotLow[B0_nbins]={0.178,0.174,0.172};
-  Double_t  B0_commonErrorP = TMath::Sqrt(0.035*0.035+0.046*0.046);
-  Double_t  B0_commonErrorN = TMath::Sqrt(0.035*0.035+0.046*0.046);
+  Double_t  B0_yPercSigmapPbSystTotHigh[B0_nbins]={0.230,0.218,0.214};
+  Double_t  B0_yPercSigmapPbSystTotLow[B0_nbins]={0.230,0.218,0.214};
+  Double_t  B0_commonErrorP = TMath::Sqrt(0.0555*0.0555);
+  Double_t  B0_commonErrorN = TMath::Sqrt(0.0555*0.0555);
   Double_t  B0_FFsysterror=0.7/40.2;
   Double_t  B0_tagandprobcorrection[B0_nbins]={1.052,1.032,1.016};
 
@@ -46,10 +46,10 @@ using namespace std;
   Double_t  Bp_xbins[Bp_nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t  Bp_exl[Bp_nbins]={2.5,2.5,2.5,2.5,15.};
   Double_t  Bp_exl0[Bp_nbins]={0.,0.,0.,0.,0.};
-  Double_t  Bp_yPercSigmapPbSystTotHigh[Bp_nbins]={0.143,0.137,0.136,0.134,0.134};
-  Double_t  Bp_yPercSigmapPbSystTotLow[Bp_nbins]={0.143,0.137,0.136,0.134,0.134};
-  Double_t  Bp_commonErrorP = TMath::Sqrt(0.035*0.035+0.032*0.032);
-  Double_t  Bp_commonErrorN = TMath::Sqrt(0.035*0.035+0.032*0.032);
+  Double_t  Bp_yPercSigmapPbSystTotHigh[Bp_nbins]={0.163,0.150,0.146,0.142,0.140};
+  Double_t  Bp_yPercSigmapPbSystTotLow[Bp_nbins]={0.163,0.150,0.146,0.142,0.140};
+  Double_t  Bp_commonErrorP = TMath::Sqrt(0.0445*0.0445);
+  Double_t  Bp_commonErrorN = TMath::Sqrt(0.0445*0.0445);
   Double_t  Bp_FFsysterror=0.7/40.1;
   Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.049,1.030,1.019,1.012,1.006};
 
@@ -61,7 +61,8 @@ const Float_t leftOffset= 0.,
 const Float_t bottomOffset= 0.,
 const Float_t leftMargin= 0.16,
 const Float_t bottomMargin= 0.16,
-const Float_t edge=0.05
+//###const Float_t edge=0.05
+const Float_t edge=0.06
 );
 
 void NuclearModification(
@@ -84,8 +85,8 @@ void NuclearModification(
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
   
-  TFile*filePPReference=new TFile(Form("../../../fonll/output%s.root",particle.Data()));  
-  //###TFile*filePPReference=new TFile(Form("../../fonll/output%s.root",particle.Data()));  
+  //###TFile*filePPReference=new TFile(Form("../../../fonll/output%s.root",particle.Data()));  
+  TFile*filePPReference=new TFile(Form("../../fonll/output%s.root",particle.Data()));  
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
@@ -212,7 +213,8 @@ void NuclearModification(
   canvasSigma->SetBorderSize(2);
   canvasSigma->SetLeftMargin(0.1451613);
   canvasSigma->SetRightMargin(0.05443548);
-  canvasSigma->SetTopMargin(0.01474576);//0.08474576
+  //###canvasSigma->SetTopMargin(0.01474576);//0.08474576
+  canvasSigma->SetTopMargin(0.005);//0.08474576
   canvasSigma->SetBottomMargin(0.1165254);
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetFrameBorderMode(0);
@@ -226,16 +228,16 @@ void NuclearModification(
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
   hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}( #mub GeV^{-1}c)");
-  hempty->GetXaxis()->SetTitleOffset(1.);
-  hempty->GetYaxis()->SetTitleOffset(1.3);
-  hempty->GetXaxis()->SetTitleSize(0.055);
-  hempty->GetYaxis()->SetTitleSize(0.055);
+  hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
+  hempty->GetYaxis()->SetTitleOffset(1.0);//###1.3
+  hempty->GetXaxis()->SetTitleSize(0.070);//###0.055
+  hempty->GetYaxis()->SetTitleSize(0.070);//###0.055
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.055);
-  hempty->GetYaxis()->SetLabelSize(0.055);  
+  hempty->GetXaxis()->SetLabelSize(0.060);//###0.055
+  hempty->GetYaxis()->SetLabelSize(0.060);//###0.055
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
@@ -259,13 +261,14 @@ void NuclearModification(
   gSigmastat->Draw("epsame");
   
   //coord.  for legend for sigma in the B+ pannel 
-  TLegend *legendSigma=new TLegend(0.468298,0.7045614,0.7678185,0.8757895,"");
+  //###TLegend *legendSigma=new TLegend(0.468298,0.7045614,0.7678185,0.8757895,"");
+  TLegend *legendSigma=new TLegend(0.55,0.63,0.85,0.80,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
   legendSigma->SetFillStyle(1001);
   legendSigma->SetTextFont(42);
-  legendSigma->SetTextSize(0.045);
+  legendSigma->SetTextSize(0.060);//###0.045
   
   TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   c->SetLineColor(5);
@@ -298,7 +301,7 @@ void NuclearModification(
     legendSigma->Draw("same");
     
     //TLatex * tlatex1=new TLatex(0.21,0.88801268,"CMS");
-    TLatex * tlatex1=new TLatex(0.19,0.88,"CMS");
+    TLatex * tlatex1=new TLatex(0.19,0.86,"CMS");
     tlatex1->SetNDC();
     tlatex1->SetTextColor(1);
     tlatex1->SetTextFont(62);//42
@@ -307,7 +310,7 @@ void NuclearModification(
     
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatexlumi=new TLatex(0.475,0.965,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatexlumi=new TLatex(0.475,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
     tlatexlumi->SetNDC();
     tlatexlumi->SetTextColor(1);
@@ -316,8 +319,10 @@ void NuclearModification(
     tlatexlumi->Draw();
   }
 
-  double xpos=0.8528226;
-  double ypos=0.6849894;
+  //###double xpos=0.8528226;
+  //###double ypos=0.6849894;
+  double xpos=0.86;
+  double ypos=0.86;
   
   TString mypar;
   if(particle=="Bplus") mypar="B^{+}";
@@ -374,23 +379,23 @@ void NuclearModification(
   legendRpA->SetFillColor(0);
   legendRpA->SetFillStyle(1001);
   legendRpA->SetTextFont(42);
-  legendRpA->SetTextSize(0.045);
+  legendRpA->SetTextSize(0.060);//###0.045
 
   hempty=new TH2F("hempty","",10,0.1, 62. ,10.,0.,2.5);  
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}");
-  hempty->GetXaxis()->SetTitleOffset(1.3);
-  hempty->GetYaxis()->SetTitleOffset(1.1);
-  hempty->GetXaxis()->SetTitleSize(0.055);
-  hempty->GetYaxis()->SetTitleSize(0.055);
+  hempty->GetXaxis()->SetTitleOffset(1.0);//###1.3
+  hempty->GetYaxis()->SetTitleOffset(1.0);//###1.1
+  hempty->GetXaxis()->SetTitleSize(0.070);//###0.055
+  hempty->GetYaxis()->SetTitleSize(0.070);//###0.055
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.055);
-  hempty->GetYaxis()->SetLabelSize(0.055);  
+  hempty->GetXaxis()->SetLabelSize(0.060);//###0.055
+  hempty->GetYaxis()->SetLabelSize(0.060);//###0.055  
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
 
@@ -440,7 +445,7 @@ void NuclearModification(
     legendRpA->Draw();
 
     //TLatex * tlatex4=new TLatex(0.21,0.88801268,"CMS");
-    TLatex * tlatex4=new TLatex(0.19,0.88,"CMS");
+    TLatex * tlatex4=new TLatex(0.19,0.86,"CMS");
 
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
@@ -450,7 +455,7 @@ void NuclearModification(
  
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatex2=new TLatex(0.475,0.965,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatex2=new TLatex(0.475,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
     tlatex2->SetNDC();
     tlatex2->SetTextColor(1);
