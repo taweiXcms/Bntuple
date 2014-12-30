@@ -477,8 +477,8 @@ void NuclearModification(
 }
 
 void NuclearModification_DrawOnSamePad(){
-  TCanvas *cSigma=new TCanvas("canvasSigma","canvasSigma",1150,400);
-  TCanvas *cRpA=new TCanvas("canvasRpA","canvasRpA",1150,400);
+  TCanvas *cSigma=new TCanvas("canvasSigma","canvasSigma",1150,500);
+  TCanvas *cRpA=new TCanvas("canvasRpA","canvasRpA",1150,500);
   makeMultiPanelCanvas(cSigma, 3, 1, true);
   makeMultiPanelCanvas(cRpA, 3, 1, false);
   NuclearModification(
