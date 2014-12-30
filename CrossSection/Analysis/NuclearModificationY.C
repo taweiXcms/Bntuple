@@ -196,7 +196,7 @@ void NuclearModificationY(){
   hempty->SetMinimum(0.);
   hempty->Draw();
     
-  /*
+  
   gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(25);  
   gaeBplusReference->SetFillColor(5);
@@ -204,7 +204,7 @@ void NuclearModificationY(){
   gaeBplusReference->SetLineColor(5);
   gaeBplusReference->SetLineWidth(1);
   gaeBplusReference->Draw("2psame");
-  */
+
   
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
@@ -233,13 +233,13 @@ void NuclearModificationY(){
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
   ent_SigmapPb->SetMarkerColor(1);
-  /*
+
   TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","fp");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(5);
   ent_Sigmapp->SetMarkerColor(1);
   ent_Sigmapp->SetMarkerStyle(25);
-  */
+
   legendSigma->Draw("psame");
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
