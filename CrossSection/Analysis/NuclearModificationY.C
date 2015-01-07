@@ -30,7 +30,7 @@ void NuclearModificationY(){
 
     
   TFile*filePPReference=new TFile(Form("../../../fonll/output%sY.root",particle.Data()));  
-  //###TFile*filePPReference=new TFile(Form("../../fonll/output%sY.root",particle.Data()));  
+  //TFile*filePPReference=new TFile(Form("../../fonll/output%sY.root",particle.Data()));  
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
@@ -149,7 +149,7 @@ void NuclearModificationY(){
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
-  gSigmasyst->SetLineWidth(1);   
+  gSigmasyst->SetLineWidth(2);   
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
@@ -165,7 +165,8 @@ void NuclearModificationY(){
   gSigmastat->SetFillStyle(0);
 
 
-  TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",600,500);   
+  //###TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",600,500);   
+  TCanvas *canvasSigma=new TCanvas("canvasSigma","canvasSigma",500,500);   
   canvasSigma->cd();
   canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasSigma->SetFillColor(0);
@@ -201,11 +202,22 @@ void NuclearModificationY(){
   gaeBplusReference->SetMarkerStyle(25);  
   gaeBplusReference->SetFillColor(5);
   gaeBplusReference->SetFillStyle(1001);
-  gaeBplusReference->SetLineColor(5);
-  gaeBplusReference->SetLineWidth(1);
+  gaeBplusReference->SetLineColor(kAzure-3);//5
+  gaeBplusReference->SetLineStyle(1);
+  gaeBplusReference->SetLineWidth(0);
   gaeBplusReference->Draw("2psame");
 
-  
+  TGraphAsymmErrors*gaeBplusReference2=gaeBplusReference->Clone(); 
+  gaeBplusReference2->SetMarkerColor(1);
+  gaeBplusReference2->SetMarkerStyle(25);  
+  gaeBplusReference2->SetFillColor(0);
+  gaeBplusReference2->SetFillStyle(0);
+  gaeBplusReference2->SetLineColor(kAzure-3);//5
+  gaeBplusReference2->SetLineStyle(1);
+  gaeBplusReference2->SetLineWidth(1);
+  gaeBplusReference2->Draw("2psame");
+
+ 
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
   gSigmastat->SetLineWidth(2);   
@@ -214,9 +226,8 @@ void NuclearModificationY(){
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
   
-  
   //###TLegend *legendSigma=new TLegend(0.233871,0.6701903,0.5322581,0.7526427,"");
-  TLegend *legendSigma=new TLegend(0.50,0.60,0.80,0.68,"");
+  TLegend *legendSigma=new TLegend(0.50,0.60,0.80,0.78,"");
   legendSigma->SetBorderSize(0);
   legendSigma->SetLineColor(0);
   legendSigma->SetFillColor(0);
@@ -236,7 +247,8 @@ void NuclearModificationY(){
 
   TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","fp");
   ent_Sigmapp->SetTextFont(42);
-  ent_Sigmapp->SetLineColor(5);
+  ent_Sigmapp->SetLineColor(kAzure-3);//5
+  ent_Sigmapp->SetLineStyle(1);
   ent_Sigmapp->SetMarkerColor(1);
   ent_Sigmapp->SetMarkerStyle(25);
 
@@ -311,13 +323,22 @@ void NuclearModificationY(){
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
   gRpAsystFONLL->SetFillColor(5);
-  gRpAsystFONLL->SetLineColor(5);//kAzure-3);
+  gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
+  gRpAsystFONLL->SetLineStyle(1);
+  TGraphAsymmErrors*gRpAsystFONLL2=gRpAsystFONLL->Clone(); 
+  gRpAsystFONLL2->SetMarkerColor(1);
+  gRpAsystFONLL2->SetMarkerStyle(25);  
+  gRpAsystFONLL2->SetFillColor(0);
+  gRpAsystFONLL2->SetFillStyle(0);
+  gRpAsystFONLL2->SetLineColor(kAzure-3);//5
+  gRpAsystFONLL2->SetLineStyle(1);
+  gRpAsystFONLL2->SetLineWidth(1);
 
 
 
-
-  TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",600,500);   
+  //###TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",600,500);   
+  TCanvas *canvasRpA=new TCanvas("canvasRpA","canvasRpA",500,500);   
   
   canvasRpA->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasRpA->SetFillColor(0);
@@ -330,7 +351,7 @@ void NuclearModificationY(){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.23,0.56,0.57,0.75,"");
+  TLegend *legendRpA=new TLegend(0.23,0.58,0.57,0.77,"");
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
@@ -368,29 +389,38 @@ void NuclearModificationY(){
   gRpAstat->SetMarkerColor(1);
 
   gRpAsystFONLL->Draw("2same");
+  gRpAsystFONLL2->Draw("2same");
+
   gRpAsyst->Draw("2esame");
   gRpAstat->Draw("psame");
   
 
   TBox *b = new TBox(-3.3,1-commonErrorN,-2.9,1+commonErrorP);
   b->SetLineColor(1);
+  b->SetLineWidth(1);
+  b->SetLineStyle(1);
   b->SetFillColor(kGray);
   b->Draw();
   
-  
+  TBox *b2=b->Clone();
+  b2->SetFillStyle(0);
+  b2->SetLineStyle(1);
+  b2->SetLineWidth(1);
+  b2->Draw();
+   
   TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}","pf");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetLineColor(2);
   ent_RpAstat->SetMarkerColor(2);
   
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. Lumi+BR","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. Lumi + BR","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
   
   TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. err. from FONLL pp ref.","f");
   ent_RpAsystFONLL->SetTextFont(42);
-  ent_RpAsystFONLL->SetLineColor(5);
+  ent_RpAsystFONLL->SetLineColor(2);//###5
   ent_RpAsystFONLL->SetLineStyle(1);
   ent_RpAsystFONLL->SetMarkerColor(5);
   
