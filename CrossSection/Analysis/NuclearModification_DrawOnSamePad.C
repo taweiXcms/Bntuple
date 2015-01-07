@@ -53,6 +53,10 @@ using namespace std;
   Double_t  Bp_FFsysterror=0.7/40.1;
   Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.049,1.030,1.019,1.012,1.006};
 
+  Double_t Bs_padratio=0.326899;
+  Double_t B0_padratio=0.307285;
+  Double_t Bp_padratio=0.365816;
+
 void makeMultiPanelCanvas(TCanvas*& canv, 
 const Int_t columns,
 const Int_t rows,
@@ -205,7 +209,12 @@ void NuclearModification(
   gSigmastat->SetFillColor(0);
   gSigmastat->SetFillStyle(0);
   gSigmastat->SetFillStyle(0);
- 
+
+  Double_t padcorrection;
+  if (particle=="Bplus") padcorrection=Bp_padratio/Bp_padratio;
+  else if (particle=="Bzero") padcorrection=Bp_padratio/B0_padratio;
+  else if (particle=="Bs") padcorrection=Bp_padratio/Bs_padratio;
+  std::cout << "padcorrection: " << padcorrection << std::endl;
   canvasSigma->cd(PadNum);
   canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasSigma->SetFillColor(0);
@@ -228,16 +237,24 @@ void NuclearModification(
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
   hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}( #mub GeV^{-1}c)");
-  hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
+  //###hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
+  if (particle=="Bplus") hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
+  else if (particle=="Bzero") hempty->GetXaxis()->SetTitleOffset(0.80);//###1.0
+  else if (particle=="Bs") hempty->GetXaxis()->SetTitleOffset(0.85);//###1.0
+
   hempty->GetYaxis()->SetTitleOffset(1.0);//###1.3
-  hempty->GetXaxis()->SetTitleSize(0.070);//###0.055
-  hempty->GetYaxis()->SetTitleSize(0.070);//###0.055
+  hempty->GetXaxis()->SetTitleSize(0.070*padcorrection);//###0.055
+  hempty->GetYaxis()->SetTitleSize(0.070*padcorrection);//###0.055
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.060);//###0.055
-  hempty->GetYaxis()->SetLabelSize(0.060);//###0.055
+  hempty->GetXaxis()->SetLabelSize(0.060*padcorrection);//###0.055
+  hempty->GetYaxis()->SetLabelSize(0.060*padcorrection);//###0.055
+  if (particle=="Bplus") hempty->GetXaxis()->SetLabelOffset(0.005);//###1.0
+  else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.0001);//###1.0
+  else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.0005);//###1.0
+  //###hempty->GetXaxis()->SetLabelOffset(0.005);//###0.005
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
   hempty->Draw();
@@ -246,8 +263,8 @@ void NuclearModification(
   gaeBplusReference->SetMarkerStyle(21);  
   gaeBplusReference->SetFillColor(5);
   gaeBplusReference->SetFillStyle(1001);
-  gaeBplusReference->SetLineColor(1);
-  gaeBplusReference->SetLineWidth(5);
+  gaeBplusReference->SetLineColor(kAzure-3);
+  gaeBplusReference->SetLineWidth(1);
   
   
   gSigmastat->SetMarkerColor(1);
@@ -257,6 +274,14 @@ void NuclearModification(
   gSigmastat->SetMarkerColor(1);
 
   gaeBplusReference->Draw("2same");
+  TGraphAsymmErrors*gaeBplusReference2=gaeBplusReference->Clone();
+  gaeBplusReference2->SetMarkerColor(1);
+  gaeBplusReference2->SetMarkerStyle(21);  
+  gaeBplusReference2->SetFillColor(0);
+  gaeBplusReference2->SetFillStyle(0);
+  gaeBplusReference2->SetLineColor(kAzure-3);
+  gaeBplusReference2->SetLineWidth(1);
+  gaeBplusReference2->Draw("2same");
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
   
@@ -269,21 +294,28 @@ void NuclearModification(
   legendSigma->SetFillStyle(1001);
   legendSigma->SetTextFont(42);
   legendSigma->SetTextSize(0.060);//###0.045
-  
+/* 
   TBox *c = new TBox(3,1-commonErrorN,7,1+commonErrorP);
   c->SetLineColor(5);
   c->SetFillColor(5);
   c->Draw();
 
+  TBox *c2 = c->Clone();
+  c2->SetLineColor(1);
+  c2->SetFillStyle(0);
+  c2->Draw();
+*/  
   TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pPb","pf");
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
   ent_SigmapPb->SetMarkerColor(1);
 
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(c,"FONLL pp ref.","f");
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","f");
   ent_Sigmapp->SetTextFont(42);
-  ent_Sigmapp->SetLineColor(5);
+  ent_Sigmapp->SetLineColor(kAzure-3);//5
+  ent_Sigmapp->SetLineStyle(1);
   ent_Sigmapp->SetMarkerColor(1);
+
 
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
@@ -310,7 +342,7 @@ void NuclearModification(
     
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatexlumi=new TLatex(0.475,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatexlumi=new TLatex(0.390,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
     tlatexlumi->SetNDC();
     tlatexlumi->SetTextColor(1);
@@ -333,7 +365,7 @@ void NuclearModification(
   tlatex3->SetNDC();
   tlatex3->SetTextColor(1);
   tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06);
+  tlatex3->SetTextSize(0.06*padcorrection);
   tlatex3->Draw();
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
@@ -357,8 +389,14 @@ void NuclearModification(
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
   gRpAsystFONLL->SetFillColor(5);
-  gRpAsystFONLL->SetLineColor(5);//kAzure-3);
+  gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
+
+  TGraphAsymmErrors *gRpAsystFONLL2 = gRpAsystFONLL->Clone();
+  gRpAsystFONLL2->SetFillStyle(0);
+  gRpAsystFONLL2->SetLineColor(kAzure-3);//5
+  gRpAsystFONLL2->SetMarkerColor(4);//kAzure-3);
+
 
 
   canvasRpA->cd(PadNum);
@@ -386,16 +424,22 @@ void NuclearModification(
   hempty->GetYaxis()->CenterTitle();
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}");
-  hempty->GetXaxis()->SetTitleOffset(1.0);//###1.3
+  //###hempty->GetXaxis()->SetTitleOffset(1.0);//###1.3
   hempty->GetYaxis()->SetTitleOffset(1.0);//###1.1
-  hempty->GetXaxis()->SetTitleSize(0.070);//###0.055
-  hempty->GetYaxis()->SetTitleSize(0.070);//###0.055
+  hempty->GetXaxis()->SetTitleSize(0.070*padcorrection);//###0.055
+  hempty->GetYaxis()->SetTitleSize(0.070*padcorrection);//###0.055
   hempty->GetXaxis()->SetTitleFont(42);
   hempty->GetYaxis()->SetTitleFont(42);
   hempty->GetXaxis()->SetLabelFont(42);
   hempty->GetYaxis()->SetLabelFont(42);
-  hempty->GetXaxis()->SetLabelSize(0.060);//###0.055
-  hempty->GetYaxis()->SetLabelSize(0.060);//###0.055  
+  hempty->GetXaxis()->SetLabelSize(0.060*padcorrection);//###0.055
+  hempty->GetYaxis()->SetLabelSize(0.060*padcorrection);//###0.055  
+  if (particle=="Bplus") hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
+  else if (particle=="Bzero") hempty->GetXaxis()->SetTitleOffset(0.80);//###1.0
+  else if (particle=="Bs") hempty->GetXaxis()->SetTitleOffset(0.85);//###1.0
+  if (particle=="Bplus") hempty->GetXaxis()->SetLabelOffset(0.005);//###1.0
+  else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.0001);//###1.0
+  else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.0005);//###1.0
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
 
@@ -410,6 +454,7 @@ void NuclearModification(
   line->SetLineWidth(2);
   
   gRpAsystFONLL->Draw("2same");
+  gRpAsystFONLL2->Draw("2same");
   line->Draw();
   gRpAsyst->Draw("2esame");
   gRpAstat->Draw("psame");
@@ -424,6 +469,11 @@ void NuclearModification(
   b->SetLineColor(1);
   b->SetFillColor(kGray);
   b->Draw();
+  TBox *b2 = b->Clone();
+  b2->SetLineColor(1);
+  b2->SetFillStyle(0);
+  b2->Draw();
+
 
   TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}","pf");
   ent_RpAstat->SetTextFont(42);
@@ -432,13 +482,14 @@ void NuclearModification(
   
   TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. Lumi + BR","f");
   ent_RpAsystData->SetTextFont(42);
-  ent_RpAsystData->SetLineColor(2);
+  ent_RpAsystData->SetLineColor(1);
   ent_RpAsystData->SetMarkerColor(2);
   
   TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. err. from FONLL pp ref.","f");
   ent_RpAsystFONLL->SetTextFont(42);
-  ent_RpAsystFONLL->SetLineColor(5);
+  ent_RpAsystFONLL->SetLineColor(kAzure-3);//5
   ent_RpAsystFONLL->SetLineStyle(1);
+  ent_RpAsystFONLL->SetLineWidth(1);
   ent_RpAsystFONLL->SetMarkerColor(5);
  
   if(PadNum==1||PadNum==0){
@@ -455,7 +506,7 @@ void NuclearModification(
  
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatex2=new TLatex(0.475,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatex2=new TLatex(0.390,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
     tlatex2->SetNDC();
     tlatex2->SetTextColor(1);
@@ -560,6 +611,7 @@ const Float_t edge
   Float_t Yup[rows];
   Float_t PadWidth = (1.0-leftOffset)/((1.0/(1.0-leftMargin)) + (1.0/(1.0-edge))+(Float_t)columns-2.0);
   Float_t PadHeight = (1.0-bottomOffset)/((1.0/(1.0-bottomMargin)) + (1.0/(1.0-edge))+(Float_t)rows-2.0);
+  std::cout << "PadWidth: " << PadWidth << ",PadHeight: " << PadHeight << std::endl;
   Xlow[0] = leftOffset;
   Xup[0] = leftOffset + PadWidth/(1.0-leftMargin);
   Xup[columns-1] = 1;
@@ -585,6 +637,7 @@ const Float_t edge
       padName = Form("p_%d_%d",i,j);
       pad[i][j] = new TPad(padName.Data(),padName.Data(),
       Xlow[i],Ylow[j],Xup[i],Yup[j]);
+      std::cout << i << " , " << j << " - " << Xlow[i] << "," << Ylow[j] << "," << Xup[i] << "," << Yup[j] << std::endl;
       if(i==0) pad[i][j]->SetLeftMargin(leftMargin);
       else pad[i][j]->SetLeftMargin(0);
       if(i==(columns-1)) pad[i][j]->SetRightMargin(edge);
