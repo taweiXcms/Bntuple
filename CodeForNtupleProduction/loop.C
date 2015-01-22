@@ -860,7 +860,8 @@ int loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140
 	if(REAL)
 	  {
 //	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
+
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4))||(EvtInfo_RunNo>=211739&&EvtInfo_RunNo<=211831&&abs(temy)<2.4))) continue;
 	  }
 	else
 	  {
@@ -927,7 +928,7 @@ int loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140
 	if(REAL)
 	  {
 //	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
+	   if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4))||(EvtInfo_RunNo>=211739&&EvtInfo_RunNo<=211831&&abs(temy)<2.4))) continue;
 	  }
 	else
 	  {
@@ -993,7 +994,7 @@ int loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140
 	if(REAL)
 	  {
 //	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4))||(EvtInfo_RunNo>=211739&&EvtInfo_RunNo<=211831&&abs(temy)<2.4))) continue;
 	  }
 	else
 	  {
@@ -1067,7 +1068,7 @@ int loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140
 	if(REAL)
 	  {
 //	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4))||(EvtInfo_RunNo>=211739&&EvtInfo_RunNo<=211831&&abs(temy)<2.4))) continue;
 	  }
 	else
 	  {
@@ -1145,7 +1146,7 @@ int loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140
 	if(REAL)
 	  {
 //	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4))||(EvtInfo_RunNo>=211739&&EvtInfo_RunNo<=211831&&abs(temy)<2.4))) continue;
 	  }
 	else
 	  {
@@ -1224,7 +1225,7 @@ int loop(string infile="/mnt/hadoop/cms/store/user/jwang/Bfinder_BoostedMC_20140
 	if(REAL)
 	  {
 //	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy+0.465)<1.93)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy-0.465)<1.93)))) continue;
-	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4)))) continue;
+	    if(!(((EvtInfo_RunNo>=210498&&EvtInfo_RunNo<=211256&&abs(temy)<2.4)||(EvtInfo_RunNo>=211313&&EvtInfo_RunNo<=211631&&abs(temy)<2.4))||(EvtInfo_RunNo>=211739&&EvtInfo_RunNo<=211831&&abs(temy)<2.4))) continue;
 	  }
 	else
 	  {
