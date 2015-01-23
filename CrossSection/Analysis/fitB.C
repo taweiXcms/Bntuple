@@ -1,6 +1,6 @@
 #include "utilities.h"
 
-double luminosity=34.6*1e-3;
+double luminosity;
 double setparam0=100.;
 double setparam1=5.28;
 double setparam2=0.05;
@@ -12,16 +12,15 @@ double fixparam1=5.279;
 //TString inputmc="/data/bmeson/MC/nt_20140801_mixed_fromQMBFinder_Kp.root";
 
 //lxplus
-TString inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
-TString inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
+TString inputdata;
+TString inputmc;
+TString outputname;
 
 //tk pt, chi2
-TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
-//TString cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01";
-
-TString seldata_2y=Form("%s",cut.Data());
-TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
-TString selmcgen="abs(y)<2.4&&abs(pdgId)==521&&isSignal==1";
+TString cut;
+TString seldata_2y;
+TString selmc;
+TString selmcgen;
 
 TString weight = "(27.493+pt*(-0.218769))";
 
@@ -31,7 +30,7 @@ void clean0(TH1D *h){
   }
 }
 
-TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){   
+TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, bool ispPb){   
    //cout<<cut.Data()<<endl;
    static int count=0;
    count++;
@@ -153,13 +152,37 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
-   c->SaveAs(Form("../ResultsBplus/BMass-%d.pdf",count));
-
+   if(ispPb)c->SaveAs(Form("../ResultsBplus/BMass-%d.pdf",count));
+   else c->SaveAs(Form("../ResultsBplus_pp/BMass-%d.pdf",count));
    return mass;
 }
 
-void fitB(TString infname="",bool doweight = 1)
+void fitB(bool ispPb=true,TString infname="",bool doweight = 1)
 {
+
+  
+  if(ispPb==true){
+  
+    inputdata="/afs/cern.ch/work/w/wangj/public/nt_20140727_PAMuon_HIRun2013_Merged_y24_Using03090319Bfinder.root";
+    inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
+    luminosity=34.6*1e-3;
+    outputname="../ResultsBplus/SigmaBplus.root";
+    cut="abs(y)<2.4&&(HLT_PAMu3_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
+
+  }
+  else{
+  
+    inputdata="/data/bmeson/data//nt_20141022_PPMuon_Run2013A_PromptReco_v1_resub20141126.root";
+    inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
+    luminosity=5400*1e-3;
+    outputname="../ResultsBplus_pp/SigmaBplus.root";
+    cut="abs(y)<2.4&&(HLT_PAL1DoubleMu0_HighQ_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
+  }
+  
+  TString seldata_2y=Form("%s",cut.Data());
+  TString selmc=Form("abs(y)<2.4&&gen==23333&&%s",cut.Data());
+  TString selmcgen="abs(y)<2.4&&abs(pdgId)==521&&isSignal==1";
+
   if (doweight==0) weight="1";
   if (infname=="") infname=inputdata.Data();
   TFile *inf = new TFile(infname.Data());
@@ -186,7 +209,7 @@ void fitB(TString infname="",bool doweight = 1)
 
   for (int i=0;i<nBins;i++)
     {
-      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
+      TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1],ispPb);
       double yield = f->Integral(5,6)/0.02;
       double yieldErr = f->Integral(5,6)/0.02*f->GetParError(0)/f->GetParameter(0);
       hPt->SetBinContent(i+1,yield/(ptBins[i+1]-ptBins[i]));
@@ -233,7 +256,7 @@ void fitB(TString infname="",bool doweight = 1)
 
   hPtSigma->Draw();
   
-  TFile *outf = new TFile("../ResultsBplus/SigmaBplus.root","recreate");
+  TFile *outf = new TFile(outputname.Data(),"recreate");
   outf->cd();
   hPt->Write();
   hEff->Write();
