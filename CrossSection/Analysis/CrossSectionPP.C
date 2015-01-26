@@ -1,3 +1,19 @@
+/*
+TString particle="Bplus";
+const int nbins=3;
+Double_t xbins[nbins]={12.5,17.5,40.};
+Double_t exl[nbins]={2.5,2.5,20};
+Double_t exl0[nbins]={0.,0.,0.};
+Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146};
+Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146};
+Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
+Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
+Double_t FFsysterror=0.7/40.1;
+Double_t tagandprobcorrection[nbins]={1.049,1.030,1.019};
+TString infilenameFONLL=Form("../../../fonll/output%s_pp_3ptbins.root",particle.Data());
+TString infilenameData=Form("../Results%s_pp/Sigma%s.root",particle.Data(),particle.Data());
+*/
+
 TString particle="Bplus";
 const int nbins=5;
 Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
@@ -9,19 +25,22 @@ Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
 Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
 Double_t FFsysterror=0.7/40.1;
 Double_t tagandprobcorrection[nbins]={1.049,1.030,1.019,1.012,1.006};
+TString infilenameFONLL=Form("../../../fonll/output%s_pp.root",particle.Data());
+TString infilenameData=Form("../Results%s_pp/Sigma%s.root",particle.Data(),particle.Data());
 
 
 void CrossSectionPP(){
 
   gROOT->SetStyle("Plain");
   gStyle->SetOptTitle(0);
-  gStyle->SetOptStat(0);
+  gStyle->SetOptStat(0);//outputBplus_pp_3ptbins.root
   
-  TFile*filePPReference=new TFile(Form("../../../fonll/output%s_pp.root",particle.Data()));  
+  TFile*filePPReference=new TFile(infilenameFONLL.Data());  
+  //TFile*filePPReference=new TFile(Form("../../../fonll/output%s_pp.root",particle.Data()));  
   TGraphAsymmErrors*gaeBplusReference=(TGraphAsymmErrors*)filePPReference->Get(Form("gaeSigmaDecay%s",particle.Data()));
   gaeBplusReference->SetName(Form("gae%sReference",particle.Data()));
   
-  TFile*filepPb=new TFile(Form("../Results%s_pp/Sigma%s.root",particle.Data(),particle.Data()));
+  TFile*filepPb=new TFile(infilenameData.Data());
   TH1F*hSigmapPbStat=(TH1F*)filepPb->Get("hPtSigma");  
   TH1F*hPt=(TH1F*)filepPb->Get("hPt");
   TH1F*hEff=(TH1F*)filepPb->Get("hEff");
@@ -348,7 +367,7 @@ void CrossSectionPP(){
   legendPPOverFONLL->SetTextFont(42);
   legendPPOverFONLL->SetTextSize(0.045);
 
-  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,2.5);  
+  TH2F* hempty=new TH2F("hempty","",10,0.,70,10.,0.,3.5);  
   
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
