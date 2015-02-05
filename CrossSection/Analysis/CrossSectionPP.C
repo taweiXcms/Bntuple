@@ -1,26 +1,11 @@
-/*
-TString particle="Bplus";
-const int nbins=3;
-Double_t xbins[nbins]={12.5,17.5,40.};
-Double_t exl[nbins]={2.5,2.5,20};
-Double_t exl0[nbins]={0.,0.,0.};
-Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146};
-Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146};
-Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
-Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
-Double_t FFsysterror=0.7/40.1;
-Double_t tagandprobcorrection[nbins]={1.049,1.030,1.019};
-TString infilenameFONLL=Form("../../../fonll/output%s_pp_3ptbins.root",particle.Data());
-TString infilenameData=Form("../Results%s_pp/Sigma%s.root",particle.Data(),particle.Data());
-*/
 
 TString particle="Bplus";
 const int nbins=5;
 Double_t xbins[nbins]={12.5,17.5,22.5,27.5,45.};
 Double_t exl[nbins]={2.5,2.5,2.5,2.5,15.};
 Double_t exl0[nbins]={0.,0.,0.,0.,0.};
-Double_t yPercSigmapPbSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
-Double_t yPercSigmapPbSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
+Double_t yPercSigmappSystTotHigh[nbins]={0.163,0.150,0.146,0.142,0.140};
+Double_t yPercSigmappSystTotLow[nbins]={0.163,0.150,0.146,0.142,0.140};
 Double_t commonErrorP = TMath::Sqrt(0.0445*0.0445);
 Double_t commonErrorN = TMath::Sqrt(0.0445*0.0445);
 Double_t FFsysterror=0.7/40.1;
@@ -84,7 +69,7 @@ void CrossSectionPP(){
   Double_t ySigmapPb[nbins];                     //value y pPb 
   Double_t xSigmapPb[nbins];                     //value x pPb
   Double_t ySigmapPbStat[nbins];                 //y err stat pPb
-  Double_t yPercSigmapPbStat[nbins];             //y err stat pPb
+  Double_t yPercSigmappStat[nbins];             //y err stat pPb
   
   Double_t yFONLL[nbins];                        //1
   Double_t yPPOverFONLL[nbins];                          //value y PPOverFONLL 
@@ -94,11 +79,8 @@ void CrossSectionPP(){
   Double_t yPercPPOverFONLLsystFONLLhigh[nbins];         //y percentuale err syst FONLL PPOverFONLL high
   Double_t yPercPPOverFONLLsystFONLLlow[nbins];          //y percentuale err syst FONLL PPOverFONLL low
     
-  Double_t ySigmapPbSystTotHigh[nbins];              //y percentuale err syst pPb TOT
+  Double_t ySigmappSystTotHigh[nbins];              //y percentuale err syst pPb TOT
   Double_t ySigmapPbSystTotLow[nbins];              //y percentuale err syst pPb TOT
-
-  Double_t yPercRpPbSystTotHigh[nbins];          //y percentuale err syst RpPb TOT
-  Double_t yPercRpPbSystTotLow[nbins];          //y percentuale err syst RpPb TOT
   
   Double_t yRpPbSystTotHigh[nbins];              //y percentuale err syst RpPb TOT
   Double_t yRpPbSystTotLow[nbins];              //y percentuale err syst RpPb TOT
@@ -119,9 +101,9 @@ void CrossSectionPP(){
   for(Int_t i=0;i<nbins;i++) {
     ySigmapPb[i]=hSigmapPbStat->GetBinContent(i+1);
     ySigmapPbStat[i]=hSigmapPbStat->GetBinError(i+1);
-    yPercSigmapPbStat[i]=ySigmapPbStat[i]/ySigmapPb[i];
-    ySigmapPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*ySigmapPb[i];
-    ySigmapPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*ySigmapPb[i];
+    yPercSigmappStat[i]=ySigmapPbStat[i]/ySigmapPb[i];
+    ySigmappSystTotHigh[i]=yPercSigmappSystTotHigh[i]*ySigmapPb[i];
+    ySigmapPbSystTotLow[i]=yPercSigmappSystTotLow[i]*ySigmapPb[i];
   }
 
   for(Int_t i=0;i<nbins;i++) {
@@ -133,15 +115,15 @@ void CrossSectionPP(){
     yPPOverFONLLsystFONLLhigh[i]=yPercPPOverFONLLsystFONLLhigh[i]*yPPOverFONLL[i];
     yPPOverFONLLsystFONLLlow[i]=yPercPPOverFONLLsystFONLLlow[i]*yPPOverFONLL[i];
 
-    yRpPbSystTotHigh[i]=yPercSigmapPbSystTotHigh[i]*yPPOverFONLL[i];
-    yRpPbSystTotLow[i]=yPercSigmapPbSystTotLow[i]*yPPOverFONLL[i];
+    yRpPbSystTotHigh[i]=yPercSigmappSystTotHigh[i]*yPPOverFONLL[i];
+    yRpPbSystTotLow[i]=yPercSigmappSystTotLow[i]*yPPOverFONLL[i];
     //cout<<yRpPbSystTot[i]<<endl;
     
   }
 
   
-  TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
-  gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
+  TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbSystTotLow,ySigmappSystTotHigh);
+  gSigmasyst->SetTitle("Sigma syst uncertainty ");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
   gSigmasyst->SetLineWidth(2);   
@@ -149,7 +131,7 @@ void CrossSectionPP(){
   gSigmasyst->SetMarkerColor(1);
 
   TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
-  gSigmastat->SetTitle("Sigma stat uncertainty from pPb");
+  gSigmastat->SetTitle("Sigma stat uncertainty ");
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
   gSigmastat->SetLineWidth(1);   
@@ -243,7 +225,7 @@ void CrossSectionPP(){
   
   //TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"pp reference","PLF");
   
-  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pPb","pf");
+  TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmastat,"pp data","pf");
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
   //ent_SigmapPb->SetFillColor(0);
@@ -285,7 +267,7 @@ void CrossSectionPP(){
 
 
     
-  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS Preliminary     pp #sqrt{s_{NN}}= 2.76 TeV");
+  TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"pp #sqrt{s_{NN}}= 2.76 TeV");
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(42);
@@ -320,7 +302,7 @@ void CrossSectionPP(){
   canvasSigma->SaveAs(Form("../Results%s_pp/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
 
   TGraphAsymmErrors *gPPOverFONLLstat = new TGraphAsymmErrors(nbins,xbins,yPPOverFONLL,exl0,exl0,yPPOverFONLLStat,yPPOverFONLLStat);
-  gPPOverFONLLstat->SetTitle("PPOverFONLL stat uncertainty from pPb");
+  gPPOverFONLLstat->SetTitle("PPOverFONLL stat uncertainty ");
   gPPOverFONLLstat->SetMarkerColor(1);
   gPPOverFONLLstat->SetLineColor(1);
   gPPOverFONLLstat->SetLineWidth(2);   
@@ -328,7 +310,7 @@ void CrossSectionPP(){
   gPPOverFONLLstat->SetMarkerColor(1);
   
   TGraphAsymmErrors *gPPOverFONLLsyst = new TGraphAsymmErrors(nbins,xbins,yPPOverFONLL,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
-  gPPOverFONLLsyst->SetTitle("PPOverFONLL syst uncertainty from pPb");
+  gPPOverFONLLsyst->SetTitle("PPOverFONLL syst uncertainty ");
   gPPOverFONLLsyst->SetMarkerColor(1);
   gPPOverFONLLsyst->SetLineColor(1);
   gPPOverFONLLsyst->SetLineWidth(2);   
