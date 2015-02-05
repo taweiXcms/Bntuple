@@ -172,8 +172,11 @@ void fitB(bool ispPb=true,TString infname="",bool doweight = 1)
   }
   else{
   
-    inputdata="/data/bmeson/data//nt_20141022_PPMuon_Run2013A_PromptReco_v1_resub20141126.root";
-    inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
+    //inputdata="/data/bmeson/data//nt_20141022_PPMuon_Run2013A_PromptReco_v1_resub20141126.root";
+    //inputmc="/afs/cern.ch/work/w/wangj/public/nt_20140801_mixed_fromQMBFinder_Kp.root";
+    inputdata="/data/bmeson/data/nt_20141022_PPMuon_Run2013A_PromptReco_v1_resub20141126_HLT_PAL1DoubleMu0_HighQ_v1.root";
+    inputmc="/data/bmeson/MC/nt_2015251_PYTHIA6_BuJpsiK_pp_PAL1DoubleMu0_HighQ_v1.root";
+
     luminosity=5400*1e-3;
     outputname="../ResultsBplus_pp/SigmaBplus.root";
     cut="abs(y)<2.4&&(HLT_PAL1DoubleMu0_HighQ_v1)&&abs(mumumass-3.096916)<0.15&&mass>5&&mass<6&& isbestchi2&&trk1Pt>0.9&&chi2cl>1.32e-02&&(d0/d0Err)>3.41&&cos(dtheta)>-3.46e01&&mu1pt>1.5&&mu2pt>1.5";
