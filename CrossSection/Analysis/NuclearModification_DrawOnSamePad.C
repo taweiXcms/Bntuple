@@ -24,8 +24,10 @@ using namespace std;
   Double_t  Bs_exl0[Bs_nbins]={0.};
   Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.212};
   Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.212};
-  Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22+0.035*0.035);
-  Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24+0.035*0.035);
+//  Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22+0.035*0.035);//old BR
+//  Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24+0.035*0.035);//old BR
+  Double_t  Bs_commonErrorP = TMath::Sqrt(0.085*0.085+0.035*0.035);//old BR
+  Double_t  Bs_commonErrorN = TMath::Sqrt(0.085*0.085+0.035*0.035);//old BR
   Double_t  Bs_FFsysterror=0.6/10.4;
   Double_t  Bs_tagandprobcorrection[Bs_nbins]={1.041};
 
