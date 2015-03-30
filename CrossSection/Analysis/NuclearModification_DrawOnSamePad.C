@@ -198,7 +198,7 @@ void NuclearModification(
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
-  gSigmasyst->SetLineWidth(2);   
+  gSigmasyst->SetLineWidth(1);   
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
@@ -215,6 +215,7 @@ void NuclearModification(
   gSigmastat->SetFillStyle(0);
 
   Double_t padcorrection;
+  padcorrection=Bp_padratio/Bp_padratio;
   if (particle=="Bplus") padcorrection=Bp_padratio/Bp_padratio;
   else if (particle=="Bzero") padcorrection=Bp_padratio/B0_padratio;
   else if (particle=="Bs") padcorrection=Bp_padratio/Bs_padratio;
@@ -233,7 +234,7 @@ void NuclearModification(
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.1, 1e3);    
+  TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.5, 2e2);    
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
@@ -259,8 +260,8 @@ void NuclearModification(
   else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.0001);//###1.0
   else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.0005);//###1.0
   //###hempty->GetXaxis()->SetLabelOffset(0.005);//###0.005
-  hempty->SetMaximum(2);
-  hempty->SetMinimum(0.);
+  hempty->SetMaximum(200);
+  hempty->SetMinimum(0.5);
   hempty->Draw();
   
   gaeBplusReference->SetMarkerColor(1);
@@ -273,12 +274,12 @@ void NuclearModification(
   
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
-  gSigmastat->SetLineWidth(2);   
+  gSigmastat->SetLineWidth(1);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
 
   gaeBplusReference->Draw("2same");
-  TGraphAsymmErrors*gaeBplusReference2=gaeBplusReference->Clone();
+  TGraphAsymmErrors*gaeBplusReference2=static_cast<TGraphAsymmErrors*>(gaeBplusReference->Clone());
   gaeBplusReference2->SetMarkerColor(1);
   gaeBplusReference2->SetMarkerStyle(21);  
   gaeBplusReference2->SetFillColor(0);
@@ -337,7 +338,7 @@ void NuclearModification(
     legendSigma->Draw("same");
     
     //TLatex * tlatex1=new TLatex(0.21,0.88801268,"CMS");
-    TLatex * tlatex1=new TLatex(0.19,0.86,"CMS");
+    TLatex * tlatex1=new TLatex(0.6,0.86,"CMS");
     tlatex1->SetNDC();
     tlatex1->SetTextColor(1);
     tlatex1->SetTextFont(62);//42
@@ -396,7 +397,7 @@ void NuclearModification(
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
 
-  TGraphAsymmErrors *gRpAsystFONLL2 = gRpAsystFONLL->Clone();
+  TGraphAsymmErrors *gRpAsystFONLL2 = static_cast<TGraphAsymmErrors*>(gRpAsystFONLL->Clone());
   gRpAsystFONLL2->SetFillStyle(0);
   gRpAsystFONLL2->SetLineColor(kAzure-3);//5
   gRpAsystFONLL2->SetMarkerColor(4);//kAzure-3);
@@ -473,7 +474,7 @@ void NuclearModification(
   b->SetLineColor(1);
   b->SetFillColor(kGray);
   b->Draw();
-  TBox *b2 = b->Clone();
+  TBox *b2 = static_cast<TBox*>(b->Clone());
   b2->SetLineColor(1);
   b2->SetFillStyle(0);
   b2->Draw();
@@ -600,7 +601,7 @@ const Float_t edge
 ) 
 {
   if (canv==0) {
-    cout << "makeMultiPanelCanvas","Got null canvas.";
+    cout << "makeMultiPanelCanvas, Got null canvas.";
     return;
   }
   canv->Clear();
