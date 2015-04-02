@@ -15,6 +15,7 @@
 #include "TLine.h"
 #include "TLegendEntry.h"
 #include "TPad.h"
+#include "TBox.h"
 using namespace std;
 
   TString   Bs_particle="Bs";
@@ -24,8 +25,8 @@ using namespace std;
   Double_t  Bs_exl0[Bs_nbins]={0.};
   Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.212};
   Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.212};
-//  Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22+0.035*0.035);//old BR
-//  Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24+0.035*0.035);//old BR
+  //Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22+0.035*0.035);//old BR
+  //Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24+0.035*0.035);//old BR
   Double_t  Bs_commonErrorP = TMath::Sqrt(0.085*0.085+0.035*0.035);//new BR
   Double_t  Bs_commonErrorN = TMath::Sqrt(0.085*0.085+0.035*0.035);//new BR
   //Double_t  Bs_FFsysterror=0.6/10.4;//old BR
@@ -198,7 +199,7 @@ void NuclearModification(
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
-  gSigmasyst->SetLineWidth(1);   
+  gSigmasyst->SetLineWidth(2);   
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
@@ -215,7 +216,6 @@ void NuclearModification(
   gSigmastat->SetFillStyle(0);
 
   Double_t padcorrection;
-  padcorrection=Bp_padratio/Bp_padratio;
   if (particle=="Bplus") padcorrection=Bp_padratio/Bp_padratio;
   else if (particle=="Bzero") padcorrection=Bp_padratio/B0_padratio;
   else if (particle=="Bs") padcorrection=Bp_padratio/Bs_padratio;
@@ -234,7 +234,7 @@ void NuclearModification(
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.5, 2e2);    
+  TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.1, 1e3);    
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
@@ -260,8 +260,8 @@ void NuclearModification(
   else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.0001);//###1.0
   else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.0005);//###1.0
   //###hempty->GetXaxis()->SetLabelOffset(0.005);//###0.005
-  hempty->SetMaximum(200);
-  hempty->SetMinimum(0.5);
+  hempty->SetMaximum(2);
+  hempty->SetMinimum(0.);
   hempty->Draw();
   
   gaeBplusReference->SetMarkerColor(1);
@@ -274,16 +274,12 @@ void NuclearModification(
   
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
-  gSigmastat->SetLineWidth(1);   
+  gSigmastat->SetLineWidth(2);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
 
   gaeBplusReference->Draw("2same");
-<<<<<<< HEAD
   TGraphAsymmErrors*gaeBplusReference2=(TGraphAsymmErrors*)gaeBplusReference->Clone();
-=======
-  TGraphAsymmErrors*gaeBplusReference2=static_cast<TGraphAsymmErrors*>(gaeBplusReference->Clone());
->>>>>>> 445303b2df05a01c78d8746822c3aff8015ff6f6
   gaeBplusReference2->SetMarkerColor(1);
   gaeBplusReference2->SetMarkerStyle(21);  
   gaeBplusReference2->SetFillColor(0);
@@ -342,7 +338,7 @@ void NuclearModification(
     legendSigma->Draw("same");
     
     //TLatex * tlatex1=new TLatex(0.21,0.88801268,"CMS");
-    TLatex * tlatex1=new TLatex(0.6,0.86,"CMS");
+    TLatex * tlatex1=new TLatex(0.19,0.86,"CMS");
     tlatex1->SetNDC();
     tlatex1->SetTextColor(1);
     tlatex1->SetTextFont(62);//42
@@ -361,13 +357,13 @@ void NuclearModification(
   }
 
    if(PadNum==2){
-    TLatex * tlatex4=new TLatex(0.60,0.73,"|y_{lab}| < 2.4");
+    TLatex * tlatex4=new TLatex(0.60,0.73,"|y_{LAB}| < 2.4");
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(42);//42
     tlatex4->SetTextSize(0.07);//0.045
     tlatex4->Draw();
-   }
+	 }
 
   //###double xpos=0.8528226;
   //###double ypos=0.6849894;
@@ -385,7 +381,7 @@ void NuclearModification(
   tlatex3->SetTextFont(42);
   tlatex3->SetTextSize(0.06*padcorrection);
   tlatex3->Draw();
-  
+
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
   gRpAstat->SetTitle("RpA stat uncertainty from pPb");
   gRpAstat->SetMarkerStyle(21);
@@ -410,11 +406,7 @@ void NuclearModification(
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
 
-<<<<<<< HEAD
   TGraphAsymmErrors *gRpAsystFONLL2 = (TGraphAsymmErrors*)gRpAsystFONLL->Clone();
-=======
-  TGraphAsymmErrors *gRpAsystFONLL2 = static_cast<TGraphAsymmErrors*>(gRpAsystFONLL->Clone());
->>>>>>> 445303b2df05a01c78d8746822c3aff8015ff6f6
   gRpAsystFONLL2->SetFillStyle(0);
   gRpAsystFONLL2->SetLineColor(kAzure-3);//5
   gRpAsystFONLL2->SetMarkerColor(4);//kAzure-3);
@@ -491,7 +483,7 @@ void NuclearModification(
   b->SetLineColor(1);
   b->SetFillColor(kGray);
   b->Draw();
-  TBox *b2 = static_cast<TBox*>(b->Clone());
+  TBox *b2 = (TBox*)b->Clone();
   b2->SetLineColor(1);
   b2->SetFillStyle(0);
   b2->Draw();
@@ -536,15 +528,16 @@ void NuclearModification(
     tlatex2->SetTextSize(0.06);//0.045
    tlatex2->Draw();
   }
-  if(PadNum==2){
-    TLatex * tlatex4=new TLatex(0.14,0.76,"|y_{lab}| < 2.4");
+    if(PadNum==2){
+    TLatex * tlatex4=new TLatex(0.14,0.76,"|y_{LAB}| < 2.4");
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(42);//42
     tlatex4->SetTextSize(0.07);//0.045
     tlatex4->Draw();
-  }
+	 }
 
+  
   tlatex3->Draw();
   
   
@@ -626,7 +619,7 @@ const Float_t edge
 ) 
 {
   if (canv==0) {
-    cout << "makeMultiPanelCanvas, Got null canvas.";
+    cout << "makeMultiPanelCanvas","Got null canvas.";
     return;
   }
   canv->Clear();
@@ -683,6 +676,3 @@ const Float_t edge
     }
   }
 }
-
-
-      
