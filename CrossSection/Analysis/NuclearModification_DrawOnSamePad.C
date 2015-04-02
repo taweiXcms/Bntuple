@@ -357,7 +357,7 @@ void NuclearModification(
   }
 
    if(PadNum==2){
-    TLatex * tlatex4=new TLatex(0.60,0.73,"|y_{LAB}| < 2.4");
+    TLatex * tlatex4=new TLatex(0.60,0.73,"|y_{lab}| < 2.4");
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(42);//42
@@ -529,7 +529,7 @@ void NuclearModification(
    tlatex2->Draw();
   }
     if(PadNum==2){
-    TLatex * tlatex4=new TLatex(0.14,0.76,"|y_{LAB}| < 2.4");
+    TLatex * tlatex4=new TLatex(0.14,0.76,"|y_{lab}| < 2.4");
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(42);//42
