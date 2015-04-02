@@ -199,7 +199,7 @@ void NuclearModification(
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
-  gSigmasyst->SetLineWidth(2);   
+  gSigmasyst->SetLineWidth(1);   
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
 
@@ -234,7 +234,8 @@ void NuclearModification(
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
   
-  TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.1, 1e3);    
+  //###TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.1, 1e3);    
+  TH2F* hempty=new TH2F("hempty","", 10, 0.1, 65., 10., 0.3, 1e3);    
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   //if(particle=="Bplus") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{+}) (pb GeV^{-1}c)");
   //if(particle=="Bzero") hempty->GetYaxis()->SetTitle("d#sigma / dp_{T} (B^{0}) (pb GeV^{-1}c)");
@@ -274,7 +275,7 @@ void NuclearModification(
   
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
-  gSigmastat->SetLineWidth(2);   
+  gSigmastat->SetLineWidth(1);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
 
