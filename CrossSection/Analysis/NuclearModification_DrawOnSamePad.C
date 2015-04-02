@@ -279,7 +279,11 @@ void NuclearModification(
   gSigmastat->SetMarkerColor(1);
 
   gaeBplusReference->Draw("2same");
+<<<<<<< HEAD
+  TGraphAsymmErrors*gaeBplusReference2=(TGraphAsymmErrors*)gaeBplusReference->Clone();
+=======
   TGraphAsymmErrors*gaeBplusReference2=static_cast<TGraphAsymmErrors*>(gaeBplusReference->Clone());
+>>>>>>> 445303b2df05a01c78d8746822c3aff8015ff6f6
   gaeBplusReference2->SetMarkerColor(1);
   gaeBplusReference2->SetMarkerStyle(21);  
   gaeBplusReference2->SetFillColor(0);
@@ -356,6 +360,15 @@ void NuclearModification(
     tlatexlumi->Draw();
   }
 
+   if(PadNum==2){
+    TLatex * tlatex4=new TLatex(0.60,0.73,"|y_{lab}| < 2.4");
+    tlatex4->SetNDC();
+    tlatex4->SetTextColor(1);
+    tlatex4->SetTextFont(42);//42
+    tlatex4->SetTextSize(0.07);//0.045
+    tlatex4->Draw();
+   }
+
   //###double xpos=0.8528226;
   //###double ypos=0.6849894;
   double xpos=0.86;
@@ -397,7 +410,11 @@ void NuclearModification(
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
 
+<<<<<<< HEAD
+  TGraphAsymmErrors *gRpAsystFONLL2 = (TGraphAsymmErrors*)gRpAsystFONLL->Clone();
+=======
   TGraphAsymmErrors *gRpAsystFONLL2 = static_cast<TGraphAsymmErrors*>(gRpAsystFONLL->Clone());
+>>>>>>> 445303b2df05a01c78d8746822c3aff8015ff6f6
   gRpAsystFONLL2->SetFillStyle(0);
   gRpAsystFONLL2->SetLineColor(kAzure-3);//5
   gRpAsystFONLL2->SetMarkerColor(4);//kAzure-3);
@@ -519,7 +536,15 @@ void NuclearModification(
     tlatex2->SetTextSize(0.06);//0.045
    tlatex2->Draw();
   }
-   
+  if(PadNum==2){
+    TLatex * tlatex4=new TLatex(0.14,0.76,"|y_{lab}| < 2.4");
+    tlatex4->SetNDC();
+    tlatex4->SetTextColor(1);
+    tlatex4->SetTextFont(42);//42
+    tlatex4->SetTextSize(0.07);//0.045
+    tlatex4->Draw();
+  }
+
   tlatex3->Draw();
   
   
