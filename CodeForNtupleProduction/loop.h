@@ -175,9 +175,9 @@ void buildBranch(TTree* nt){
   nt->Branch("geneta",geneta, "geneta[size]/F");
   nt->Branch("genphi",genphi, "genphi[size]/F");
 
-  nt->Branch("mu1isTrackerMuon",mu1isTrackerMuon, "mu1isTrackerMuon[size]/B");
-  nt->Branch("mu1isGlobalMuon",mu1isGlobalMuon, "mu1isGlobalMuon[size]/B");
-  nt->Branch("mu1TMOneStationTight",mu1TMOneStationTight, "mu1TMOneStationTight[size]/B");
+  nt->Branch("mu1isTrackerMuon",mu1isTrackerMuon, "mu1isTrackerMuon[size]/O");
+  nt->Branch("mu1isGlobalMuon",mu1isGlobalMuon, "mu1isGlobalMuon[size]/O");
+  nt->Branch("mu1TMOneStationTight",mu1TMOneStationTight, "mu1TMOneStationTight[size]/O");
   nt->Branch("mu1dxyPV",mu1dxyPV, "mu1dxyPV[size]/D");
   nt->Branch("mu1dzPV",mu1dzPV, "mu1dzPV[size]/D");
   nt->Branch("mu1InPixelLayer",mu1InPixelLayer, "mu1InPixelLayer[size]/I");
@@ -192,9 +192,9 @@ void buildBranch(TTree* nt){
   nt->Branch("mu1p",mu1p, "mu1p[size]/F");
   nt->Branch("mu1Chi2ndf",mu1Chi2ndf, "mu1Chi2ndf[size]/D");
 
-  nt->Branch("mu2isTrackerMuon",mu2isTrackerMuon, "mu2isTrackerMuon[size]/B");
-  nt->Branch("mu2isGlobalMuon",mu2isGlobalMuon, "mu2isGlobalMuon[size]/B");
-  nt->Branch("mu2TMOneStationTight",mu2TMOneStationTight, "mu2TMOneStationTight[size]/B");
+  nt->Branch("mu2isTrackerMuon",mu2isTrackerMuon, "mu2isTrackerMuon[size]/O");
+  nt->Branch("mu2isGlobalMuon",mu2isGlobalMuon, "mu2isGlobalMuon[size]/O");
+  nt->Branch("mu2TMOneStationTight",mu2TMOneStationTight, "mu2TMOneStationTight[size]/O");
   nt->Branch("mu2dxyPV",mu2dxyPV, "mu2dxyPV[size]/D");
   nt->Branch("mu2dzPV",mu2dzPV, "mu2dzPV[size]/D");
   nt->Branch("mu2InPixelLayer",mu2InPixelLayer, "mu2InPixelLayer[size]/I");
