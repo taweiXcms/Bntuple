@@ -31,7 +31,8 @@ using namespace std;
   Double_t  Bs_commonErrorN = TMath::Sqrt(0.085*0.085+0.035*0.035);//new BR
   //Double_t  Bs_FFsysterror=0.6/10.4;//old BR
   Double_t  Bs_FFsysterror=0.6/10.5;//new BR
-  Double_t  Bs_tagandprobcorrection[Bs_nbins]={1.041};
+//  Double_t  Bs_tagandprobcorrection[Bs_nbins]={1.041};
+  Double_t  Bs_tagandprobcorrection[Bs_nbins]={1.069};//new correction
 
   TString   B0_particle="Bzero";
   const int B0_nbins=3;
@@ -43,7 +44,8 @@ using namespace std;
   Double_t  B0_commonErrorP = TMath::Sqrt(0.035*0.035+0.046*0.046);
   Double_t  B0_commonErrorN = TMath::Sqrt(0.035*0.035+0.046*0.046);
   Double_t  B0_FFsysterror=0.7/40.2;
-  Double_t  B0_tagandprobcorrection[B0_nbins]={1.052,1.032,1.016};
+//  Double_t  B0_tagandprobcorrection[B0_nbins]={1.052,1.032,1.016};
+  Double_t  B0_tagandprobcorrection[B0_nbins]={1.078,1.061,1.058};//new correction
 
   TString   Bp_particle="Bplus";
   const int Bp_nbins=5;
@@ -56,7 +58,8 @@ using namespace std;
   Double_t  Bp_commonErrorN = TMath::Sqrt(0.035*0.035+0.031*0.031);
   //Double_t  Bp_FFsysterror=0.7/40.1;//old BR
   Double_t  Bp_FFsysterror=0.7/40.2;//new BR
-  Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.049,1.030,1.019,1.012,1.006};
+//  Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.049,1.030,1.019,1.012,1.006};
+  Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.071,1.057,1.058,1.045,1.061};//new correciton
 
   Double_t Bs_padratio=0.326899;
   Double_t B0_padratio=0.307285;
