@@ -272,8 +272,8 @@ void NuclearModification(
   hempty->Draw();
   
   gaeBplusReference->SetMarkerColor(1);
-  gaeBplusReference->SetMarkerStyle(21);  
-  gaeBplusReference->SetFillColor(5);
+  gaeBplusReference->SetMarkerStyle(25);  
+  gaeBplusReference->SetFillColor(kYellow-7);//5
   gaeBplusReference->SetFillStyle(1001);
   gaeBplusReference->SetLineColor(kAzure-3);
   gaeBplusReference->SetLineWidth(1);
@@ -285,15 +285,15 @@ void NuclearModification(
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
 
-  gaeBplusReference->Draw("2same");
+  gaeBplusReference->Draw("2psame");//2same
   TGraphAsymmErrors*gaeBplusReference2=(TGraphAsymmErrors*)gaeBplusReference->Clone();
   gaeBplusReference2->SetMarkerColor(1);
-  gaeBplusReference2->SetMarkerStyle(21);  
+  gaeBplusReference2->SetMarkerStyle(25);  
   gaeBplusReference2->SetFillColor(0);
   gaeBplusReference2->SetFillStyle(0);
   gaeBplusReference2->SetLineColor(kAzure-3);
   gaeBplusReference2->SetLineWidth(1);
-  gaeBplusReference2->Draw("2same");
+  gaeBplusReference2->Draw("2psame");//2same
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
   
@@ -322,12 +322,12 @@ void NuclearModification(
   ent_SigmapPb->SetLineColor(1);
   ent_SigmapPb->SetMarkerColor(1);
 
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","f");
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(gaeBplusReference,"FONLL pp ref.","pf");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(kAzure-3);//5
   ent_Sigmapp->SetLineStyle(1);
   ent_Sigmapp->SetMarkerColor(1);
-
+  ent_Sigmapp->SetMarkerStyle(21);
 
   gSigmasyst->SetFillColor(0);
   gSigmasyst->SetFillStyle(0);
@@ -372,6 +372,20 @@ void NuclearModification(
     tlatex4->Draw();
 	 }
 
+	double GloUnc;
+	double xtl5;
+   if(PadNum==1) {GloUnc=Bp_commonErrorP*100;xtl5=0.57;}
+   if(PadNum==2) {GloUnc=B0_commonErrorP*100;xtl5=0.47;}
+   if(PadNum==3) {GloUnc=Bs_commonErrorP*100;xtl5=0.42;}
+
+//TLegend *legendSigma=new TLegend(0.55,0.63,0.85,0.80,"");
+   TLatex * tlatex5=new TLatex(xtl5,0.55,Form("Global uncert. %2.1f%%",GloUnc));
+    tlatex5->SetNDC();
+    tlatex5->SetTextColor(1);
+    tlatex5->SetTextFont(42);//42
+    tlatex5->SetTextSize(0.05*padcorrection);//0.045
+    tlatex5->Draw();
+
   //###double xpos=0.8528226;
   //###double ypos=0.6849894;
   double xpos=0.86;
@@ -409,7 +423,7 @@ void NuclearModification(
   
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
-  gRpAsystFONLL->SetFillColor(5);
+  gRpAsystFONLL->SetFillColor(kYellow-7);//5
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
 
@@ -506,12 +520,12 @@ void NuclearModification(
   ent_RpAsystData->SetLineColor(1);
   ent_RpAsystData->SetMarkerColor(2);
   
-  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. err. from FONLL pp ref.","f");
+  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. FONLL pp ref.","f");
   ent_RpAsystFONLL->SetTextFont(42);
   ent_RpAsystFONLL->SetLineColor(kAzure-3);//5
   ent_RpAsystFONLL->SetLineStyle(1);
   ent_RpAsystFONLL->SetLineWidth(1);
-  ent_RpAsystFONLL->SetMarkerColor(5);
+  ent_RpAsystFONLL->SetMarkerColor(kYellow-7);//5
  
   if(PadNum==1||PadNum==0){
     legendRpA->Draw();
