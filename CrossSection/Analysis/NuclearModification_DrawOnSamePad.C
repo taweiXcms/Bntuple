@@ -23,8 +23,8 @@ using namespace std;
   Double_t  Bs_xbins[Bs_nbins]={35};
   Double_t  Bs_exl[Bs_nbins]={25};
   Double_t  Bs_exl0[Bs_nbins]={0.};
-  Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.212};
-  Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.212};
+  Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.218};
+  Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.218};
   //Double_t  Bs_commonErrorP = TMath::Sqrt(0.22*0.22+0.035*0.035);//old BR
   //Double_t  Bs_commonErrorN = TMath::Sqrt(0.24*0.24+0.035*0.035);//old BR
   Double_t  Bs_commonErrorP = TMath::Sqrt(0.085*0.085+0.035*0.035);//new BR
@@ -40,8 +40,8 @@ using namespace std;
   Double_t  B0_xbins[B0_nbins]={12.5,17.5,40};
   Double_t  B0_exl[B0_nbins]={2.5,2.5,20};
   Double_t  B0_exl0[B0_nbins]={0.,0.,0.};
-  Double_t  B0_yPercSigmapPbSystTotHigh[B0_nbins]={0.178,0.174,0.172};
-  Double_t  B0_yPercSigmapPbSystTotLow[B0_nbins]={0.178,0.174,0.172};
+  Double_t  B0_yPercSigmapPbSystTotHigh[B0_nbins]={0.186,0.181,0.180};
+  Double_t  B0_yPercSigmapPbSystTotLow[B0_nbins]={0.186,0.181,0.180};
   Double_t  B0_commonErrorP = TMath::Sqrt(0.035*0.035+0.046*0.046);
   Double_t  B0_commonErrorN = TMath::Sqrt(0.035*0.035+0.046*0.046);
   Double_t  B0_FFsysterror=0.7/40.2;
@@ -54,8 +54,8 @@ using namespace std;
   Double_t  Bp_xbins[Bp_nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t  Bp_exl[Bp_nbins]={2.5,2.5,2.5,2.5,15.};
   Double_t  Bp_exl0[Bp_nbins]={0.,0.,0.,0.,0.};
-  Double_t  Bp_yPercSigmapPbSystTotHigh[Bp_nbins]={0.143,0.137,0.136,0.134,0.134};
-  Double_t  Bp_yPercSigmapPbSystTotLow[Bp_nbins]={0.143,0.137,0.136,0.134,0.134};
+  Double_t  Bp_yPercSigmapPbSystTotHigh[Bp_nbins]={0.150,0.143,0.143,0.141,0.149};
+  Double_t  Bp_yPercSigmapPbSystTotLow[Bp_nbins]={0.150,0.143,0.143,0.141,0.149};
   Double_t  Bp_commonErrorP = TMath::Sqrt(0.035*0.035+0.031*0.031);
   Double_t  Bp_commonErrorN = TMath::Sqrt(0.035*0.035+0.031*0.031);
   //Double_t  Bp_FFsysterror=0.7/40.1;//old BR
