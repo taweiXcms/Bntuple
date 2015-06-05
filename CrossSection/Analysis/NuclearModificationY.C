@@ -1,3 +1,22 @@
+#include <math.h>
+#include <iostream>
+#include "TROOT.h"
+#include "TSystem.h"
+#include "TStyle.h"
+#include "TString.h"
+#include "TFile.h"
+#include "TGraphAsymmErrors.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "TMath.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "TLatex.h"
+#include "TLine.h"
+#include "TLegendEntry.h"
+#include "TPad.h"
+#include "TBox.h"
+
 TString particle="Bplus";
 const int nbinsRFB = 2;
 Double_t xbinsRFB[nbinsRFB]={0.5,1.465};
@@ -202,7 +221,7 @@ void NuclearModificationY(){
   
   gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(25);  
-  gaeBplusReference->SetFillColor(5);
+  gaeBplusReference->SetFillColor(kYellow-7);//5
   gaeBplusReference->SetFillStyle(1001);
   gaeBplusReference->SetLineColor(kAzure-3);//5
   gaeBplusReference->SetLineStyle(1);
@@ -324,7 +343,7 @@ void NuclearModificationY(){
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
-  gRpAsystFONLL->SetFillColor(5);
+  gRpAsystFONLL->SetFillColor(kYellow-7);//5
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
   gRpAsystFONLL->SetLineStyle(1);
@@ -420,11 +439,11 @@ void NuclearModificationY(){
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
   
-  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. err. from FONLL pp ref.","f");
+  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. FONLL pp ref.","f");
   ent_RpAsystFONLL->SetTextFont(42);
   ent_RpAsystFONLL->SetLineColor(2);//###5
   ent_RpAsystFONLL->SetLineStyle(1);
-  ent_RpAsystFONLL->SetMarkerColor(5);
+  ent_RpAsystFONLL->SetMarkerColor(kYellow-7);//5
   
   tlatex1->Draw();
   tlatexlumi->Draw();
