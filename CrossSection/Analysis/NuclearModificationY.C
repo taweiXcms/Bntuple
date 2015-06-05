@@ -228,7 +228,7 @@ void NuclearModificationY(){
   gaeBplusReference->SetLineWidth(0);
   gaeBplusReference->Draw("2psame");
 
-  TGraphAsymmErrors*gaeBplusReference2=gaeBplusReference->Clone(); 
+  TGraphAsymmErrors*gaeBplusReference2=(TGraphAsymmErrors*)gaeBplusReference->Clone(); 
   gaeBplusReference2->SetMarkerColor(1);
   gaeBplusReference2->SetMarkerStyle(25);  
   gaeBplusReference2->SetFillColor(0);
@@ -347,7 +347,7 @@ void NuclearModificationY(){
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
   gRpAsystFONLL->SetLineStyle(1);
-  TGraphAsymmErrors*gRpAsystFONLL2=gRpAsystFONLL->Clone(); 
+  TGraphAsymmErrors*gRpAsystFONLL2=(TGraphAsymmErrors*)gRpAsystFONLL->Clone(); 
   gRpAsystFONLL2->SetMarkerColor(1);
   gRpAsystFONLL2->SetMarkerStyle(25);  
   gRpAsystFONLL2->SetFillColor(0);
@@ -380,7 +380,7 @@ void NuclearModificationY(){
   legendRpA->SetTextFont(42);
   legendRpA->SetTextSize(0.055);//###0.04
 
-  TH2F* hempty=new TH2F("hempty","",4,-3.5,2.7,10.,0.,3.5);  
+  hempty=new TH2F("hempty","",4,-3.5,2.7,10.,0.,3.5);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
@@ -423,7 +423,7 @@ void NuclearModificationY(){
   b->SetFillColor(kGray);
   b->Draw();
   
-  TBox *b2=b->Clone();
+  TBox *b2=(TBox*)b->Clone();
   b2->SetFillStyle(0);
   b2->SetLineStyle(1);
   b2->SetLineWidth(1);
@@ -450,6 +450,13 @@ void NuclearModificationY(){
   tlatex3->Draw();
   tlatex4->Draw();
   canvasRpA->SaveAs(Form("../Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+
+  TLatex * tlatex5=new TLatex(0.62,0.20,Form("Global uncert. %2.1f%%",commonErrorP*100));
+  tlatex5->SetNDC();
+  tlatex5->SetTextColor(1);
+  tlatex5->SetTextFont(42);
+  tlatex5->SetTextSize(0.04);
+  tlatex5->Draw();
 
 /*
   TCanvas *canvasRFB=new TCanvas("canvasRFB","canvasRFB",500,500);   
