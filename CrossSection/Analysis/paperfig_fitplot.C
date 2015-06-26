@@ -11,7 +11,10 @@
 #include <TColor.h>
 #include <TLine.h>
 
-double luminosity=34.8*1e-3;
+//double luminosity=34.8*1e-3;
+double luminosity=34.6*1e-3;
+
+
 double setparam0=100.;
 double setparam1=5.28;
 double setparam2=0.05;
@@ -83,6 +86,7 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   //f->SetRange(5,6);  
   f->Draw("same");
 
+  hraw->SetMarkerStyle(20);
   hraw->Draw("samee");
   TLine* line0;
   if (str=="B^{+}") line0 = new TLine(5.000,axisymin,6.000,axisymin);
@@ -176,7 +180,7 @@ tex->SetNDC();
 //      tex = new TLatex(0.6804938,0.696044,"|y_{LAB}| < 2.4");
 //###      tex = new TLatex(0.72,0.68,"|y_{LAB}| < 2.4");
 //###      tex = new TLatex(0.685,0.68,"|y_{LAB}| < 2.4");
-      tex = new TLatex(0.685,0.77,"|y_{LAB}| < 2.4");
+      tex = new TLatex(0.700,0.77,"|y_{lab}| < 2.4");//0.685
 
 
 
@@ -205,9 +209,9 @@ void paperfig_fitplot()
   gStyle->SetPadBottomMargin(0.145);
 
 
-  TFile *infBplus = new TFile("../ResultsBplus/SigmaBplus.root");
-  TFile *infBzero = new TFile("../ResultsBzero/SigmaBzero.root");
-  TFile *infBs = new TFile("../ResultsBs/SigmaBs.root");
+  TFile *infBplus = new TFile("../ResultsBplus/SigmaBplus_extend.root");
+  TFile *infBzero = new TFile("../ResultsBzero/SigmaBzero_extend.root");
+  TFile *infBs = new TFile("../ResultsBs/SigmaBs_extend.root");
 
 //  TFile *infBplus = new TFile("/afs/cern.ch/work/h/hckim/public/Plotsforpaper/ResultsBplus/SigmaBplus.root");
 //  TFile *infBzero = new TFile("/afs/cern.ch/work/h/hckim/public/Plotsforpaper/ResultsBzero/SigmaBzero.root");
@@ -237,7 +241,7 @@ void paperfig_fitplot()
   TF1 *Bkpi0_Bs = (TF1*)infBs->Get("fBkpi0");
   TF1 *mass0_Bs = (TF1*)infBs->Get("fmass0");
   TH1D *hraw0_Bs = (TH1D*)infBs->Get("hraw0");
-
+/*
   TH1D *h5_Bplus = (TH1D*)infBplus->Get("h5");
   TH1D *hMC5_Bplus = (TH1D*)infBplus->Get("hMC5");
   TF1 *f5_Bplus = (TF1*)infBplus->Get("f5");
@@ -253,7 +257,7 @@ void paperfig_fitplot()
   TF1 *Bkpi3_Bzero = (TF1*)infBzero->Get("fBkpi3");
   TF1 *mass3_Bzero = (TF1*)infBzero->Get("fmass3");
   TH1D *hraw3_Bzero = (TH1D*)infBzero->Get("hraw3");
-
+*/
   //TCanvas *cSigma=  new TCanvas("cSigma","",10,10,1810,610);
   //TCanvas *cSigma=  new TCanvas("cSigma","",1200,400);
   //TCanvas *cSigma=  new TCanvas("cSigma","",900,400);
@@ -313,7 +317,7 @@ void paperfig_fitplot()
   drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{0}");
   drawtex("B_{s}^{0}",10,60);
 
-  cSigma->SaveAs("paperfig_fitplot_lowestptbin.pdf");
+  cSigma->SaveAs("paperfig_fitplot_lowestptbin_present.pdf");
 ////////////////////////////////////////////////////////////////
 /*
   pad1->cd();
