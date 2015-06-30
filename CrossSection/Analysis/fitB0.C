@@ -57,6 +57,11 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
 
 //   cout <<"nsig = "<<hBck->GetEntries();
    clean0(h);
+   TH1D *hraw = new TH1D(Form("hraw%d",count),"",30,5.03,5.93);
+   clean0(hraw);
+   hraw = (TH1D*)h->Clone(Form("hraw%d",count));
+
+
    h->Draw();
    f->SetParLimits(4,-1000,0);
    f->SetParLimits(2,0.01,0.08);
@@ -155,8 +160,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
-   leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
-   leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
+   leg->AddEntry(h,"p+Pb #sqrt{s_{NN}} = 5.02 TeV","");
+   leg->AddEntry(h,Form("%.0f < p_{T}^{B} < %.0f GeV/c",ptmin,ptmax),"");
    leg->AddEntry(h,"Data","pl");
    leg->AddEntry(f,"Fit","l");
    leg->AddEntry(mass,"Signal","f");
@@ -165,8 +170,8 @@ TF1 *fit(TTree *nt, TTree *ntMC, double ptmin,double ptmax)
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
    leg2->AddEntry(h,"B meson","");
-   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
-   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f",yield,yieldErr),"");
+   leg2->AddEntry(h,Form("M_{B} = %.2f #pm %.2f MeV/c^{2}",f->GetParameter(1)*1000.,f->GetParError(1)*1000.),"");
+   leg2->AddEntry(h,Form("N_{B} = %.0f #pm %.0f",yield,yieldErr),"");
    leg2->Draw();
 
    c->SaveAs(Form("../ResultsBzero/BMass-%d.pdf",count));
@@ -201,6 +206,7 @@ void fitB0(TString infname="",bool doweight = 1)
   TH1D *hRecoTruth = new TH1D("hRecoTruth","",nBins,ptBins);
   TH1D *hPtMC = new TH1D("hPtMC","",nBins,ptBins);
   TH1D *hPtGen = new TH1D("hPtGen","",nBins,ptBins);
+
   for (int i=0;i<nBins;i++)
     {
       TF1 *f = fit(nt,ntMC,ptBins[i],ptBins[i+1]);
@@ -252,7 +258,7 @@ void fitB0(TString infname="",bool doweight = 1)
   TCanvas *cSigma=  new TCanvas("cSigma","",600,600);
 
   hPtSigma->Draw();
-  
+ 
   TFile *outf = new TFile("../ResultsBzero/SigmaBzero.root","recreate");
   outf->cd();
   hPt->Write();
