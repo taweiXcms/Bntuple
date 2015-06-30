@@ -143,16 +143,27 @@ tex->SetNDC();
    tex->Draw();
    //TLatex *   tex = new TLatex(0.1837838,0.8523297,"CMS");
    //tex = new TLatex(0.19,0.84,"CMS");
-   tex = new TLatex(0.19,0.84,"CMS");
+   tex = new TLatex(0.19,0.86,"CMS");
    tex->SetNDC();
    //tex->SetTextSize(0.06379928);
    tex->SetTextSize(0.07);//0.06
    tex->SetLineWidth(2);
    tex->SetTextFont(62);
    tex->Draw();
+
+   tex = new TLatex(0.19,0.81,"Preliminary");
+   tex->SetNDC();
+   //tex->SetTextSize(0.06379928);
+   tex->SetTextSize(0.05);//0.06
+   tex->SetLineWidth(2);
+   tex->SetTextFont(52);
+   tex->Draw();
+
+
+
 //      tex = new TLatex(0.1891892,0.771261,"B^{+}");
 //      tex = new TLatex(0.19,0.75,str.c_str());
-      tex = new TLatex(0.19,0.75,str.c_str());
+      tex = new TLatex(0.19,0.73,str.c_str());
 
 
 tex->SetNDC();
@@ -318,6 +329,9 @@ void paperfig_fitplot()
   drawtex("B_{s}^{0}",10,60);
 
   cSigma->SaveAs("paperfig_fitplot_lowestptbin_present.pdf");
+  cSigma->SaveAs("paperfig_fitplot_lowestptbin_present.png");
+
+
 ////////////////////////////////////////////////////////////////
 /*
   pad1->cd();
