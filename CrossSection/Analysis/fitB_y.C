@@ -146,8 +146,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.92);
    leg->AddEntry(h,"CMS Preliminary","");
-   leg->AddEntry(h,"p+Pb #sqrt{s_{NN}}= 5.02 TeV","");
-   leg->AddEntry(h,Form("%.0f<y_{CM}^{B}<%.0f",ptmin,ptmax),"");
+   leg->AddEntry(h,"pPb #sqrt{s_{NN}} = 5.02 TeV","");
+   leg->AddEntry(h,Form("%.0f < y_{CM}^{B} < %.0f",ptmin,ptmax),"");
    leg->AddEntry(h,"Data","pl");
    leg->AddEntry(f,"Fit","l");
    leg->AddEntry(mass,"Signal","f");
@@ -156,8 +156,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax){
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
    leg2->AddEntry(h,"B meson","");
-   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
-   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
+   leg2->AddEntry(h,Form("M_{B} = %.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
+   leg2->AddEntry(h,Form("N_{B} = %.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
    c->SaveAs(Form("../ResultsBplus_y/BMass-%d.pdf",count));
