@@ -184,6 +184,16 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   gSigmasyst->SetFillColor(kYellow-7);//5
   gSigmasyst->SetFillStyle(1001);
 
+  TGraphAsymmErrors*gSigmasyst2=(TGraphAsymmErrors*)gSigmasyst->Clone();
+  gSigmasyst2->SetMarkerColor(1);
+  gSigmasyst2->SetMarkerStyle(25);  
+  gSigmasyst2->SetFillColor(0);
+  gSigmasyst2->SetFillStyle(0);
+  gSigmasyst2->SetLineColor(1);//5
+  gSigmasyst2->SetLineStyle(1);
+  gSigmasyst2->SetLineWidth(1);
+
+
   TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
   gSigmastat->SetTitle("Sigma stat uncertainty from pPb");
   gSigmastat->SetMarkerColor(1);
@@ -255,6 +265,20 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   hBplusReferenceEYlow->SetLineWidth(1);
   hBplusReferenceEYlow->SetLineStyle(2);
 
+for (int i=0;i<nbins;i++){
+        double xgae,ygae;
+        gaeBplusReference->GetPoint(i,xgae,ygae);
+        hBplusReference->SetBinContent(i+1,ygae);
+        hBplusReferenceEYhigh->SetBinContent(i+1,ygae+gaeBplusReference->GetEYhigh()[i]);
+        hBplusReferenceEYlow->SetBinContent(i+1,ygae-gaeBplusReference->GetEYlow()[i]);
+        std::cout << "### FONLL (" << i << ") : " << ygae << " + " << gaeBplusReference->GetEYhigh()[i] << " - " << gaeBplusReference->GetEYlow()[i] << std::endl;
+}
+
+  for (int i=0;i<nbins;i++){
+        double xgae,ygae;
+        gSigmastat->GetPoint(i,xgae,ygae);
+        std::cout << "### cross section (" << i << ") : " << ygae << " stat: " << gSigmastat->GetEYhigh()[i] << " syst: " << gSigmasyst->GetEYhigh()[i]     << std::endl;
+  }
   hBplusReference->Draw("][,same");
 
   hBplusReferenceEYhigh->Draw("][,same");
@@ -282,7 +306,8 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
 */
   //gSigmasyst->SetFillColor(0);
   //gSigmasyst->SetFillStyle(0);
-  gSigmasyst->Draw("2same");
+  gSigmasyst->Draw("2esame");//2same
+  gSigmasyst2->Draw("2esame");
  
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
@@ -349,13 +374,21 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   d->SetFillColor(0);
   d->Draw();
 
-  //###TLatex * tlatex1=new TLatex(0.1612903,0.8625793,"CMS                 pPb #sqrt{s_{NN}}= 5.02 TeV");
-  TLatex * tlatex1=new TLatex(0.23,0.84,"CMS");
+  //###TLatex * tlatex1=new TLatex(0.23,0.84,"CMS");
+  TLatex * tlatex1=new TLatex(0.24,0.85,"CMS");
+
   tlatex1->SetNDC();
   tlatex1->SetTextColor(1);
   tlatex1->SetTextFont(62);//###42
   tlatex1->SetTextSize(0.07);//###0.045
   tlatex1->Draw();
+
+  TLatex * tlatex12=new TLatex(0.24,0.80,"Preliminary");
+  tlatex12->SetNDC();
+  tlatex12->SetTextColor(1);
+  tlatex12->SetTextFont(52);//###42
+  tlatex12->SetTextSize(0.05);//###0.045
+  tlatex12->Draw();
   
 
   TString mypar="B^{+}";
@@ -387,7 +420,17 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   tlatex4->SetTextSize(0.06);
   tlatex4->Draw();
  
+  TLatex * tlatex5=new TLatex(0.62,0.20,Form("Global uncert. %2.1f%%",commonErrorP*100));
+  tlatex5->SetNDC();
+  tlatex5->SetTextColor(1);
+  tlatex5->SetTextFont(42);
+  tlatex5->SetTextSize(0.04);
+  tlatex5->Draw();
+
+
   canvasSigma->SaveAs(Form("../Results%s_y/canvasSigma%s.pdf",particle.Data(),particle.Data()));  
+  canvasSigma->SaveAs(Form("../Results%s_y/canvasSigma%s.png",particle.Data(),particle.Data()));  
+
   canvasSigma->SaveAs(Form("../Results%s_y/canvasSigma%s.eps",particle.Data(),particle.Data()));  
   
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpAStat,yRpAStat);
@@ -487,6 +530,13 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   gRpAstat->SetLineColor(1);
   gRpAstat->SetMarkerColor(1);
 
+for (int i=0;i<nbins;i++){
+         double xgae,ygae;
+         gRpAstat->GetPoint(i,xgae,ygae);
+         std::cout << "####### RpA (" << i << ") : " << ygae << " stat: " << gRpAstat->GetEYhigh()[i] << " syst: " << gRpAsyst->GetEYhigh()[i] << std::endl;
+         std::cout << "########### FONLL (" << i << ") : " << " + " << gRpAsystFONLL->GetEYhigh()[i] << " - " << gRpAsystFONLL->GetEYlow()[i] << std::    endl;
+}
+
   gRpAsystFONLL->Draw("2same");
   gRpAsystFONLL2->Draw("2same");
 
@@ -494,7 +544,7 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   gRpAsyst2->Draw("2esame");
   gRpAstat->Draw("psame");
   
-
+  std::cout << "%%%%%%% RpA commonError " << " - " << commonErrorN << " + " << commonErrorP << std::endl;
   TBox *b = new TBox(-3.49,1-commonErrorN,-3.1,1+commonErrorP);
   b->SetLineColor(1);
   b->SetLineWidth(1);
@@ -534,21 +584,20 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   ent_RpAsystFONLL->SetMarkerColor(kYellow-7);//5
   
   tlatex1->Draw();
+  tlatex12->Draw();
+
+
   tlatexlumi->Draw();
   tlatex3->Draw();
   tlatex4->Draw();
+
+
   canvasRpA->SaveAs(Form("../Results%s_y/canvasRpA%s.pdf",particle.Data(),particle.Data()));  
+  canvasRpA->SaveAs(Form("../Results%s_y/canvasRpA%s.png",particle.Data(),particle.Data()));  
+
   canvasRpA->SaveAs(Form("../Results%s_y/canvasRpA%s.eps",particle.Data(),particle.Data()));  
   canvasRpA->SaveAs(Form("../Results%s_y/canvasRpA%s.ps",particle.Data(),particle.Data()));  
 
-
-
-  TLatex * tlatex5=new TLatex(0.62,0.20,Form("Global uncert. %2.1f%%",commonErrorP*100));
-  tlatex5->SetNDC();
-  tlatex5->SetTextColor(1);
-  tlatex5->SetTextFont(42);
-  tlatex5->SetTextSize(0.04);
-  tlatex5->Draw();
 
 /*
   TCanvas *canvasRFB=new TCanvas("canvasRFB","canvasRFB",500,500);   
