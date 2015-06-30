@@ -228,6 +228,15 @@ void NuclearModification(
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetFillColor(kYellow-7);//5
   gSigmasyst->SetFillStyle(1001);
+  TGraphAsymmErrors*gSigmasyst2=(TGraphAsymmErrors*)gSigmasyst->Clone();
+  gSigmasyst2->SetMarkerColor(1);
+  gSigmasyst2->SetMarkerStyle(25);
+  gSigmasyst2->SetFillColor(0);
+  gSigmasyst2->SetFillStyle(0);
+  gSigmasyst2->SetLineColor(1);//5
+  gSigmasyst2->SetLineStyle(1);
+  gSigmasyst2->SetLineWidth(1);
+ 
 
   TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
   gSigmastat->SetTitle("Sigma stat uncertainty from pPb");
@@ -319,6 +328,7 @@ void NuclearModification(
 	hBplusReference->SetBinContent(i+1,ygae);
 	hBplusReferenceEYhigh->SetBinContent(i+1,ygae+gaeBplusReference->GetEYhigh()[i]);
 	hBplusReferenceEYlow->SetBinContent(i+1,ygae-gaeBplusReference->GetEYlow()[i]);
+	std::cout << "### FONLL (" << i << ") : " << ygae << " + " << gaeBplusReference->GetEYhigh()[i] << " - " << gaeBplusReference->GetEYlow()[i] << std::endl;
 }
 
   //hBplusReference->SetMarkerColor(1);
@@ -424,7 +434,16 @@ void NuclearModification(
 
   //###gSigmasyst->SetFillColor(0);
   //###gSigmasyst->SetFillStyle(0);
-  gSigmasyst->Draw("2psame");//###2same
+
+for (int i=0;i<nbins;i++){
+        double xgae,ygae;
+        gSigmastat->GetPoint(i,xgae,ygae);
+        std::cout << "### cross section (" << i << ") : " << ygae << " stat: " << gSigmastat->GetEYhigh()[i] << " syst: " << gSigmasyst->GetEYhigh()[i] << std::endl;
+}
+
+  gSigmasyst->Draw("2esame");//###2psame
+  gSigmasyst2->Draw("2esame");
+
 
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
@@ -444,7 +463,14 @@ void NuclearModification(
     tlatex1->SetTextFont(62);//42
     tlatex1->SetTextSize(0.07);//0.045
     tlatex1->Draw();
-    
+
+    TLatex * tlatex12=new TLatex(0.35,0.86,"Preliminary");
+    tlatex12->SetNDC();
+    tlatex12->SetTextColor(1);
+    tlatex12->SetTextFont(52);//42
+    tlatex12->SetTextSize(0.05);//0.045
+    tlatex12->Draw();
+   
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
     TLatex * tlatexlumi=new TLatex(0.390,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
@@ -498,7 +524,7 @@ void NuclearModification(
   tlatex3->SetNDC();
   tlatex3->SetTextColor(1);
   tlatex3->SetTextFont(42);
-  tlatex3->SetTextSize(0.06*padcorrection);
+  tlatex3->SetTextSize(0.07*padcorrection);
   tlatex3->Draw();
 
   TGraphAsymmErrors *gRpAstat = new TGraphAsymmErrors(nbins,xbins,yRpA,exl0,exl0,yRpAStat,yRpAStat);
@@ -629,6 +655,13 @@ void NuclearModification(
   gRpAstat->SetLineColor(1);
   gRpAstat->SetMarkerColor(1);
 
+for (int i=0;i<nbins;i++){
+         double xgae,ygae;
+         gRpAstat->GetPoint(i,xgae,ygae);
+         std::cout << "####### RpA (" << i << ") : " << ygae << " stat: " << gRpAstat->GetEYhigh()[i] << " syst: " << gRpAsyst->GetEYhigh()[i] << std::endl;
+	 std::cout << "########### FONLL (" << i << ") : " << " + " << gRpAsystFONLL->GetEYhigh()[i] << " - " << gRpAsystFONLL->GetEYlow()[i] << std::    endl;
+}
+
   gRpAsystFONLL->Draw("2same");
   gRpAsystFONLL2->Draw("2same");
   //###line->Draw();
@@ -643,7 +676,7 @@ void NuclearModification(
   a->SetLineColor(1);
   a->SetFillColor(0);
   a->Draw();
-
+  std::cout << "%%%%%%% RpA commonError " << " - " << commonErrorN << " + " << commonErrorP << std::endl;
   TBox *b = new TBox(0.1,1-commonErrorN,4,1+commonErrorP);
   b->SetLineColor(1);
   b->SetFillColor(kGray);
@@ -707,6 +740,13 @@ void NuclearModification(
     tlatex4->SetTextFont(62);//42
     tlatex4->SetTextSize(0.07);//0.045
     tlatex4->Draw();
+ 
+    TLatex * tlatex42=new TLatex(0.35,0.86,"Preliminary");
+    tlatex42->SetNDC();
+    tlatex42->SetTextColor(1);
+    tlatex42->SetTextFont(52);//42
+    tlatex42->SetTextSize(0.05);//0.045
+    tlatex42->Draw();
  
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
@@ -803,6 +843,9 @@ void NuclearModification_DrawOnSamePad(){
   cRpA->SaveAs(Form("../ResultsAll/canvasRpA.pdf"));  
   cSigma->SaveAs(Form("../ResultsAll/canvasSigma.eps"));  
   cRpA->SaveAs(Form("../ResultsAll/canvasRpA.eps"));  
+  cSigma->SaveAs(Form("../ResultsAll/canvasSigma.png"));  
+  cRpA->SaveAs(Form("../ResultsAll/canvasRpA.png"));  
+
 }
 
 void makeMultiPanelCanvas(TCanvas*& canv, 
