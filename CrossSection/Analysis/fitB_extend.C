@@ -40,10 +40,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, bool ispPb, int count)
 
    TString iNP="7.26667e+00*Gaus(x,5.10472e+00,2.63158e-02)/(sqrt(2*3.14159)*2.63158e-02)+4.99089e+01*Gaus(x,4.96473e+00,9.56645e-02)/(sqrt(2*3.14159)*9.56645e-02)+3.94417e-01*(3.74282e+01*Gaus(x,5.34796e+00,3.11510e-02)+1.14713e+01*Gaus(x,5.42190e+00,1.00544e-01))";
    TF1 *f = new TF1(Form("f%d",count),"[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*("+iNP+")");
-	std::cout << "$$$ 1 $$$" << std::endl;
    nt->Project(Form("h%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
- 	std::cout << "$$$ 2 $$$" << std::endl;
-  ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
+   ntMC->Project(Form("hMC%d",count),"mass",Form("%s&&pt>%f&&pt<%f",seldata_2y.Data(),ptmin,ptmax));   
    clean0(h);
 
    TH1D *hraw = new TH1D(Form("hraw%d",count),"",50,5,6);
@@ -147,8 +145,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, bool ispPb, int count)
    // Draw the legend:)   
    TLegend *leg = myLegend(0.50,0.5,0.86,0.89);
    leg->AddEntry(h,"CMS Preliminary","");
-   leg->AddEntry(h,"p+Pb #sqrt{s_{NN}} = 5.02 TeV","");
-   leg->AddEntry(h,Form("%.0f<p_{T}^{B}<%.0f GeV/c",ptmin,ptmax),"");
+   leg->AddEntry(h,"pPb #sqrt{s_{NN}} = 5.02 TeV","");
+   leg->AddEntry(h,Form("%.0f < p_{T}^{B} < %.0f GeV/c",ptmin,ptmax),"");
    leg->AddEntry(h,"Data","pl");
    leg->AddEntry(f,"Fit","l");
    leg->AddEntry(mass,"Signal","f");
@@ -157,8 +155,8 @@ TF1 *fit(TTree *nt,TTree *ntMC,double ptmin,double ptmax, bool ispPb, int count)
    leg->Draw();
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
    leg2->AddEntry(h,"B meson","");
-   leg2->AddEntry(h,Form("M_{B}=%.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
-   leg2->AddEntry(h,Form("N_{B}=%.0f #pm %.0f", yield, yieldErr),"");
+   leg2->AddEntry(h,Form("M_{B} = %.2f #pm %.2f MeV/c^{2}",mass->GetParameter(1)*1000.,mass->GetParError(1)*1000.),"");
+   leg2->AddEntry(h,Form("N_{B} = %.0f #pm %.0f", yield, yieldErr),"");
    leg2->Draw();
 
    if(ispPb)c->SaveAs(Form("../ResultsBplus/BMass-%d.pdf",count));
