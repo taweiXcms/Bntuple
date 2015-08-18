@@ -27,33 +27,68 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
 {
   //cSigma->cd(1);
   //h->Draw("pe");
+  TH1F* hempty=new TH1F("hempty","", 50, 5.0, 6.0);
+  hempty->GetXaxis()->CenterTitle();
+  hempty->GetYaxis()->CenterTitle();
+  hempty->GetXaxis()->SetTitle("m_{B} (GeV/c^{2})");
+  if (str=="B^{+}+B^{-}") hempty->SetYTitle("Entries / (20 MeV/c^{2})");
+  else if (str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") hempty->SetYTitle("Entries / (30 MeV/c^{2})");
+  else if (str=="B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}") hempty->SetYTitle("Entries / (40 MeV/c^{2})");
+  hempty->GetXaxis()->SetTitleOffset(0.90);//0.95
+  //###if (str=="B^{+}+B^{-}" || str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") hempty->GetYaxis()->SetTitleOffset(1.140);//1.30
+  //###else hempty->GetYaxis()->SetTitleOffset(0.95);//1.30
+  if (str=="B^{+}+B^{-}") h->GetYaxis()->SetTitleOffset(1.200);//1.145
+  else h->GetYaxis()->SetTitleOffset(0.95);//1.30
+  hempty->GetXaxis()->SetTitleSize(0.070);
+  hempty->GetYaxis()->SetTitleSize(0.070);//###0.055
+  hempty->GetXaxis()->SetTitleFont(42);
+  hempty->GetYaxis()->SetTitleFont(42);
+  hempty->GetXaxis()->SetLabelFont(42);
+  hempty->GetYaxis()->SetLabelFont(42);
+  hempty->GetXaxis()->SetLabelSize(0.060);//###0.055
+  hempty->GetYaxis()->SetLabelSize(0.060);//###0.055
+  double axisymin=-0.05;
+  hempty->SetAxisRange(axisymin,h->GetMaximum()*1.2,"Y");
+  hempty->SetStats(0);
+  hempty->GetXaxis()->SetNdivisions(-50205);
+  hempty->Draw();
+//////////////////////////////////////////////////
   Int_t ci = TColor::GetColor("#000099");
   h->SetLineColor(ci);
   h->SetMarkerStyle(24);
   h->SetMarkerSize(0.8);
-  h->SetXTitle("M_{B} (GeV/c^{2})");
+/*
+  //###h->SetXTitle("M_{B} (GeV/c^{2})");
+  h->SetXTitle("m_{B} (GeV/c^{2})");
   h->GetXaxis()->CenterTitle();
   h->GetXaxis()->SetLabelFont(42);
   h->GetXaxis()->SetLabelSize(0.060);//0.05
   h->GetXaxis()->SetTitleSize(0.070);//0.055
   h->GetXaxis()->SetTitleFont(42);
   h->GetXaxis()->SetTitleOffset(0.90);//0.95
-  if (str=="B^{+}") h->SetYTitle("Entries / (20 MeV/c^{2})");
-  else if (str=="B^{0}") h->SetYTitle("Entries / (30 MeV/c^{2})");
-  else if (str=="B_{s}^{0}") h->SetYTitle("Entries / (40 MeV/c^{2})");
+  if (str=="B^{+}+B^{-}") h->SetYTitle("Entries / (20 MeV/c^{2})");
+  else if (str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") h->SetYTitle("Entries / (30 MeV/c^{2})");
+  else if (str=="B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}") h->SetYTitle("Entries / (40 MeV/c^{2})");
   h->GetYaxis()->CenterTitle();
   h->GetYaxis()->SetLabelFont(42);
   h->GetYaxis()->SetLabelSize(0.060);//0.05
   h->GetYaxis()->SetTitleSize(0.070);//0.055
   h->GetYaxis()->SetTitleFont(42);
-  if (str=="B^{+}") h->GetYaxis()->SetTitleOffset(1.140);//1.30
+  //###if (str=="B^{+}+B^{-}") h->GetYaxis()->SetTitleOffset(1.140);//1.30
+  //###else h->GetYaxis()->SetTitleOffset(0.95);//1.30
+  if (str=="B^{+}+B^{-}" || str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") h->GetYaxis()->SetTitleOffset(1.140);//1.30
   else h->GetYaxis()->SetTitleOffset(0.95);//1.30
+*/
+
   h->SetStats(0);
   //h->SetTitleOffset(1.5,"Y");
   //h->SetTitleOffset(1.10,"Y");
+/*
   double axisymin=-0.05;
   h->SetAxisRange(axisymin,h->GetMaximum()*1.2,"Y");
-  h->Draw("e");
+  h->SetAxisRange(5.0,6.0,"X");
+*/
+  h->Draw("samee");
 
 //###  fBkpi->SetFillColor(kGreen+1);
   fBkpi->SetFillColor(kGreen+4);
@@ -63,9 +98,14 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   fBkpi->SetLineColor(kGreen+4);
   fBkpi->SetLineWidth(3);
   //fBkpi->SetRange(5.00,5.28);
-  fBkpi->SetRange(5.00,6.00);
+  //###fBkpi->SetRange(5.00,6.00);
+  if (str=="B^{+}+B^{-}") fBkpi->SetRange(5.00,5.40);
+  else if (str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") fBkpi->SetRange(5.00,5.40);
+  else if (str=="B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}") fBkpi->SetRange(0.00,1.00);
+
+
   fBkpi->SetLineStyle(1);
-  if (str=="B^{+}" || str=="B^{0}") fBkpi->Draw("same");
+  if (str=="B^{+}+B^{-}" || str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") fBkpi->Draw("same");
 
   background->SetLineColor(4);
   background->SetLineWidth(3);
@@ -78,7 +118,12 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   fmass->SetLineColor(kOrange-3);
   fmass->SetLineWidth(3);
   fmass->SetLineStyle(2);
-  fmass->SetRange(5,6);
+  //###fmass->SetRange(5,6);
+  if (str=="B^{+}+B^{-}") fmass->SetRange(5.16,5.40);
+  else if (str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") fmass->SetRange(5.16,5.40);
+  else if (str=="B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}") fmass->SetRange(5.28,5.46);
+
+
   fmass->Draw("same");
 
   f->SetLineColor(kRed);
@@ -89,11 +134,17 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   hraw->SetMarkerStyle(20);
   hraw->Draw("samee");
   TLine* line0;
-  if (str=="B^{+}") line0 = new TLine(5.000,axisymin,6.000,axisymin);
-  else if (str=="B^{0}") line0 = new TLine(5.030,axisymin,5.930,axisymin);
-  else if (str=="B_{s}^{0}") line0 = new TLine(5.030,axisymin,5.990,axisymin);
+/*
+  if (str=="B^{+}+B^{-}") line0 = new TLine(5.000,axisymin,6.000,axisymin);
+  else if (str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") line0 = new TLine(5.030,axisymin,5.930,axisymin);
+  else if (str=="B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}") line0 = new TLine(5.030,axisymin,5.990,axisymin);
+*/
+  if (str=="B^{+}+B^{-}") line0 = new TLine(5.000,axisymin,6.000,axisymin);
+  else if (str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") line0 = new TLine(5.000,axisymin,6.000,axisymin);
+  else if (str=="B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}") line0 = new TLine(5.000,axisymin,6.000,axisymin);
+
   line0->SetLineColor(kBlack);
-  line0->SetLineWidth(2.5);
+  line0->SetLineWidth(1.5);//###2.5
   line0->Draw("same");
   //h->Draw("samee");
 
@@ -122,7 +173,7 @@ void drawplots(TH1D* h, TH1D* hMC, TF1* f, TF1* background, TF1* fBkpi, TF1* fma
   leg->AddEntry(f,"Fit","l");
   leg->AddEntry(fmass,"Signal","f");
   leg->AddEntry(background,"Combinatorial","l");
-  if (str=="B^{+}" || str=="B^{0}") leg->AddEntry(fBkpi,"B #rightarrow J/#psi X","f");
+  if (str=="B^{+}+B^{-}" || str=="B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}") leg->AddEntry(fBkpi,"B #rightarrow J/#psi X","f");
   leg->Draw();
 
 
@@ -132,7 +183,7 @@ void drawtex(std::string str, int ptmin, int ptmax)
 //      tex = new TLatex(0.4552936,0.9418305,"34.8 nb^{-1} (pPb 5.02 TeV)");
    //tex = new TLatex(0.50,0.94,"34.8 nb^{-1} (pPb 5.02 TeV)");
    //###tex = new TLatex(0.49,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
-   if (str=="B^{+}") tex = new TLatex(0.41,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
+   if (str=="B^{+}+B^{-}") tex = new TLatex(0.41,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
    else tex = new TLatex(0.39,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
 tex->SetNDC();
@@ -150,7 +201,7 @@ tex->SetNDC();
    tex->SetLineWidth(2);
    tex->SetTextFont(62);
    tex->Draw();
-
+/*
    tex = new TLatex(0.19,0.81,"Preliminary");
    tex->SetNDC();
    //tex->SetTextSize(0.06379928);
@@ -158,10 +209,10 @@ tex->SetNDC();
    tex->SetLineWidth(2);
    tex->SetTextFont(52);
    tex->Draw();
+*/
 
 
-
-//      tex = new TLatex(0.1891892,0.771261,"B^{+}");
+//      tex = new TLatex(0.1891892,0.771261,"B^{+}+B^{-}");
 //      tex = new TLatex(0.19,0.75,str.c_str());
       tex = new TLatex(0.19,0.73,str.c_str());
 
@@ -170,15 +221,21 @@ tex->SetNDC();
    tex->SetTextFont(42);
 //   tex->SetTextSize(0.0585206);
    tex->SetTextSize(0.07);//0.06
-   tex->SetLineWidth(2);
+   //tex->SetLineWidth(2);
+   tex->SetLineWidth(1);
+
+
    tex->Draw();
 //      tex = new TLatex(0.5581628,0.7721208,"10<p_{T}^{B}<60 GeV/c");
 //###      tex = new TLatex(0.605,0.75,Form("%i<p_{T}^{B}<%i GeV/c",ptmin,ptmax));
 
-//###    if (str=="B^{+}") tex = new TLatex(0.488,0.75,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+//###    if (str=="B^{+}+B^{-}") tex = new TLatex(0.488,0.75,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
 //###    else tex = new TLatex(0.480,0.75,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
-    if (str=="B^{+}") tex = new TLatex(0.488,0.84,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
-    else tex = new TLatex(0.480,0.84,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+    //###if (str=="B^{+}+B^{-}") tex = new TLatex(0.488,0.84,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+    //###else tex = new TLatex(0.480,0.84,Form("%i < p_{T}^{B} < %i GeV/c",ptmin,ptmax));
+    if (str=="B^{+}+B^{-}") tex = new TLatex(0.488,0.84,Form("%i < p_{T} < %i GeV/c",ptmin,ptmax));
+    else tex = new TLatex(0.480,0.84,Form("%i < p_{T} < %i GeV/c",ptmin,ptmax));
+
 
 
 
@@ -252,7 +309,7 @@ void paperfig_fitplot()
   TF1 *Bkpi0_Bs = (TF1*)infBs->Get("fBkpi0");
   TF1 *mass0_Bs = (TF1*)infBs->Get("fmass0");
   TH1D *hraw0_Bs = (TH1D*)infBs->Get("hraw0");
-/*
+
   TH1D *h5_Bplus = (TH1D*)infBplus->Get("h5");
   TH1D *hMC5_Bplus = (TH1D*)infBplus->Get("hMC5");
   TF1 *f5_Bplus = (TF1*)infBplus->Get("f5");
@@ -268,7 +325,7 @@ void paperfig_fitplot()
   TF1 *Bkpi3_Bzero = (TF1*)infBzero->Get("fBkpi3");
   TF1 *mass3_Bzero = (TF1*)infBzero->Get("fmass3");
   TH1D *hraw3_Bzero = (TH1D*)infBzero->Get("hraw3");
-*/
+
   //TCanvas *cSigma=  new TCanvas("cSigma","",10,10,1810,610);
   //TCanvas *cSigma=  new TCanvas("cSigma","",1200,400);
   //TCanvas *cSigma=  new TCanvas("cSigma","",900,400);
@@ -308,8 +365,12 @@ void paperfig_fitplot()
 ///////////////////
   pad1->cd();
 
-  drawplots(h0_Bplus, hMC0_Bplus, f0_Bplus, background0_Bplus, Bkpi0_Bplus, mass0_Bplus, hraw0_Bplus, "B^{+}");
-  drawtex("B^{+}",10,15);
+drawplots(h0_Bplus, hMC0_Bplus, f0_Bplus, background0_Bplus, Bkpi0_Bplus, mass0_Bplus, hraw0_Bplus, "B^{+}+B^{-}");
+drawtex("B^{+}+B^{-}",10,15);
+
+//###drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}+B^{-}");
+//###drawtex("B^{+}+B^{-}",10,60);
+
 
 /*
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
@@ -320,29 +381,32 @@ void paperfig_fitplot()
 */
   pad2->cd();
   //cSigma->cd(2); 
-  drawplots(h0_Bzero, hMC0_Bzero, f0_Bzero, background0_Bzero, Bkpi0_Bzero, mass0_Bzero, hraw0_Bzero, "B^{0}");
-  drawtex("B^{0}",10,15);
+  drawplots(h0_Bzero, hMC0_Bzero, f0_Bzero, background0_Bzero, Bkpi0_Bzero, mass0_Bzero, hraw0_Bzero, "B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}");
+  drawtex("B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}",10,15);
+//###drawplots(h3_Bzero, hMC3_Bzero, f3_Bzero, background3_Bzero, Bkpi3_Bzero, mass3_Bzero, hraw3_Bzero, "B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}");
+//###drawtex("B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}",10,60);
+
 
   pad3->cd();
   //cSigma->cd(3);
-  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{0}");
-  drawtex("B_{s}^{0}",10,60);
+  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}");
+  drawtex("B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}",10,60);
 
-  cSigma->SaveAs("paperfig_fitplot_lowestptbin_present.pdf");
-  cSigma->SaveAs("paperfig_fitplot_lowestptbin_present.png");
+  cSigma->SaveAs("paperfig_fitplot_lowestptbin.pdf");
+  //###cSigma->SaveAs("paperfig_fitplot_lowestptbin.png");
 
 
 ////////////////////////////////////////////////////////////////
 /*
   pad1->cd();
-  drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}");
-  drawtex("B^{+}",10,60);
+  drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}+B^{-}");
+  drawtex("B^{+}+B^{-}",10,60);
   pad2->cd();
-  drawplots(h3_Bzero, hMC3_Bzero, f3_Bzero, background3_Bzero, Bkpi3_Bzero, mass3_Bzero, hraw3_Bzero, "B^{0}");
-  drawtex("B^{0}",10,60);
+  drawplots(h3_Bzero, hMC3_Bzero, f3_Bzero, background3_Bzero, Bkpi3_Bzero, mass3_Bzero, hraw3_Bzero, "B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}");
+  drawtex("B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}",10,60);
   pad3->cd();
-  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{0}");
-  drawtex("B_{s}^{0}",10,60);
+  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}");
+  drawtex("B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}",10,60);
 
   cSigma->SaveAs("paperfig_fitplot_integptbin.pdf");
 */
@@ -354,8 +418,8 @@ void paperfig_fitplot()
   tx->Draw("same");
 */
 
-//###  drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}");
-//###  drawtex("B^{+}",10,60);
+//###  drawplots(h5_Bplus, hMC5_Bplus, f5_Bplus, background5_Bplus, Bkpi5_Bplus, mass5_Bplus, hraw5_Bplus, "B^{+}+B^{-}");
+//###  drawtex("B^{+}+B^{-}",10,60);
 /*
    TLegend *leg2 = myLegend(0.44,0.33,0.89,0.50);
    leg2->AddEntry(h0_Bplus,"B meson","");
@@ -366,13 +430,13 @@ void paperfig_fitplot()
   //cSigma->cd(2); 
 /*
   pad2->cd();
-  drawplots(h3_Bzero, hMC3_Bzero, f3_Bzero, background3_Bzero, Bkpi3_Bzero, mass3_Bzero, hraw3_Bzero, "B^{0}");
-  drawtex("B^{0}",10,60);
+  drawplots(h3_Bzero, hMC3_Bzero, f3_Bzero, background3_Bzero, Bkpi3_Bzero, mass3_Bzero, hraw3_Bzero, "B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}");
+  drawtex("B^{#lower[0.2]{0}}+#bar{B^{#lower[0.2]{0}}}",10,60);
 
   //cSigma->cd(3);
   pad3->cd();
-  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{0}");
-  drawtex("B_{s}^{0}",10,60);
+  drawplots(h0_Bs, hMC0_Bs, f0_Bs, background0_Bs, Bkpi0_Bs, mass0_Bs, hraw0_Bs, "B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}");
+  drawtex("B_{s}^{#lower[0.1]{0}}+#bar{B_{s}^{#lower[0.1]{0}}}",10,60);
 
   cSigma->SaveAs("paperfig_fitplot_integptbin.pdf");
 */

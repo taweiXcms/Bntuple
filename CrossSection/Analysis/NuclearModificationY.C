@@ -30,7 +30,9 @@ Double_t xbins[nbins]={-2.4,-1.465,-0.5,0.5,1.465};
 Double_t xhbins[nbins+1]={-2.865,-1.935,-1.0,0.0,1.0,1.935};
 
 Double_t exl[nbins]={0.465,0.465,0.5,0.5,0.465};
-Double_t exl2[nbins]={0.1,0.1,0.1,0.1,0.1};
+Double_t exl2[nbins]={0.415,0.415,0.45,0.45,0.415};
+Double_t exl0[nbins]={0.0,0.0,0.0,0.0,0.0};
+
 
 Double_t yPercSigmapPbSystTotHigh[nbins]={0.148,0.150,0.149,0.154,0.148};
 Double_t yPercSigmapPbSystTotLow[nbins]={0.148,0.150,0.149,0.154,0.148};
@@ -175,10 +177,12 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   yRFBSystTotLow[1] = yRFB[1]*yRFBSystTotLowRel[1];
     
   TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl2,exl2,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
+  //###TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
+
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
-  gSigmasyst->SetLineWidth(2);   
+  gSigmasyst->SetLineWidth(3);   
   gSigmasyst->SetMarkerStyle(21);
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetFillColor(kYellow-7);//5
@@ -191,14 +195,17 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   gSigmasyst2->SetFillStyle(0);
   gSigmasyst2->SetLineColor(1);//5
   gSigmasyst2->SetLineStyle(1);
-  gSigmasyst2->SetLineWidth(1);
+  gSigmasyst2->SetLineWidth(3);
 
 
-  TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
+  //###TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
+  TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl0,exl0,ySigmapPbStat,ySigmapPbStat);
+
+
   gSigmastat->SetTitle("Sigma stat uncertainty from pPb");
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
-  gSigmastat->SetLineWidth(1);   
+  gSigmastat->SetLineWidth(3);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
   
@@ -257,12 +264,12 @@ std::cout << "FONLL: " << yRefPP[i] << " - " << yPPsystFONLLlow[i] << " + " << y
   //hBplusReference->SetFillColor(kYellow-7);//5
   //hBplusReference->SetFillStyle(1001);
   hBplusReference->SetLineColor(kAzure-3);
-  hBplusReference->SetLineWidth(1);
+  hBplusReference->SetLineWidth(3);
   hBplusReferenceEYhigh->SetLineColor(kAzure-3);
-  hBplusReferenceEYhigh->SetLineWidth(1);
+  hBplusReferenceEYhigh->SetLineWidth(3);
   hBplusReferenceEYhigh->SetLineStyle(2);
   hBplusReferenceEYlow->SetLineColor(kAzure-3);
-  hBplusReferenceEYlow->SetLineWidth(1);
+  hBplusReferenceEYlow->SetLineWidth(3);
   hBplusReferenceEYlow->SetLineStyle(2);
 
 for (int i=0;i<nbins;i++){
@@ -279,11 +286,12 @@ for (int i=0;i<nbins;i++){
         gSigmastat->GetPoint(i,xgae,ygae);
         std::cout << "### cross section (" << i << ") : " << ygae << " stat: " << gSigmastat->GetEYhigh()[i] << " syst: " << gSigmasyst->GetEYhigh()[i]     << std::endl;
   }
+/*
   hBplusReference->Draw("][,same");
 
   hBplusReferenceEYhigh->Draw("][,same");
   hBplusReferenceEYlow->Draw("][,same");
-
+*/
 /*  
   gaeBplusReference->SetMarkerColor(1);
   gaeBplusReference->SetMarkerStyle(25);  
@@ -308,10 +316,15 @@ for (int i=0;i<nbins;i++){
   //gSigmasyst->SetFillStyle(0);
   gSigmasyst->Draw("2esame");//2same
   gSigmasyst2->Draw("2esame");
- 
+
+  hBplusReference->Draw("][,same");
+
+  hBplusReferenceEYhigh->Draw("][,same");
+  hBplusReferenceEYlow->Draw("][,same");
+
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
-  gSigmastat->SetLineWidth(2);   
+  gSigmastat->SetLineWidth(3);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetFillColor(0);
@@ -327,12 +340,12 @@ for (int i=0;i<nbins;i++){
   legendSigma->SetFillStyle(1001);
   legendSigma->SetTextFont(42);
   legendSigma->SetTextSize(0.055);//###0.045
-
+/*
   TBox *c = new TBox(0.1,1-commonErrorN,4,1+commonErrorP);
   c->SetLineColor(5);
   c->SetFillColor(5);
   c->Draw();
-  
+*/  
   TLegendEntry *ent_SigmapPb=legendSigma->AddEntry(gSigmasyst,"pPb","pf");
   ent_SigmapPb->SetTextFont(42);
   ent_SigmapPb->SetLineColor(1);
@@ -353,7 +366,7 @@ for (int i=0;i<nbins;i++){
   ent_Sigmapp->SetMarkerStyle(25);
 */
 
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(hBplusReference,"FONLL pp ref.","l");
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(hBplusReference,"Scaled FONLL pp ref.","l");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(kAzure-3);//5
   ent_Sigmapp->SetLineStyle(1);
@@ -368,12 +381,12 @@ for (int i=0;i<nbins;i++){
   ent_Sigmapperr->SetMarkerStyle(21);
 
   legendSigma->Draw("psame");
- 
+/*
   TBox *d = new TBox(0.1,1-commonErrorN,4,1+commonErrorP);
   d->SetLineColor(1);
   d->SetFillColor(0);
   d->Draw();
-
+*/
   //###TLatex * tlatex1=new TLatex(0.23,0.84,"CMS");
   TLatex * tlatex1=new TLatex(0.24,0.85,"CMS");
 
@@ -382,14 +395,14 @@ for (int i=0;i<nbins;i++){
   tlatex1->SetTextFont(62);//###42
   tlatex1->SetTextSize(0.07);//###0.045
   tlatex1->Draw();
-
+/*
   TLatex * tlatex12=new TLatex(0.24,0.80,"Preliminary");
   tlatex12->SetNDC();
   tlatex12->SetTextColor(1);
   tlatex12->SetTextFont(52);//###42
   tlatex12->SetTextSize(0.05);//###0.045
   tlatex12->Draw();
-  
+*/  
 
   TString mypar="B^{+}";
   
@@ -413,7 +426,8 @@ for (int i=0;i<nbins;i++){
   tlatex3->SetTextSize(0.07);//###0.06
   tlatex3->Draw();
   
-  TLatex * tlatex4=new TLatex(0.51,0.84,"10 < p_{T}^{B} < 60 GeV/c");
+  //###TLatex * tlatex4=new TLatex(0.51,0.84,"10 < p_{T}^{B} < 60 GeV/c");
+  TLatex * tlatex4=new TLatex(0.51,0.84,"10 < p_{T} < 60 GeV/c");
   tlatex4->SetNDC();
   tlatex4->SetTextColor(1);
   tlatex4->SetTextFont(42);
@@ -438,7 +452,7 @@ for (int i=0;i<nbins;i++){
   gRpAstat->SetMarkerStyle(21);
   gRpAstat->SetMarkerColor(1);
   gRpAstat->SetLineColor(1);
-  gRpAstat->SetLineWidth(2);  
+  gRpAstat->SetLineWidth(3);  
   gRpAstat->SetFillColor(0);
   
   TGraphAsymmErrors *gRpAsyst = new TGraphAsymmErrors(nbins,xbins,yRpA,exl,exl,yRpPbSystTotLow,yRpPbSystTotHigh);
@@ -446,7 +460,7 @@ for (int i=0;i<nbins;i++){
   gRpAsyst->SetFillColor(kYellow-7);//###0
   //gRpAsyst->SetMarkerSize(0);
   gRpAsyst->SetLineColor(1);
-  gRpAsyst->SetLineWidth(2);
+  gRpAsyst->SetLineWidth(3);
   gRpAsyst->SetFillStyle(1001);
   gRpAsyst->SetMarkerStyle(21);
   gRpAsyst->SetMarkerColor(1);
@@ -457,17 +471,19 @@ for (int i=0;i<nbins;i++){
   gRpAsyst2->SetFillStyle(0);
   gRpAsyst2->SetLineColor(1);//5
   gRpAsyst2->SetLineStyle(1);
-  gRpAsyst2->SetLineWidth(2);
+  gRpAsyst2->SetLineWidth(3);
 
 
    
   TGraphAsymmErrors *gRpAsystFONLL = new TGraphAsymmErrors(nbins,xbins,yFONLL,exl,exl,yRpAsystFONLLlow,yRpAsystFONLLhigh);
   gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
-  gRpAsystFONLL->SetTitle("RpA syst uncertainty from FONLL reference");
   gRpAsystFONLL->SetFillColor(0);//5,kYellow-7
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
   gRpAsystFONLL->SetLineStyle(1);
+  gRpAsystFONLL->SetLineWidth(3);
+
+
   TGraphAsymmErrors*gRpAsystFONLL2=(TGraphAsymmErrors*)gRpAsystFONLL->Clone(); 
   gRpAsystFONLL2->SetMarkerColor(1);
   gRpAsystFONLL2->SetMarkerStyle(25);  
@@ -475,7 +491,7 @@ for (int i=0;i<nbins;i++){
   gRpAsystFONLL2->SetFillStyle(0);
   gRpAsystFONLL2->SetLineColor(kAzure-3);//5
   gRpAsystFONLL2->SetLineStyle(1);
-  gRpAsystFONLL2->SetLineWidth(1);
+  gRpAsystFONLL2->SetLineWidth(3);
 
 
 
@@ -493,7 +509,9 @@ for (int i=0;i<nbins;i++){
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
+  //###TLegend *legendRpA=new TLegend(0.23,0.58,0.57,0.77,"");
   TLegend *legendRpA=new TLegend(0.23,0.58,0.57,0.77,"");
+
   legendRpA->SetBorderSize(0);
   legendRpA->SetLineColor(0);
   legendRpA->SetFillColor(0);
@@ -501,7 +519,7 @@ for (int i=0;i<nbins;i++){
   legendRpA->SetTextFont(42);
   legendRpA->SetTextSize(0.055);//###0.04
 
-  hempty=new TH2F("hempty","",4,-3.5,2.7,10.,0.,3.5);  
+  hempty=new TH2F("hempty","",4,-3.5,2.7,40.,0.,4.0);  
   hempty->GetXaxis()->SetTitle("y_{CM}");
   if(particle=="Bplus") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{+})");
   if(particle=="Bzero") hempty->GetYaxis()->SetTitle("R^{FONLL}_{pA}  (B^{0})");
@@ -518,7 +536,7 @@ for (int i=0;i<nbins;i++){
   hempty->GetYaxis()->SetLabelFont(42);
   hempty->GetXaxis()->SetLabelSize(0.060);//###0.040
   hempty->GetYaxis()->SetLabelSize(0.060);//###0.040  
-  hempty->SetMaximum(3);
+  hempty->SetMaximum(4.0);
   hempty->SetMinimum(0.);
   hempty->Draw();
   
@@ -557,34 +575,53 @@ for (int i=0;i<nbins;i++){
   b2->SetLineStyle(1);
   b2->SetLineWidth(1);
   b2->Draw();
-   
-  //TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}","pf");
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAsyst,"R^{FONLL}_{pA}","pf");
+
+  TGraphAsymmErrors*gRpAstat2=(TGraphAsymmErrors*)gRpAstat->Clone();
+  gRpAstat2->SetTitle("RpA stat uncertainty from pPb");
+  gRpAstat2->SetMarkerStyle(21);
+  gRpAstat2->SetMarkerColor(1);
+  gRpAstat2->SetLineColor(1);
+  gRpAstat2->SetLineWidth(3);  
+  gRpAstat2->SetFillColor(0);
+  gRpAstat2->SetMarkerSize(1.5);
+  
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat2,"R^{FONLL}_{pA}","p");
   ent_RpAstat->SetTextFont(42);
   ent_RpAstat->SetMarkerColor(1);
   ent_RpAstat->SetMarkerStyle(25);
+  ent_RpAstat->SetMarkerSize(30);//###3
   //ent_RpAstat->SetFillColor(kYellow-7);//5
   //ent_RpAstat->SetFillStyle(1001);
   ent_RpAstat->SetLineColor(1);
-  ent_RpAstat->SetLineWidth(2);
+  ent_RpAstat->SetLineWidth(3);
   ent_RpAstat->SetLineStyle(0);
  
+   //TLegendEntry *ent_RpAsyst=legendRpA->AddEntry(gRpAsyst,"R^{FONLL}_{pA}","pf");
+  TLegendEntry *ent_RpAsyst=legendRpA->AddEntry(gRpAsyst,"Syst. pPb data","f");
+  ent_RpAsyst->SetTextFont(42);
+  ent_RpAsyst->SetMarkerColor(1);
+  ent_RpAsyst->SetMarkerStyle(25);
+  //ent_RpAsyst->SetFillColor(kYellow-7);//5
+  //ent_RpAsyst->SetFillStyle(1001);
+  ent_RpAsyst->SetLineColor(1);
+  ent_RpAsyst->SetLineWidth(3);
+  ent_RpAsyst->SetLineStyle(0);
  
-  //###TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. int. lumi + BR","f");
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. int. lumi + B","f");
+  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. FONLL pp ref.","f");
+  ent_RpAsystFONLL->SetTextFont(42);
+  ent_RpAsystFONLL->SetLineColor(2);//###5
+  ent_RpAsystFONLL->SetLineStyle(0);//###1
+  ent_RpAsystFONLL->SetLineWidth(3);
+  ent_RpAsystFONLL->SetMarkerColor(kYellow-7);//5
 
+   //###TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. int. lumi + BR","f");
+  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. int. lumi + B","f");
   ent_RpAsystData->SetTextFont(42);
   ent_RpAsystData->SetLineColor(2);
   ent_RpAsystData->SetMarkerColor(2);
   
-  TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. FONLL pp ref.","f");
-  ent_RpAsystFONLL->SetTextFont(42);
-  ent_RpAsystFONLL->SetLineColor(2);//###5
-  ent_RpAsystFONLL->SetLineStyle(1);
-  ent_RpAsystFONLL->SetMarkerColor(kYellow-7);//5
-  
   tlatex1->Draw();
-  tlatex12->Draw();
+  //###tlatex12->Draw();
 
 
   tlatexlumi->Draw();

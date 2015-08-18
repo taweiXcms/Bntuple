@@ -23,7 +23,7 @@ using namespace std;
   Double_t  Bs_xbins[Bs_nbins]={35};
   Double_t  Bs_xhbins[Bs_nbins+1]={10,60};
   Double_t  Bs_exl[Bs_nbins]={25};
-  Double_t  Bs_exl2[Bs_nbins]={1.2};
+  Double_t  Bs_exl2[Bs_nbins]={24.0};
  Double_t  Bs_exl0[Bs_nbins]={0.};
   Double_t  Bs_yPercSigmapPbSystTotHigh[Bs_nbins]={0.218};
   Double_t  Bs_yPercSigmapPbSystTotLow[Bs_nbins]={0.218};
@@ -42,7 +42,7 @@ using namespace std;
   Double_t  B0_xbins[B0_nbins]={12.5,17.5,40};
   Double_t  B0_xhbins[B0_nbins+1]={10,15,20,60};
   Double_t  B0_exl[B0_nbins]={2.5,2.5,20};
-  Double_t  B0_exl2[B0_nbins]={1.2,1.2,1.2};
+  Double_t  B0_exl2[B0_nbins]={1.5,1.5,19.0};
   Double_t  B0_exl0[B0_nbins]={0.,0.,0.};
   Double_t  B0_yPercSigmapPbSystTotHigh[B0_nbins]={0.186,0.181,0.180};
   Double_t  B0_yPercSigmapPbSystTotLow[B0_nbins]={0.186,0.181,0.180};
@@ -58,7 +58,7 @@ using namespace std;
   Double_t  Bp_xbins[Bp_nbins]={12.5,17.5,22.5,27.5,45.};
   Double_t  Bp_xhbins[Bp_nbins+1]={10,15,20,25,30,60};
   Double_t  Bp_exl[Bp_nbins]={2.5,2.5,2.5,2.5,15.};
-  Double_t  Bp_exl2[Bp_nbins]={1.2,1.2,1.2,1.2,1.2};
+  Double_t  Bp_exl2[Bp_nbins]={1.5,1.5,1.5,1.5,14.0};
   Double_t  Bp_exl0[Bp_nbins]={0.,0.,0.,0.,0.};
   Double_t  Bp_yPercSigmapPbSystTotHigh[Bp_nbins]={0.150,0.143,0.143,0.141,0.149};
   Double_t  Bp_yPercSigmapPbSystTotLow[Bp_nbins]={0.150,0.143,0.143,0.141,0.149};
@@ -69,10 +69,14 @@ using namespace std;
 //  Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.049,1.030,1.019,1.012,1.006};
 //  Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.071,1.057,1.058,1.045,1.061};//new correciton
   Double_t  Bp_tagandprobcorrection[Bp_nbins]={1.069,1.050,1.050,1.045,1.065};//new correciton, abs eta binning
-
+/*
   Double_t Bs_padratio=0.326899;
   Double_t B0_padratio=0.307285;
   Double_t Bp_padratio=0.365816;
+*/
+  Double_t Bs_padratio=1.0;
+  Double_t B0_padratio=1.0;
+  Double_t Bp_padratio=1.0;
 
 void makeMultiPanelCanvas(TCanvas*& canv, 
 const Int_t columns,
@@ -84,6 +88,10 @@ const Float_t leftMargin= 0.16,
 const Float_t bottomMargin= 0.16,
 //###const Float_t edge=0.05
 const Float_t edge=0.06
+);
+
+void makeIndepPadCanvas(TCanvas*& canv, 
+bool  setlogy
 );
 
 void NuclearModification(
@@ -220,6 +228,9 @@ void NuclearModification(
   }
   
   TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl2,exl2,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
+  //###TGraphAsymmErrors *gSigmasyst = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbSystTotLow,ySigmapPbSystTotHigh);
+
+
   gSigmasyst->SetTitle("Sigma syst uncertainty from pPb");
   gSigmasyst->SetMarkerColor(1);
   gSigmasyst->SetLineColor(1);
@@ -238,7 +249,10 @@ void NuclearModification(
   gSigmasyst2->SetLineWidth(1);
  
 
-  TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
+  //###TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl,exl,ySigmapPbStat,ySigmapPbStat);
+  TGraphAsymmErrors *gSigmastat = new TGraphAsymmErrors(nbins,xbins,ySigmapPb,exl0,exl0,ySigmapPbStat,ySigmapPbStat);
+
+
   gSigmastat->SetTitle("Sigma stat uncertainty from pPb");
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
@@ -256,15 +270,14 @@ void NuclearModification(
   else if (particle=="Bs") padcorrection=Bp_padratio/Bs_padratio;
   std::cout << "padcorrection: " << padcorrection << std::endl;
   canvasSigma->cd(PadNum);
-  canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
+  //canvasSigma->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasSigma->SetFillColor(0);
   canvasSigma->SetBorderMode(0);
   canvasSigma->SetBorderSize(2);
-  canvasSigma->SetLeftMargin(0.1451613);
-  canvasSigma->SetRightMargin(0.05443548);
-  //###canvasSigma->SetTopMargin(0.01474576);//0.08474576
-  canvasSigma->SetTopMargin(0.005);//0.08474576
-  canvasSigma->SetBottomMargin(0.1165254);
+  //canvasSigma->SetLeftMargin(0.1451613);
+  //canvasSigma->SetRightMargin(0.05443548);
+  //canvasSigma->SetTopMargin(0.005);//0.08474576
+  //canvasSigma->SetBottomMargin(0.1165254);
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetFrameBorderMode(0);
   canvasSigma->SetLogy();
@@ -278,11 +291,11 @@ void NuclearModification(
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
   //###hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}( #mub GeV^{-1}c)");
-  hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}( #mub/(GeV/c))");
+  hempty->GetYaxis()->SetTitle("d#sigma / dp_{T}(#mub/(GeV/c))");
   //###hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
-  if (particle=="Bplus") hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
-  else if (particle=="Bzero") hempty->GetXaxis()->SetTitleOffset(0.80);//###1.0
-  else if (particle=="Bs") hempty->GetXaxis()->SetTitleOffset(0.85);//###1.0
+  if (particle=="Bplus") hempty->GetXaxis()->SetTitleOffset(0.90);//###1.0
+  else if (particle=="Bzero") hempty->GetXaxis()->SetTitleOffset(0.90);//###0.80
+  else if (particle=="Bs") hempty->GetXaxis()->SetTitleOffset(0.90);//###0.85
 
   hempty->GetYaxis()->SetTitleOffset(1.0);//###1.3
   hempty->GetXaxis()->SetTitleSize(0.070*padcorrection);//###0.055
@@ -293,9 +306,9 @@ void NuclearModification(
   hempty->GetYaxis()->SetLabelFont(42);
   hempty->GetXaxis()->SetLabelSize(0.060*padcorrection);//###0.055
   hempty->GetYaxis()->SetLabelSize(0.060*padcorrection);//###0.055
-  if (particle=="Bplus") hempty->GetXaxis()->SetLabelOffset(0.005);//###1.0
-  else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.0001);//###1.0
-  else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.0005);//###1.0
+  if (particle=="Bplus") hempty->GetXaxis()->SetLabelOffset(0.005);//###0.005
+  else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.005);//###0.0001
+  else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.005);//###0.0005
   //###hempty->GetXaxis()->SetLabelOffset(0.005);//###0.005
   hempty->SetMaximum(2);
   hempty->SetMinimum(0.);
@@ -311,7 +324,7 @@ void NuclearModification(
   
   gSigmastat->SetMarkerColor(1);
   gSigmastat->SetLineColor(1);
-  gSigmastat->SetLineWidth(1);   
+  gSigmastat->SetLineWidth(2);   
   gSigmastat->SetMarkerStyle(21);
   gSigmastat->SetMarkerColor(1);
 
@@ -336,21 +349,21 @@ void NuclearModification(
   //hBplusReference->SetFillColor(kYellow-7);//5
   //hBplusReference->SetFillStyle(1001);
   hBplusReference->SetLineColor(kAzure-3);
-  hBplusReference->SetLineWidth(1);
+  hBplusReference->SetLineWidth(2);
   hBplusReferenceEYhigh->SetLineColor(kAzure-3);
-  hBplusReferenceEYhigh->SetLineWidth(1);
+  hBplusReferenceEYhigh->SetLineWidth(2);
   hBplusReferenceEYhigh->SetLineStyle(2);
   hBplusReferenceEYlow->SetLineColor(kAzure-3);
-  hBplusReferenceEYlow->SetLineWidth(1);
+  hBplusReferenceEYlow->SetLineWidth(2);
   hBplusReferenceEYlow->SetLineStyle(2);
 
 
-
+/*
   hBplusReference->Draw("][,same");
 
   hBplusReferenceEYhigh->Draw("][,same");
   hBplusReferenceEYlow->Draw("][,same");
-
+*/
 
 
 /*
@@ -417,7 +430,7 @@ void NuclearModification(
   ent_Sigmapp->SetMarkerColor(1);
   ent_Sigmapp->SetMarkerStyle(21);
 */
-  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(hBplusReference,"FONLL pp ref.","l");
+  TLegendEntry *ent_Sigmapp=legendSigma->AddEntry(hBplusReference,"Scaled FONLL pp ref.","l");
   ent_Sigmapp->SetTextFont(42);
   ent_Sigmapp->SetLineColor(kAzure-3);//5
   ent_Sigmapp->SetLineStyle(1);
@@ -444,16 +457,23 @@ for (int i=0;i<nbins;i++){
   gSigmasyst->Draw("2esame");//###2psame
   gSigmasyst2->Draw("2esame");
 
+  hBplusReference->Draw("][,same");
+
+  hBplusReferenceEYhigh->Draw("][,same");
+  hBplusReferenceEYlow->Draw("][,same");
 
   gSigmastat->SetFillColor(0);
   gSigmastat->Draw("epsame");
-  
+/*  
   TBox *d = new TBox(0.1,1-commonErrorN,4,1+commonErrorP);
   d->SetLineColor(1);
   d->SetFillColor(0);
   d->Draw();
-  
-  if(PadNum==0 || PadNum==1){
+*/  
+  //if(PadNum==0 || PadNum==1){
+  if(PadNum==3 || PadNum==1 || PadNum==2){
+
+
     legendSigma->Draw("same");
     
     //TLatex * tlatex1=new TLatex(0.21,0.88801268,"CMS");
@@ -463,18 +483,20 @@ for (int i=0;i<nbins;i++){
     tlatex1->SetTextFont(62);//42
     tlatex1->SetTextSize(0.07);//0.045
     tlatex1->Draw();
-
+/*
     TLatex * tlatex12=new TLatex(0.35,0.86,"Preliminary");
     tlatex12->SetNDC();
     tlatex12->SetTextColor(1);
     tlatex12->SetTextFont(52);//42
     tlatex12->SetTextSize(0.05);//0.045
     tlatex12->Draw();
-   
+*/   
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatexlumi=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatexlumi=new TLatex(0.390,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
-
+    TLatex * tlatexlumi;
+//###TLatex * tlatexlumi=new TLatex(0.390,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
+   if (PadNum==1) tlatexlumi = new TLatex(0.41,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
+   else tlatexlumi = new TLatex(0.39,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
     tlatexlumi->SetNDC();
     tlatexlumi->SetTextColor(1);
     tlatexlumi->SetTextFont(42);
@@ -482,8 +504,12 @@ for (int i=0;i<nbins;i++){
     tlatexlumi->Draw();
   }
 
-   if(PadNum==2){
-    TLatex * tlatex4=new TLatex(0.60,0.73,"|y_{lab}| < 2.4");
+   //if(PadNum==2){
+    if(PadNum==3 || PadNum==1 || PadNum==2) {
+    //TLatex * tlatex4=new TLatex(0.60,0.73,"|y_{lab}| < 2.4");
+    TLatex * tlatex4=new TLatex(0.65,0.50,"|y_{lab}| < 2.4");
+
+
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(42);//42
@@ -492,13 +518,17 @@ for (int i=0;i<nbins;i++){
 	 }
 
 	double GloUnc;
-	double xtl5;
+	double xtl5=0.54;
+
    if(PadNum==1) {GloUnc=Bp_commonErrorP*100;xtl5=0.54;}//###0.57
    if(PadNum==2) {GloUnc=B0_commonErrorP*100;xtl5=0.47;}
    if(PadNum==3) {GloUnc=Bs_commonErrorP*100;xtl5=0.42;}
 
+	xtl5=0.54;
+
+
 //TLegend *legendSigma=new TLegend(0.55,0.63,0.85,0.80,"");
-   TLatex * tlatex5=new TLatex(xtl5,0.55,Form("Global uncert. %2.1f%%",GloUnc));
+   TLatex * tlatex5=new TLatex(xtl5,0.60,Form("Global uncert. %2.1f%%",GloUnc));
     tlatex5->SetNDC();
     tlatex5->SetTextColor(1);
     tlatex5->SetTextFont(42);//42
@@ -507,8 +537,8 @@ for (int i=0;i<nbins;i++){
 
   //###double xpos=0.8528226;
   //###double ypos=0.6849894;
-  double xpos=0.86;
-  double ypos=0.86;
+  double xpos=0.90;//0.86
+  double ypos=0.85;//0.86
   
   TString mypar;
   if(particle=="Bplus") mypar="B^{+}";
@@ -516,10 +546,11 @@ for (int i=0;i<nbins;i++){
   if(particle=="Bs") mypar="B_{s}^{0}";  
 
   double xlgap=0.04;
+/*
   if(particle=="Bplus") xpos=(0.365816-xlgap)/0.365816;
   if(particle=="Bzero") xpos=1-xlgap/(0.673101-0.365816);
   if(particle=="Bs") xpos=0.94-xlgap/(1-0.673101);;  
-
+*/
   TLatex * tlatex3=new TLatex(xpos,ypos,mypar.Data());
   tlatex3->SetNDC();
   tlatex3->SetTextColor(1);
@@ -578,6 +609,8 @@ for (int i=0;i<nbins;i++){
   gRpAsystFONLL->SetLineColor(kAzure-3);//5
   gRpAsystFONLL->SetMarkerColor(4);//kAzure-3);
   gRpAsystFONLL->SetLineStyle(1);
+  gRpAsystFONLL->SetLineWidth(2);
+
   TGraphAsymmErrors*gRpAsystFONLL2=(TGraphAsymmErrors*)gRpAsystFONLL->Clone();
   gRpAsystFONLL2->SetMarkerColor(1);
   gRpAsystFONLL2->SetMarkerStyle(25);
@@ -585,31 +618,23 @@ for (int i=0;i<nbins;i++){
   gRpAsystFONLL2->SetFillStyle(0);
   gRpAsystFONLL2->SetLineColor(kAzure-3);//5
   gRpAsystFONLL2->SetLineStyle(1);
-  gRpAsystFONLL2->SetLineWidth(1);
+  gRpAsystFONLL2->SetLineWidth(2);
 
   canvasRpA->cd(PadNum);
-  canvasRpA->Range(-1.989924,-0.2917772,25.49622,2.212202);
+  //canvasRpA->Range(-1.989924,-0.2917772,25.49622,2.212202);
   canvasRpA->SetFillColor(0);
   canvasRpA->SetBorderMode(0);
   canvasRpA->SetBorderSize(2);
+/*
   canvasRpA->SetLeftMargin(0.1451613);
   canvasRpA->SetRightMargin(0.05443548);
   canvasRpA->SetTopMargin(0.08474576);
   canvasRpA->SetBottomMargin(0.1165254);
+*/
   canvasRpA->SetFrameBorderMode(0);
   canvasRpA->SetFrameBorderMode(0);
   
-  TLegend *legendRpA=new TLegend(0.22,0.66,0.51,0.83,"");
-
-
-  legendRpA->SetBorderSize(0);
-  legendRpA->SetLineColor(0);
-  legendRpA->SetFillColor(0);
-  legendRpA->SetFillStyle(1001);
-  legendRpA->SetTextFont(42);
-  legendRpA->SetTextSize(0.060);//###0.045
-
-  hempty=new TH2F("hempty","",10,0.1, 62. ,10.,0.,2.5);  
+  hempty=new TH2F("hempty","",10,0.1, 62. ,30.,0.,3.0);  
   hempty->GetXaxis()->CenterTitle();
   hempty->GetYaxis()->CenterTitle();
   hempty->GetXaxis()->SetTitle("p_{T} (GeV/c)");
@@ -624,13 +649,14 @@ for (int i=0;i<nbins;i++){
   hempty->GetYaxis()->SetLabelFont(42);
   hempty->GetXaxis()->SetLabelSize(0.060*padcorrection);//###0.055
   hempty->GetYaxis()->SetLabelSize(0.060*padcorrection);//###0.055  
-  if (particle=="Bplus") hempty->GetXaxis()->SetTitleOffset(1.0);//###1.0
-  else if (particle=="Bzero") hempty->GetXaxis()->SetTitleOffset(0.80);//###1.0
-  else if (particle=="Bs") hempty->GetXaxis()->SetTitleOffset(0.85);//###1.0
-  if (particle=="Bplus") hempty->GetXaxis()->SetLabelOffset(0.005);//###1.0
-  else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.0001);//###1.0
-  else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.0005);//###1.0
-  hempty->SetMaximum(2);
+  if (particle=="Bplus") hempty->GetXaxis()->SetTitleOffset(0.90);//###1.0
+  else if (particle=="Bzero") hempty->GetXaxis()->SetTitleOffset(0.90);//###0.80
+  else if (particle=="Bs") hempty->GetXaxis()->SetTitleOffset(0.90);//###0.85
+  if (particle=="Bplus") hempty->GetXaxis()->SetLabelOffset(0.005);//###0.005
+  else if (particle=="Bzero") hempty->GetXaxis()->SetLabelOffset(0.005);//###0.0001
+  else if (particle=="Bs") hempty->GetXaxis()->SetLabelOffset(0.005);//###0.0005
+  //###hempty->SetMaximum(2);
+  hempty->SetMaximum(3.0);
   hempty->SetMinimum(0.);
 
   hempty->Draw();
@@ -638,8 +664,10 @@ for (int i=0;i<nbins;i++){
   TLine *l = new TLine(0,1, 65.,1);
   l->SetLineStyle(2);
 
-  //###TLine *line = new TLine(8.740882,1.017445,61,1.008586);
-  TLine *line = new TLine(4.740882,1.017445,61,1.008586);
+  //TLine *line = new TLine(8.740882,1.017445,61,1.008586);
+  //###TLine *line = new TLine(4.740882,1.017445,61,1.008586);
+  TLine *line = new TLine(4.740882,1.00,61,1.00);
+
 
   line->SetLineColor(kRed);//###
   line->SetLineStyle(2);  
@@ -686,9 +714,16 @@ for (int i=0;i<nbins;i++){
   b2->SetFillStyle(0);
   b2->Draw();
 
+  TLegend *legendRpA=new TLegend(0.22,0.60,0.51,0.83,"");
 
-  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAsyst,"R^{FONLL}_{pA}","pf");
-  //###TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}","pf");
+  legendRpA->SetBorderSize(0);
+  legendRpA->SetLineColor(0);
+  legendRpA->SetFillColor(0);
+  legendRpA->SetFillStyle(1001);
+  legendRpA->SetTextFont(42);
+  legendRpA->SetTextSize(0.060);//###0.045
+
+  TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"R^{FONLL}_{pA}","p");
   //###TLegendEntry *ent_RpAstat=legendRpA->AddEntry(gRpAstat,"pPb data","pf");
 
 /*
@@ -704,17 +739,17 @@ for (int i=0;i<nbins;i++){
   ent_RpAstat->SetLineColor(1);
   ent_RpAstat->SetLineWidth(2);
   ent_RpAstat->SetLineStyle(0);
+
+  TLegendEntry *ent_RpAsyst=legendRpA->AddEntry(gRpAsyst,"Syst. pPb data","f");
+  ent_RpAsyst->SetTextFont(42);
+  ent_RpAsyst->SetMarkerColor(1);
+  ent_RpAsyst->SetMarkerStyle(25);
+  //ent_RpAsyst->SetFillColor(kYellow-7);//5
+  //ent_RpAsyst->SetFillStyle(1001);
+  ent_RpAsyst->SetLineColor(1);
+  ent_RpAsyst->SetLineWidth(2);
+  ent_RpAsyst->SetLineStyle(0);
   
-  TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. int. lumi + B","f");
-/*
-  ent_RpAsystData->SetTextFont(42);
-  ent_RpAsystData->SetLineColor(1);
-  ent_RpAsystData->SetMarkerColor(2);
-*/
-  ent_RpAsystData->SetTextFont(42);
-  ent_RpAsystData->SetLineColor(2);
-  ent_RpAsystData->SetMarkerColor(2);
- 
   TLegendEntry *ent_RpAsystFONLL=legendRpA->AddEntry(gRpAsystFONLL,"Syst. FONLL pp ref.","f");
 /*
   ent_RpAsystFONLL->SetTextFont(42);
@@ -728,29 +763,45 @@ for (int i=0;i<nbins;i++){
   ent_RpAsystFONLL->SetLineColor(2);//###5
   ent_RpAsystFONLL->SetLineStyle(1);
   ent_RpAsystFONLL->SetMarkerColor(kYellow-7);//5
+
+   TLegendEntry *ent_RpAsystData=legendRpA->AddEntry(b,"Syst. int. lumi + B","f");
+/*
+  ent_RpAsystData->SetTextFont(42);
+  ent_RpAsystData->SetLineColor(1);
+  ent_RpAsystData->SetMarkerColor(2);
+*/
+  ent_RpAsystData->SetTextFont(42);
+  ent_RpAsystData->SetLineColor(2);
+  ent_RpAsystData->SetMarkerColor(2);
  
-  if(PadNum==1||PadNum==0){
+  //if(PadNum==1||PadNum==3){
+    if(PadNum==3 || PadNum==1 || PadNum==2) {
+
     legendRpA->Draw();
 
     //TLatex * tlatex4=new TLatex(0.21,0.88801268,"CMS");
-    TLatex * tlatex4=new TLatex(0.19,0.86,"CMS");
+    TLatex * tlatex4=new TLatex(0.19,0.85,"CMS");
 
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(62);//42
     tlatex4->SetTextSize(0.07);//0.045
     tlatex4->Draw();
- 
+/* 
     TLatex * tlatex42=new TLatex(0.35,0.86,"Preliminary");
     tlatex42->SetNDC();
     tlatex42->SetTextColor(1);
     tlatex42->SetTextFont(52);//42
     tlatex42->SetTextSize(0.05);//0.045
     tlatex42->Draw();
- 
+*/ 
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"L = 34.8 nb^{-1} (pPb 5.02 TeV)");
     //TLatex * tlatex2=new TLatex(0.471371,0.88801268,"34.6 nb^{-1} (pPb 5.02 TeV)");
-    TLatex * tlatex2=new TLatex(0.390,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    //###TLatex * tlatex2=new TLatex(0.390,0.950,"34.6 nb^{-1} (pPb 5.02 TeV)");
+    TLatex * tlatex2;
+
+   if (PadNum==1) tlatex2 = new TLatex(0.41,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
+   else tlatex2 = new TLatex(0.39,0.94,"34.6 nb^{-1} (pPb 5.02 TeV)");
 
     tlatex2->SetNDC();
     tlatex2->SetTextColor(1);
@@ -758,8 +809,10 @@ for (int i=0;i<nbins;i++){
     tlatex2->SetTextSize(0.06);//0.045
    tlatex2->Draw();
   }
-    if(PadNum==2){
-    TLatex * tlatex4=new TLatex(0.14,0.76,"|y_{lab}| < 2.4");
+    //if(PadNum==2){
+    if(PadNum==3 || PadNum==1 || PadNum==2) {
+
+    TLatex * tlatex4=new TLatex(0.65,0.23,"|y_{lab}| < 2.4");
     tlatex4->SetNDC();
     tlatex4->SetTextColor(1);
     tlatex4->SetTextFont(42);//42
@@ -781,10 +834,29 @@ for (int i=0;i<nbins;i++){
 }
 
 void NuclearModification_DrawOnSamePad(){
-  TCanvas *cSigma=new TCanvas("canvasSigma","canvasSigma",1150,500);
-  TCanvas *cRpA=new TCanvas("canvasRpA","canvasRpA",1150,500);
+
+  gStyle->SetTextSize(0.060);
+  gStyle->SetTextFont(42);
+  //gStyle->SetPadRightMargin(0.000);
+  //gStyle->SetPadLeftMargin(0.000);
+  gStyle->SetPadRightMargin(0.020);
+  gStyle->SetPadLeftMargin(0.165);//0.145
+  gStyle->SetPadTopMargin(0.075);
+  gStyle->SetPadBottomMargin(0.145);
+
+  //TCanvas *cSigma=new TCanvas("canvasSigma","canvasSigma",1150,500);
+  //TCanvas *cRpA=new TCanvas("canvasRpA","canvasRpA",1150,500);
+  TCanvas *cSigma=new TCanvas("canvasSigma","canvasSigma",1128,390);
+  TCanvas *cRpA=new TCanvas("canvasRpA","canvasRpA",1128,390);
+
+
+/*
   makeMultiPanelCanvas(cSigma, 3, 1, true);
   makeMultiPanelCanvas(cRpA, 3, 1, false);
+*/
+  makeIndepPadCanvas(cSigma, true);
+  makeIndepPadCanvas(cRpA, false);
+
   NuclearModification(
     Bp_particle,
     Bp_nbins,
@@ -848,6 +920,28 @@ void NuclearModification_DrawOnSamePad(){
 
 }
 
+void makeIndepPadCanvas(TCanvas*& canv, 
+bool  setlogy
+) 
+{
+  canv->Clear();
+  int columns=3;
+  TPad* pad[columns];
+  TString padName;
+  double Xlow[3] = {0.000,0.342,0.671};
+  double Xup[3] = {0.342,0.671,1.000};
+  for(Int_t i=0;i<columns;i++) {
+      canv->cd();
+      padName = Form("p_%d_%d",i,0);
+      pad[i] = new TPad(padName.Data(),padName.Data(),
+      Xlow[i],0.01,Xup[i],0.99);
+      pad[i]->Draw();
+      pad[i]->cd();
+      pad[i]->SetNumber(i+1);
+      if(setlogy) pad[i]->SetLogy();
+    }
+
+}
 void makeMultiPanelCanvas(TCanvas*& canv, 
 const Int_t columns,
 const Int_t rows,
